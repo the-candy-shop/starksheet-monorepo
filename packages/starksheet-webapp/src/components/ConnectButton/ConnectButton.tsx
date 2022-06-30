@@ -13,7 +13,7 @@ function ConnectButton({ sx }: ConnectButtonProps) {
   const account = starknet?.account;
 
   return account ? (
-    <GreyCell sx={{ ...sx, justifyContent: "center" }}>
+    <GreyCell sx={{ ...sx, "& .content": { justifyContent: "center" } }}>
       {account.address.substring(0, 8)}
     </GreyCell>
   ) : (

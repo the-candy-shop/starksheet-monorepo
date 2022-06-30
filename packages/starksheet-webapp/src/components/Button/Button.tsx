@@ -10,7 +10,11 @@ function Button({ children, onClick, sx }: ButtonProps) {
   return (
     <GreyCell
       onClick={onClick}
-      sx={{ cursor: "pointer", justifyContent: "center", ...sx }}
+      sx={{
+        cursor: "pointer",
+        "& .content": { justifyContent: "center" },
+        ...sx,
+      }}
     >
       {children}
     </GreyCell>

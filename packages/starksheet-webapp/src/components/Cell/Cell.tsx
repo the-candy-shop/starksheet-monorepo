@@ -2,21 +2,19 @@ import React from "react";
 import { Box, TableCell, TableCellProps } from "@mui/material";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 
-export type GreyCellProps = React.PropsWithChildren & {
+export type CellProps = React.PropsWithChildren & {
   sx?: TableCellProps["sx"];
   onClick?: TableCellProps["onClick"];
 };
 
-function GreyCell({ children, sx, onClick }: GreyCellProps) {
+function Cell({ children, sx, onClick }: CellProps) {
   return (
     <TableCell
-      variant="head"
       onClick={onClick}
       sx={{
         height: `${CELL_HEIGHT - 2 * CELL_BORDER_WIDTH}px`,
         border: `${CELL_BORDER_WIDTH}px solid black`,
-        boxShadow: "inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC",
-        background: "#C6D2E4",
+        background: "white",
         padding: 0,
         borderCollapse: "collapse",
         ...sx,
@@ -41,4 +39,4 @@ function GreyCell({ children, sx, onClick }: GreyCellProps) {
   );
 }
 
-export default GreyCell;
+export default Cell;

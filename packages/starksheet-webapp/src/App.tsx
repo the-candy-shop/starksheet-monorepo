@@ -14,9 +14,13 @@ function App() {
         sx={{ display: "flex", flexDirection: "column", height: "100vh" }}
       >
         <Header />
-        <Box sx={{ flex: 1, overflow: "auto" }}>
-          <SheetTable sx={{ marginTop: `-${CELL_BORDER_WIDTH}px` }} />
-        </Box>
+        <SheetTable
+          sx={{
+            marginTop: `-${CELL_BORDER_WIDTH}px`,
+            overflow: "auto",
+            flex: 1,
+          }}
+        />
         <Footer />
       </Box>
     </StarknetContextProvider>

@@ -1,29 +1,27 @@
 import React from "react";
-import { Box, TableCell, TableCellProps } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 
-export type CellProps = React.PropsWithChildren & {
-  sx?: TableCellProps["sx"];
-  onClick?: TableCellProps["onClick"];
+export type GreyCellProps = React.PropsWithChildren & {
+  sx?: BoxProps["sx"];
+  onClick?: BoxProps["onClick"];
 };
 
-function Cell({ children, sx, onClick }: CellProps) {
+function Cell({ children, sx, onClick }: GreyCellProps) {
   return (
-    <TableCell
+    <Box
       onClick={onClick}
       sx={{
-        height: `${CELL_HEIGHT - 2 * CELL_BORDER_WIDTH}px`,
-        border: `${CELL_BORDER_WIDTH}px solid black`,
-        background: "white",
-        padding: 0,
-        borderCollapse: "collapse",
+        height: `${CELL_HEIGHT}px`,
+        display: "flex",
+        flexDirection: "column",
         ...sx,
       }}
     >
       <Box
         className="content"
         sx={{
-          height: "100%",
+          border: `${CELL_BORDER_WIDTH}px solid black`,
           padding: "0 10px",
           fontFamily: "'Press Start 2P', cursive",
           fontSize: "14px",
@@ -35,7 +33,7 @@ function Cell({ children, sx, onClick }: CellProps) {
       >
         {children}
       </Box>
-    </TableCell>
+    </Box>
   );
 }
 

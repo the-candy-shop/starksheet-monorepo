@@ -1,32 +1,30 @@
 import React from "react";
-import { Box, TableCell, TableCellProps } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 
 export type GreyCellProps = React.PropsWithChildren & {
-  sx?: TableCellProps["sx"];
-  onClick?: TableCellProps["onClick"];
+  sx?: BoxProps["sx"];
+  onClick?: BoxProps["onClick"];
 };
 
 function GreyCell({ children, sx, onClick }: GreyCellProps) {
   return (
-    <TableCell
-      variant="head"
+    <Box
       onClick={onClick}
       sx={{
-        height: `${CELL_HEIGHT - 2 * CELL_BORDER_WIDTH}px`,
-        border: `${CELL_BORDER_WIDTH}px solid black`,
-        boxShadow: "inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC",
-        background: "#C6D2E4",
-        padding: 0,
-        borderCollapse: "collapse",
+        height: `${CELL_HEIGHT}px`,
+        display: "flex",
+        flexDirection: "column",
         ...sx,
       }}
     >
       <Box
         className="content"
         sx={{
-          height: "100%",
+          border: `${CELL_BORDER_WIDTH}px solid black`,
+          boxShadow: "inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC",
           padding: "0 10px",
+          background: "#C6D2E4",
           fontFamily: "'Press Start 2P', cursive",
           fontSize: "14px",
           lineHeight: "20px",
@@ -37,7 +35,7 @@ function GreyCell({ children, sx, onClick }: GreyCellProps) {
       >
         {children}
       </Box>
-    </TableCell>
+    </Box>
   );
 }
 

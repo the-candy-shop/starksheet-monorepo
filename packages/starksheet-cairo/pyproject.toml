@@ -17,6 +17,7 @@ onlydust-cairo-streams = "^0.1.2"
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
 isort = "^5.10.1"
+ipython = "^8.4.0"
 
 [tool.pytest.ini_options]
 pythonpath = [

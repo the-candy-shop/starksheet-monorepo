@@ -1,0 +1,1 @@
+0x07c3dd824220221e3f5590324569f50c55468608dc86e8f4e0987a9cf2bee1b0:artifacts/abis/MyToken.json:my_token

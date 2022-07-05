@@ -1,7 +1,6 @@
 import React from "react";
 import GreyCell from "../GreyCell/GreyCell";
 import { Box } from "@mui/material";
-import ConnectButton from "../ConnectButton/ConnectButton";
 import { CELL_BORDER_WIDTH } from "../../config";
 
 function Footer() {

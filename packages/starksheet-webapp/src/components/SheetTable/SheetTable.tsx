@@ -6,12 +6,20 @@ import { Box, BoxProps } from "@mui/material";
 import Cell from "../Cell/Cell";
 
 export type SheetTableProps = {
+  selectedCell: string | null;
+  setSelectedCell: (value: string | null) => void;
   rows?: number;
   columns?: number;
   sx?: BoxProps["sx"];
 };
 
-function SheetTable({ rows = 15, columns = 15, sx }: SheetTableProps) {
+function SheetTable({
+  selectedCell,
+  setSelectedCell,
+  rows = 15,
+  columns = 15,
+  sx,
+}: SheetTableProps) {
   const columnNames = React.useMemo(
     () => generateColumnNames(columns),
     [columns]
@@ -63,15 +71,15 @@ function SheetTable({ rows = 15, columns = 15, sx }: SheetTableProps) {
           </GreyCell>
           {columnNames.map((columnName) => (
             <Cell
+              selected={`${columnName}${rowName}` === selectedCell}
+              onClick={() => setSelectedCell(`${columnName}${rowName}`)}
               sx={{
                 width: `${CELL_WIDTH}px`,
                 minWidth: `${CELL_WIDTH}px`,
                 maxWidth: `${CELL_WIDTH}px`,
                 marginLeft: `-${CELL_BORDER_WIDTH}px`,
               }}
-            >
-              {columnName}:{rowName}
-            </Cell>
+            ></Cell>
           ))}
         </Box>
       ))}

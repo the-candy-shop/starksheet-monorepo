@@ -5,8 +5,11 @@ import { StarknetContextProvider } from "./contexts/StarknetContext";
 import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
 import Footer from "./components/Footer/Footer";
+import ActionBar from "./components/ActionBar/ActionBar";
 
 function App() {
+  const [selectedCell, setSelectedCell] = React.useState<string | null>(null);
+
   return (
     <StarknetContextProvider>
       <Box
@@ -14,7 +17,13 @@ function App() {
         sx={{ display: "flex", flexDirection: "column", height: "100vh" }}
       >
         <Header />
+        <ActionBar
+          selectedCell={selectedCell}
+          sx={{ marginTop: `-${CELL_BORDER_WIDTH}px` }}
+        />
         <SheetTable
+          selectedCell={selectedCell}
+          setSelectedCell={setSelectedCell}
           sx={{
             marginTop: `-${CELL_BORDER_WIDTH}px`,
             marginBottom: `-${CELL_BORDER_WIDTH}px`,

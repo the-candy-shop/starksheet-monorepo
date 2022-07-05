@@ -1,1 +1,1 @@
-0x07c3dd824220221e3f5590324569f50c55468608dc86e8f4e0987a9cf2bee1b0:artifacts/abis/MyToken.json:my_token
+0x0435d51020da5ac0fcb7cee6a4ddf32be38256bbbef85f794078306d989efe18:artifacts/abis/Starksheet.json:starksheet

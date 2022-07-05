@@ -12,16 +12,14 @@ logger.setLevel(logging.INFO)
 
 def run(nre: NileRuntimeEnvironment) -> None:
 
-    contract_name = "MyToken"
+    contract_name = "Starksheet"
     alias = snakecase(contract_name)
     arguments = [
-        "0x" + "StarksheetToken".encode().hex(),
+        "0x" + "Starksheet".encode().hex(),
         "0x" + "STRK".encode().hex(),
-        "18",
-        "1",
-        "0",
         "0x01C8D2BB17CDDF22728553C9700ADFBBD42D1999194B409B1188B17191CC2EFD",
     ]
+
     contract_file = next(Path(CONTRACTS_DIRECTORY).glob(f"{contract_name}.cairo"))
     abi_file = Path(ABIS_DIRECTORY) / f"{contract_name}.json"
     prev_abi = {}
@@ -30,10 +28,12 @@ def run(nre: NileRuntimeEnvironment) -> None:
         logger.info(
             f"Contract {contract_name} already deployed, checking differences..."
         )
+        # TODO: we should pull the abi from the address instead
         prev_abi = json.load(open(abi_file))
     except StopIteration:
         logger.info(f"No deployment found for contract {contract_name}")
 
+    logger.info(f"Compiling contract {contract_name}...")
     nre.compile([contract_file])
 
     new_abi = json.load(open(abi_file))

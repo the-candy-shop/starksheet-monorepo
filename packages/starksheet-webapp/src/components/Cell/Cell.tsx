@@ -49,12 +49,13 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
         className="content"
         sx={{
           border: `${CELL_BORDER_WIDTH}px solid black`,
-          padding: "0 10px",
+          padding: "13px 10px",
           fontFamily: "'Press Start 2P', cursive",
           fontSize: "14px",
           lineHeight: "20px",
-          display: "flex",
-          alignItems: "center",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
           flex: 1,
         }}
       >

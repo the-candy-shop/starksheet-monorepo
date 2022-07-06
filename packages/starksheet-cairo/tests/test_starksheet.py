@@ -29,17 +29,17 @@ class TestStarksheet:
         async def test_should_return_zero_when_token_does_not_exist(starksheet_minted):
             token_id = TestStarksheet.token_id + 1
             with pytest.raises(Exception) as e:
-                await starksheet_minted.ownerOf((0, token_id)).invoke()
+                await starksheet_minted.ownerOf((0, token_id)).call()
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "ERC721: owner query for nonexistent token"
-            cell = await starksheet_minted.getCell(token_id).invoke()
+            cell = await starksheet_minted.getCell(token_id).call()
             cell = cell.result
             assert cell.dependencies == []
             assert cell.value == 0
 
         @staticmethod
         async def test_should_return_cell_value_when_token_exists(starksheet_minted):
-            cell = await starksheet_minted.getCell(TestStarksheet.token_id).invoke()
+            cell = await starksheet_minted.getCell(TestStarksheet.token_id).call()
             cell = cell.result
             assert cell.value == TestStarksheet.value
             assert cell.dependencies == TestStarksheet.dependencies
@@ -79,7 +79,7 @@ class TestStarksheet:
             However, we keep it here as well to clarify what is tested for the both.
             """
             cell = (
-                await starksheet_minted.getCell(TestStarksheet.token_id).invoke()
+                await starksheet_minted.getCell(TestStarksheet.token_id).call()
             ).result
             assert cell.value == TestStarksheet.value
             assert cell.dependencies == TestStarksheet.dependencies

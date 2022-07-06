@@ -5,7 +5,10 @@ export type FormulaComponent = {
   type: "number" | "operator" | "cell" | "unknown";
 };
 
-export function parseFormula(formula: string): FormulaComponent[] {
+export function parseFormula(
+  cellName: string,
+  formula: string
+): FormulaComponent[] {
   const result: FormulaComponent[] = [];
   let currentSubString = "";
 
@@ -14,7 +17,7 @@ export function parseFormula(formula: string): FormulaComponent[] {
       if (currentSubString !== "") {
         result.push({
           value: currentSubString,
-          type: getFormulaComponentType(currentSubString),
+          type: getFormulaComponentType(cellName, currentSubString),
         });
       }
 
@@ -28,7 +31,7 @@ export function parseFormula(formula: string): FormulaComponent[] {
       currentSubString += formula.charAt(i);
       result.push({
         value: currentSubString,
-        type: getFormulaComponentType(currentSubString),
+        type: getFormulaComponentType(cellName, currentSubString),
       });
     } else {
       currentSubString += formula.charAt(i);
@@ -38,9 +41,9 @@ export function parseFormula(formula: string): FormulaComponent[] {
   return result;
 }
 
-export function buildFormulaDisplay(formula: string): string {
+export function buildFormulaDisplay(cellName: string, formula: string): string {
   const elements: string[] = [];
-  const components = parseFormula(formula);
+  const components = parseFormula(cellName, formula);
 
   components.forEach((el) =>
     elements.push(`<span class="${el.type}">${el.value}</span>`)
@@ -49,11 +52,14 @@ export function buildFormulaDisplay(formula: string): string {
   return elements.join("");
 }
 
-function getFormulaComponentType(component: string): FormulaComponent["type"] {
-  if (!!component.match(/^[1-9]+$/)) {
+function getFormulaComponentType(
+  cellName: string,
+  component: string
+): FormulaComponent["type"] {
+  if (!!component.match(/^\d+$/)) {
     return "number";
-  } else if (!!component.match(/^[A-Z]+[1-9]+$/)) {
-    return "cell";
+  } else if (!!component.match(/^[A-Z]+\d+$/)) {
+    return component === cellName ? "unknown" : "cell";
   } else {
     return "unknown";
   }

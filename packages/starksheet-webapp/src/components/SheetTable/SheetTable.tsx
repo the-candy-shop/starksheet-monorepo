@@ -5,6 +5,7 @@ import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { Box, BoxProps } from "@mui/material";
 import Cell from "../Cell/Cell";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { computeCellValue } from "./compute.utils";
 
 export type SheetTableProps = {
   selectedCell: string | null;
@@ -27,6 +28,15 @@ function SheetTable({
   );
   const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
   const { values } = React.useContext(CellValuesContext);
+
+  const computedValues = React.useMemo(
+    () =>
+      Object.keys(values).reduce((result: Record<string, string>, cellName) => {
+        result[cellName] = computeCellValue(cellName, values);
+        return result;
+      }, {}),
+    [values]
+  );
 
   return (
     <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>
@@ -91,7 +101,7 @@ function SheetTable({
                 textAlign: "center",
               }}
             >
-              {values[`${columnName}${rowName}`]}
+              {computedValues[`${columnName}${rowName}`]}
             </Cell>
           ))}
         </Box>

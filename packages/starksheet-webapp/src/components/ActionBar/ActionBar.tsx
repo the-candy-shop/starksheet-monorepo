@@ -72,7 +72,7 @@ function ActionBar({ selectedCell, sx }: ActionBarProps) {
                     .replaceAll("\r", "")
                 );
               }}
-              html={buildFormulaDisplay(unSavedValue)}
+              html={buildFormulaDisplay(selectedCell, unSavedValue)}
             />
           </Box>
         )}

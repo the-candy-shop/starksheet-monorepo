@@ -1,3 +1,5 @@
+import re
+
 import pytest
 import pytest_asyncio
 
@@ -26,8 +28,10 @@ class TestStarksheet:
         @staticmethod
         async def test_should_return_zero_when_token_does_not_exist(starksheet_minted):
             token_id = TestStarksheet.token_id + 1
-            with pytest.raises(Exception):
+            with pytest.raises(Exception) as e:
                 await starksheet_minted.ownerOf((0, token_id)).invoke()
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == "ERC721: owner query for nonexistent token"
             cell = await starksheet_minted.getCell(token_id).invoke()
             cell = cell.result
             assert cell.dependencies == []
@@ -46,21 +50,25 @@ class TestStarksheet:
             starksheet_minted,
         ):
             token_id = TestStarksheet.token_id + 1
-            with pytest.raises(Exception):
+            with pytest.raises(Exception) as e:
                 await starksheet_minted.setCell(
                     token_id, TestStarksheet.value, TestStarksheet.dependencies
                 ).invoke(caller_address=OWNER)
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == "setCell: tokenId does not exist"
 
         @staticmethod
         async def test_should_revert_when_caller_is_not_owner(
             starksheet_minted,
         ):
-            with pytest.raises(Exception):
+            with pytest.raises(Exception) as e:
                 await starksheet_minted.setCell(
                     TestStarksheet.token_id,
                     TestStarksheet.value,
                     TestStarksheet.dependencies,
                 ).invoke(caller_address=TestStarksheet.other)
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == "setCell: sender is not owner"
 
         @staticmethod
         async def test_should_set_value_and_dependencies(

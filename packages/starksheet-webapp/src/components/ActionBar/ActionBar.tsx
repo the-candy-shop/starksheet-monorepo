@@ -46,7 +46,7 @@ function ActionBar({ selectedCell, sx }: ActionBarProps) {
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
-      <Cell sx={{ width: "134px", "& .content": { justifyContent: "center" } }}>
+      <Cell sx={{ width: "134px", "& .content": { textAlign: "center" } }}>
         {selectedCell}
       </Cell>
       <Cell sx={{ flex: 1, marginLeft: `-${CELL_BORDER_WIDTH}px` }}>

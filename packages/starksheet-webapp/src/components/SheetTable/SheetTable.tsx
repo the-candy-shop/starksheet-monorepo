@@ -88,6 +88,7 @@ function SheetTable({
                 minWidth: `${CELL_WIDTH}px`,
                 maxWidth: `${CELL_WIDTH}px`,
                 marginLeft: `-${CELL_BORDER_WIDTH}px`,
+                textAlign: "center",
               }}
             >
               {values[`${columnName}${rowName}`]}

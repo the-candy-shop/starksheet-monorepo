@@ -3,11 +3,12 @@ import { Box, BoxProps } from "@mui/material";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 
 export type GreyCellProps = React.PropsWithChildren & {
+  variant?: "1" | "2";
   sx?: BoxProps["sx"];
   onClick?: BoxProps["onClick"];
 };
 
-function GreyCell({ children, sx, onClick }: GreyCellProps) {
+function GreyCell({ variant = "1", children, sx, onClick }: GreyCellProps) {
   return (
     <Box
       onClick={onClick}
@@ -22,9 +23,12 @@ function GreyCell({ children, sx, onClick }: GreyCellProps) {
         className="content"
         sx={{
           border: `${CELL_BORDER_WIDTH}px solid black`,
-          boxShadow: "inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC",
+          boxShadow:
+            variant === "1"
+              ? "inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC"
+              : "inset -5px -5px 3px #F4F4F4, inset 5px 5px 3px #B7B7B8",
           padding: "0 10px",
-          background: "#C6D2E4",
+          background: variant === "1" ? "#C6D2E4" : "#E1E1E1",
           fontFamily: "'Press Start 2P', cursive",
           fontSize: "14px",
           lineHeight: "20px",

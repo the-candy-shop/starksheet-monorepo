@@ -30,6 +30,7 @@ function SheetTable({
     <Box sx={{ position: "relative", ...sx }}>
       <Box sx={{ display: "flex", position: "sticky", top: 0, zIndex: 1 }}>
         <GreyCell
+          variant="2"
           sx={{
             width: `${CELL_WIDTH}px`,
             minWidth: `${CELL_WIDTH}px`,
@@ -42,6 +43,7 @@ function SheetTable({
         />
         {columnNames.map((name) => (
           <GreyCell
+            variant="2"
             sx={{
               width: `${CELL_WIDTH}px`,
               minWidth: `${CELL_WIDTH}px`,
@@ -57,6 +59,7 @@ function SheetTable({
       {rowNames.map((rowName) => (
         <Box sx={{ display: "flex", marginTop: `-${CELL_BORDER_WIDTH}px` }}>
           <GreyCell
+            variant="2"
             sx={{
               width: `${CELL_WIDTH}px`,
               minWidth: `${CELL_WIDTH}px`,

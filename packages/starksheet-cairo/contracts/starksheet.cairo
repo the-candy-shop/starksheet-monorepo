@@ -1,9 +1,13 @@
 # Declare this file as a StarkNet contract.
 %lang starknet
 
+from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_nn
 from openzeppelin.token.erc721.ERC721_Mintable_Burnable import constructor
+from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf
+from starkware.cairo.common.uint256 import split_64, Uint256
+from openzeppelin.utils.constants import TRUE, FALSE
 
 # Each token is a cell in the grid. Each cell has a number of dependencies and a function to execute.
 # if there are no dependencies, the value is a constant, otherwise it is a function identifier.
@@ -43,10 +47,25 @@ func setContent{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
     tokenId : felt, value : felt, dependencies_len : felt, dependencies : felt*
 ):
     alloc_locals
+    let (low, high) = split_64(tokenId)
+    let token_id = Uint256(low, high)
+
+    with_attr error_message("setContent: tokenId does not exist"):
+        let (exist) = _exists(token_id)
+        assert TRUE = exist
+    end
+
+    with_attr error_message("setContent: sender is not owner"):
+        let (owner) = ERC721_ownerOf(token_id)
+        let (caller) = get_caller_address()
+        assert owner = caller
+    end
+
     with_attr error_message("setContent: dependencies_len must be non-negative"):
         let (is_nn_deps) = is_nn(dependencies_len)
-        assert is_nn_deps = 1
+        assert 1 = is_nn_deps
     end
+
     Starksheet_cells.write(tokenId, TokenData(dependencies_len, value))
     local index = 0
     with index, dependencies_len:

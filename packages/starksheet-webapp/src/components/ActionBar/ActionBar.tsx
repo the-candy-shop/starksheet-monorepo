@@ -5,6 +5,7 @@ import { CELL_BORDER_WIDTH } from "../../config";
 import Button from "../Button/Button";
 import ContentEditable from "react-contenteditable";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { buildFormulaDisplay } from "./formula.utils";
 
 export type ActionBarProps = {
   selectedCell: string | null;
@@ -51,19 +52,29 @@ function ActionBar({ selectedCell, sx }: ActionBarProps) {
       </Cell>
       <Cell sx={{ flex: 1, marginLeft: `-${CELL_BORDER_WIDTH}px` }}>
         {selectedCell && (
-          <ContentEditable
-            style={{
-              width: "100%",
-              height: "100%",
-              outline: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-            // @ts-ignore
-            ref={inputRef}
-            onChange={(e) => setUnsavedValue(e.target.value)}
-            html={unSavedValue}
-          />
+          <Box sx={{ display: "flex", "& .cell": { color: "#FF4F0A" } }}>
+            <Box sx={{ padding: "0 15px" }}>=</Box>
+            <ContentEditable
+              style={{
+                width: "100%",
+                height: "100%",
+                outline: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+              // @ts-ignore
+              ref={inputRef}
+              onChange={() => {
+                setUnsavedValue(
+                  inputRef?.current?.el.current.innerText
+                    .trim()
+                    .replaceAll("\n", "")
+                    .replaceAll("\r", "")
+                );
+              }}
+              html={buildFormulaDisplay(unSavedValue)}
+            />
+          </Box>
         )}
       </Cell>
       <Button

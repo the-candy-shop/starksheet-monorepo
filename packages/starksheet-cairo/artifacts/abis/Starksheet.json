@@ -17,23 +17,6 @@
         "type": "struct"
     },
     {
-        "members": [
-            {
-                "name": "dependencies_len",
-                "offset": 0,
-                "type": "felt"
-            },
-            {
-                "name": "value",
-                "offset": 1,
-                "type": "felt"
-            }
-        ],
-        "name": "TokenData",
-        "size": 2,
-        "type": "struct"
-    },
-    {
         "data": [
             {
                 "name": "from_",
@@ -357,6 +340,21 @@
         "type": "function"
     },
     {
+        "data": [
+            {
+                "name": "id",
+                "type": "felt"
+            },
+            {
+                "name": "value",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "CellUpdated",
+        "type": "event"
+    },
+    {
         "inputs": [
             {
                 "name": "tokenId",
@@ -375,7 +373,7 @@
                 "type": "felt*"
             }
         ],
-        "name": "setContent",
+        "name": "setCell",
         "outputs": [],
         "type": "function"
     },
@@ -389,30 +387,19 @@
         "name": "getCell",
         "outputs": [
             {
-                "name": "token_data",
-                "type": "TokenData"
-            }
-        ],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
+                "name": "value",
                 "type": "felt"
             },
             {
-                "name": "index",
+                "name": "dependencies_len",
                 "type": "felt"
-            }
-        ],
-        "name": "getCellDependenciesAtIndex",
-        "outputs": [
+            },
             {
-                "name": "dep",
-                "type": "felt"
+                "name": "dependencies",
+                "type": "felt*"
             }
         ],
+        "stateMutability": "view",
         "type": "function"
     }
 ]

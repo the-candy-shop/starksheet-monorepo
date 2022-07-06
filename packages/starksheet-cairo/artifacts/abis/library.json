@@ -1,0 +1,17 @@
+[
+    {
+        "data": [
+            {
+                "name": "id",
+                "type": "felt"
+            },
+            {
+                "name": "value",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "CellUpdated",
+        "type": "event"
+    }
+]

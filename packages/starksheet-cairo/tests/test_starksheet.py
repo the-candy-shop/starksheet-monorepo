@@ -17,7 +17,7 @@ class TestStarksheet:
         await contracts["Starksheet"].mint(OWNER, self.token_id_256).invoke(
             caller_address=OWNER
         )
-        await contracts["Starksheet"].setContent(
+        await contracts["Starksheet"].setCell(
             self.token_id, self.value, self.dependencies
         ).invoke(caller_address=OWNER)
         return contracts["Starksheet"]
@@ -29,27 +29,25 @@ class TestStarksheet:
             with pytest.raises(Exception):
                 await starksheet_minted.ownerOf((0, token_id)).invoke()
             cell = await starksheet_minted.getCell(token_id).invoke()
-            assert len(cell.result) == 1
-            token_data = cell.result[0]
-            assert token_data.dependencies_len == 0
-            assert token_data.value == 0
+            cell = cell.result
+            assert cell.dependencies == []
+            assert cell.value == 0
 
         @staticmethod
         async def test_should_return_cell_value_when_token_exists(starksheet_minted):
             cell = await starksheet_minted.getCell(TestStarksheet.token_id).invoke()
-            assert len(cell.result) == 1
-            token_data = cell.result[0]
-            assert token_data.dependencies_len == len(TestStarksheet.dependencies)
-            assert token_data.value == TestStarksheet.value
+            cell = cell.result
+            assert cell.value == TestStarksheet.value
+            assert cell.dependencies == TestStarksheet.dependencies
 
-    class TestSetContent:
+    class TestSetCell:
         @staticmethod
         async def test_should_revert_when_token_does_not_exist(
             starksheet_minted,
         ):
             token_id = TestStarksheet.token_id + 1
             with pytest.raises(Exception):
-                await starksheet_minted.setContent(
+                await starksheet_minted.setCell(
                     token_id, TestStarksheet.value, TestStarksheet.dependencies
                 ).invoke(caller_address=OWNER)
 
@@ -58,7 +56,7 @@ class TestStarksheet:
             starksheet_minted,
         ):
             with pytest.raises(Exception):
-                await starksheet_minted.setContent(
+                await starksheet_minted.setCell(
                     TestStarksheet.token_id,
                     TestStarksheet.value,
                     TestStarksheet.dependencies,
@@ -68,17 +66,12 @@ class TestStarksheet:
         async def test_should_set_value_and_dependencies(
             starksheet_minted,
         ):
-
-            cell = await starksheet_minted.getCell(TestStarksheet.token_id).invoke()
-            assert len(cell.result) == 1
-            assert cell.result[0].value == TestStarksheet.value
-            assert cell.result[0].dependencies_len == len(TestStarksheet.dependencies)
-            deps = [
-                (
-                    await starksheet_minted.getCellDependenciesAtIndex(
-                        TestStarksheet.token_id, i
-                    ).invoke()
-                ).result[0]
-                for i in range(cell.result[0].dependencies_len)
-            ]
-            assert deps == TestStarksheet.dependencies
+            """
+            Testing getter and setter by writing and retreiving the value leads to duplicated tests.
+            However, we keep it here as well to clarify what is tested for the both.
+            """
+            cell = (
+                await starksheet_minted.getCell(TestStarksheet.token_id).invoke()
+            ).result
+            assert cell.value == TestStarksheet.value
+            assert cell.dependencies == TestStarksheet.dependencies

@@ -4,6 +4,7 @@ import GreyCell from "../GreyCell/GreyCell";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { Box, BoxProps } from "@mui/material";
 import Cell from "../Cell/Cell";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 
 export type SheetTableProps = {
   selectedCell: string | null;
@@ -25,6 +26,7 @@ function SheetTable({
     [columns]
   );
   const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
+  const { values } = React.useContext(CellValuesContext);
 
   return (
     <Box sx={{ position: "relative", ...sx }}>
@@ -43,6 +45,7 @@ function SheetTable({
         />
         {columnNames.map((name) => (
           <GreyCell
+            key={name}
             variant="2"
             sx={{
               width: `${CELL_WIDTH}px`,
@@ -57,7 +60,10 @@ function SheetTable({
         ))}
       </Box>
       {rowNames.map((rowName) => (
-        <Box sx={{ display: "flex", marginTop: `-${CELL_BORDER_WIDTH}px` }}>
+        <Box
+          key={rowName}
+          sx={{ display: "flex", marginTop: `-${CELL_BORDER_WIDTH}px` }}
+        >
           <GreyCell
             variant="2"
             sx={{
@@ -74,6 +80,7 @@ function SheetTable({
           </GreyCell>
           {columnNames.map((columnName) => (
             <Cell
+              key={columnName}
               selected={`${columnName}${rowName}` === selectedCell}
               onClick={() => setSelectedCell(`${columnName}${rowName}`)}
               sx={{
@@ -82,7 +89,9 @@ function SheetTable({
                 maxWidth: `${CELL_WIDTH}px`,
                 marginLeft: `-${CELL_BORDER_WIDTH}px`,
               }}
-            ></Cell>
+            >
+              {values[`${columnName}${rowName}`]}
+            </Cell>
           ))}
         </Box>
       ))}

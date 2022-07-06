@@ -25,10 +25,10 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
         <Box
           sx={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
+            top: `${CELL_BORDER_WIDTH}px`,
+            left: `${CELL_BORDER_WIDTH}px`,
+            bottom: `${CELL_BORDER_WIDTH}px`,
+            right: `${CELL_BORDER_WIDTH}px`,
             border: `${CELL_BORDER_WIDTH}px solid #0000FF`,
             zIndex: 1,
           }}

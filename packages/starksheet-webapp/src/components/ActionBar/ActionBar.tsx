@@ -3,6 +3,8 @@ import { Box, BoxProps } from "@mui/material";
 import Cell from "../Cell/Cell";
 import { CELL_BORDER_WIDTH } from "../../config";
 import Button from "../Button/Button";
+import ContentEditable from "react-contenteditable";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 
 export type ActionBarProps = {
   selectedCell: string | null;
@@ -10,13 +12,48 @@ export type ActionBarProps = {
 };
 
 function ActionBar({ selectedCell, sx }: ActionBarProps) {
+  const { values, setValue } = React.useContext(CellValuesContext);
+  const [unSavedValue, setUnsavedValue] = React.useState<string>(
+    selectedCell ? values[selectedCell] : ""
+  );
+  const previousSelectedCell = React.useRef<string | null>(selectedCell);
+
+  React.useEffect(() => {
+    if (selectedCell === previousSelectedCell.current) return;
+
+    previousSelectedCell.current = selectedCell;
+    if (selectedCell && values[selectedCell]) {
+      setUnsavedValue(values[selectedCell]);
+    } else {
+      setUnsavedValue("");
+    }
+  }, [selectedCell, values]);
+
+  const saveValue = React.useCallback(() => {
+    if (!selectedCell) return;
+
+    setValue(selectedCell, unSavedValue);
+  }, [selectedCell, setValue, unSavedValue]);
+
   return (
     <Box sx={{ display: "flex", ...sx }}>
       <Cell sx={{ width: "134px", "& .content": { justifyContent: "center" } }}>
         {selectedCell}
       </Cell>
       <Cell sx={{ flex: 1, marginLeft: `-${CELL_BORDER_WIDTH}px` }}>
-        {selectedCell}
+        {selectedCell && (
+          <ContentEditable
+            style={{
+              width: "100%",
+              height: "100%",
+              outline: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onChange={(e) => setUnsavedValue(e.target.value)}
+            html={unSavedValue}
+          />
+        )}
       </Cell>
       <Button
         sx={{
@@ -29,7 +66,7 @@ function ActionBar({ selectedCell, sx }: ActionBarProps) {
             justifyContent: "center",
           },
         }}
-        onClick={() => {}}
+        onClick={saveValue}
       >
         Save Value
       </Button>

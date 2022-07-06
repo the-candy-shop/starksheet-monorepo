@@ -17,9 +17,18 @@ function ActionBar({ selectedCell, sx }: ActionBarProps) {
     selectedCell ? values[selectedCell] : ""
   );
   const previousSelectedCell = React.useRef<string | null>(selectedCell);
+  const inputRef = React.useRef<ContentEditable>(null);
 
   React.useEffect(() => {
     if (selectedCell === previousSelectedCell.current) return;
+
+    if (
+      inputRef.current &&
+      inputRef.current.el &&
+      inputRef.current.el.current
+    ) {
+      inputRef.current.el.current.focus();
+    }
 
     previousSelectedCell.current = selectedCell;
     if (selectedCell && values[selectedCell]) {
@@ -50,6 +59,8 @@ function ActionBar({ selectedCell, sx }: ActionBarProps) {
               display: "flex",
               alignItems: "center",
             }}
+            // @ts-ignore
+            ref={inputRef}
             onChange={(e) => setUnsavedValue(e.target.value)}
             html={unSavedValue}
           />

@@ -3,6 +3,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_nn
+from openzeppelin.token.erc721.ERC721_Mintable_Burnable import constructor
 
 # Each token is a cell in the grid. Each cell has a number of dependencies and a function to execute.
 # if there are no dependencies, the value is a constant, otherwise it is a function identifier.

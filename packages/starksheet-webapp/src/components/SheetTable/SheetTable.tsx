@@ -29,7 +29,7 @@ function SheetTable({
   const { values } = React.useContext(CellValuesContext);
 
   return (
-    <Box sx={{ position: "relative", ...sx }}>
+    <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>
       <Box sx={{ display: "flex", position: "sticky", top: 0, zIndex: 1 }}>
         <GreyCell
           variant="2"

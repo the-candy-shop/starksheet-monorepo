@@ -13,6 +13,7 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
     <Box
       onClick={onClick}
       sx={{
+        background: "white",
         position: "relative",
         height: `${CELL_HEIGHT}px`,
         display: "flex",

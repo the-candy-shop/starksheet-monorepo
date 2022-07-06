@@ -1,11 +1,15 @@
 import React from "react";
 import GreyCell from "../GreyCell/GreyCell";
-import { Box } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import { CELL_BORDER_WIDTH } from "../../config";
 
-function Footer() {
+export type FooterProps = {
+  sx?: BoxProps["sx"];
+};
+
+function Footer({ sx }: FooterProps) {
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", ...sx }}>
       <GreyCell>Sheet 1</GreyCell>
       <GreyCell sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}>
         Sheet 2 (Coming Soon)

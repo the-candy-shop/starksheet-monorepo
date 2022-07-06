@@ -21,7 +21,7 @@ function App() {
           <Header />
           <ActionBar
             selectedCell={selectedCell}
-            sx={{ marginTop: `-${CELL_BORDER_WIDTH}px` }}
+            sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
           />
           <SheetTable
             selectedCell={selectedCell}
@@ -51,7 +51,7 @@ function App() {
               },
             }}
           />
-          <Footer />
+          <Footer sx={{ zIndex: 1 }} />
         </Box>
       </CellValuesContextProvider>
     </StarknetContextProvider>

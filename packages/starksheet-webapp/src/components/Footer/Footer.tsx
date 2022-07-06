@@ -26,7 +26,7 @@ function Footer({ sx }: FooterProps) {
         }}
       >
         Sheet 2 (
-        <a href="#" target="_blank">
+        <a href="https://google.fr" target="_blank" rel="noreferrer">
           Coming Soon
         </a>
         )

@@ -11,32 +11,32 @@
             "range_check"
         ],
         "data": [
-            "0x20780017fff7ffd",
+            "0x20780017fff7ffc",
             "0x5",
             "0x480680017fff8000",
             "0x0",
             "0x208b7fff7fff7ffe",
             "0x482680017ffc8000",
-            "0x1",
-            "0x482680017ffd8000",
             "0x800000000000011000000000000000000000000000000000000000000000000",
+            "0x482680017ffd8000",
+            "0x1",
             "0x1104800180018000",
             "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffff8",
-            "0x480280007ffc8000",
+            "0x480280007ffd8000",
             "0x48307ffe7fff8000",
             "0x208b7fff7fff7ffe",
-            "0x20780017fff7ffd",
+            "0x20780017fff7ffc",
             "0x5",
             "0x480680017fff8000",
             "0x1",
             "0x208b7fff7fff7ffe",
             "0x482680017ffc8000",
-            "0x1",
-            "0x482680017ffd8000",
             "0x800000000000011000000000000000000000000000000000000000000000000",
+            "0x482680017ffd8000",
+            "0x1",
             "0x1104800180018000",
             "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffff8",
-            "0x480280007ffc8000",
+            "0x480280007ffd8000",
             "0x48507ffe7fff8000",
             "0x208b7fff7fff7ffe"
         ],
@@ -54,7 +54,7 @@
                         "end_col": 7,
                         "end_line": 4,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 4
@@ -71,7 +71,7 @@
                         "end_col": 18,
                         "end_line": 5,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 17,
                         "start_line": 5
@@ -88,7 +88,7 @@
                         "end_col": 19,
                         "end_line": 5,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 9,
                         "start_line": 5
@@ -102,12 +102,12 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 40,
+                        "end_col": 48,
                         "end_line": 8,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
-                        "start_col": 33,
+                        "start_col": 37,
                         "start_line": 8
                     }
                 },
@@ -119,12 +119,12 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 55,
+                        "end_col": 61,
                         "end_line": 8,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
-                        "start_col": 47,
+                        "start_col": 54,
                         "start_line": 8
                     }
                 },
@@ -136,10 +136,10 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 56,
+                        "end_col": 62,
                         "end_line": 8,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 25,
                         "start_line": 8
@@ -156,7 +156,7 @@
                         "end_col": 18,
                         "end_line": 9,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 9
@@ -173,7 +173,7 @@
                         "end_col": 32,
                         "end_line": 9,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 9
@@ -190,7 +190,7 @@
                         "end_col": 33,
                         "end_line": 9,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 9
@@ -207,7 +207,7 @@
                         "end_col": 7,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 13
@@ -224,7 +224,7 @@
                         "end_col": 18,
                         "end_line": 14,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 17,
                         "start_line": 14
@@ -241,7 +241,7 @@
                         "end_col": 19,
                         "end_line": 14,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 9,
                         "start_line": 14
@@ -255,12 +255,12 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 42,
+                        "end_col": 50,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
-                        "start_col": 35,
+                        "start_col": 39,
                         "start_line": 17
                     }
                 },
@@ -272,12 +272,12 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 57,
+                        "end_col": 63,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
-                        "start_col": 49,
+                        "start_col": 56,
                         "start_line": 17
                     }
                 },
@@ -289,10 +289,10 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 58,
+                        "end_col": 64,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 26,
                         "start_line": 17
@@ -309,7 +309,7 @@
                         "end_col": 18,
                         "end_line": 18,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 18
@@ -326,7 +326,7 @@
                         "end_col": 33,
                         "end_line": 18,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 18
@@ -343,7 +343,7 @@
                         "end_col": 34,
                         "end_line": 18,
                         "input_file": {
-                            "filename": "contracts/Math.cairo"
+                            "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 18
@@ -363,11 +363,11 @@
                 "members": {
                     "arr": {
                         "cairo_type": "felt*",
-                        "offset": 0
-                    },
-                    "size": {
-                        "cairo_type": "felt",
                         "offset": 1
+                    },
+                    "arr_len": {
+                        "cairo_type": "felt",
+                        "offset": 0
                     }
                 },
                 "size": 2,
@@ -397,11 +397,11 @@
                 "members": {
                     "arr": {
                         "cairo_type": "felt*",
-                        "offset": 0
-                    },
-                    "size": {
-                        "cairo_type": "felt",
                         "offset": 1
+                    },
+                    "arr_len": {
+                        "cairo_type": "felt",
+                        "offset": 0
                     }
                 },
                 "size": 2,

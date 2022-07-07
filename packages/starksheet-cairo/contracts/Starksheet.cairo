@@ -5,11 +5,11 @@ from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_nn
 from openzeppelin.token.erc721.ERC721_Mintable_Burnable import constructor
-from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf
+from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf, ERC721_mint
 from starkware.cairo.common.uint256 import split_64, Uint256
 from openzeppelin.utils.constants import TRUE
 
-from contracts.library import Starksheet_getCell, Starksheet_setCell
+from contracts.library import Starksheet_getCell, Starksheet_setCell, Starksheet_renderCell
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -40,4 +40,21 @@ func getCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
 ):
     let res = Starksheet_getCell(tokenId)
     return (res.value, res.dependencies_len, res.dependencies)
+end
+
+@view
+func renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    tokenId : felt
+) -> (value : felt):
+    let (res) = Starksheet_renderCell(tokenId)
+    return (res)
+end
+
+@external
+func mintPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
+    tokenId : Uint256
+):
+    let (to) = get_caller_address()
+    ERC721_mint(to, tokenId)
+    return ()
 end

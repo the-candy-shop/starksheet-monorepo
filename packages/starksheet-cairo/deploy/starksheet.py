@@ -2,6 +2,7 @@ import json
 import logging
 from pathlib import Path
 
+import pandas as pd
 from caseconverter import snakecase
 from nile.common import ABIS_DIRECTORY, CONTRACTS_DIRECTORY
 from nile.nre import NileRuntimeEnvironment
@@ -28,8 +29,8 @@ def run(nre: NileRuntimeEnvironment) -> None:
         logger.info(
             f"Contract {contract_name} already deployed, checking differences..."
         )
-        # TODO: we should pull the abi from the address instead
-        prev_abi = json.load(open(abi_file))
+        # TODO: we should pull the abi from the address to check if it changed
+        # prev_abi = fetch_abi(address)
     except StopIteration:
         logger.info(f"No deployment found for contract {contract_name}")
 
@@ -41,6 +42,12 @@ def run(nre: NileRuntimeEnvironment) -> None:
         if prev_abi != {}:
             logger.info(f"Contract {contract_name} has changed, redeploying...")
 
+        file = f"{nre.network}.deployments.txt"
+        (
+            pd.read_csv(file, names=["address", "abi", "alias"], sep=":")
+            .loc[lambda df: df.alias != alias]  # type: ignore
+            .to_csv(file, sep=":", index=False, header=False)
+        )
         address, _ = nre.deploy(
             contract_name,
             alias=alias,

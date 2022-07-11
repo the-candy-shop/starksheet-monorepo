@@ -1,18 +1,22 @@
 import React from "react";
 import Header from "./components/Header/Header";
 import { Box } from "@mui/material";
-import { StarknetContextProvider } from "./contexts/StarknetContext";
 import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
 import Footer from "./components/Footer/Footer";
 import ActionBar from "./components/ActionBar/ActionBar";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
+import {
+  getInstalledInjectedConnectors,
+  StarknetProvider,
+} from "@starknet-react/core";
 
 function App() {
   const [selectedCell, setSelectedCell] = React.useState<string | null>(null);
+  const connectors = getInstalledInjectedConnectors();
 
   return (
-    <StarknetContextProvider>
+    <StarknetProvider connectors={connectors}>
       <CellValuesContextProvider>
         <Box
           className="App"
@@ -54,7 +58,7 @@ function App() {
           <Footer sx={{ zIndex: 1 }} />
         </Box>
       </CellValuesContextProvider>
-    </StarknetContextProvider>
+    </StarknetProvider>
   );
 }
 

@@ -429,5 +429,20 @@
         "name": "mintPublic",
         "outputs": [],
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "tokenIds_len",
+                "type": "felt"
+            },
+            {
+                "name": "tokenIds",
+                "type": "Uint256*"
+            }
+        ],
+        "name": "mintBatchPublic",
+        "outputs": [],
+        "type": "function"
     }
 ]

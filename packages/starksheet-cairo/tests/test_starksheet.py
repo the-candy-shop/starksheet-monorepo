@@ -10,9 +10,10 @@ from starkware.starknet.public.abi import get_selector_from_name
 
 from constants import OWNER
 
-OTHER = OWNER + 1
 Cell = namedtuple("Cell", ["id", "value", "dependencies"])
 random.seed(0)
+
+OTHER = OWNER + 1
 FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod]}
 CELLS = [
     Cell(
@@ -92,7 +93,7 @@ class TestStarksheet:
                     caller_address=OWNER
                 )
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == "setCell: tokenId does not exist"
+            assert message == f"setCell: tokenId does not exist"
 
         @staticmethod
         async def test_should_revert_when_caller_is_not_owner(
@@ -105,7 +106,7 @@ class TestStarksheet:
                     CELLS[0].dependencies,
                 ).invoke(caller_address=OTHER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == "setCell: sender is not owner"
+            assert message == "setCell: caller is not owner"
 
         @staticmethod
         @pytest.mark.parametrize("cell", CELLS)
@@ -124,3 +125,15 @@ class TestStarksheet:
         async def test_should_return_rendered_cell_value(starksheet_minted, cell):
             result = (await starksheet_minted.renderCell(cell.id).call()).result
             assert result.value == render(CELLS)(cell.id)
+
+    class TestMintBatchPublic:
+        @staticmethod
+        async def test_should_mint_batch_to_caller(contracts):
+            token_ids = [(len(CELLS) + 1, 0), (len(CELLS) + 2, 0)]
+            await contracts["Starksheet"].mintBatchPublic(token_ids).invoke(
+                caller_address=OWNER
+            )
+            owner = await contracts["Starksheet"].ownerOf(token_ids[0]).call()
+            assert OWNER == owner.result.owner
+            owner = await contracts["Starksheet"].ownerOf(token_ids[1]).call()
+            assert OWNER == owner.result.owner

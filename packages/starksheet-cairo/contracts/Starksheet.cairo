@@ -3,13 +3,19 @@
 from starkware.cairo.common.alloc import alloc
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.cairo.common.math_cmp import is_nn
+from starkware.cairo.common.math_cmp import is_not_zero
 from openzeppelin.token.erc721.ERC721_Mintable_Burnable import constructor
-from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf, ERC721_mint
+from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf
 from starkware.cairo.common.uint256 import split_64, Uint256
 from openzeppelin.utils.constants import TRUE
 
-from contracts.library import Starksheet_getCell, Starksheet_setCell, Starksheet_renderCell
+from contracts.library import (
+    Starksheet_getCell,
+    Starksheet_setCell,
+    Starksheet_renderCell,
+    Starksheet_mint,
+    Starksheet_mintBatch,
+)
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -24,7 +30,7 @@ func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         assert exist = TRUE
     end
 
-    with_attr error_message("setCell: sender is not owner"):
+    with_attr error_message("setCell: caller is not owner"):
         let (owner) = ERC721_ownerOf(token_id)
         let (caller) = get_caller_address()
         assert owner = caller
@@ -54,7 +60,16 @@ end
 func mintPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
     tokenId : Uint256
 ):
-    let (to) = get_caller_address()
-    ERC721_mint(to, tokenId)
+    # TODO: add some value / payment checks in prod
+    Starksheet_mint(tokenId)
+    return ()
+end
+
+@external
+func mintBatchPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
+    tokenIds_len : felt, tokenIds : Uint256*
+):
+    # TODO: add some value / payment checks in prod
+    Starksheet_mintBatch(tokenIds_len, tokenIds)
     return ()
 end

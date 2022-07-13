@@ -126,6 +126,32 @@ class TestStarksheet:
             result = (await starksheet_minted.renderCell(cell.id).call()).result
             assert result.value == render(CELLS)(cell.id)
 
+        @staticmethod
+        @pytest_asyncio.fixture
+        async def starksheet_cell_altered(starksheet_minted):
+            cell = next(iter([cell for cell in CELLS if cell.dependencies]))
+            await starksheet_minted.setCell(
+                cell.id,
+                cell.value + 1,
+                cell.dependencies,
+            ).invoke(caller_address=OWNER)
+            yield starksheet_minted, cell
+            await starksheet_minted.setCell(
+                cell.id,
+                cell.value,
+                cell.dependencies,
+            ).invoke(caller_address=OWNER)
+
+        @staticmethod
+        async def test_should_revert_when_value_does_not_exist_and_cell_has_deps(
+            starksheet_cell_altered,
+        ):
+            starksheet, cell = starksheet_cell_altered
+            with pytest.raises(Exception) as e:
+                await starksheet.renderCell(cell.id).call()
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == f"renderCell: formula {cell.value + 1} not found"
+
     class TestMintBatchPublic:
         @staticmethod
         async def test_should_mint_batch_to_caller(contracts):

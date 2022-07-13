@@ -122,15 +122,21 @@ func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     # let result = retdata[0]
 
     # TODO: can't make the call_contract work, for now this is a workaround to plug the FE
-    # let formula = cast(value, codeoffset)
-    # let formula_locatation = get_label_location(formula)
-    if value == 1745323118234039575158332314383998379920114756853600128775583542343013246395:
+    # These values comes from get_selector_from_name available in the python api
+    const SUM_VALUE = 1745323118234039575158332314383998379920114756853600128775583542343013246395
+    const PROD_VALUE = 390954762583876961124108005862584803545498882125673813294165296772873328665
+    if value == SUM_VALUE:
         let (result) = sum(dependencies_len, dependencies)
-    else:
-        let (result) = prod(dependencies_len, dependencies)
+        return (result)
     end
-
-    return (result)
+    if value == PROD_VALUE:
+        let (result) = prod(dependencies_len, dependencies)
+        return (result)
+    end
+    with_attr error_message("renderCell: formula {value} not found"):
+        assert 0 = 1
+    end
+    return (0)
 end
 
 func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(

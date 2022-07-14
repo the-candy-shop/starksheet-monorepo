@@ -13,10 +13,12 @@ from contracts.library import (
     Starksheet_getCell,
     Starksheet_setCell,
     Starksheet_renderCell,
+    Starksheet_renderGrid,
     Starksheet_mint,
     Starksheet_mintBatch,
     CellRendered,
 )
+from contracts.constants import GRID_SIZE
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -55,6 +57,17 @@ func renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 ) -> (cell : CellRendered):
     let (cell) = Starksheet_renderCell(tokenId)
     return (cell)
+end
+
+@view
+func renderGrid{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    cells_len : felt, cells : CellRendered*
+):
+    alloc_locals
+    let (local cells : CellRendered*) = alloc()
+    let stop = GRID_SIZE
+    Starksheet_renderGrid{cells=cells, stop=stop}(0)
+    return (GRID_SIZE, cells)
 end
 
 @external

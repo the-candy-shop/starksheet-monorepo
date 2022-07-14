@@ -13,6 +13,7 @@ from constants import OWNER
 Cell = namedtuple("Cell", ["id", "value", "dependencies"])
 random.seed(0)
 
+GRID_SIZE = 15 * 15
 OTHER = OWNER + 1
 FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod]}
 CELLS = [
@@ -35,6 +36,8 @@ CELLS = [
 
 def render(cells):
     def _render(i):
+        if i >= len(cells):
+            return 0
         cell = cells[i]
         if not cell.dependencies:
             return cell.value
@@ -153,6 +156,15 @@ class TestStarksheet:
                 await starksheet.renderCell(cell.id).call()
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"renderCell: formula {cell.value + 1} not found"
+
+    class TestRenderGrid:
+        @staticmethod
+        async def test_should_return_rendered_grid(starksheet_minted):
+            result = (await starksheet_minted.renderGrid().call()).result.cells
+            grid = [render(CELLS)(i) for i in range(GRID_SIZE)]
+            assert [cell.value for cell in result] == grid
+            assert {cell.owner for cell in result} == {0, OWNER}
+            assert [cell.id for cell in result] == list(range(GRID_SIZE))
 
     class TestMintBatchPublic:
         @staticmethod

@@ -442,6 +442,22 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "renderGrid",
+        "outputs": [
+            {
+                "name": "cells_len",
+                "type": "felt"
+            },
+            {
+                "name": "cells",
+                "type": "CellRendered*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "name": "tokenId",

@@ -8,7 +8,7 @@ from starkware.starknet.common.syscalls import (
     get_contract_address,
     get_caller_address,
 )
-from openzeppelin.token.erc721.library import ERC721_mint, ERC721_ownerOf
+from openzeppelin.token.erc721.library import ERC721_mint, ERC721_owners
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256
 
@@ -149,8 +149,27 @@ func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
 ) -> (cell : CellRendered):
     let (result) = _render_cell(value)
     let token_id = Uint256(value, 0)
-    let (owner) = ERC721_ownerOf(token_id)
+    let (owner) = ERC721_owners.read(token_id)
     return (CellRendered(id=value, owner=owner, value=result))
+end
+
+# TODO: This method is inefficient because it probably (depending on the content of the sheet)
+# TODO: render some cells several times.
+# TODO: Rework by storing all the results of the intermediate _render_cell
+func Starksheet_renderGrid{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+    cells : CellRendered*,
+    stop : felt,
+}(index : felt):
+    # alloc_locals
+    if index == stop:
+        return ()
+    end
+    let (cell) = Starksheet_renderCell(index)
+    assert [cells + CellRendered.SIZE * index] = cell
+    return Starksheet_renderGrid(index + 1)
 end
 
 func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(

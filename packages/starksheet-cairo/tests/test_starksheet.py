@@ -123,8 +123,10 @@ class TestStarksheet:
         @staticmethod
         @pytest.mark.parametrize("cell", CELLS)
         async def test_should_return_rendered_cell_value(starksheet_minted, cell):
-            result = (await starksheet_minted.renderCell(cell.id).call()).result
+            result = (await starksheet_minted.renderCell(cell.id).call()).result.cell
             assert result.value == render(CELLS)(cell.id)
+            assert result.id == cell.id
+            assert result.owner == OWNER
 
         @staticmethod
         @pytest_asyncio.fixture

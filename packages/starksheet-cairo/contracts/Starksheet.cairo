@@ -15,6 +15,7 @@ from contracts.library import (
     Starksheet_renderCell,
     Starksheet_mint,
     Starksheet_mintBatch,
+    CellRendered,
 )
 
 @external
@@ -51,9 +52,9 @@ end
 @view
 func renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     tokenId : felt
-) -> (value : felt):
-    let (res) = Starksheet_renderCell(tokenId)
-    return (res)
+) -> (cell : CellRendered):
+    let (cell) = Starksheet_renderCell(tokenId)
+    return (cell)
 end
 
 @external

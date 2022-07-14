@@ -8,11 +8,12 @@ from starkware.starknet.common.syscalls import (
     get_contract_address,
     get_caller_address,
 )
-from openzeppelin.token.erc721.library import ERC721_mint
+from openzeppelin.token.erc721.library import ERC721_mint, ERC721_ownerOf
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256
 
 from contracts.math import sum, prod
+from contracts.constants import SUM_VALUE, PROD_VALUE
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -22,6 +23,12 @@ end
 # If there is no dependency, the value is a constant, otherwise it is a function identifier.
 struct CellData:
     member dependencies_len : felt
+    member value : felt
+end
+
+struct CellRendered:
+    member id : felt
+    member owner : felt
     member value : felt
 end
 
@@ -97,7 +104,8 @@ func Starksheet_getCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_
     return (cell_data.value, dependencies_len, dependencies)
 end
 
-func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+# Signature has to be the following to use stream.map, hence the "value" and "result" kwargs
+func _render_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     value : felt
 ) -> (result : felt):
     alloc_locals
@@ -106,7 +114,7 @@ func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     if dependencies_len == 0:
         return (result)
     end
-    let (dependencies) = stream.map(Starksheet_renderCell, dependencies_len, dependencies)
+    let (dependencies) = stream.map(_render_cell, dependencies_len, dependencies)
 
     # TODO: store address in cell to be able to call any function from any contract (math/ml lib for instance)
     # let (contract_address) = get_contract_address()
@@ -122,9 +130,6 @@ func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
     # let result = retdata[0]
 
     # TODO: can't make the call_contract work, for now this is a workaround to plug the FE
-    # These values comes from get_selector_from_name available in the python api
-    const SUM_VALUE = 1745323118234039575158332314383998379920114756853600128775583542343013246395
-    const PROD_VALUE = 390954762583876961124108005862584803545498882125673813294165296772873328665
     if value == SUM_VALUE:
         let (result) = sum(dependencies_len, dependencies)
         return (result)
@@ -137,6 +142,15 @@ func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ran
         assert 0 = 1
     end
     return (0)
+end
+
+func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    value : felt
+) -> (cell : CellRendered):
+    let (result) = _render_cell(value)
+    let token_id = Uint256(value, 0)
+    let (owner) = ERC721_ownerOf(token_id)
+    return (CellRendered(id=value, owner=owner, value=result))
 end
 
 func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(

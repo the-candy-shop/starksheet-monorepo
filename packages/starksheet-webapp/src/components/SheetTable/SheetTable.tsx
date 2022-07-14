@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
 import GreyCell from "../GreyCell/GreyCell";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { Box, BoxProps } from "@mui/material";
-import Cell from "../Cell/Cell";
-import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { computeCellValue } from "./compute.utils";
+import ComputedCell from "../ComputedCell/ComputedCell";
+import { BigNumberish, toHex } from "starknet/utils/number";
 
 export type SheetTableProps = {
-  selectedCell: string | null;
-  setSelectedCell: (value: string | null) => void;
+  selectedCell: { name: string; id: number } | null;
+  setSelectedCell: (value: { name: string; id: number } | null) => void;
+  cellsData: { value: BigNumberish; owner: BigNumberish }[];
   rows?: number;
   columns?: number;
   sx?: BoxProps["sx"];
@@ -18,6 +18,7 @@ export type SheetTableProps = {
 function SheetTable({
   selectedCell,
   setSelectedCell,
+  cellsData,
   rows = 15,
   columns = 15,
   sx,
@@ -27,16 +28,6 @@ function SheetTable({
     [columns]
   );
   const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
-  const { values } = React.useContext(CellValuesContext);
-
-  const computedValues = React.useMemo(
-    () =>
-      Object.keys(values).reduce((result: Record<string, string>, cellName) => {
-        result[cellName] = computeCellValue(cellName, values);
-        return result;
-      }, {}),
-    [values]
-  );
 
   return (
     <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>
@@ -69,7 +60,7 @@ function SheetTable({
           </GreyCell>
         ))}
       </Box>
-      {rowNames.map((rowName) => (
+      {rowNames.map((rowName, rowIndex) => (
         <Box
           key={rowName}
           sx={{ display: "flex", marginTop: `-${CELL_BORDER_WIDTH}px` }}
@@ -88,22 +79,28 @@ function SheetTable({
           >
             {rowName}
           </GreyCell>
-          {columnNames.map((columnName) => (
-            <Cell
-              key={columnName}
-              selected={`${columnName}${rowName}` === selectedCell}
-              onClick={() => setSelectedCell(`${columnName}${rowName}`)}
-              sx={{
-                width: `${CELL_WIDTH}px`,
-                minWidth: `${CELL_WIDTH}px`,
-                maxWidth: `${CELL_WIDTH}px`,
-                marginLeft: `-${CELL_BORDER_WIDTH}px`,
-                textAlign: "center",
-              }}
-            >
-              {computedValues[`${columnName}${rowName}`]}
-            </Cell>
-          ))}
+          {columnNames.map((columnName, columnIndex) => {
+            const id = columnIndex + columnNames.length * rowIndex;
+            const value = cellsData[id]
+              ? cellsData[id].value.toString()
+              : undefined;
+            const owner =
+              cellsData[id] && cellsData[id].owner.toString() !== "0"
+                ? toHex(cellsData[id].owner)
+                : undefined;
+
+            return (
+              <ComputedCell
+                key={`${columnName}${rowName}`}
+                name={`${columnName}${rowName}`}
+                id={id}
+                value={value}
+                owner={owner}
+                selected={`${columnName}${rowName}` === selectedCell?.name}
+                setSelectedCell={setSelectedCell}
+              />
+            );
+          })}
         </Box>
       ))}
     </Box>

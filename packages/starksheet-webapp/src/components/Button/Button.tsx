@@ -3,15 +3,16 @@ import GreyCell, { GreyCellProps } from "../GreyCell/GreyCell";
 import { BoxProps } from "@mui/material";
 
 export type ButtonProps = GreyCellProps & {
+  disabled?: boolean;
   onClick: BoxProps["onClick"];
 };
 
-function Button({ children, onClick, sx }: ButtonProps) {
+function Button({ children, onClick, disabled = false, sx }: ButtonProps) {
   return (
     <GreyCell
-      onClick={onClick}
+      onClick={!disabled ? onClick : undefined}
       sx={{
-        cursor: "pointer",
+        cursor: !disabled ? "pointer" : "not-allowed",
         "& .content": { justifyContent: "center" },
         ...sx,
       }}

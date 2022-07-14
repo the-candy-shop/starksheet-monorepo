@@ -3,13 +3,24 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { CellValuesContextProvider } from "./contexts/CellValuesContext";
+import {
+  getInstalledInjectedConnectors,
+  StarknetProvider,
+} from "@starknet-react/core";
+
+const connectors = getInstalledInjectedConnectors();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <StarknetProvider connectors={connectors}>
+      <CellValuesContextProvider>
+        <App />
+      </CellValuesContextProvider>
+    </StarknetProvider>
   </React.StrictMode>
 );
 

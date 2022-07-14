@@ -1,24 +1,54 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
+import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
+import { useStarknetCall } from "@starknet-react/core";
+import { BigNumberish } from "starknet/utils/number";
 
 export const CellValuesContext = React.createContext<{
-  values: Record<string, string>;
-  setValue: (key: string, value: string) => void;
+  loading: boolean;
+  hasLoaded: boolean;
+  values: { owner: BigNumberish; value: BigNumberish }[];
+  updateValueOwner: (id: number, owner: BigNumberish) => void;
 }>({
-  values: {},
-  setValue: () => {},
+  loading: false,
+  hasLoaded: false,
+  values: [],
+  updateValueOwner: () => {},
 });
 
 export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const [values, setValues] = React.useState<Record<string, string>>({});
-  const setValue = React.useCallback(
-    (key: string, value: string) => setValues({ ...values, [key]: value }),
-    [setValues, values]
+  const [values, setValues] = React.useState<
+    { owner: BigNumberish; value: BigNumberish }[]
+  >([]);
+
+  const { contract } = useStarkSheetContract();
+  const { data: gridData, loading } = useStarknetCall({
+    contract,
+    method: "renderGrid",
+    args: [],
+  });
+
+  React.useEffect(() => {
+    if (gridData) {
+      // @ts-ignore
+      setValues(gridData.cells ? gridData.cells : []);
+    }
+  }, [gridData]);
+
+  const updateValueOwner = useCallback(
+    (id: number, owner: BigNumberish) => {
+      const newValues = [...values];
+      newValues[id] = { ...values[id], owner: owner };
+      setValues(newValues);
+    },
+    [values]
   );
 
   return (
-    <CellValuesContext.Provider value={{ values, setValue }}>
+    <CellValuesContext.Provider
+      value={{ values, updateValueOwner, loading, hasLoaded: !!gridData }}
+    >
       {children}
     </CellValuesContext.Provider>
   );

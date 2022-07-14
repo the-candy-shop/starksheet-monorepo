@@ -24,6 +24,7 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
     >
       {selected && (
         <Box
+          className="selection"
           sx={{
             position: "absolute",
             top: `${CELL_BORDER_WIDTH}px`,
@@ -35,6 +36,7 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
           }}
         >
           <Box
+            className="selection-square"
             sx={{
               position: "absolute",
               height: "8px",

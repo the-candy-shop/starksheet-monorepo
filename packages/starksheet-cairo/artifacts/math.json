@@ -6,11 +6,85 @@
         "L1_HANDLER": []
     },
     "program": {
-        "attributes": [],
+        "attributes": [
+            {
+                "accessible_scopes": [
+                    "__main__",
+                    "__main__.div"
+                ],
+                "end_pc": 65,
+                "flow_tracking_data": {
+                    "ap_tracking": {
+                        "group": 7,
+                        "offset": 0
+                    },
+                    "reference_ids": {
+                        "__main__.div.arr_len": 6
+                    }
+                },
+                "name": "error_message",
+                "start_pc": 63,
+                "value": "div only works with 2 arguments, {arr_len} given"
+            },
+            {
+                "accessible_scopes": [
+                    "__main__",
+                    "__main__.sub"
+                ],
+                "end_pc": 76,
+                "flow_tracking_data": {
+                    "ap_tracking": {
+                        "group": 8,
+                        "offset": 0
+                    },
+                    "reference_ids": {
+                        "__main__.sub.arr_len": 7
+                    }
+                },
+                "name": "error_message",
+                "start_pc": 74,
+                "value": "sub only works with 2 arguments, {arr_len} given"
+            }
+        ],
         "builtins": [
             "range_check"
         ],
         "data": [
+            "0x400380007ffc7ffd",
+            "0x482680017ffc8000",
+            "0x1",
+            "0x208b7fff7fff7ffe",
+            "0x480a7ffb7fff8000",
+            "0x48297ffc80007ffd",
+            "0x1104800180018000",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffffb",
+            "0x208b7fff7fff7ffe",
+            "0x480280017ffa8000",
+            "0x48287ffd80007fff",
+            "0x48487ffc7fff8000",
+            "0x480280007ffa8000",
+            "0x40317fff7ffe7ffb",
+            "0x482680017ffa8000",
+            "0x2",
+            "0x480280007ffa8000",
+            "0x482680017ffc8000",
+            "0x800000000000011000000000000000000000000000000000000000000000000",
+            "0x1104800180018000",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffff2",
+            "0x480680017fff8000",
+            "0x2",
+            "0x48487ffd7fff8000",
+            "0x48127ffd7fff8000",
+            "0x480280017ffa8000",
+            "0x482480017ffd8000",
+            "0x800000000000011000000000000000000000000000000000000000000000000",
+            "0x1104800180018000",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffe9",
+            "0x480280017ffa8000",
+            "0x48127ffe7fff8000",
+            "0x48287ffd80007ffe",
+            "0x480280007ffa8000",
+            "0x208b7fff7fff7ffe",
             "0x20780017fff7ffc",
             "0x5",
             "0x480680017fff8000",
@@ -38,12 +112,778 @@
             "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffff8",
             "0x480280007ffd8000",
             "0x48507ffe7fff8000",
+            "0x208b7fff7fff7ffe",
+            "0x400780017fff7ffc",
+            "0x2",
+            "0x480a7ffb7fff8000",
+            "0x480280007ffd8000",
+            "0x480280017ffd8000",
+            "0x480280017ffd8000",
+            "0x1104800180018000",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffc5",
+            "0x48127ffd7fff8000",
+            "0x48127ffd7fff8000",
+            "0x208b7fff7fff7ffe",
+            "0x400780017fff7ffc",
+            "0x2",
+            "0x480280007ffd8000",
+            "0x480280017ffd8000",
+            "0x48307fff80007ffe",
             "0x208b7fff7fff7ffe"
         ],
         "debug_info": {
             "file_contents": {},
             "instruction_locations": {
                 "0": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_nn"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [
+                        {
+                            "location": {
+                                "end_col": 7,
+                                "end_line": 44,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 5,
+                                "start_line": 40
+                            },
+                            "n_prefix_newlines": 1
+                        }
+                    ],
+                    "inst": {
+                        "end_col": 26,
+                        "end_line": 45,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 45
+                    }
+                },
+                "1": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_nn"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 46,
+                        "end_line": 46,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 31,
+                                "end_line": 39,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 14,
+                                        "end_line": 47,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "start_col": 5,
+                                        "start_line": 47
+                                    },
+                                    "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                ],
+                                "start_col": 16,
+                                "start_line": 39
+                            },
+                            "While expanding the reference 'range_check_ptr' in:"
+                        ],
+                        "start_col": 27,
+                        "start_line": 46
+                    }
+                },
+                "3": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_nn"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 14,
+                        "end_line": 47,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 47
+                    }
+                },
+                "4": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_le"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 31,
+                        "end_line": 51,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 31,
+                                "end_line": 39,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 21,
+                                        "end_line": 52,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "start_col": 5,
+                                        "start_line": 52
+                                    },
+                                    "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                ],
+                                "start_col": 16,
+                                "start_line": 39
+                            },
+                            "While expanding the reference 'range_check_ptr' in:"
+                        ],
+                        "start_col": 16,
+                        "start_line": 51
+                    }
+                },
+                "5": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_le"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 20,
+                        "end_line": 52,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 15,
+                        "start_line": 52
+                    }
+                },
+                "6": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_le"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 21,
+                        "end_line": 52,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 52
+                    }
+                },
+                "8": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_le"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 14,
+                        "end_line": 53,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 53
+                    }
+                },
+                "9": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [
+                        {
+                            "location": {
+                                "end_col": 7,
+                                "end_line": 311,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 5,
+                                "start_line": 293
+                            },
+                            "n_prefix_newlines": 1
+                        }
+                    ],
+                    "inst": {
+                        "end_col": 41,
+                        "end_line": 291,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 21,
+                                "end_line": 312,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 21,
+                                        "end_line": 313,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "start_col": 20,
+                                        "start_line": 313
+                                    },
+                                    "While expanding the reference 'q' in:"
+                                ],
+                                "start_col": 13,
+                                "start_line": 312
+                            },
+                            "While expanding the reference 'biased_q' in:"
+                        ],
+                        "start_col": 20,
+                        "start_line": 291
+                    }
+                },
+                "10": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 29,
+                        "end_line": 312,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 21,
+                                "end_line": 313,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 20,
+                                "start_line": 313
+                            },
+                            "While expanding the reference 'q' in:"
+                        ],
+                        "start_col": 13,
+                        "start_line": 312
+                    }
+                },
+                "11": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 27,
+                        "end_line": 313,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 20,
+                        "start_line": 313
+                    }
+                },
+                "12": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 30,
+                        "end_line": 290,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 31,
+                                "end_line": 313,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 30,
+                                "start_line": 313
+                            },
+                            "While expanding the reference 'r' in:"
+                        ],
+                        "start_col": 13,
+                        "start_line": 290
+                    }
+                },
+                "13": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 31,
+                        "end_line": 313,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 313
+                    }
+                },
+                "14": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 46,
+                        "end_line": 292,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 31,
+                                "end_line": 51,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 26,
+                                        "end_line": 314,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "start_col": 5,
+                                        "start_line": 314
+                                    },
+                                    "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                ],
+                                "start_col": 16,
+                                "start_line": 51
+                            },
+                            "While expanding the reference 'range_check_ptr' in:"
+                        ],
+                        "start_col": 27,
+                        "start_line": 292
+                    }
+                },
+                "16": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 30,
+                        "end_line": 290,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 16,
+                                "end_line": 314,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 15,
+                                "start_line": 314
+                            },
+                            "While expanding the reference 'r' in:"
+                        ],
+                        "start_col": 13,
+                        "start_line": 290
+                    }
+                },
+                "17": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 25,
+                        "end_line": 314,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 18,
+                        "start_line": 314
+                    }
+                },
+                "19": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 26,
+                        "end_line": 314,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 314
+                    }
+                },
+                "21": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 26,
+                        "end_line": 315,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 25,
+                        "start_line": 315
+                    }
+                },
+                "23": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 34,
+                        "end_line": 315,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 25,
+                        "start_line": 315
+                    }
+                },
+                "24": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 31,
+                        "end_line": 51,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 26,
+                                "end_line": 314,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 31,
+                                        "end_line": 51,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "parent_location": [
+                                            {
+                                                "end_col": 39,
+                                                "end_line": 315,
+                                                "input_file": {
+                                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                                },
+                                                "start_col": 5,
+                                                "start_line": 315
+                                            },
+                                            "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                        ],
+                                        "start_col": 16,
+                                        "start_line": 51
+                                    },
+                                    "While expanding the reference 'range_check_ptr' in:"
+                                ],
+                                "start_col": 5,
+                                "start_line": 314
+                            },
+                            "While trying to update the implicit return value 'range_check_ptr' in:"
+                        ],
+                        "start_col": 16,
+                        "start_line": 51
+                    }
+                },
+                "25": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 41,
+                        "end_line": 291,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 23,
+                                "end_line": 315,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 15,
+                                "start_line": 315
+                            },
+                            "While expanding the reference 'biased_q' in:"
+                        ],
+                        "start_col": 20,
+                        "start_line": 291
+                    }
+                },
+                "26": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 38,
+                        "end_line": 315,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 25,
+                        "start_line": 315
+                    }
+                },
+                "28": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 39,
+                        "end_line": 315,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 315
+                    }
+                },
+                "30": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 41,
+                        "end_line": 291,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 21,
+                                "end_line": 312,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 14,
+                                        "end_line": 316,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "start_col": 13,
+                                        "start_line": 316
+                                    },
+                                    "While expanding the reference 'q' in:"
+                                ],
+                                "start_col": 13,
+                                "start_line": 312
+                            },
+                            "While expanding the reference 'biased_q' in:"
+                        ],
+                        "start_col": 20,
+                        "start_line": 291
+                    }
+                },
+                "31": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 31,
+                        "end_line": 51,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 39,
+                                "end_line": 315,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 36,
+                                        "end_line": 289,
+                                        "input_file": {
+                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                        },
+                                        "parent_location": [
+                                            {
+                                                "end_col": 18,
+                                                "end_line": 316,
+                                                "input_file": {
+                                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                                },
+                                                "start_col": 5,
+                                                "start_line": 316
+                                            },
+                                            "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                        ],
+                                        "start_col": 21,
+                                        "start_line": 289
+                                    },
+                                    "While expanding the reference 'range_check_ptr' in:"
+                                ],
+                                "start_col": 5,
+                                "start_line": 315
+                            },
+                            "While trying to update the implicit return value 'range_check_ptr' in:"
+                        ],
+                        "start_col": 16,
+                        "start_line": 51
+                    }
+                },
+                "32": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 29,
+                        "end_line": 312,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 14,
+                                "end_line": 316,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 13,
+                                "start_line": 316
+                            },
+                            "While expanding the reference 'q' in:"
+                        ],
+                        "start_col": 13,
+                        "start_line": 312
+                    }
+                },
+                "33": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 30,
+                        "end_line": 290,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 17,
+                                "end_line": 316,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 16,
+                                "start_line": 316
+                            },
+                            "While expanding the reference 'r' in:"
+                        ],
+                        "start_col": 13,
+                        "start_line": 290
+                    }
+                },
+                "34": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 18,
+                        "end_line": 316,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 316
+                    }
+                },
+                "35": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -52,15 +892,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 7,
-                        "end_line": 4,
+                        "end_line": 6,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 4
+                        "start_line": 6
                     }
                 },
-                "2": {
+                "37": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -69,15 +909,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 5,
+                        "end_line": 7,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 17,
-                        "start_line": 5
+                        "start_line": 7
                     }
                 },
-                "4": {
+                "39": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -86,15 +926,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 19,
-                        "end_line": 5,
+                        "end_line": 7,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 9,
-                        "start_line": 5
+                        "start_line": 7
                     }
                 },
-                "5": {
+                "40": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -103,15 +943,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 48,
-                        "end_line": 8,
+                        "end_line": 10,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 37,
-                        "start_line": 8
+                        "start_line": 10
                     }
                 },
-                "7": {
+                "42": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -120,15 +960,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 61,
-                        "end_line": 8,
+                        "end_line": 10,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 54,
-                        "start_line": 8
+                        "start_line": 10
                     }
                 },
-                "9": {
+                "44": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -137,15 +977,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 62,
-                        "end_line": 8,
+                        "end_line": 10,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 25,
-                        "start_line": 8
+                        "start_line": 10
                     }
                 },
-                "11": {
+                "46": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -154,15 +994,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 9,
+                        "end_line": 11,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 9
+                        "start_line": 11
                     }
                 },
-                "12": {
+                "47": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -171,15 +1011,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 32,
-                        "end_line": 9,
+                        "end_line": 11,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 9
+                        "start_line": 11
                     }
                 },
-                "13": {
+                "48": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.sum"
@@ -188,15 +1028,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 33,
-                        "end_line": 9,
+                        "end_line": 11,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 9
+                        "start_line": 11
                     }
                 },
-                "14": {
+                "49": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -205,15 +1045,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 7,
-                        "end_line": 13,
+                        "end_line": 15,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 13
+                        "start_line": 15
                     }
                 },
-                "16": {
+                "51": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -222,15 +1062,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 14,
+                        "end_line": 16,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 17,
-                        "start_line": 14
+                        "start_line": 16
                     }
                 },
-                "18": {
+                "53": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -239,15 +1079,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 19,
-                        "end_line": 14,
+                        "end_line": 16,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 9,
-                        "start_line": 14
+                        "start_line": 16
                     }
                 },
-                "19": {
+                "54": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -256,15 +1096,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 50,
-                        "end_line": 17,
+                        "end_line": 19,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 39,
-                        "start_line": 17
+                        "start_line": 19
                     }
                 },
-                "21": {
+                "56": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -273,15 +1113,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 63,
-                        "end_line": 17,
+                        "end_line": 19,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 56,
-                        "start_line": 17
+                        "start_line": 19
                     }
                 },
-                "23": {
+                "58": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -290,15 +1130,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 64,
-                        "end_line": 17,
+                        "end_line": 19,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 26,
-                        "start_line": 17
+                        "start_line": 19
                     }
                 },
-                "25": {
+                "60": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -307,15 +1147,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 18,
+                        "end_line": 20,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 18
+                        "start_line": 20
                     }
                 },
-                "26": {
+                "61": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -324,15 +1164,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 33,
-                        "end_line": 18,
+                        "end_line": 20,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 18
+                        "start_line": 20
                     }
                 },
-                "27": {
+                "62": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.prod"
@@ -341,21 +1181,426 @@
                     "hints": [],
                     "inst": {
                         "end_col": 34,
-                        "end_line": 18,
+                        "end_line": 20,
                         "input_file": {
                             "filename": "contracts/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 18
+                        "start_line": 20
+                    }
+                },
+                "63": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 27,
+                        "end_line": 25,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 9,
+                        "start_line": 25
+                    }
+                },
+                "65": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 25,
+                        "end_line": 23,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 36,
+                                "end_line": 289,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 56,
+                                        "end_line": 27,
+                                        "input_file": {
+                                            "filename": "contracts/math.cairo"
+                                        },
+                                        "start_col": 18,
+                                        "start_line": 27
+                                    },
+                                    "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                ],
+                                "start_col": 21,
+                                "start_line": 289
+                            },
+                            "While expanding the reference 'range_check_ptr' in:"
+                        ],
+                        "start_col": 10,
+                        "start_line": 23
+                    }
+                },
+                "66": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 39,
+                        "end_line": 27,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 33,
+                        "start_line": 27
+                    }
+                },
+                "67": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 47,
+                        "end_line": 27,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 41,
+                        "start_line": 27
+                    }
+                },
+                "68": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 55,
+                        "end_line": 27,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 49,
+                        "start_line": 27
+                    }
+                },
+                "69": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 56,
+                        "end_line": 27,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 18,
+                        "start_line": 27
+                    }
+                },
+                "71": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 36,
+                        "end_line": 289,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 56,
+                                "end_line": 27,
+                                "input_file": {
+                                    "filename": "contracts/math.cairo"
+                                },
+                                "parent_location": [
+                                    {
+                                        "end_col": 25,
+                                        "end_line": 23,
+                                        "input_file": {
+                                            "filename": "contracts/math.cairo"
+                                        },
+                                        "parent_location": [
+                                            {
+                                                "end_col": 15,
+                                                "end_line": 28,
+                                                "input_file": {
+                                                    "filename": "contracts/math.cairo"
+                                                },
+                                                "start_col": 5,
+                                                "start_line": 28
+                                            },
+                                            "While trying to retrieve the implicit argument 'range_check_ptr' in:"
+                                        ],
+                                        "start_col": 10,
+                                        "start_line": 23
+                                    },
+                                    "While expanding the reference 'range_check_ptr' in:"
+                                ],
+                                "start_col": 18,
+                                "start_line": 27
+                            },
+                            "While trying to update the implicit return value 'range_check_ptr' in:"
+                        ],
+                        "start_col": 21,
+                        "start_line": 289
+                    }
+                },
+                "72": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 11,
+                        "end_line": 27,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "parent_location": [
+                            {
+                                "end_col": 14,
+                                "end_line": 28,
+                                "input_file": {
+                                    "filename": "contracts/math.cairo"
+                                },
+                                "start_col": 13,
+                                "start_line": 28
+                            },
+                            "While expanding the reference 'q' in:"
+                        ],
+                        "start_col": 10,
+                        "start_line": 27
+                    }
+                },
+                "73": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 15,
+                        "end_line": 28,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 28
+                    }
+                },
+                "74": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.sub"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 27,
+                        "end_line": 33,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 9,
+                        "start_line": 33
+                    }
+                },
+                "76": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.sub"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 19,
+                        "end_line": 35,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 13,
+                        "start_line": 35
+                    }
+                },
+                "77": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.sub"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 28,
+                        "end_line": 35,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 22,
+                        "start_line": 35
+                    }
+                },
+                "78": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.sub"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 28,
+                        "end_line": 35,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 13,
+                        "start_line": 35
+                    }
+                },
+                "79": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__.sub"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 29,
+                        "end_line": 35,
+                        "input_file": {
+                            "filename": "contracts/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 35
                     }
                 }
             }
         },
-        "hints": {},
+        "hints": {
+            "0": [
+                {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_nn"
+                    ],
+                    "code": "from starkware.cairo.common.math_utils import assert_integer\nassert_integer(ids.a)\nassert 0 <= ids.a % PRIME < range_check_builtin.bound, f'a = {ids.a} is out of range.'",
+                    "flow_tracking_data": {
+                        "ap_tracking": {
+                            "group": 0,
+                            "offset": 0
+                        },
+                        "reference_ids": {
+                            "starkware.cairo.common.math.assert_nn.a": 0
+                        }
+                    }
+                }
+            ],
+            "9": [
+                {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.signed_div_rem"
+                    ],
+                    "code": "from starkware.cairo.common.math_utils import as_int, assert_integer\n\nassert_integer(ids.div)\nassert 0 < ids.div <= PRIME // range_check_builtin.bound, \\\n    f'div={hex(ids.div)} is out of the valid range.'\n\nassert_integer(ids.bound)\nassert ids.bound <= range_check_builtin.bound // 2, \\\n    f'bound={hex(ids.bound)} is out of the valid range.'\n\nint_value = as_int(ids.value, PRIME)\nq, ids.r = divmod(int_value, ids.div)\n\nassert -ids.bound <= q < ids.bound, \\\n    f'{int_value} / {ids.div} = {q} is out of the range [{-ids.bound}, {ids.bound}).'\n\nids.biased_q = q + ids.bound",
+                    "flow_tracking_data": {
+                        "ap_tracking": {
+                            "group": 2,
+                            "offset": 0
+                        },
+                        "reference_ids": {
+                            "starkware.cairo.common.math.signed_div_rem.biased_q": 5,
+                            "starkware.cairo.common.math.signed_div_rem.bound": 3,
+                            "starkware.cairo.common.math.signed_div_rem.div": 2,
+                            "starkware.cairo.common.math.signed_div_rem.r": 4,
+                            "starkware.cairo.common.math.signed_div_rem.value": 1
+                        }
+                    }
+                }
+            ]
+        },
         "identifiers": {
+            "__main__.div": {
+                "decorators": [],
+                "pc": 63,
+                "type": "function"
+            },
+            "__main__.div.Args": {
+                "full_name": "__main__.div.Args",
+                "members": {
+                    "arr": {
+                        "cairo_type": "felt*",
+                        "offset": 1
+                    },
+                    "arr_len": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 2,
+                "type": "struct"
+            },
+            "__main__.div.ImplicitArgs": {
+                "full_name": "__main__.div.ImplicitArgs",
+                "members": {
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 1,
+                "type": "struct"
+            },
+            "__main__.div.Return": {
+                "cairo_type": "(res : felt)",
+                "type": "type_definition"
+            },
+            "__main__.div.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "__main__.div.arr_len": {
+                "cairo_type": "felt",
+                "full_name": "__main__.div.arr_len",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 7,
+                            "offset": 0
+                        },
+                        "pc": 63,
+                        "value": "[cast(fp + (-4), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
             "__main__.prod": {
                 "decorators": [],
-                "pc": 14,
+                "pc": 49,
                 "type": "function"
             },
             "__main__.prod.Args": {
@@ -387,9 +1632,62 @@
                 "type": "const",
                 "value": 0
             },
+            "__main__.signed_div_rem": {
+                "destination": "starkware.cairo.common.math.signed_div_rem",
+                "type": "alias"
+            },
+            "__main__.sub": {
+                "decorators": [],
+                "pc": 74,
+                "type": "function"
+            },
+            "__main__.sub.Args": {
+                "full_name": "__main__.sub.Args",
+                "members": {
+                    "arr": {
+                        "cairo_type": "felt*",
+                        "offset": 1
+                    },
+                    "arr_len": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 2,
+                "type": "struct"
+            },
+            "__main__.sub.ImplicitArgs": {
+                "full_name": "__main__.sub.ImplicitArgs",
+                "members": {},
+                "size": 0,
+                "type": "struct"
+            },
+            "__main__.sub.Return": {
+                "cairo_type": "(res : felt)",
+                "type": "type_definition"
+            },
+            "__main__.sub.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "__main__.sub.arr_len": {
+                "cairo_type": "felt",
+                "full_name": "__main__.sub.arr_len",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 8,
+                            "offset": 0
+                        },
+                        "pc": 74,
+                        "value": "[cast(fp + (-4), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
             "__main__.sum": {
                 "decorators": [],
-                "pc": 0,
+                "pc": 35,
                 "type": "function"
             },
             "__main__.sum.Args": {
@@ -546,6 +1844,213 @@
             "starkware.cairo.common.hash.HashBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.HashBuiltin",
                 "type": "alias"
+            },
+            "starkware.cairo.common.math.assert_le": {
+                "decorators": [],
+                "pc": 4,
+                "type": "function"
+            },
+            "starkware.cairo.common.math.assert_le.Args": {
+                "full_name": "starkware.cairo.common.math.assert_le.Args",
+                "members": {
+                    "a": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "b": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    }
+                },
+                "size": 2,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.assert_le.ImplicitArgs": {
+                "full_name": "starkware.cairo.common.math.assert_le.ImplicitArgs",
+                "members": {
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 1,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.assert_le.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "starkware.cairo.common.math.assert_le.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "starkware.cairo.common.math.assert_nn": {
+                "decorators": [],
+                "pc": 0,
+                "type": "function"
+            },
+            "starkware.cairo.common.math.assert_nn.Args": {
+                "full_name": "starkware.cairo.common.math.assert_nn.Args",
+                "members": {
+                    "a": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 1,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.assert_nn.ImplicitArgs": {
+                "full_name": "starkware.cairo.common.math.assert_nn.ImplicitArgs",
+                "members": {
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 1,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.assert_nn.Return": {
+                "cairo_type": "()",
+                "type": "type_definition"
+            },
+            "starkware.cairo.common.math.assert_nn.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "starkware.cairo.common.math.assert_nn.a": {
+                "cairo_type": "felt",
+                "full_name": "starkware.cairo.common.math.assert_nn.a",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 0,
+                            "offset": 0
+                        },
+                        "pc": 0,
+                        "value": "[cast(fp + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "starkware.cairo.common.math.signed_div_rem": {
+                "decorators": [],
+                "pc": 9,
+                "type": "function"
+            },
+            "starkware.cairo.common.math.signed_div_rem.Args": {
+                "full_name": "starkware.cairo.common.math.signed_div_rem.Args",
+                "members": {
+                    "bound": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    },
+                    "div": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    },
+                    "value": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 3,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.signed_div_rem.ImplicitArgs": {
+                "full_name": "starkware.cairo.common.math.signed_div_rem.ImplicitArgs",
+                "members": {
+                    "range_check_ptr": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 1,
+                "type": "struct"
+            },
+            "starkware.cairo.common.math.signed_div_rem.Return": {
+                "cairo_type": "(q : felt, r : felt)",
+                "type": "type_definition"
+            },
+            "starkware.cairo.common.math.signed_div_rem.SIZEOF_LOCALS": {
+                "type": "const",
+                "value": 0
+            },
+            "starkware.cairo.common.math.signed_div_rem.biased_q": {
+                "cairo_type": "felt",
+                "full_name": "starkware.cairo.common.math.signed_div_rem.biased_q",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 2,
+                            "offset": 0
+                        },
+                        "pc": 9,
+                        "value": "[cast([fp + (-6)] + 1, felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "starkware.cairo.common.math.signed_div_rem.bound": {
+                "cairo_type": "felt",
+                "full_name": "starkware.cairo.common.math.signed_div_rem.bound",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 2,
+                            "offset": 0
+                        },
+                        "pc": 9,
+                        "value": "[cast(fp + (-3), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "starkware.cairo.common.math.signed_div_rem.div": {
+                "cairo_type": "felt",
+                "full_name": "starkware.cairo.common.math.signed_div_rem.div",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 2,
+                            "offset": 0
+                        },
+                        "pc": 9,
+                        "value": "[cast(fp + (-4), felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "starkware.cairo.common.math.signed_div_rem.r": {
+                "cairo_type": "felt",
+                "full_name": "starkware.cairo.common.math.signed_div_rem.r",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 2,
+                            "offset": 0
+                        },
+                        "pc": 9,
+                        "value": "[cast([fp + (-6)], felt*)]"
+                    }
+                ],
+                "type": "reference"
+            },
+            "starkware.cairo.common.math.signed_div_rem.value": {
+                "cairo_type": "felt",
+                "full_name": "starkware.cairo.common.math.signed_div_rem.value",
+                "references": [
+                    {
+                        "ap_tracking_data": {
+                            "group": 2,
+                            "offset": 0
+                        },
+                        "pc": 9,
+                        "value": "[cast(fp + (-5), felt*)]"
+                    }
+                ],
+                "type": "reference"
             },
             "starkware.starknet.common.storage.ADDR_BOUND": {
                 "type": "const",
@@ -1207,7 +2712,72 @@
         "main_scope": "__main__",
         "prime": "0x800000000000011000000000000000000000000000000000000000000000001",
         "reference_manager": {
-            "references": []
+            "references": [
+                {
+                    "ap_tracking_data": {
+                        "group": 0,
+                        "offset": 0
+                    },
+                    "pc": 0,
+                    "value": "[cast(fp + (-3), felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 2,
+                        "offset": 0
+                    },
+                    "pc": 9,
+                    "value": "[cast(fp + (-5), felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 2,
+                        "offset": 0
+                    },
+                    "pc": 9,
+                    "value": "[cast(fp + (-4), felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 2,
+                        "offset": 0
+                    },
+                    "pc": 9,
+                    "value": "[cast(fp + (-3), felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 2,
+                        "offset": 0
+                    },
+                    "pc": 9,
+                    "value": "[cast([fp + (-6)], felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 2,
+                        "offset": 0
+                    },
+                    "pc": 9,
+                    "value": "[cast([fp + (-6)] + 1, felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 7,
+                        "offset": 0
+                    },
+                    "pc": 63,
+                    "value": "[cast(fp + (-4), felt*)]"
+                },
+                {
+                    "ap_tracking_data": {
+                        "group": 8,
+                        "offset": 0
+                    },
+                    "pc": 74,
+                    "value": "[cast(fp + (-4), felt*)]"
+                }
+            ]
         }
     }
 }

@@ -1,6 +1,7 @@
 %lang starknet
 
 from onlydust.stream.default_implementation import stream
+from openzeppelin.token.erc721.library import ERC721_mint, ERC721_owners
 from starkware.cairo.common.registers import get_label_location
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
@@ -8,12 +9,11 @@ from starkware.starknet.common.syscalls import (
     get_contract_address,
     get_caller_address,
 )
-from openzeppelin.token.erc721.library import ERC721_mint, ERC721_owners
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256
 
-from contracts.math import sum, prod
-from contracts.constants import SUM_VALUE, PROD_VALUE
+from contracts.math import sum, prod, div, sub
+from contracts.constants import SUM_VALUE, PROD_VALUE, DIV_VALUE, SUB_VALUE
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -136,6 +136,14 @@ func _render_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
     end
     if value == PROD_VALUE:
         let (result) = prod(dependencies_len, dependencies)
+        return (result)
+    end
+    if value == SUB_VALUE:
+        let (result) = sub(dependencies_len, dependencies)
+        return (result)
+    end
+    if value == DIV_VALUE:
+        let (result) = div(dependencies_len, dependencies)
         return (result)
     end
     with_attr error_message("renderCell: formula {value} not found"):

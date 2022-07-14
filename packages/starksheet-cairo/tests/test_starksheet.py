@@ -6,32 +6,45 @@ from math import prod
 import pytest
 import pytest_asyncio
 from starkware.crypto.signature.signature import FIELD_PRIME
+from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.public.abi import get_selector_from_name
+from starkware.starknet.testing.starknet import Starknet, StarknetContract
 
-from constants import OWNER
+from constants import CONTRACTS, OWNER
 
 Cell = namedtuple("Cell", ["id", "value", "dependencies"])
 random.seed(0)
 
+
+def div(l):
+    return l[0] // l[1]
+
+
+def sub(l):
+    return l[0] - l[1]
+
+
 GRID_SIZE = 15 * 15
 OTHER = OWNER + 1
-FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod]}
-CELLS = [
-    Cell(
-        **{
-            "id": id,
-            "dependencies": (
-                deps := random.sample(list(range(id - 1)), k=random.randint(0, id - 1))
-                if id > 0
-                else []
-            ),
-            "value": random.sample(list(FUNCTIONS.keys()), k=1)[0]
-            if len(deps) > 0
-            else random.randint(0, 2**16),
-        }
+FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod, div, sub]}
+CELLS = []
+for id in range(10):
+    dependencies = (
+        random.sample(list(range(id - 1)), k=random.randint(0, id - 1))
+        if id > 0
+        else []
     )
-    for id in range(10)
-]
+    if id < 2:
+        value = random.sample(
+            [get_selector_from_name(ops.__name__) for ops in [sum, prod]], k=1
+        )[0]
+    else:
+        value = random.sample(list(FUNCTIONS.keys()), k=1)[0]
+    if not dependencies:
+        value = random.randint(0, 2**64 - 1)
+    if value in [get_selector_from_name(ops.__name__) for ops in [div, sub]]:
+        dependencies = random.sample(list(range(id)), k=2)
+    CELLS.append(Cell(id, value, dependencies))
 
 
 def render(cells):
@@ -51,59 +64,66 @@ def render(cells):
     return _render
 
 
+@pytest_asyncio.fixture(scope="session")
+async def starksheet(starknet: Starknet) -> StarknetContract:
+    _starksheet = await starknet.deploy(
+        contract_class=compile_starknet_files(
+            [str(CONTRACTS["Starksheet"])],
+            debug_info=True,
+            disable_hint_validation=True,
+        ),
+        constructor_calldata=[
+            int("Starksheet".encode().hex(), 16),
+            int("STRK".encode().hex(), 16),
+            OWNER,
+        ],
+    )
+    for cell in CELLS:
+        await _starksheet.mint(OWNER, (cell.id, 0)).invoke(caller_address=OWNER)
+        await _starksheet.setCell(
+            cell.id,
+            cell.value,
+            cell.dependencies,
+        ).invoke(caller_address=OWNER)
+    return _starksheet
+
+
 @pytest.mark.asyncio
 class TestStarksheet:
-    @pytest_asyncio.fixture(scope="session")
-    async def starksheet_minted(self, contracts):
-        for cell in CELLS:
-            await contracts["Starksheet"].mint(OWNER, (cell.id, 0)).invoke(
-                caller_address=OWNER
-            )
-            await contracts["Starksheet"].setCell(
-                cell.id,
-                cell.value,
-                cell.dependencies,
-            ).invoke(caller_address=OWNER)
-        return contracts["Starksheet"]
-
     class TestGetCell:
         @staticmethod
-        async def test_should_return_zero_when_token_does_not_exist(starksheet_minted):
+        async def test_should_return_zero_when_token_does_not_exist(starksheet):
             with pytest.raises(Exception) as e:
-                await starksheet_minted.ownerOf((0, len(CELLS))).call()
+                await starksheet.ownerOf((0, len(CELLS))).call()
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "ERC721: owner query for nonexistent token"
-            cell = (await starksheet_minted.getCell(len(CELLS)).call()).result
+            cell = (await starksheet.getCell(len(CELLS)).call()).result
             assert cell.dependencies == []
             assert cell.value == 0
 
         @staticmethod
         @pytest.mark.parametrize("cell", CELLS)
-        async def test_should_return_cell_value_when_token_exists(
-            starksheet_minted, cell
-        ):
-            result = (await starksheet_minted.getCell(cell.id).call()).result
+        async def test_should_return_cell_value_when_token_exists(starksheet, cell):
+            result = (await starksheet.getCell(cell.id).call()).result
             assert result.value == cell.value
             assert result.dependencies == cell.dependencies
 
     class TestSetCell:
         @staticmethod
         async def test_should_revert_when_token_does_not_exist(
-            starksheet_minted,
+            starksheet,
         ):
             with pytest.raises(Exception) as e:
-                await starksheet_minted.setCell(len(CELLS), 0, []).invoke(
-                    caller_address=OWNER
-                )
+                await starksheet.setCell(len(CELLS), 0, []).invoke(caller_address=OWNER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"setCell: tokenId does not exist"
 
         @staticmethod
         async def test_should_revert_when_caller_is_not_owner(
-            starksheet_minted,
+            starksheet,
         ):
             with pytest.raises(Exception) as e:
-                await starksheet_minted.setCell(
+                await starksheet.setCell(
                     CELLS[0].id,
                     CELLS[0].value,
                     CELLS[0].dependencies,
@@ -113,35 +133,35 @@ class TestStarksheet:
 
         @staticmethod
         @pytest.mark.parametrize("cell", CELLS)
-        async def test_should_set_value_and_dependencies(starksheet_minted, cell):
+        async def test_should_set_value_and_dependencies(starksheet, cell):
             """
             Testing getter and setter by writing and retreiving the value leads to duplicated tests.
             However, we keep it here as well to clarify what is tested for the both.
             """
-            result = (await starksheet_minted.getCell(cell.id).call()).result
+            result = (await starksheet.getCell(cell.id).call()).result
             assert result.value == cell.value
             assert result.dependencies == cell.dependencies
 
     class TestRenderCell:
         @staticmethod
         @pytest.mark.parametrize("cell", CELLS)
-        async def test_should_return_rendered_cell_value(starksheet_minted, cell):
-            result = (await starksheet_minted.renderCell(cell.id).call()).result.cell
+        async def test_should_return_rendered_cell_value(starksheet, cell):
+            result = (await starksheet.renderCell(cell.id).call()).result.cell
             assert result.value == render(CELLS)(cell.id)
             assert result.id == cell.id
             assert result.owner == OWNER
 
         @staticmethod
         @pytest_asyncio.fixture
-        async def starksheet_cell_altered(starksheet_minted):
+        async def starksheet_cell_altered(starksheet):
             cell = next(iter([cell for cell in CELLS if cell.dependencies]))
-            await starksheet_minted.setCell(
+            await starksheet.setCell(
                 cell.id,
                 cell.value + 1,
                 cell.dependencies,
             ).invoke(caller_address=OWNER)
-            yield starksheet_minted, cell
-            await starksheet_minted.setCell(
+            yield starksheet, cell
+            await starksheet.setCell(
                 cell.id,
                 cell.value,
                 cell.dependencies,
@@ -159,8 +179,8 @@ class TestStarksheet:
 
     class TestRenderGrid:
         @staticmethod
-        async def test_should_return_rendered_grid(starksheet_minted):
-            result = (await starksheet_minted.renderGrid().call()).result.cells
+        async def test_should_return_rendered_grid(starksheet):
+            result = (await starksheet.renderGrid().call()).result.cells
             grid = [render(CELLS)(i) for i in range(GRID_SIZE)]
             assert [cell.value for cell in result] == grid
             assert {cell.owner for cell in result} == {0, OWNER}
@@ -168,12 +188,10 @@ class TestStarksheet:
 
     class TestMintBatchPublic:
         @staticmethod
-        async def test_should_mint_batch_to_caller(contracts):
+        async def test_should_mint_batch_to_caller(starksheet):
             token_ids = [(len(CELLS) + 1, 0), (len(CELLS) + 2, 0)]
-            await contracts["Starksheet"].mintBatchPublic(token_ids).invoke(
-                caller_address=OWNER
-            )
-            owner = await contracts["Starksheet"].ownerOf(token_ids[0]).call()
+            await starksheet.mintBatchPublic(token_ids).invoke(caller_address=OWNER)
+            owner = await starksheet.ownerOf(token_ids[0]).call()
             assert OWNER == owner.result.owner
-            owner = await contracts["Starksheet"].ownerOf(token_ids[1]).call()
+            owner = await starksheet.ownerOf(token_ids[1]).call()
             assert OWNER == owner.result.owner

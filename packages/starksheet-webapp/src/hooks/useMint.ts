@@ -14,12 +14,6 @@ export const useMint = () => {
     method: "mintPublic",
   });
 
-  console.log("account", account);
-  console.log(
-    "toBN",
-    toBN("0x2a1ec511dbced8d34997fbadfcb72e173910ca00901ee123eef6a0548ec5e66")
-  );
-
   const waitForMint = useCallback(
     (id: number): Promise<void> => {
       if (contract && account) {

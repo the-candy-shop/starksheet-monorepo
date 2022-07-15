@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
 import GreyCell from "../GreyCell/GreyCell";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";

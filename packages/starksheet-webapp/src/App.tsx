@@ -38,7 +38,8 @@ function App() {
         owner={selectedCellOwner}
         sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
       />
-      {loading && !hasLoaded && <Box>Loading...</Box>}
+      {(loading && !hasLoaded) ||
+        (values.length === 0 && <Box>Loading...</Box>)}
       {!loading && hasLoaded && (
         <SheetTable
           selectedCell={selectedCell}

@@ -98,6 +98,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         )}
       </Cell>
       <SaveButton
+        unSavedValue={unSavedValue}
         selectedCell={selectedCell}
         currentCellOwnerAddress={owner}
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}

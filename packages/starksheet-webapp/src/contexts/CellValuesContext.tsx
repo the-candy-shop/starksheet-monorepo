@@ -8,11 +8,13 @@ export const CellValuesContext = React.createContext<{
   hasLoaded: boolean;
   values: { owner: BigNumberish; value: BigNumberish }[];
   updateValueOwner: (id: number, owner: BigNumberish) => void;
+  updateValue: (id: number, value: BigNumberish) => void;
 }>({
   loading: false,
   hasLoaded: false,
   values: [],
   updateValueOwner: () => {},
+  updateValue: () => {},
 });
 
 export const CellValuesContextProvider = ({
@@ -45,9 +47,24 @@ export const CellValuesContextProvider = ({
     [values]
   );
 
+  const updateValue = useCallback(
+    (id: number, value: BigNumberish) => {
+      const newValues = [...values];
+      newValues[id] = { ...values[id], value };
+      setValues(newValues);
+    },
+    [values]
+  );
+
   return (
     <CellValuesContext.Provider
-      value={{ values, updateValueOwner, loading, hasLoaded: !!gridData }}
+      value={{
+        values,
+        updateValueOwner,
+        updateValue,
+        loading,
+        hasLoaded: !!gridData,
+      }}
     >
       {children}
     </CellValuesContext.Provider>

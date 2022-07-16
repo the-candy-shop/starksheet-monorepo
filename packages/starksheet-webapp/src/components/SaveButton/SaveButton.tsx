@@ -4,21 +4,25 @@ import Button from "../Button/Button";
 import { useStarknet } from "@starknet-react/core";
 import Cell from "../Cell/Cell";
 import { useMint } from "../../hooks/useMint";
+import { useSetCell } from "../../hooks/useSetCell";
 
 export type SaveButtonProps = {
+  unSavedValue: string;
   selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
   sx?: BoxProps["sx"];
 };
 
 function SaveButton({
+  unSavedValue,
   selectedCell,
   currentCellOwnerAddress,
   sx,
 }: SaveButtonProps) {
   const { account } = useStarknet();
   const disabled = useMemo(() => !account, [account]);
-  const { mint, loading } = useMint();
+  const { mint, loading: loadingMint } = useMint();
+  const { setCell, loading: loadingSetCell } = useSetCell();
 
   const onClick = useCallback(() => {
     if (!selectedCell) return;
@@ -26,7 +30,18 @@ function SaveButton({
     if (!currentCellOwnerAddress) {
       return mint(selectedCell.id);
     }
-  }, [currentCellOwnerAddress, mint, selectedCell]);
+
+    if (!!account && currentCellOwnerAddress === account) {
+      return setCell(selectedCell.id, unSavedValue);
+    }
+  }, [
+    account,
+    currentCellOwnerAddress,
+    mint,
+    selectedCell,
+    setCell,
+    unSavedValue,
+  ]);
 
   if (
     selectedCell &&
@@ -63,10 +78,13 @@ function SaveButton({
         ...sx,
       }}
       onClick={onClick}
-      disabled={!account || loading}
+      disabled={!account || loadingMint || loadingSetCell}
     >
-      {loading && "MINTING..."}
-      {!loading && (currentCellOwnerAddress ? "Save Value" : "MINT ACCESS")}
+      {loadingMint && "MINTING..."}
+      {loadingSetCell && "Saving value..."}
+      {!loadingMint &&
+        !loadingSetCell &&
+        (currentCellOwnerAddress ? "Save Value" : "MINT ACCESS")}
     </Button>
   );
 }

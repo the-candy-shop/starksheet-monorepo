@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, BoxProps } from "@mui/material";
 import Cell from "../Cell/Cell";
 import { CELL_BORDER_WIDTH } from "../../config";
 import ContentEditable from "react-contenteditable";
-import { buildFormulaDisplay } from "./formula.utils";
+import { buildFormulaDisplay, toPlainTextFormula } from "./formula.utils";
 import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
 import SaveButton from "../SaveButton/SaveButton";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 
 export type ActionBarProps = {
   selectedCell: { name: string; id: number } | null;
@@ -15,6 +16,7 @@ export type ActionBarProps = {
 };
 
 function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
+  const { cellNames } = useContext(CellValuesContext);
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const { data } = useStarknetCall({
@@ -25,7 +27,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
 
   const [unSavedValue, setUnsavedValue] = React.useState<string>(
     // @ts-ignore
-    selectedCell ? data?.value?.toString() : ""
+    selectedCell && data ? toPlainTextFormula(data, cellNames) : ""
   );
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
@@ -45,13 +47,13 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
 
     previousSelectedCell.current = selectedCell ? selectedCell.name : null;
     // @ts-ignore
-    if (selectedCell && data?.value) {
+    if (selectedCell && data) {
       // @ts-ignore
-      setUnsavedValue(data?.value?.toString());
+      setUnsavedValue(toPlainTextFormula(data, cellNames));
     } else {
       setUnsavedValue("");
     }
-  }, [selectedCell, data]);
+  }, [selectedCell, data, cellNames]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -60,7 +62,13 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       </Cell>
       <Cell sx={{ flex: 1, marginLeft: `-${CELL_BORDER_WIDTH}px` }}>
         {selectedCell && (
-          <Box sx={{ display: "flex", "& .cell": { color: "#FF4F0A" } }}>
+          <Box
+            sx={{
+              display: "flex",
+              "& .cell": { color: "#FF4F0A" },
+              "& .operator": { color: "#0000FF" },
+            }}
+          >
             {!owner && (
               <Box sx={{ padding: "0 15px" }}>
                 Once minted, owner can set a value directly or with a formula
@@ -89,7 +97,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
                           .replaceAll("\r", "")
                       );
                     }}
-                    html={buildFormulaDisplay(selectedCell.name, unSavedValue)}
+                    html={buildFormulaDisplay(unSavedValue)}
                   />
                 )}
               </>

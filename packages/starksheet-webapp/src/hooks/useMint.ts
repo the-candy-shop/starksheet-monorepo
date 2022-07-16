@@ -45,12 +45,17 @@ export const useMint = () => {
     async (id: number) => {
       if (!contract || !account) return;
 
-      setLoading(true);
-      await invoke({ args: [[id, "0"]] });
+      try {
+        setLoading(true);
+        await invoke({ args: [[id, "0"]] });
 
-      await waitForMint(id);
-      updateValueOwner(id, toBN(account));
-      setLoading(false);
+        await waitForMint(id);
+        updateValueOwner(id, toBN(account));
+      } catch (e) {
+        console.log("e", e);
+      } finally {
+        setLoading(false);
+      }
     },
     [account, contract, invoke, updateValueOwner, waitForMint]
   );

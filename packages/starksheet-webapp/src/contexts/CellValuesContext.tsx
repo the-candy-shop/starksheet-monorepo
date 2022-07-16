@@ -9,12 +9,16 @@ export const CellValuesContext = React.createContext<{
   values: { owner: BigNumberish; value: BigNumberish }[];
   updateValueOwner: (id: number, owner: BigNumberish) => void;
   updateValue: (id: number, value: BigNumberish) => void;
+  cellNames: string[];
+  setCellNames: (value: string[]) => void;
 }>({
   loading: false,
   hasLoaded: false,
   values: [],
   updateValueOwner: () => {},
   updateValue: () => {},
+  cellNames: [],
+  setCellNames: () => {},
 });
 
 export const CellValuesContextProvider = ({
@@ -23,6 +27,7 @@ export const CellValuesContextProvider = ({
   const [values, setValues] = React.useState<
     { owner: BigNumberish; value: BigNumberish }[]
   >([]);
+  const [cellNames, setCellNames] = React.useState<string[]>([]);
 
   const { contract } = useStarkSheetContract();
   const { data: gridData, loading } = useStarknetCall({
@@ -59,6 +64,8 @@ export const CellValuesContextProvider = ({
   return (
     <CellValuesContext.Provider
       value={{
+        cellNames,
+        setCellNames,
         values,
         updateValueOwner,
         updateValue,

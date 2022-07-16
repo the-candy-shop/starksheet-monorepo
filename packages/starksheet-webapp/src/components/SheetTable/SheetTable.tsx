@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
 import GreyCell from "../GreyCell/GreyCell";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { Box, BoxProps } from "@mui/material";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import { BigNumberish, toHex } from "starknet/utils/number";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 
 export type SheetTableProps = {
   selectedCell: { name: string; id: number } | null;
@@ -28,6 +29,19 @@ function SheetTable({
     [columns]
   );
   const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
+  const { setCellNames } = useContext(CellValuesContext);
+
+  React.useEffect(() => {
+    const result: string[] = [];
+    rowNames.forEach((rowName, rowIndex) => {
+      columnNames.forEach((columnName, columnIndex) => {
+        const id = columnIndex + columnNames.length * rowIndex;
+        result[id] = `${columnName}${rowName}`;
+      });
+    });
+
+    setCellNames(result);
+  }, [columnNames, rowNames, setCellNames]);
 
   return (
     <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>

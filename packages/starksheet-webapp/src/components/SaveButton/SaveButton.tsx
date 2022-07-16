@@ -1,10 +1,12 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { BoxProps } from "@mui/material";
 import Button from "../Button/Button";
 import { useStarknet } from "@starknet-react/core";
 import Cell from "../Cell/Cell";
 import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
+import { operationNumbers, parse } from "../ActionBar/formula.utils";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 
 export type SaveButtonProps = {
   unSavedValue: string;
@@ -23,6 +25,7 @@ function SaveButton({
   const disabled = useMemo(() => !account, [account]);
   const { mint, loading: loadingMint } = useMint();
   const { setCell, loading: loadingSetCell } = useSetCell();
+  const { cellNames } = useContext(CellValuesContext);
 
   const onClick = useCallback(() => {
     if (!selectedCell) return;
@@ -32,10 +35,25 @@ function SaveButton({
     }
 
     if (!!account && currentCellOwnerAddress === account) {
-      return setCell(selectedCell.id, unSavedValue);
+      const parsedValue = parse(selectedCell.name, unSavedValue);
+
+      if (!parsedValue) return;
+
+      if (parsedValue.type === "number") {
+        return setCell(selectedCell.id, unSavedValue);
+      } else if (parsedValue.type === "formula") {
+        return setCell(
+          selectedCell.id,
+          // @ts-ignore
+          operationNumbers[parsedValue.operation],
+          // @ts-ignore
+          parsedValue.dependencies.map((dep) => cellNames.indexOf(dep))
+        );
+      }
     }
   }, [
     account,
+    cellNames,
     currentCellOwnerAddress,
     mint,
     selectedCell,
@@ -73,6 +91,7 @@ function SaveButton({
             ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
             : undefined,
           justifyContent: "center",
+          textAlign: "center",
           color: disabled ? "#8C95A3" : undefined,
         },
         ...sx,

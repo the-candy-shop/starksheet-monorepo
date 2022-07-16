@@ -2,7 +2,7 @@ import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet, useStarknetInvoke } from "@starknet-react/core";
 import { useCallback, useContext, useState } from "react";
 import { CellValuesContext } from "../contexts/CellValuesContext";
-import { BigNumberish, toBN } from "starknet/utils/number";
+import { BigNumberish } from "starknet/utils/number";
 
 export const useSetCell = () => {
   const { account } = useStarknet();
@@ -42,15 +42,25 @@ export const useSetCell = () => {
   );
 
   const setCell = useCallback(
-    async (id: number, value: BigNumberish) => {
+    async (
+      id: number,
+      value: BigNumberish,
+      dependencies: BigNumberish[] = []
+    ) => {
       if (!contract || !account) return;
 
-      setLoading(true);
-      await invoke({ args: [id, value, []] });
+      try {
+        setLoading(true);
+        await invoke({ args: [id, value, dependencies] });
 
-      await waitForTransaction(id, value);
-      updateValue(id, toBN(value));
-      setLoading(false);
+        await waitForTransaction(id, value);
+        const render = await contract.call("renderCell", [id]);
+        updateValue(id, render.cell.value);
+      } catch (e) {
+        console.log("e", e);
+      } finally {
+        setLoading(false);
+      }
     },
     [account, contract, invoke, updateValue, waitForTransaction]
   );

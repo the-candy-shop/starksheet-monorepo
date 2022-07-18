@@ -65,6 +65,24 @@ export function parse(cellName: string, formula: string): CellValue | null {
   return null;
 }
 
+export function getError(cellName: string, formula: string): string | null {
+  const parsedNumber = parseNumberValue(formula);
+  if (parsedNumber) {
+    return null;
+  }
+
+  const parsedFormula = parseFormulaValue(cellName, formula);
+  if (parsedFormula) {
+    if (parsedFormula.dependencies?.includes(cellName)) {
+      return "You cannot reference a cell inside itself";
+    }
+
+    return null;
+  }
+
+  return "Invalid formula format";
+}
+
 export function parseNumberValue(formula: string): CellValue | null {
   const match = formula.match(/^\d+$/);
 

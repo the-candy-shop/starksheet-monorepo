@@ -5,9 +5,10 @@ import { useStarknet } from "@starknet-react/core";
 import Cell from "../Cell/Cell";
 import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
-import { operationNumbers, parse } from "../ActionBar/formula.utils";
+import { getError, operationNumbers, parse } from "../ActionBar/formula.utils";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import LoadingDots from "../LoadingDots/LoadingDots";
+import Tooltip from "../../Tooltip/Tooltip";
 
 export type SaveButtonProps = {
   unSavedValue: string;
@@ -23,7 +24,6 @@ function SaveButton({
   sx,
 }: SaveButtonProps) {
   const { account } = useStarknet();
-  const disabled = useMemo(() => !account, [account]);
   const { mint, loading: loadingMint } = useMint();
   const { setCell, loading: loadingSetCell } = useSetCell();
   const { cellNames } = useContext(CellValuesContext);
@@ -62,6 +62,12 @@ function SaveButton({
     unSavedValue,
   ]);
 
+  const error = useMemo(
+    () => (selectedCell ? getError(selectedCell.name, unSavedValue) : null),
+    [selectedCell, unSavedValue]
+  );
+  const disabled = useMemo(() => !account, [account]);
+
   if (
     selectedCell &&
     currentCellOwnerAddress &&
@@ -83,39 +89,43 @@ function SaveButton({
   }
 
   return (
-    <Button
-      sx={{
-        width: "221px",
-        "& .content": {
-          backgroundColor: !disabled ? "#FF4F0A" : undefined,
-          boxShadow: !disabled
-            ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
-            : undefined,
-          justifyContent: "center",
-          textAlign: "center",
-          color: disabled ? "#8C95A3" : undefined,
-        },
-        ...sx,
-      }}
-      onClick={onClick}
-      disabled={!account || loadingMint || loadingSetCell}
-    >
-      {loadingMint && (
-        <Box>
-          MINTING
-          <LoadingDots />
-        </Box>
-      )}
-      {loadingSetCell && (
-        <Box>
-          Saving value
-          <LoadingDots />
-        </Box>
-      )}
-      {!loadingMint &&
-        !loadingSetCell &&
-        (currentCellOwnerAddress ? "Save Value" : "MINT ACCESS")}
-    </Button>
+    <Tooltip title={error ? error : false} followCursor>
+      <span>
+        <Button
+          sx={{
+            width: "221px",
+            "& .content": {
+              backgroundColor: !disabled ? "#FF4F0A" : undefined,
+              boxShadow: !disabled
+                ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
+                : undefined,
+              justifyContent: "center",
+              textAlign: "center",
+              color: disabled ? "#8C95A3" : undefined,
+            },
+            ...sx,
+          }}
+          onClick={onClick}
+          disabled={disabled || loadingMint || loadingSetCell || !!error}
+        >
+          {loadingMint && (
+            <Box>
+              MINTING
+              <LoadingDots />
+            </Box>
+          )}
+          {loadingSetCell && (
+            <Box>
+              Saving value
+              <LoadingDots />
+            </Box>
+          )}
+          {!loadingMint &&
+            !loadingSetCell &&
+            (currentCellOwnerAddress ? "Save Value" : "MINT ACCESS")}
+        </Button>
+      </span>
+    </Tooltip>
   );
 }
 

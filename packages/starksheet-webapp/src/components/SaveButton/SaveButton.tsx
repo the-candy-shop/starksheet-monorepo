@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo } from "react";
-import { BoxProps } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import Button from "../Button/Button";
 import { useStarknet } from "@starknet-react/core";
 import Cell from "../Cell/Cell";
@@ -7,6 +7,7 @@ import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
 import { operationNumbers, parse } from "../ActionBar/formula.utils";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import LoadingDots from "../LoadingDots/LoadingDots";
 
 export type SaveButtonProps = {
   unSavedValue: string;
@@ -99,8 +100,18 @@ function SaveButton({
       onClick={onClick}
       disabled={!account || loadingMint || loadingSetCell}
     >
-      {loadingMint && "MINTING..."}
-      {loadingSetCell && "Saving value..."}
+      {loadingMint && (
+        <Box>
+          MINTING
+          <LoadingDots />
+        </Box>
+      )}
+      {loadingSetCell && (
+        <Box>
+          Saving value
+          <LoadingDots />
+        </Box>
+      )}
       {!loadingMint &&
         !loadingSetCell &&
         (currentCellOwnerAddress ? "Save Value" : "MINT ACCESS")}

@@ -11,6 +11,7 @@ import {
   getInstalledInjectedConnectors,
   StarknetProvider,
 } from "@starknet-react/core";
+import LoadingDots from "./components/LoadingDots/LoadingDots";
 
 function App() {
   const connectors = getInstalledInjectedConnectors();
@@ -44,9 +45,21 @@ function App() {
           owner={selectedCellOwner}
           sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
         />
-        {(loading && !hasLoaded) ||
-          (values.length === 0 && <Box>Loading...</Box>)}
-        {!loading && hasLoaded && (
+        {((loading && !hasLoaded) || values.length === 0) && (
+          <Box
+            sx={{
+              display: "flex",
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: "'Press Start 2P', cursive",
+            }}
+          >
+            Loading
+            <LoadingDots />
+          </Box>
+        )}
+        {!loading && hasLoaded && values.length !== 0 && (
           <SheetTable
             selectedCell={selectedCell}
             setSelectedCell={setSelectedCell}

@@ -77,7 +77,13 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
             {!!owner && (
               <>
                 <Box sx={{ padding: "0 15px" }}>=</Box>
-                {(!account || account !== owner) && <Box>{unSavedValue}</Box>}
+                {(!account || account !== owner) && (
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: buildFormulaDisplay(unSavedValue),
+                    }}
+                  />
+                )}
                 {!!account && account === owner && (
                   <ContentEditable
                     style={{

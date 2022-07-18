@@ -7,7 +7,7 @@ import { BigNumberish } from "starknet/utils/number";
 export const useSetCell = () => {
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
-  const { updateValue } = useContext(CellValuesContext);
+  const { updateValue, refresh } = useContext(CellValuesContext);
   const [loading, setLoading] = useState<boolean>(false);
   const { invoke } = useStarknetInvoke({
     contract,
@@ -54,8 +54,9 @@ export const useSetCell = () => {
         await invoke({ args: [id, value, dependencies] });
 
         await waitForTransaction(id, value);
-        const render = await contract.call("renderCell", [id]);
-        updateValue(id, render.cell.value);
+        // const render = await contract.call("renderCell", [id]);
+        // updateValue(id, render.cell.value);
+        await refresh();
       } catch (e) {
         console.log("e", e);
       } finally {

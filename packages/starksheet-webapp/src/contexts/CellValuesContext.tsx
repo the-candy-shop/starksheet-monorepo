@@ -11,6 +11,7 @@ export const CellValuesContext = React.createContext<{
   updateValue: (id: number, value: BigNumberish) => void;
   cellNames: string[];
   setCellNames: (value: string[]) => void;
+  refresh: () => void;
 }>({
   loading: false,
   hasLoaded: false,
@@ -19,6 +20,7 @@ export const CellValuesContext = React.createContext<{
   updateValue: () => {},
   cellNames: [],
   setCellNames: () => {},
+  refresh: () => {},
 });
 
 export const CellValuesContextProvider = ({
@@ -30,7 +32,11 @@ export const CellValuesContextProvider = ({
   const [cellNames, setCellNames] = React.useState<string[]>([]);
 
   const { contract } = useStarkSheetContract();
-  const { data: gridData, loading } = useStarknetCall({
+  const {
+    data: gridData,
+    loading,
+    refresh,
+  } = useStarknetCall({
     contract,
     method: "renderGrid",
     args: [],
@@ -71,6 +77,7 @@ export const CellValuesContextProvider = ({
         updateValue,
         loading,
         hasLoaded: !!gridData,
+        refresh,
       }}
     >
       {children}

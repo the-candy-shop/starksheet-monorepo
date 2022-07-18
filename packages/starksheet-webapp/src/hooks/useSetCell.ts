@@ -63,7 +63,7 @@ export const useSetCell = () => {
         setLoading(false);
       }
     },
-    [account, contract, invoke, updateValue, waitForTransaction]
+    [account, contract, invoke, refresh, waitForTransaction]
   );
 
   return { setCell, loading };

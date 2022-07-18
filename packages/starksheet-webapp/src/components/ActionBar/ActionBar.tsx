@@ -8,6 +8,7 @@ import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
 import SaveButton from "../SaveButton/SaveButton";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import FormulaField from "../FormulaField/FormulaField";
 
 export type ActionBarProps = {
   selectedCell: { name: string; id: number } | null;
@@ -60,7 +61,13 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       <Cell sx={{ width: "134px", "& .content": { textAlign: "center" } }}>
         {selectedCell?.name}
       </Cell>
-      <Cell sx={{ flex: 1, marginLeft: `-${CELL_BORDER_WIDTH}px` }}>
+      <Cell
+        sx={{
+          flex: 1,
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          position: "relative",
+        }}
+      >
         {selectedCell && (
           <Box
             sx={{
@@ -85,16 +92,8 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
                   />
                 )}
                 {!!account && account === owner && (
-                  <ContentEditable
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      outline: "none",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    // @ts-ignore
-                    ref={inputRef}
+                  <FormulaField
+                    inputRef={inputRef}
                     onChange={() => {
                       setUnsavedValue(
                         inputRef?.current?.el.current.innerText
@@ -103,7 +102,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
                           .replaceAll("\r", "")
                       );
                     }}
-                    html={buildFormulaDisplay(unSavedValue)}
+                    value={unSavedValue}
                   />
                 )}
               </>

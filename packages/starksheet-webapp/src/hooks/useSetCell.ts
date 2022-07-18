@@ -7,7 +7,7 @@ import { BigNumberish } from "starknet/utils/number";
 export const useSetCell = () => {
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
-  const { updateValue, refresh } = useContext(CellValuesContext);
+  const { refresh } = useContext(CellValuesContext);
   const [loading, setLoading] = useState<boolean>(false);
   const { invoke } = useStarknetInvoke({
     contract,

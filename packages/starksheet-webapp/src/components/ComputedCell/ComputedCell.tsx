@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import Cell from "../Cell/Cell";
 import { useStarknet } from "@starknet-react/core";
+import Tooltip from "../../Tooltip/Tooltip";
 
 export type ComputedCellProps = {
   name: string;
@@ -59,30 +60,34 @@ function ComputedCell({
   const color = useMemo(() => buildColor(owner, account), [owner, account]);
 
   return (
-    <Cell
-      key={name}
-      selected={selected}
-      onClick={() => setSelectedCell({ name, id })}
-      sx={{
-        width: `${CELL_WIDTH}px`,
-        minWidth: `${CELL_WIDTH}px`,
-        maxWidth: `${CELL_WIDTH}px`,
-        marginLeft: `-${CELL_BORDER_WIDTH}px`,
-        textAlign: "center",
-        background,
-        color,
+    <Tooltip title={value && value.length > 4 ? value : false} followCursor>
+      <span>
+        <Cell
+          key={name}
+          selected={selected}
+          onClick={() => setSelectedCell({ name, id })}
+          sx={{
+            width: `${CELL_WIDTH}px`,
+            minWidth: `${CELL_WIDTH}px`,
+            maxWidth: `${CELL_WIDTH}px`,
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            textAlign: "center",
+            background,
+            color,
 
-        "& .selection": {
-          borderColor,
-        },
+            "& .selection": {
+              borderColor,
+            },
 
-        "& .selection-square": {
-          background: borderColor,
-        },
-      }}
-    >
-      {!!owner ? value : ""}
-    </Cell>
+            "& .selection-square": {
+              background: borderColor,
+            },
+          }}
+        >
+          {!!owner ? value : ""}
+        </Cell>
+      </span>
+    </Tooltip>
   );
 }
 

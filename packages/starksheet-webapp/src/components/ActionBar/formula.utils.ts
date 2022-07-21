@@ -1,9 +1,8 @@
 import { BigNumberish, toBN } from "starknet/utils/number";
 import StarkSheetContract from "../../contract.json";
 import BN from "bn.js";
-import { UINT_128_MAX } from "starknet/utils/uint256";
 
-const FIELD_PRIME = toBN(2)
+const PRIME = toBN(2)
   .pow(toBN(251))
   .add(toBN(17).mul(toBN(2).pow(toBN(192))))
   .add(toBN(1));
@@ -141,12 +140,8 @@ export function buildFormulaDisplay(formula: string): string {
 }
 
 export function getValue(value: BN): BN {
-  if (value.gt(UINT_128_MAX)) {
-    return value
-      .add(FIELD_PRIME.div(toBN(2)).abs())
-      .mod(FIELD_PRIME)
-      .sub(FIELD_PRIME.div(toBN(2)).abs());
-  }
-
-  return value;
+  return value
+    .add(PRIME.div(toBN(2)).abs())
+    .mod(PRIME)
+    .sub(PRIME.div(toBN(2)).abs());
 }

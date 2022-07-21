@@ -94,6 +94,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
                 {!!account && account === owner && (
                   <FormulaField
                     inputRef={inputRef}
+                    setValue={setUnsavedValue}
                     onChange={() => {
                       setUnsavedValue(
                         inputRef?.current?.el.current.innerText

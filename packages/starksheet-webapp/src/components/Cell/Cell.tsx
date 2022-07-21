@@ -32,7 +32,7 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
             bottom: `${CELL_BORDER_WIDTH}px`,
             right: `${CELL_BORDER_WIDTH}px`,
             border: `${CELL_BORDER_WIDTH}px solid #0000FF`,
-            zIndex: 1,
+            zIndex: 0,
           }}
         >
           <Box

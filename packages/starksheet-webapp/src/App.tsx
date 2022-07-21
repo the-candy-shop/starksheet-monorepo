@@ -129,6 +129,7 @@ function App() {
               columns={MAX_COLUMNS}
               rows={MAX_ROWS}
               sx={{
+                zIndex: 0,
                 marginTop: `-${CELL_BORDER_WIDTH}px`,
                 marginBottom: `-${CELL_BORDER_WIDTH}px`,
                 overflow: "auto",

@@ -4,7 +4,7 @@ import { Box, BoxProps } from "@mui/material";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import twitterLogo from "./twitter.svg";
 import starknetLogo from "./starknet.svg";
-import openseaLogo from "./opensea.svg";
+import aspectLogo from "./aspect.png";
 import discordLogo from "./discord.svg";
 import StarkSheetContract from "../../contract.json";
 
@@ -93,12 +93,12 @@ function Footer({ sx }: FooterProps) {
         }}
         onClick={() =>
           window.open(
-            "https://testnets.opensea.io/collection/starksheet",
+            `https://testnet.aspect.co/collection/${StarkSheetContract.address}`,
             "_blank"
           )
         }
       >
-        <img src={openseaLogo} alt="" />
+        <img src={aspectLogo} alt="" style={{ width: "18px" }} />
       </GreyCell>
     </Box>
   );

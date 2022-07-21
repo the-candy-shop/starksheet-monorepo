@@ -1,7 +1,8 @@
 %lang starknet
 
 from onlydust.stream.default_implementation import stream
-from openzeppelin.token.erc721.library import ERC721_mint, ERC721_owners
+from openzeppelin.token.erc721.library import ERC721_mint, ERC721_owners, _exists
+from openzeppelin.utils.constants import TRUE
 from starkware.cairo.common.registers import get_label_location
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
@@ -14,6 +15,7 @@ from starkware.cairo.common.uint256 import Uint256
 
 from contracts.math import sum, prod, div, sub
 from contracts.constants import SUM_VALUE, PROD_VALUE, DIV_VALUE, SUB_VALUE
+from contracts.rendering import Starksheet_render_token_uri
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -197,4 +199,19 @@ func Starksheet_mintBatch{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, rang
     let token_id = token_ids[0]
     Starksheet_mint(token_id)
     return Starksheet_mintBatch(token_ids_len - 1, token_ids + Uint256.SIZE)
+end
+
+func Starksheet_tokenURI{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
+    token_id : Uint256
+) -> (token_uri_len : felt, token_uri : felt*):
+    let (exists) = _exists(token_id)
+    with_attr error_message("ERC721: tokenURI query for nonexistent token"):
+        assert exists = TRUE
+    end
+
+    let (value) = _render_cell(token_id.low)
+    tempvar pedersen_ptr = pedersen_ptr
+
+    let (token_uri_len, token_uri) = Starksheet_render_token_uri(token_id.low, value)
+    return (token_uri_len, token_uri)
 end

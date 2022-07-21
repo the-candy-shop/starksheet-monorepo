@@ -230,23 +230,6 @@
     {
         "inputs": [
             {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "tokenURI",
-        "outputs": [
-            {
-                "name": "tokenURI",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "name": "to",
                 "type": "felt"
             },
@@ -323,21 +306,6 @@
     {
         "inputs": [
             {
-                "name": "tokenId",
-                "type": "Uint256"
-            },
-            {
-                "name": "tokenURI",
-                "type": "felt"
-            }
-        ],
-        "name": "setTokenURI",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "name": "to",
                 "type": "felt"
             },
@@ -359,6 +327,31 @@
         ],
         "name": "burn",
         "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "token_id",
+                "type": "felt"
+            },
+            {
+                "name": "value",
+                "type": "felt"
+            }
+        ],
+        "name": "Starksheet_render_token_uri",
+        "outputs": [
+            {
+                "name": "token_uri_len",
+                "type": "felt"
+            },
+            {
+                "name": "token_uri",
+                "type": "felt*"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -481,6 +474,27 @@
         ],
         "name": "mintBatchPublic",
         "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "Uint256"
+            }
+        ],
+        "name": "tokenURI",
+        "outputs": [
+            {
+                "name": "token_uri_len",
+                "type": "felt"
+            },
+            {
+                "name": "token_uri",
+                "type": "felt*"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     }
 ]

@@ -1,5 +1,4 @@
 import asyncio
-from typing import Dict
 
 import pytest
 import pytest_asyncio

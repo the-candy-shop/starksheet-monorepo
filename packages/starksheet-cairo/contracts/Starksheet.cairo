@@ -4,11 +4,12 @@ from starkware.cairo.common.alloc import alloc
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_not_zero
-from openzeppelin.token.erc721.ERC721_Mintable_Burnable import constructor
 from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf
 from starkware.cairo.common.uint256 import split_64, Uint256
 from openzeppelin.utils.constants import TRUE
 
+from contracts.constants import GRID_SIZE
+from contracts.ERC721_Enumerable import constructor
 from contracts.library import (
     Starksheet_getCell,
     Starksheet_setCell,
@@ -16,9 +17,9 @@ from contracts.library import (
     Starksheet_renderGrid,
     Starksheet_mint,
     Starksheet_mintBatch,
+    Starksheet_tokenURI,
     CellRendered,
 )
-from contracts.constants import GRID_SIZE
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -86,4 +87,12 @@ func mintBatchPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_che
     # TODO: add some value / payment checks in prod
     Starksheet_mintBatch(tokenIds_len, tokenIds)
     return ()
+end
+
+@view
+func tokenURI{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    tokenId : Uint256
+) -> (token_uri_len : felt, token_uri : felt*):
+    let (token_uri_len, token_uri) = Starksheet_tokenURI(tokenId)
+    return (token_uri_len, token_uri)
 end

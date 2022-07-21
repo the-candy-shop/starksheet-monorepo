@@ -1,7 +1,10 @@
+import json
 import random
 import re
+import xml.etree.ElementTree as ET
 from collections import namedtuple
 from math import prod
+from urllib.parse import unquote
 
 import pytest
 import pytest_asyncio
@@ -41,7 +44,7 @@ for id in range(10):
     else:
         value = random.sample(list(FUNCTIONS.keys()), k=1)[0]
     if not dependencies:
-        value = random.randint(0, 2**64 - 1)
+        value = random.randint(0, 2**32 - 1)
     if value in [get_selector_from_name(ops.__name__) for ops in [div, sub]]:
         dependencies = random.sample(list(range(id)), k=2)
     CELLS.append(Cell(id, value, dependencies))
@@ -54,11 +57,8 @@ def render(cells):
         cell = cells[i]
         if not cell.dependencies:
             return cell.value
-        return (
-            FUNCTIONS[cell.value](
-                [_render(dependency) for dependency in cell.dependencies]
-            )
-            % FIELD_PRIME
+        return FUNCTIONS[cell.value](
+            [_render(dependency) for dependency in cell.dependencies]
         )
 
     return _render
@@ -147,7 +147,7 @@ class TestStarksheet:
         @pytest.mark.parametrize("cell", CELLS)
         async def test_should_return_rendered_cell_value(starksheet, cell):
             result = (await starksheet.renderCell(cell.id).call()).result.cell
-            assert result.value == render(CELLS)(cell.id)
+            assert result.value == render(CELLS)(cell.id) % FIELD_PRIME
             assert result.id == cell.id
             assert result.owner == OWNER
 
@@ -181,7 +181,7 @@ class TestStarksheet:
         @staticmethod
         async def test_should_return_rendered_grid(starksheet):
             result = (await starksheet.renderGrid().call()).result.cells
-            grid = [render(CELLS)(i) for i in range(GRID_SIZE)]
+            grid = [render(CELLS)(i) % FIELD_PRIME for i in range(GRID_SIZE)]
             assert [cell.value for cell in result] == grid
             assert {cell.owner for cell in result} == {0, OWNER}
             assert [cell.id for cell in result] == list(range(GRID_SIZE))
@@ -195,3 +195,27 @@ class TestStarksheet:
             assert OWNER == owner.result.owner
             owner = await starksheet.ownerOf(token_ids[1]).call()
             assert OWNER == owner.result.owner
+
+    class TestTokenURI:
+        @staticmethod
+        @pytest.mark.parametrize("cell", CELLS)
+        async def test_should_return_token_uri(starksheet, cell):
+            token_uri = (
+                await starksheet.tokenURI((cell.id, 0)).call()
+            ).result.token_uri
+            data_uri = "".join([bytes.fromhex(hex(s)[2:]).decode() for s in token_uri])
+            token_data = json.loads(data_uri.replace("data:application/json,", ""))
+            assert token_data["name"] == f"Sheet1!{cell.id}"
+            svg = ET.fromstring(
+                unquote(token_data["image"]).replace("data:image/svg+xml,", "")
+            )
+            assert svg.findall("{http://www.w3.org/2000/svg}text")[0].text == str(
+                render(CELLS)(cell.id)
+            )
+
+        @staticmethod
+        async def test_should_revert_when_token_does_not_exist(starksheet):
+            with pytest.raises(Exception) as e:
+                await starksheet.tokenURI((len(CELLS), 0)).call()
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == f"ERC721: tokenURI query for nonexistent token"

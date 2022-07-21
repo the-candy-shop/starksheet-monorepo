@@ -2,7 +2,10 @@
 
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.math import unsigned_div_rem, sign, abs_value
+from starkware.cairo.common.math_cmp import is_le
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+
+from contracts.constants import N_COLS
 
 # Copied from topology-gg/caistring
 # Convert felt (decimal integer) into ascii-encoded felt representing str(felt); return a literal
@@ -36,6 +39,25 @@ func str{range_check_ptr}(num : felt) -> (literal : felt):
     )
 
     return (ascii)
+end
+
+@view
+func number_to_index{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    token_id : felt
+) -> (res : felt):
+    alloc_locals
+    let (local row, local col) = unsigned_div_rem(token_id, N_COLS)
+    local letter = 'A' + col
+    let (number) = str(row + 1)
+    local shift
+    let (_row_single_digit) = is_le(number, '9')
+    if _row_single_digit == 1:
+        shift = 256
+    else:
+        shift = 256 * 256
+    end
+    let res = letter * shift + number
+    return (res)
 end
 
 #
@@ -91,7 +113,7 @@ func Starksheet_render_token_uri{pedersen_ptr : HashBuiltin*, syscall_ptr : felt
     token_id : felt, value : felt
 ) -> (token_uri_len : felt, token_uri : felt*):
     alloc_locals
-    let (local token_id_ascii) = str(token_id)
+    let (local cell_index_ascii) = number_to_index(token_id)
     let (local value_ascii) = str(value)
     let token_uri_len = 43
     let (token_uri) = alloc()
@@ -102,7 +124,7 @@ func Starksheet_render_token_uri{pedersen_ptr : HashBuiltin*, syscall_ptr : felt
     let index = index + 1
     assert [index] = 'heet1!'
     let index = index + 1
-    assert [index] = token_id_ascii
+    assert [index] = cell_index_ascii
     let index = index + 1
     assert [index] = '", "image": "data:image/svg+xml'
     let index = index + 1

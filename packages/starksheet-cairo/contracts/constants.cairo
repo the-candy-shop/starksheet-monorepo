@@ -6,4 +6,6 @@ const SUB_VALUE = 95876607120944277847908540311920159405728823075724310246665054
 
 # This should not be a limitation but use this for now
 # TODO: remove this limitation
-const GRID_SIZE = 15 * 15
+const N_COLS = 15
+const N_ROWS = 15
+const GRID_SIZE = N_COLS * N_ROWS

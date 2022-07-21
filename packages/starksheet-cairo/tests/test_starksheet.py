@@ -14,6 +14,7 @@ from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
 
 from constants import CONTRACTS, OWNER
+from utils import number_to_index
 
 Cell = namedtuple("Cell", ["id", "value", "dependencies"])
 random.seed(0)
@@ -205,7 +206,7 @@ class TestStarksheet:
             ).result.token_uri
             data_uri = "".join([bytes.fromhex(hex(s)[2:]).decode() for s in token_uri])
             token_data = json.loads(data_uri.replace("data:application/json,", ""))
-            assert token_data["name"] == f"Sheet1!{cell.id}"
+            assert token_data["name"] == f"Sheet1!{number_to_index(cell.id)}"
             svg = ET.fromstring(
                 unquote(token_data["image"]).replace("data:image/svg+xml,", "")
             )

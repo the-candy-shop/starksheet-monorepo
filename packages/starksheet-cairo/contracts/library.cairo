@@ -1,7 +1,8 @@
 %lang starknet
 
 from onlydust.stream.default_implementation import stream
-from openzeppelin.token.erc721.library import ERC721_mint, ERC721_owners, _exists
+from openzeppelin.token.erc721.library import ERC721_owners, _exists
+from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
 from openzeppelin.utils.constants import TRUE
 from starkware.cairo.common.registers import get_label_location
 from starkware.cairo.common.cairo_builtins import HashBuiltin
@@ -186,7 +187,7 @@ func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_che
     token_id : Uint256
 ):
     let (caller_address) = get_caller_address()
-    ERC721_mint(caller_address, token_id)
+    ERC721_Enumerable_mint(caller_address, token_id)
     return ()
 end
 

@@ -1,21 +1,21 @@
 import { BigNumberish, toBN } from "starknet/utils/number";
+import StarkSheetContract from "../../contract.json";
+import BN from "bn.js";
+import { UINT_128_MAX } from "starknet/utils/uint256";
+
+const FIELD_PRIME = toBN(2)
+  .pow(toBN(251))
+  .add(toBN(17).mul(toBN(2).pow(toBN(192))))
+  .add(toBN(1));
 
 const validFormulaRegex =
   /^(SUM|MINUS|DIVIDE|MULTIPLY)\((([A-Z]+\d+);)+([A-Z]+\d+)\)$/;
 
 export const operationNumbers = {
-  SUM: toBN(
-    "1745323118234039575158332314383998379920114756853600128775583542343013246395"
-  ),
-  MINUS: toBN(
-    "958766071209442778479085403119201594057288230757243102466650545030408647035"
-  ),
-  DIVIDE: toBN(
-    "108192450202678444723308767730487539068408323925754456806249919587336532304"
-  ),
-  MULTIPLY: toBN(
-    "390954762583876961124108005862584803545498882125673813294165296772873328665"
-  ),
+  SUM: toBN(StarkSheetContract.operations.SUM),
+  MINUS: toBN(StarkSheetContract.operations.MINUS),
+  DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
+  MULTIPLY: toBN(StarkSheetContract.operations.MULTIPLY),
 };
 
 export type CellValue = {
@@ -48,7 +48,9 @@ export function toPlainTextFormula(
     return "";
   }
 
-  return `${operator}(${dependencies.map((dep) => cellNames[dep]).join(";")})`;
+  return `${operator}(${dependencies
+    .map((dep) => cellNames[dep as number])
+    .join(";")})`;
 }
 
 export function parse(cellName: string, formula: string): CellValue | null {
@@ -136,4 +138,15 @@ export function buildFormulaDisplay(formula: string): string {
   }
 
   return result;
+}
+
+export function getValue(value: BN): BN {
+  if (value.gt(UINT_128_MAX)) {
+    return value
+      .add(FIELD_PRIME.div(toBN(2)).abs())
+      .mod(FIELD_PRIME)
+      .sub(FIELD_PRIME.div(toBN(2)).abs());
+  }
+
+  return value;
 }

@@ -6,6 +6,8 @@ import { Box, BoxProps } from "@mui/material";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import { BigNumberish, toHex } from "starknet/utils/number";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { getValue } from "../ActionBar/formula.utils";
+import BN from "bn.js";
 
 export type SheetTableProps = {
   selectedCell: { name: string; id: number } | null;
@@ -96,11 +98,11 @@ function SheetTable({
           {columnNames.map((columnName, columnIndex) => {
             const id = columnIndex + columnNames.length * rowIndex;
             const value = cellsData[id]
-              ? cellsData[id].value.toString()
+              ? getValue(cellsData[id].value as BN).toString()
               : undefined;
             const owner =
               cellsData[id] && cellsData[id].owner.toString() !== "0"
-                ? toHex(cellsData[id].owner)
+                ? toHex(cellsData[id].owner as BN)
                 : undefined;
 
             return (

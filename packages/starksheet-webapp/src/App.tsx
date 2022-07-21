@@ -12,6 +12,7 @@ import {
   StarknetProvider,
 } from "@starknet-react/core";
 import LoadingDots from "./components/LoadingDots/LoadingDots";
+import BN from "bn.js";
 
 function App() {
   const connectors = getInstalledInjectedConnectors();
@@ -28,7 +29,7 @@ function App() {
       selectedCell &&
       values[selectedCell.id].owner &&
       values[selectedCell.id].owner.toString() !== "0"
-        ? toHex(values[selectedCell.id].owner)
+        ? toHex(values[selectedCell.id].owner as BN)
         : undefined,
     [values, hasLoaded, selectedCell]
   );

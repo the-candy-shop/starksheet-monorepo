@@ -11,18 +11,6 @@ export type FormulaFieldProps = {
 };
 
 function FormulaField({ inputRef, onChange, value }: FormulaFieldProps) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
-
-  const handleFocus = (event: React.FocusEvent<HTMLElement>) => {
-    console.log("event.currentTarget", event.currentTarget);
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  console.log("open", open);
-  console.log("id", id);
-
   return (
     <>
       <ContentEditable
@@ -37,7 +25,6 @@ function FormulaField({ inputRef, onChange, value }: FormulaFieldProps) {
         ref={inputRef}
         onChange={onChange}
         html={buildFormulaDisplay(value)}
-        onFocus={handleFocus}
       />
     </>
   );

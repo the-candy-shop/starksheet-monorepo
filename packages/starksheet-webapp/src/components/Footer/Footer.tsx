@@ -1,7 +1,12 @@
 import React from "react";
 import GreyCell from "../GreyCell/GreyCell";
 import { Box, BoxProps } from "@mui/material";
-import { CELL_BORDER_WIDTH } from "../../config";
+import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
+import twitterLogo from "./twitter.svg";
+import starknetLogo from "./starknet.svg";
+import openseaLogo from "./opensea.svg";
+import discordLogo from "./discord.svg";
+import StarkSheetContract from "../../contract.json";
 
 export type FooterProps = {
   sx?: BoxProps["sx"];
@@ -26,16 +31,75 @@ function Footer({ sx }: FooterProps) {
         }}
       >
         Sheet 2 (
-        <a href="https://google.fr" target="_blank" rel="noreferrer">
+        <a
+          href="https://starksheet.notion.site/Starksheet-Roadmap-146530d01d914d6fae8c8779b99d58ec"
+          target="_blank"
+          rel="noreferrer"
+        >
           Coming Soon
         </a>
         )
       </GreyCell>
-      <GreyCell sx={{ flex: 1, marginLeft: `-${CELL_BORDER_WIDTH}px` }} />
-      <GreyCell sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}>i</GreyCell>
-      <GreyCell sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}>i</GreyCell>
-      <GreyCell sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}>i</GreyCell>
-      <GreyCell sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}>i</GreyCell>
+      <GreyCell
+        sx={{
+          flex: 1,
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+        }}
+      />
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={() =>
+          window.open(
+            `https://goerli.voyager.online/contract/${StarkSheetContract.address}`,
+            "_blank"
+          )
+        }
+      >
+        <img src={starknetLogo} alt="" />
+      </GreyCell>
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={() => window.open("https://discord.gg/Aab6qdWb5k", "_blank")}
+      >
+        <img src={discordLogo} alt="" />
+      </GreyCell>
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={() => window.open("https://twitter.com/starksheet", "_blank")}
+      >
+        <img src={twitterLogo} alt="" />
+      </GreyCell>
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={() =>
+          window.open(
+            "https://testnets.opensea.io/collection/starksheet",
+            "_blank"
+          )
+        }
+      >
+        <img src={openseaLogo} alt="" />
+      </GreyCell>
     </Box>
   );
 }

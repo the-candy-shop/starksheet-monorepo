@@ -8,18 +8,18 @@ const PRIME = toBN(2)
   .add(toBN(1));
 
 const validFormulaRegex =
-  /^(SUM|MINUS|DIVIDE|MULTIPLY)\((([A-Z]+\d+);)+([A-Z]+\d+)\)$/;
+  /^(SUM|MINUS|DIVIDE|PRODUCT)\((([A-Z]+\d+);)+([A-Z]+\d+)\)$/;
 
 export const operationNumbers = {
   SUM: toBN(StarkSheetContract.operations.SUM),
   MINUS: toBN(StarkSheetContract.operations.MINUS),
   DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
-  MULTIPLY: toBN(StarkSheetContract.operations.MULTIPLY),
+  PRODUCT: toBN(StarkSheetContract.operations.PRODUCT),
 };
 
 export type CellValue = {
   type: "number" | "formula";
-  operation?: "SUM" | "MINUS" | "DIVIDE" | "MULTIPLY";
+  operation?: "SUM" | "MINUS" | "DIVIDE" | "PRODUCT";
   dependencies?: string[];
   value?: number;
 };
@@ -103,7 +103,7 @@ export function parseFormulaValue(
 
   if (!match) return null;
 
-  const operation = match[1] as "SUM" | "MINUS" | "DIVIDE" | "MULTIPLY";
+  const operation = match[1] as "SUM" | "MINUS" | "DIVIDE" | "PRODUCT";
   const dependencies = formula
     .replace(operation, "")
     .replace("(", "")
@@ -118,7 +118,7 @@ export function parseFormulaValue(
 }
 
 export function buildFormulaDisplay(formula: string): string {
-  const operator = formula.match(/(SUM|MINUS|DIVIDE|MULTIPLY)/);
+  const operator = formula.match(/(SUM|MINUS|DIVIDE|PRODUCT)/);
   const cellNames = formula.match(/[A-Z]+\d+/g);
 
   let result = formula;

@@ -1,4 +1,21 @@
-const generateColumnName = (columnIndex: number): string => {
+export const getColumnIndexFromName = (columnName: string): number => {
+  let base = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    i,
+    j,
+    result = 0;
+
+  for (
+    i = 0, j = columnName.length - 1;
+    i < columnName.length;
+    i += 1, j -= 1
+  ) {
+    result += Math.pow(base.length, j) * (base.indexOf(columnName[i]) + 1);
+  }
+
+  return result - 1;
+};
+
+export const generateColumnName = (columnIndex: number): string => {
   let letters = "";
   while (columnIndex >= 0) {
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[columnIndex % 26] + letters;
@@ -25,4 +42,72 @@ export const generateRowNames = (rows: number): string[] => {
   }
 
   return result;
+};
+
+export const getRightCellName = (
+  cellName: string,
+  maxColumnIndex: number
+): string => {
+  const split = cellName.match(/([A-Z]+)(\d+)/);
+
+  if (!split) return cellName;
+
+  const columnName = split[1];
+  const columnIndex = getColumnIndexFromName(columnName);
+  const rowName = split[2];
+
+  if (columnIndex + 1 < maxColumnIndex) {
+    return `${generateColumnName(columnIndex + 1)}${rowName}`;
+  } else {
+    return cellName;
+  }
+};
+
+export const getLeftCellName = (cellName: string): string => {
+  const split = cellName.match(/([A-Z]+)(\d+)/);
+
+  if (!split) return cellName;
+
+  const columnName = split[1];
+  const columnIndex = getColumnIndexFromName(columnName);
+  const rowName = split[2];
+
+  if (columnIndex - 1 >= 0) {
+    return `${generateColumnName(columnIndex - 1)}${rowName}`;
+  } else {
+    return cellName;
+  }
+};
+
+export const getTopCellName = (cellName: string): string => {
+  const split = cellName.match(/([A-Z]+)(\d+)/);
+
+  if (!split) return cellName;
+
+  const columnName = split[1];
+  const rowIndex = parseInt(split[2]);
+
+  if (rowIndex - 1 >= 1) {
+    return `${columnName}${rowIndex - 1}`;
+  } else {
+    return cellName;
+  }
+};
+
+export const getBottomCellName = (
+  cellName: string,
+  maxRowIndex: number
+): string => {
+  const split = cellName.match(/([A-Z]+)(\d+)/);
+
+  if (!split) return cellName;
+
+  const columnName = split[1];
+  const rowIndex = parseInt(split[2]);
+
+  if (rowIndex + 1 <= maxRowIndex) {
+    return `${columnName}${rowIndex + 1}`;
+  } else {
+    return cellName;
+  }
 };

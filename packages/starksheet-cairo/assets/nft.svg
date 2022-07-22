@@ -2,10 +2,12 @@
     <rect width="89" height="55" fill="#E5E5E5" />
     <rect width="89" height="55" fill="#29296E" />
     <rect x="5.5" y="5.5" width="78" height="44" fill="#0000FF" />
-    <text text-anchor="middle" x="44.5" y="31" fill=" white" font-family="Press Start 2P" font-size="12" letter-spacing="0em">
-        1234
-</text>
-    <rect x="78" y="45" width="9" height="8" fill="#FF4F0A" />
+    <text text-anchor="middle" x="44.5" y="31" fill=" white" font-family="Press Start 2P" font-size="12">
+    {}
+    </text>
     <rect x="5.5" y="5.5" width="78" height="44" stroke="#FF4F0A" stroke-width="3" />
-    <path d="M81.4286 51V50.4286H81V49.8571H81.8571V50.4286H83.1429V49.2857H81.4286V48.7143H81V47.5714H81.4286V47H83.5714V47.5714H84V48.1429H83.1429V47.5714H81.8571V48.7143H83.5714V49.2857H84V50.4286H83.5714V51H81.4286Z" fill="#0000FF" />
+    <rect x="47" y="45" width="41" height="8" fill="#FF4F0A" />
+    <text text-anchor="end" x="86" y="52" fill=" white" font-family="Press Start 2P" font-size="8" letter-spacing="0em">
+    Sheet1!{}
+    </text>
 </svg>

@@ -213,6 +213,10 @@ class TestStarksheet:
             assert svg.findall("{http://www.w3.org/2000/svg}text")[0].text == str(
                 render(CELLS)(cell.id)
             )
+            assert (
+                svg.findall("{http://www.w3.org/2000/svg}text")[1].text
+                == f"Sheet1!{number_to_index(cell.id)}"
+            )
 
         @staticmethod
         async def test_should_revert_when_token_does_not_exist(starksheet):

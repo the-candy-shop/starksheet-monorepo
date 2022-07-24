@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, {PropsWithChildren, useCallback, useRef} from "react";
 import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
 import { useStarknetCall } from "@starknet-react/core";
 import { BigNumberish } from "starknet/utils/number";
@@ -29,6 +29,7 @@ export const CellValuesContextProvider = ({
   const [values, setValues] = React.useState<
     { owner: BigNumberish; value: BigNumberish }[]
   >([]);
+  const previousGridData = useRef<any>(undefined);
   const [cellNames, setCellNames] = React.useState<string[]>([]);
 
   const { contract } = useStarkSheetContract();
@@ -44,10 +45,21 @@ export const CellValuesContextProvider = ({
 
   React.useEffect(() => {
     if (gridData) {
+      if (previousGridData.current) {
+        // @ts-ignore
+        gridData.cells?.forEach((cell, index) => {
+          if (previousGridData.current.cells[index].value.toString() !== cell.value.toString()) {
+            console.log('fetch', index);
+            fetch(`https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`)
+          }
+        });
+      }
+
+      previousGridData.current = gridData;
       // @ts-ignore
       setValues(gridData.cells ? gridData.cells : []);
     }
-  }, [gridData]);
+  }, [contract?.address, gridData]);
 
   const updateValueOwner = useCallback(
     (id: number, owner: BigNumberish) => {

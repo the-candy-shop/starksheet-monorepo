@@ -40,6 +40,10 @@ class TestRendering:
                 unquote(token_data["image"]).replace("data:image/svg+xml,", "")
             )
             assert svg.findall("{http://www.w3.org/2000/svg}text")[0].text == str(value)
+            assert (
+                svg.findall("{http://www.w3.org/2000/svg}text")[1].text
+                == f"Sheet1!{number_to_index(token_id)}"
+            )
 
     class TestNumberToIndex:
         @staticmethod

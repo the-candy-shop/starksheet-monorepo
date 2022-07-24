@@ -210,8 +210,14 @@ class TestStarksheet:
             svg = ET.fromstring(
                 unquote(token_data["image"]).replace("data:image/svg+xml,", "")
             )
+            with open(f"tests/tokens/token_{cell.id}.svg", "w") as f:
+                f.write(unquote(token_data["image"]).replace("data:image/svg+xml,", ""))
             assert svg.findall("{http://www.w3.org/2000/svg}text")[0].text == str(
                 render(CELLS)(cell.id)
+            )
+            assert (
+                svg.findall("{http://www.w3.org/2000/svg}text")[1].text
+                == f"Sheet1!{number_to_index(cell.id)}"
             )
 
         @staticmethod

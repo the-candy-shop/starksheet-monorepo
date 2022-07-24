@@ -1,11 +1,33 @@
-<svg width="89" height="55" viewBox="0 0 89 55" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="89" height="55" fill="#E5E5E5" />
-    <rect width="89" height="55" fill="#29296E" />
+<svg viewBox="0 0 89 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+        @font-face {
+            font-family: 'Press Start 2P';
+            src: url('data:font/woff2;base64,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') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        text {
+            font-family: 'Press Start 2P';
+            fill: white
+        }
+        .value {
+            font-size: 10px;
+        }
+        .name {
+            font-size: 4px;
+        }
+        </style>
+    </defs>
+    <rect width="89" height="55" fill="black" />
     <rect x="5.5" y="5.5" width="78" height="44" fill="#0000FF" />
-    <text text-anchor="middle" x="44.5" y="31" fill=" white" font-family="Press Start 2P" font-size="12" letter-spacing="0em">
-        1234
-</text>
-    <rect x="78" y="45" width="9" height="8" fill="#FF4F0A" />
+    <text text-anchor="middle" x="44.5" y="33" class="value">
+        {}
+    </text>
     <rect x="5.5" y="5.5" width="78" height="44" stroke="#FF4F0A" stroke-width="3" />
-    <path d="M81.4286 51V50.4286H81V49.8571H81.8571V50.4286H83.1429V49.2857H81.4286V48.7143H81V47.5714H81.4286V47H83.5714V47.5714H84V48.1429H83.1429V47.5714H81.8571V48.7143H83.5714V49.2857H84V50.4286H83.5714V51H81.4286Z" fill="#0000FF" />
+    <rect x="45.5" y="45.5" width="42" height="8" fill="#FF4F0A" />
+    <text text-anchor="end" x="87" y="52" class="name">
+    Sheet1!{}
+    </text>
 </svg>

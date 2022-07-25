@@ -230,18 +230,10 @@ class TestStarksheet:
     class TestSetMerkleRoot:
         @staticmethod
         async def test_should_revert_when_caller_is_not_owner(starksheet):
-
             with pytest.raises(Exception) as e:
                 await starksheet.setMerkleRoot(0).invoke(caller_address=OTHER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "Ownable: caller is not the owner"
-
-        @staticmethod
-        async def test_should_set_merkle_root(starksheet):
-            merkle_root = 1234
-            await starksheet.setMerkleRoot(merkle_root).invoke(caller_address=OWNER)
-            result = (await starksheet.getMerkleRoot().call()).result
-            assert result.root == merkle_root
 
     class TestMintPublic:
         @staticmethod

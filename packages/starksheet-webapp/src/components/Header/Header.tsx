@@ -13,7 +13,7 @@ function Header() {
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px`, width: "191px" }}
         onClick={() =>
           window.open(
-            "https://starksheet.notion.site/starksheet/Starksheet-bfb55bc581e446598d7bf5860e219b03",
+            "https://starksheet.notion.site/Starksheet-Roadmap-146530d01d914d6fae8c8779b99d58ec",
             "_blank"
           )
         }

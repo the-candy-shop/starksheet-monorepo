@@ -8,7 +8,7 @@ from urllib.parse import unquote
 
 import pytest
 import pytest_asyncio
-from starkware.crypto.signature.signature import FIELD_PRIME
+from starkware.crypto.signature.signature import FIELD_PRIME, pedersen_hash
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
@@ -28,8 +28,17 @@ def sub(l):
     return l[0] - l[1]
 
 
+def merkle_root(values):
+    if len(values) == 1:
+        return values[0]
+    return merkle_root([pedersen_hash(x, y) for x, y in zip(values[::2], values[1::2])])
+
+
 GRID_SIZE = 15 * 15
 OTHER = OWNER + 1
+ALLOW_LIST = [OWNER, OTHER]
+LEAFS = [pedersen_hash(address, address) for address in ALLOW_LIST]
+MERKLE_ROOT = merkle_root(LEAFS)
 FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod, div, sub]}
 CELLS = []
 for id in range(10):
@@ -80,12 +89,13 @@ async def starksheet(starknet: Starknet) -> StarknetContract:
         ],
     )
     for cell in CELLS:
-        await _starksheet.mint(OWNER, (cell.id, 0)).invoke(caller_address=OWNER)
+        await _starksheet.mintOwner(OWNER, (cell.id, 0)).invoke(caller_address=OWNER)
         await _starksheet.setCell(
             cell.id,
             cell.value,
             cell.dependencies,
         ).invoke(caller_address=OWNER)
+    await _starksheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
     return _starksheet
 
 
@@ -187,16 +197,6 @@ class TestStarksheet:
             assert {cell.owner for cell in result} == {0, OWNER}
             assert [cell.id for cell in result] == list(range(GRID_SIZE))
 
-    class TestMintBatchPublic:
-        @staticmethod
-        async def test_should_mint_batch_to_caller(starksheet):
-            token_ids = [(len(CELLS) + 1, 0), (len(CELLS) + 2, 0)]
-            await starksheet.mintBatchPublic(token_ids).invoke(caller_address=OWNER)
-            owner = await starksheet.ownerOf(token_ids[0]).call()
-            assert OWNER == owner.result.owner
-            owner = await starksheet.ownerOf(token_ids[1]).call()
-            assert OWNER == owner.result.owner
-
     class TestTokenURI:
         @staticmethod
         @pytest.mark.parametrize("cell", CELLS)
@@ -226,3 +226,44 @@ class TestStarksheet:
                 await starksheet.tokenURI((len(CELLS), 0)).call()
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"ERC721: tokenURI query for nonexistent token"
+
+    class TestSetMerkleRoot:
+        @staticmethod
+        async def test_should_revert_when_caller_is_not_owner(starksheet):
+
+            with pytest.raises(Exception) as e:
+                await starksheet.setMerkleRoot(0).invoke(caller_address=OTHER)
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == "Ownable: caller is not the owner"
+
+        @staticmethod
+        async def test_should_set_merkle_root(starksheet):
+            merkle_root = 1234
+            await starksheet.setMerkleRoot(merkle_root).invoke(caller_address=OWNER)
+            result = (await starksheet.getMerkleRoot().call()).result
+            assert result.root == merkle_root
+
+    class TestMintPublic:
+        @staticmethod
+        async def test_should_revert_when_caller_is_not_in_allow_list(starksheet):
+            with pytest.raises(Exception) as e:
+                await starksheet.mintPublic((0, 0), []).invoke(
+                    caller_address=(OTHER + 1)
+                )
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == "mint: proof is not valid"
+
+        @staticmethod
+        async def test_should_mint_public_token_and_revert_second_mint(starksheet):
+            token_id = (len(CELLS) + 1, 0)
+            await starksheet.mintPublic(token_id, [LEAFS[0]]).invoke(
+                caller_address=OTHER
+            )
+            owner = await starksheet.ownerOf(token_id).call()
+            assert OTHER == owner.result.owner
+            with pytest.raises(Exception) as e:
+                await starksheet.mintPublic(token_id, [LEAFS[0]]).invoke(
+                    caller_address=OTHER
+                )
+            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
+            assert message == "mint: token already claimed"

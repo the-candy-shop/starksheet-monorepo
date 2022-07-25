@@ -167,7 +167,7 @@ func safeTransferFrom{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_ch
 end
 
 @external
-func mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
+func mintOwner{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
     to : felt, tokenId : Uint256
 ):
     Ownable_only_owner()

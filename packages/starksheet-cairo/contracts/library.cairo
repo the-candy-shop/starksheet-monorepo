@@ -3,8 +3,9 @@
 from onlydust.stream.default_implementation import stream
 from openzeppelin.token.erc721.library import ERC721_owners, _exists
 from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
-from openzeppelin.utils.constants import TRUE
+from openzeppelin.utils.constants import TRUE, FALSE
 from starkware.cairo.common.registers import get_label_location
+from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import (
     call_contract,
@@ -17,6 +18,7 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.math import sum, prod, div, sub
 from contracts.constants import SUM_VALUE, PROD_VALUE, DIV_VALUE, SUB_VALUE
 from contracts.rendering import Starksheet_render_token_uri
+from contracts.merkle_tree import merkle_verify
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -33,6 +35,14 @@ struct CellRendered:
     member id : felt
     member owner : felt
     member value : felt
+end
+
+@storage_var
+func Starksheet_merkle_root() -> (root : felt):
+end
+
+@storage_var
+func Starksheet_claimed(leaf : felt) -> (claimed : felt):
 end
 
 @storage_var
@@ -184,22 +194,23 @@ func Starksheet_renderGrid{
 end
 
 func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-    token_id : Uint256
+    token_id : Uint256, proof_len : felt, proof : felt*
 ):
-    let (caller_address) = get_caller_address()
-    ERC721_Enumerable_mint(caller_address, token_id)
-    return ()
-end
-
-func Starksheet_mintBatch{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-    token_ids_len : felt, token_ids : Uint256*
-):
-    if token_ids_len == 0:
-        return ()
+    alloc_locals
+    let (local caller_address) = get_caller_address()
+    let (leaf) = hash2{hash_ptr=pedersen_ptr}(caller_address, caller_address)
+    let (root) = Starksheet_merkle_root.read()
+    let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
+    with_attr error_message("mint: proof is not valid"):
+        assert is_allow_list = TRUE
     end
-    let token_id = token_ids[0]
-    Starksheet_mint(token_id)
-    return Starksheet_mintBatch(token_ids_len - 1, token_ids + Uint256.SIZE)
+    let (claimed) = Starksheet_claimed.read(leaf)
+    with_attr error_message("mint: token already claimed"):
+        assert claimed = FALSE
+    end
+    ERC721_Enumerable_mint(caller_address, token_id)
+    Starksheet_claimed.write(leaf, TRUE)
+    return ()
 end
 
 func Starksheet_tokenURI{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(

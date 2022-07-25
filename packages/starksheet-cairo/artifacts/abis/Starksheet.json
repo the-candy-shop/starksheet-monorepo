@@ -364,7 +364,7 @@
                 "type": "Uint256"
             }
         ],
-        "name": "mint",
+        "name": "mintOwner",
         "outputs": [],
         "type": "function"
     },
@@ -435,6 +435,29 @@
         "keys": [],
         "name": "CellUpdated",
         "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "name": "root",
+                "type": "felt"
+            }
+        ],
+        "name": "setMerkleRoot",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getMerkleRoot",
+        "outputs": [
+            {
+                "name": "root",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     },
     {
         "inputs": [
@@ -522,24 +545,17 @@
             {
                 "name": "tokenId",
                 "type": "Uint256"
-            }
-        ],
-        "name": "mintPublic",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
+            },
             {
-                "name": "tokenIds_len",
+                "name": "proof_len",
                 "type": "felt"
             },
             {
-                "name": "tokenIds",
-                "type": "Uint256*"
+                "name": "proof",
+                "type": "felt*"
             }
         ],
-        "name": "mintBatchPublic",
+        "name": "mintPublic",
         "outputs": [],
         "type": "function"
     },

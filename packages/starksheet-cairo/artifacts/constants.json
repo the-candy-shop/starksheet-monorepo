@@ -25,6 +25,14 @@
                 "type": "const",
                 "value": 225
             },
+            "__main__.N_COLS": {
+                "type": "const",
+                "value": 15
+            },
+            "__main__.N_ROWS": {
+                "type": "const",
+                "value": 15
+            },
             "__main__.PROD_VALUE": {
                 "type": "const",
                 "value": 390954762583876961124108005862584803545498882125673813294165296772873328665

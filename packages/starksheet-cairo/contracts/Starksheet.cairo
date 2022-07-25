@@ -9,6 +9,7 @@ from starkware.cairo.common.uint256 import split_64, Uint256
 from openzeppelin.utils.constants import TRUE
 
 from contracts.constants import GRID_SIZE
+from openzeppelin.access.ownable import Ownable_only_owner
 from contracts.ERC721_Enumerable import constructor
 from contracts.library import (
     Starksheet_getCell,
@@ -16,10 +17,25 @@ from contracts.library import (
     Starksheet_renderCell,
     Starksheet_renderGrid,
     Starksheet_mint,
-    Starksheet_mintBatch,
     Starksheet_tokenURI,
     CellRendered,
+    Starksheet_merkle_root,
 )
+
+@external
+func setMerkleRoot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(root : felt):
+    Ownable_only_owner()
+    Starksheet_merkle_root.write(root)
+    return ()
+end
+
+@view
+func getMerkleRoot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    root : felt
+):
+    let (root) = Starksheet_merkle_root.read()
+    return (root)
+end
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -73,19 +89,10 @@ end
 
 @external
 func mintPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-    tokenId : Uint256
+    tokenId : Uint256, proof_len : felt, proof : felt*
 ):
     # TODO: add some value / payment checks in prod
-    Starksheet_mint(tokenId)
-    return ()
-end
-
-@external
-func mintBatchPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-    tokenIds_len : felt, tokenIds : Uint256*
-):
-    # TODO: add some value / payment checks in prod
-    Starksheet_mintBatch(tokenIds_len, tokenIds)
+    Starksheet_mint(tokenId, proof_len, proof)
     return ()
 end
 

@@ -12,6 +12,8 @@ export type FooterProps = {
   sx?: BoxProps["sx"];
 };
 
+const network = process.env.REACT_APP_NETWORK;
+
 function Footer({ sx }: FooterProps) {
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -55,7 +57,9 @@ function Footer({ sx }: FooterProps) {
         }}
         onClick={() =>
           window.open(
-            `https://goerli.voyager.online/contract/${StarkSheetContract.address}`,
+            network === "mainnet"
+              ? `https://voyager.online/contract/${StarkSheetContract.address}`
+              : `https://goerli.voyager.online/contract/${StarkSheetContract.address}`,
             "_blank"
           )
         }
@@ -93,7 +97,9 @@ function Footer({ sx }: FooterProps) {
         }}
         onClick={() =>
           window.open(
-            `https://testnet.aspect.co/collection/${StarkSheetContract.address}`,
+            network === "mainnet"
+              ? `https://aspect.co/collection/${StarkSheetContract.address}`
+              : `https://testnet.aspect.co/collection/${StarkSheetContract.address}`,
             "_blank"
           )
         }

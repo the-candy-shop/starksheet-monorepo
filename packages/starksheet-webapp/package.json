@@ -28,7 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_NETWORK=goerli react-scripts start",
     "prebuild": "node generate-contract-data.js",
     "build": "react-scripts build",
     "test": "react-scripts test",

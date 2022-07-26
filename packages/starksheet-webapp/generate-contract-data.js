@@ -6,9 +6,11 @@ const prodRegex = / +"__main__\.PROD_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
 const subRegex = / +"__main__\.SUB_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
 const sumRegex = / +"__main__\.SUM_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
 
+const network = process.env.REACT_APP_NETWORK;
+
 async function run() {
   const contractDeployData = fs.readFileSync(
-    path.join(__dirname, "../starksheet-cairo/goerli.deployments.txt"),
+    path.join(__dirname, `../starksheet-cairo/${network}.deployments.txt`),
     "utf8"
   );
 

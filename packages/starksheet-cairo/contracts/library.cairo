@@ -18,7 +18,7 @@ from starkware.cairo.common.uint256 import Uint256
 from contracts.math import sum, prod, div, sub
 from contracts.constants import SUM_VALUE, PROD_VALUE, DIV_VALUE, SUB_VALUE
 from contracts.rendering import Starksheet_render_token_uri
-from contracts.merkle_tree import merkle_verify
+from contracts.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -87,6 +87,18 @@ func _get_dependencies{
     assert dependencies[index] = current_data
     _get_dependencies(index + 1)
     return ()
+end
+
+func Starksheet_addressesToLeafs{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    addresses_len : felt, addresses : felt*
+) -> (leafs_len : felt, leafs : felt*):
+    return addresses_to_leafs(addresses_len, addresses)
+end
+
+func Starksheet_merkleBuild{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    leafs_len : felt, leafs : felt*
+) -> (res : felt):
+    return merkle_build(leafs_len, leafs)
 end
 
 func Starksheet_setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

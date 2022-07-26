@@ -4,6 +4,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.math_cmp import is_le_felt
+from starkware.cairo.common.alloc import alloc
 
 # verifies a merkle proof
 func merkle_verify{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -42,4 +43,61 @@ func _merkle_verify_body{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
 
     let (res) = _merkle_verify_body(node, proof_len - 1, proof + 1)
     return (res)
+end
+
+func merkle_build{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    leafs_len : felt, leafs : felt*
+) -> (res : felt):
+    alloc_locals
+    if leafs_len == 1:
+        return (leafs[0])
+    end
+    let (local new_leafs) = alloc()
+    _merkle_build_body{new_leafs=new_leafs, leafs=leafs, stop=leafs_len}(0)
+    return merkle_build(leafs_len / 2, new_leafs)
+end
+
+func _merkle_build_body{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+    new_leafs : felt*,
+    leafs : felt*,
+    stop : felt,
+}(i : felt):
+    if i == stop:
+        return ()
+    end
+    if i == stop - 1:
+        let (n) = hash2{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i])
+    else:
+        let (n) = hash2{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i + 1])
+    end
+    assert [new_leafs + i] = n
+    return _merkle_build_body(i + 2)
+end
+
+func addresses_to_leafs{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    allow_list_len : felt, allow_list : felt*
+) -> (leafs_len : felt, leafs : felt*):
+    alloc_locals
+    let (local leafs) = alloc()
+    _addresses_to_leafs_body{leafs=leafs, allow_list=allow_list, stop=allow_list_len}(0)
+    return (allow_list_len, leafs)
+end
+
+func _addresses_to_leafs_body{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+    leafs : felt*,
+    allow_list : felt*,
+    stop : felt,
+}(i : felt):
+    if i == stop:
+        return ()
+    end
+    let (n) = hash2{hash_ptr=pedersen_ptr}([allow_list + i], [allow_list + i])
+    assert [leafs + i] = n
+    return _addresses_to_leafs_body(i + 1)
 end

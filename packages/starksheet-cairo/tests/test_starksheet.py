@@ -101,6 +101,12 @@ async def starksheet(starknet: Starknet) -> StarknetContract:
 
 @pytest.mark.asyncio
 class TestStarksheet:
+    class TestGetMerkleRootFromList:
+        @staticmethod
+        async def test_should_return_same_as_python_implementation(starksheet):
+            root = (await starksheet.getMerkleRootFromList(ALLOW_LIST).call()).result
+            assert root.res == MERKLE_ROOT
+
     class TestGetCell:
         @staticmethod
         async def test_should_return_zero_when_token_does_not_exist(starksheet):

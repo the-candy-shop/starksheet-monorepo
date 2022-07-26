@@ -20,6 +20,8 @@ from contracts.library import (
     Starksheet_tokenURI,
     CellRendered,
     Starksheet_merkle_root,
+    Starksheet_addressesToLeafs,
+    Starksheet_merkleBuild,
 )
 
 @external
@@ -35,6 +37,15 @@ func getMerkleRoot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
 ):
     let (root) = Starksheet_merkle_root.read()
     return (root)
+end
+
+@view
+func getMerkleRootFromList{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    allow_list_len : felt, allow_list : felt*
+) -> (res : felt):
+    alloc_locals
+    let (leafs_len, leafs) = Starksheet_addressesToLeafs(allow_list_len, allow_list)
+    return Starksheet_merkleBuild(leafs_len, leafs)
 end
 
 @external

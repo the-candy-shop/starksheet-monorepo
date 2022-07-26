@@ -1,18 +1,28 @@
 import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet, useStarknetInvoke } from "@starknet-react/core";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { CellValuesContext } from "../contexts/CellValuesContext";
 import { BigNumberish } from "starknet/utils/number";
+import { useSnackbar } from "notistack";
 
 export const useSetCell = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const { refresh } = useContext(CellValuesContext);
   const [loading, setLoading] = useState<boolean>(false);
-  const { invoke } = useStarknetInvoke({
+  const { invoke, error, reset } = useStarknetInvoke({
     contract,
     method: "setCell",
   });
+
+  useEffect(() => {
+    if (error) {
+      setLoading(false);
+      enqueueSnackbar(error, { variant: "error" });
+      reset();
+    }
+  }, [enqueueSnackbar, error, reset]);
 
   const waitForTransaction = useCallback(
     (id: number, value: BigNumberish): Promise<void> => {
@@ -51,12 +61,14 @@ export const useSetCell = () => {
 
       try {
         setLoading(true);
-        await invoke({ args: [id, value, dependencies] });
+        const result = await invoke({ args: [id, value, dependencies] });
 
-        await waitForTransaction(id, value);
-        // const render = await contract.call("renderCell", [id]);
-        // updateValue(id, render.cell.value);
-        await refresh();
+        if (result) {
+          await waitForTransaction(id, value);
+          // const render = await contract.call("renderCell", [id]);
+          // updateValue(id, render.cell.value);
+          await refresh();
+        }
       } catch (e) {
         console.log("e", e);
       } finally {

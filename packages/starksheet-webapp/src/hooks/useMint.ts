@@ -1,18 +1,28 @@
 import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet, useStarknetInvoke } from "@starknet-react/core";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { CellValuesContext } from "../contexts/CellValuesContext";
 import { toBN } from "starknet/utils/number";
+import { useSnackbar } from "notistack";
 
 export const useMint = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const { updateValueOwner } = useContext(CellValuesContext);
   const [loading, setLoading] = useState<boolean>(false);
-  const { invoke } = useStarknetInvoke({
+  const { invoke, error, reset } = useStarknetInvoke({
     contract,
     method: "mintPublic",
   });
+
+  useEffect(() => {
+    if (error) {
+      setLoading(false);
+      enqueueSnackbar(error, { variant: "error" });
+      reset();
+    }
+  }, [enqueueSnackbar, error, reset]);
 
   const waitForMint = useCallback(
     (id: number): Promise<void> => {
@@ -47,17 +57,19 @@ export const useMint = () => {
 
       try {
         setLoading(true);
-        await invoke({ args: [[id, "0"]] });
+        const result = await invoke({ args: [[id, "0"]] });
 
-        await waitForMint(id);
-        updateValueOwner(id, toBN(account));
-      } catch (e) {
-        console.log("e", e);
+        if (result) {
+          await waitForMint(id);
+          updateValueOwner(id, toBN(account));
+        }
+      } catch (e: any) {
+        enqueueSnackbar(e.toString(), { variant: "error" });
       } finally {
         setLoading(false);
       }
     },
-    [account, contract, invoke, updateValueOwner, waitForMint]
+    [account, contract, enqueueSnackbar, invoke, updateValueOwner, waitForMint]
   );
 
   return { mint, loading };

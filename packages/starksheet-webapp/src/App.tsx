@@ -20,6 +20,7 @@ import {
   getRightCellName,
   getTopCellName,
 } from "./utils/sheetUtils";
+import { SnackbarProvider } from "notistack";
 
 const MAX_ROWS = 15;
 const MAX_COLUMNS = 15;
@@ -95,70 +96,72 @@ function App() {
   );
 
   return (
-    <StarknetProvider connectors={connectors}>
-      <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
-        <Box
-          className="App"
-          sx={{ display: "flex", flexDirection: "column", height: "100vh" }}
-        >
-          <Header />
-          <ActionBar
-            selectedCell={selectedCell}
-            owner={selectedCellOwner}
-            sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
-          />
-          {((loading && !hasLoaded) || values.length === 0) && (
-            <Box
-              sx={{
-                display: "flex",
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: "'Press Start 2P', cursive",
-              }}
-            >
-              Loading
-              <LoadingDots />
-            </Box>
-          )}
-          {!loading && hasLoaded && values.length !== 0 && (
-            <SheetTable
+    <SnackbarProvider maxSnack={3}>
+      <StarknetProvider connectors={connectors}>
+        <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
+          <Box
+            className="App"
+            sx={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          >
+            <Header />
+            <ActionBar
               selectedCell={selectedCell}
-              setSelectedCell={setSelectedCell}
-              cellsData={values}
-              columns={MAX_COLUMNS}
-              rows={MAX_ROWS}
-              sx={{
-                zIndex: 0,
-                marginTop: `-${CELL_BORDER_WIDTH}px`,
-                marginBottom: `-${CELL_BORDER_WIDTH}px`,
-                overflow: "auto",
-                flex: 1,
-                "&::-webkit-scrollbar": {
-                  width: `${CELL_HEIGHT}px`,
-                  height: `${CELL_HEIGHT}px`,
-                  backgroundColor: "#C6D2E4",
-                  border: `${CELL_BORDER_WIDTH}px solid black`,
-                  boxShadow: `inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC`,
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "#C6D2E4",
-                  border: `${CELL_BORDER_WIDTH}px solid black`,
-                  boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
-                  cursor: "pointer",
-                },
-                "&::-webkit-scrollbar-corner": {
-                  backgroundColor: "#C6D2E4",
-                  border: `${CELL_BORDER_WIDTH}px solid black`,
-                  boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
-                },
-              }}
+              owner={selectedCellOwner}
+              sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
             />
-          )}
-          <Footer sx={{ zIndex: 1 }} />
-        </Box>
-      </HotKeys>{" "}
-    </StarknetProvider>
+            {((loading && !hasLoaded) || values.length === 0) && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily: "'Press Start 2P', cursive",
+                }}
+              >
+                Loading
+                <LoadingDots />
+              </Box>
+            )}
+            {!loading && hasLoaded && values.length !== 0 && (
+              <SheetTable
+                selectedCell={selectedCell}
+                setSelectedCell={setSelectedCell}
+                cellsData={values}
+                columns={MAX_COLUMNS}
+                rows={MAX_ROWS}
+                sx={{
+                  zIndex: 0,
+                  marginTop: `-${CELL_BORDER_WIDTH}px`,
+                  marginBottom: `-${CELL_BORDER_WIDTH}px`,
+                  overflow: "auto",
+                  flex: 1,
+                  "&::-webkit-scrollbar": {
+                    width: `${CELL_HEIGHT}px`,
+                    height: `${CELL_HEIGHT}px`,
+                    backgroundColor: "#C6D2E4",
+                    border: `${CELL_BORDER_WIDTH}px solid black`,
+                    boxShadow: `inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC`,
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#C6D2E4",
+                    border: `${CELL_BORDER_WIDTH}px solid black`,
+                    boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
+                    cursor: "pointer",
+                  },
+                  "&::-webkit-scrollbar-corner": {
+                    backgroundColor: "#C6D2E4",
+                    border: `${CELL_BORDER_WIDTH}px solid black`,
+                    boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
+                  },
+                }}
+              />
+            )}
+            <Footer sx={{ zIndex: 1 }} />
+          </Box>
+        </HotKeys>{" "}
+      </StarknetProvider>
+    </SnackbarProvider>
   );
 }
 

@@ -61,14 +61,12 @@ export const useSetCell = () => {
 
       try {
         setLoading(true);
-        const result = await invoke({ args: [id, value, dependencies] });
+        await invoke({ args: [id, value, dependencies] });
 
-        if (result) {
-          await waitForTransaction(id, value);
-          // const render = await contract.call("renderCell", [id]);
-          // updateValue(id, render.cell.value);
-          await refresh();
-        }
+        await waitForTransaction(id, value);
+        // const render = await contract.call("renderCell", [id]);
+        // updateValue(id, render.cell.value);
+        await refresh();
       } catch (e) {
         console.log("e", e);
       } finally {

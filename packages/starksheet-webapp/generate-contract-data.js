@@ -36,7 +36,7 @@ async function run() {
   };
 
   const allowlistData = fs.readFileSync(
-    path.join(__dirname, "../starksheet-cairo/allowlist.json"),
+    path.join(__dirname, "../starksheet-cairo/allow_list.json"),
     "utf8"
   );
 

@@ -68,12 +68,10 @@ export const useMint = () => {
         }
 
         setLoading(true);
-        const result = await invoke({ args: [[id, "0"], addressProof] });
+        await invoke({ args: [[id, "0"], addressProof] });
 
-        if (result) {
-          await waitForMint(id);
-          updateValueOwner(id, toBN(account));
-        }
+        await waitForMint(id);
+        updateValueOwner(id, toBN(account));
       } catch (e: any) {
         enqueueSnackbar(e.toString(), { variant: "error" });
       } finally {

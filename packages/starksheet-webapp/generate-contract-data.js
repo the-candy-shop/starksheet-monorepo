@@ -35,10 +35,18 @@ async function run() {
     PRODUCT: constantsData.match(prodRegex)[1],
   };
 
+  const allowlistData = fs.readFileSync(
+    path.join(__dirname, "../starksheet-cairo/allowlist.json"),
+    "utf8"
+  );
+
+  const allowlist = JSON.parse(allowlistData);
+
   const data = {
     address,
     operations,
     abi,
+    allowlist,
   };
 
   fs.writeFileSync(

@@ -1,9 +1,10 @@
 import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet, useStarknetInvoke } from "@starknet-react/core";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { CellValuesContext } from "../contexts/CellValuesContext";
 import { toBN } from "starknet/utils/number";
 import { useSnackbar } from "notistack";
+import StarkSheetContract from "../contract.json";
 
 export const useMint = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -15,6 +16,12 @@ export const useMint = () => {
     contract,
     method: "mintPublic",
   });
+
+  const addressProof = useMemo(
+    // @ts-ignore
+    () => (account ? StarkSheetContract.allowlist[account] : undefined),
+    [account]
+  );
 
   useEffect(() => {
     if (error) {
@@ -56,8 +63,12 @@ export const useMint = () => {
       if (!contract || !account) return;
 
       try {
+        if (!addressProof) {
+          throw new Error(`Address ${account} is not whitelisted`);
+        }
+
         setLoading(true);
-        const result = await invoke({ args: [[id, "0"]] });
+        const result = await invoke({ args: [[id, "0"], addressProof] });
 
         if (result) {
           await waitForMint(id);
@@ -69,7 +80,15 @@ export const useMint = () => {
         setLoading(false);
       }
     },
-    [account, contract, enqueueSnackbar, invoke, updateValueOwner, waitForMint]
+    [
+      account,
+      addressProof,
+      contract,
+      enqueueSnackbar,
+      invoke,
+      updateValueOwner,
+      waitForMint,
+    ]
   );
 
   return { mint, loading };

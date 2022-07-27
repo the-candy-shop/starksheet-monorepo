@@ -4,7 +4,9 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.math_cmp import is_le_felt
+from starkware.cairo.common.math import unsigned_div_rem
 from starkware.cairo.common.alloc import alloc
+from openzeppelin.utils.constants import TRUE
 
 # verifies a merkle proof
 func merkle_verify{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -50,11 +52,13 @@ func merkle_build{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
 ) -> (res : felt):
     alloc_locals
     if leafs_len == 1:
-        return (leafs[0])
+        return ([leafs])
     end
     let (local new_leafs) = alloc()
     _merkle_build_body{new_leafs=new_leafs, leafs=leafs, stop=leafs_len}(0)
-    return merkle_build(leafs_len / 2, new_leafs)
+
+    let (q, r) = unsigned_div_rem(leafs_len, 2)
+    return merkle_build(q + r, new_leafs)
 end
 
 func _merkle_build_body{
@@ -65,15 +69,18 @@ func _merkle_build_body{
     leafs : felt*,
     stop : felt,
 }(i : felt):
-    if i == stop:
+    let (stop_loop) = is_le_felt(stop, i)
+    if stop_loop == TRUE:
         return ()
     end
     if i == stop - 1:
         let (n) = hash2{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i])
+        tempvar range_check_ptr = range_check_ptr
     else:
         let (n) = hash2{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i + 1])
+        tempvar range_check_ptr = range_check_ptr
     end
-    assert [new_leafs + i] = n
+    assert [new_leafs + i / 2] = n
     return _merkle_build_body(i + 2)
 end
 

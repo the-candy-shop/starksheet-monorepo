@@ -7,6 +7,9 @@ from caseconverter import snakecase
 from nile.common import ABIS_DIRECTORY, CONTRACTS_DIRECTORY
 from nile.nre import NileRuntimeEnvironment
 
+from constants import ALLOW_LIST, OWNER
+from utils import address_to_leaf, merkle_proofs, merkle_root
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -18,7 +21,7 @@ def run(nre: NileRuntimeEnvironment) -> None:
     arguments = [
         "0x" + "Starksheet".encode().hex(),
         "0x" + "STRK".encode().hex(),
-        "0x01C8D2BB17CDDF22728553C9700ADFBBD42D1999194B409B1188B17191CC2EFD",
+        hex(OWNER),
     ]
 
     contract_file = next(Path(CONTRACTS_DIRECTORY).glob(f"{contract_name}.cairo"))
@@ -43,11 +46,12 @@ def run(nre: NileRuntimeEnvironment) -> None:
             logger.info(f"Contract {contract_name} has changed, redeploying...")
 
         file = f"{nre.network}.deployments.txt"
-        (
-            pd.read_csv(file, names=["address", "abi", "alias"], sep=":")
-            .loc[lambda df: df.alias != alias]  # type: ignore
-            .to_csv(file, sep=":", index=False, header=False)
-        )
+        if Path(file).exists():
+            (
+                pd.read_csv(file, names=["address", "abi", "alias"], sep=":")
+                .loc[lambda df: df.alias != alias]  # type: ignore
+                .to_csv(file, sep=":", index=False, header=False)
+            )
         address, _ = nre.deploy(
             contract_name,
             alias=alias,
@@ -56,3 +60,16 @@ def run(nre: NileRuntimeEnvironment) -> None:
         logger.info(f"Deployed {contract_name} at {address} in network {nre.network}")
     else:
         logger.info(f"Contract {contract_name} is up to date, skipping...")
+
+    json.dump(
+        {
+            hex(address): [str(p) for p in proof]
+            for address, proof in merkle_proofs(ALLOW_LIST).items()
+        },
+        open("allow_list.json", "w"),
+        indent=2,
+    )
+    leafs = [address_to_leaf(address) for address in ALLOW_LIST]
+    root = merkle_root(leafs)
+    logger.info(f"Allow list merkle root: {root}")
+    nre.invoke(contract=alias, method="setMerkleRoot", params=[hex(root)])

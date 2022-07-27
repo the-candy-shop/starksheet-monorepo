@@ -439,6 +439,29 @@
     {
         "inputs": [
             {
+                "name": "max",
+                "type": "felt"
+            }
+        ],
+        "name": "setMaxPerWallet",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getMaxPerWallet",
+        "outputs": [
+            {
+                "name": "max",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "root",
                 "type": "felt"
             }

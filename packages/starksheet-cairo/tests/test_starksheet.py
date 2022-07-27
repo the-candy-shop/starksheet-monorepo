@@ -8,13 +8,13 @@ from urllib.parse import unquote
 
 import pytest
 import pytest_asyncio
-from starkware.crypto.signature.signature import FIELD_PRIME, pedersen_hash
+from starkware.crypto.signature.signature import FIELD_PRIME
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
 
-from constants import CONTRACTS, OWNER
-from utils import number_to_index
+from constants import ALLOW_LIST, CONTRACTS, OWNER
+from utils import address_to_leaf, merkle_proof, merkle_root, number_to_index
 
 Cell = namedtuple("Cell", ["id", "value", "dependencies"])
 random.seed(0)
@@ -28,16 +28,9 @@ def sub(l):
     return l[0] - l[1]
 
 
-def merkle_root(values):
-    if len(values) == 1:
-        return values[0]
-    return merkle_root([pedersen_hash(x, y) for x, y in zip(values[::2], values[1::2])])
-
-
 GRID_SIZE = 15 * 15
 OTHER = OWNER + 1
-ALLOW_LIST = [OWNER, OTHER]
-LEAFS = [pedersen_hash(address, address) for address in ALLOW_LIST]
+LEAFS = [address_to_leaf(address) for address in ALLOW_LIST]
 MERKLE_ROOT = merkle_root(LEAFS)
 MAX_PER_WALLET = 10
 FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod, div, sub]}
@@ -246,25 +239,24 @@ class TestStarksheet:
     class TestMintPublic:
         @staticmethod
         async def test_should_revert_when_caller_is_not_in_allow_list(starksheet):
+            other = sorted(ALLOW_LIST)[-1] + 1
             with pytest.raises(Exception) as e:
-                await starksheet.mintPublic((0, 0), []).invoke(
-                    caller_address=(OTHER + 1)
-                )
+                await starksheet.mintPublic((0, 0), []).invoke(caller_address=other)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "mint: proof is not valid"
 
         @staticmethod
         async def test_should_mint_public_token_up_to_max_per_wallet(starksheet):
             token_id = (len(CELLS) + 1, 0)
-            await starksheet.mintPublic(token_id, [LEAFS[0]]).invoke(
-                caller_address=OTHER
-            )
+            caller = ALLOW_LIST[0]
+            proof = merkle_proof(caller, ALLOW_LIST)
+            await starksheet.mintPublic(token_id, proof).invoke(caller_address=caller)
             owner = await starksheet.ownerOf(token_id).call()
-            assert OTHER == owner.result.owner
+            assert caller == owner.result.owner
             await starksheet.setMaxPerWallet(1).invoke(caller_address=OWNER)
             with pytest.raises(Exception) as e:
-                await starksheet.mintPublic(token_id, [LEAFS[0]]).invoke(
-                    caller_address=OTHER
+                await starksheet.mintPublic(token_id, proof).invoke(
+                    caller_address=caller
                 )
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "mint: tokens already claimed"

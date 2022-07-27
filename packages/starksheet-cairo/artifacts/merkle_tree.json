@@ -292,10 +292,12 @@
             "0x480080007ffd8000",
             "0x1104800180018000",
             "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffeed",
-            "0x482a7ffd7ffa8000",
-            "0x400080007fff7ffe",
+            "0x484680017ffd8000",
+            "0x400000000000008800000000000000000000000000000000000000000000001",
+            "0x48327fff7ffa8000",
+            "0x400080007fff7ffd",
             "0x480a7ff77fff8000",
-            "0x48127ffc7fff8000",
+            "0x48127ffb7fff8000",
             "0x480a7ff97fff8000",
             "0x480a7ffa7fff8000",
             "0x480a7ffb7fff8000",
@@ -303,12 +305,12 @@
             "0x482680017ffd8000",
             "0x2",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffd6",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffd4",
             "0x208b7fff7fff7ffe",
             "0x40780017fff7fff",
             "0x1",
             "0x1104800180018000",
-            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffed9",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffed7",
             "0x40137fff7fff8000",
             "0x480a7ff97fff8000",
             "0x480a7ffa7fff8000",
@@ -342,7 +344,7 @@
             "0x480080007ffd8000",
             "0x480080007ffd8000",
             "0x1104800180018000",
-            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffeba",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffeb8",
             "0x482a7ffd7ffa8000",
             "0x400080007fff7ffe",
             "0x480a7ff77fff8000",
@@ -6042,7 +6044,24 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 26,
+                        "end_col": 30,
+                        "end_line": 76,
+                        "input_file": {
+                            "filename": "contracts/merkle_tree.cairo"
+                        },
+                        "start_col": 25,
+                        "start_line": 76
+                    }
+                },
+                "283": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__._merkle_build_body"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 30,
                         "end_line": 76,
                         "input_file": {
                             "filename": "contracts/merkle_tree.cairo"
@@ -6051,7 +6070,7 @@
                         "start_line": 76
                     }
                 },
-                "282": {
+                "284": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6059,7 +6078,7 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 31,
+                        "end_col": 35,
                         "end_line": 76,
                         "input_file": {
                             "filename": "contracts/merkle_tree.cairo"
@@ -6068,7 +6087,7 @@
                         "start_line": 76
                     }
                 },
-                "283": {
+                "285": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6109,7 +6128,7 @@
                         "start_line": 61
                     }
                 },
-                "284": {
+                "286": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6150,7 +6169,7 @@
                         "start_line": 74
                     }
                 },
-                "285": {
+                "287": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6191,7 +6210,7 @@
                         "start_line": 63
                     }
                 },
-                "286": {
+                "288": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6232,7 +6251,7 @@
                         "start_line": 64
                     }
                 },
-                "287": {
+                "289": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6273,7 +6292,7 @@
                         "start_line": 65
                     }
                 },
-                "288": {
+                "290": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6314,7 +6333,7 @@
                         "start_line": 66
                     }
                 },
-                "289": {
+                "291": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6331,7 +6350,7 @@
                         "start_line": 77
                     }
                 },
-                "291": {
+                "293": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6348,7 +6367,7 @@
                         "start_line": 77
                     }
                 },
-                "293": {
+                "295": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._merkle_build_body"
@@ -6365,7 +6384,7 @@
                         "start_line": 77
                     }
                 },
-                "294": {
+                "296": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6382,7 +6401,7 @@
                         "start_line": 83
                     }
                 },
-                "296": {
+                "298": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6399,7 +6418,7 @@
                         "start_line": 84
                     }
                 },
-                "298": {
+                "300": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6416,7 +6435,7 @@
                         "start_line": 84
                     }
                 },
-                "299": {
+                "301": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6457,7 +6476,7 @@
                         "start_line": 80
                     }
                 },
-                "300": {
+                "302": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6498,7 +6517,7 @@
                         "start_line": 80
                     }
                 },
-                "301": {
+                "303": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6539,7 +6558,7 @@
                         "start_line": 80
                     }
                 },
-                "302": {
+                "304": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6568,7 +6587,7 @@
                         "start_line": 84
                     }
                 },
-                "303": {
+                "305": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6597,7 +6616,7 @@
                         "start_line": 81
                     }
                 },
-                "304": {
+                "306": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6626,7 +6645,7 @@
                         "start_line": 81
                     }
                 },
-                "305": {
+                "307": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6643,7 +6662,7 @@
                         "start_line": 85
                     }
                 },
-                "307": {
+                "309": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6660,7 +6679,7 @@
                         "start_line": 85
                     }
                 },
-                "309": {
+                "311": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6713,7 +6732,7 @@
                         "start_line": 90
                     }
                 },
-                "310": {
+                "312": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6766,7 +6785,7 @@
                         "start_line": 91
                     }
                 },
-                "311": {
+                "313": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6819,7 +6838,7 @@
                         "start_line": 92
                     }
                 },
-                "312": {
+                "314": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6848,7 +6867,7 @@
                         "start_line": 85
                     }
                 },
-                "313": {
+                "315": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6877,7 +6896,7 @@
                         "start_line": 85
                     }
                 },
-                "314": {
+                "316": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__.addresses_to_leafs"
@@ -6894,7 +6913,7 @@
                         "start_line": 86
                     }
                 },
-                "315": {
+                "317": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -6911,7 +6930,7 @@
                         "start_line": 97
                     }
                 },
-                "316": {
+                "318": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -6928,7 +6947,7 @@
                         "start_line": 97
                     }
                 },
-                "318": {
+                "320": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -6969,7 +6988,7 @@
                         "start_line": 90
                     }
                 },
-                "319": {
+                "321": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7010,7 +7029,7 @@
                         "start_line": 91
                     }
                 },
-                "320": {
+                "322": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7051,7 +7070,7 @@
                         "start_line": 92
                     }
                 },
-                "321": {
+                "323": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7092,7 +7111,7 @@
                         "start_line": 93
                     }
                 },
-                "322": {
+                "324": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7133,7 +7152,7 @@
                         "start_line": 94
                     }
                 },
-                "323": {
+                "325": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7174,7 +7193,7 @@
                         "start_line": 95
                     }
                 },
-                "324": {
+                "326": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7191,7 +7210,7 @@
                         "start_line": 98
                     }
                 },
-                "325": {
+                "327": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7208,7 +7227,7 @@
                         "start_line": 100
                     }
                 },
-                "326": {
+                "328": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7225,7 +7244,7 @@
                         "start_line": 100
                     }
                 },
-                "327": {
+                "329": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7254,7 +7273,7 @@
                         "start_line": 91
                     }
                 },
-                "328": {
+                "330": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7271,7 +7290,7 @@
                         "start_line": 100
                     }
                 },
-                "329": {
+                "331": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7288,7 +7307,7 @@
                         "start_line": 100
                     }
                 },
-                "330": {
+                "332": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7305,7 +7324,7 @@
                         "start_line": 100
                     }
                 },
-                "332": {
+                "334": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7322,7 +7341,7 @@
                         "start_line": 101
                     }
                 },
-                "333": {
+                "335": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7339,7 +7358,7 @@
                         "start_line": 101
                     }
                 },
-                "334": {
+                "336": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7380,7 +7399,7 @@
                         "start_line": 90
                     }
                 },
-                "335": {
+                "337": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7421,7 +7440,7 @@
                         "start_line": 100
                     }
                 },
-                "336": {
+                "338": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7462,7 +7481,7 @@
                         "start_line": 92
                     }
                 },
-                "337": {
+                "339": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7503,7 +7522,7 @@
                         "start_line": 93
                     }
                 },
-                "338": {
+                "340": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7544,7 +7563,7 @@
                         "start_line": 94
                     }
                 },
-                "339": {
+                "341": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7585,7 +7604,7 @@
                         "start_line": 95
                     }
                 },
-                "340": {
+                "342": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7602,7 +7621,7 @@
                         "start_line": 102
                     }
                 },
-                "342": {
+                "344": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7619,7 +7638,7 @@
                         "start_line": 102
                     }
                 },
-                "344": {
+                "346": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__._addresses_to_leafs_body"
@@ -7763,7 +7782,7 @@
             },
             "__main__._addresses_to_leafs_body": {
                 "decorators": [],
-                "pc": 315,
+                "pc": 317,
                 "type": "function"
             },
             "__main__._addresses_to_leafs_body.Args": {
@@ -7924,7 +7943,7 @@
             },
             "__main__.addresses_to_leafs": {
                 "decorators": [],
-                "pc": 294,
+                "pc": 296,
                 "type": "function"
             },
             "__main__.addresses_to_leafs.Args": {

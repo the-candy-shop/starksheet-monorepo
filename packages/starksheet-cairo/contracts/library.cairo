@@ -1,7 +1,7 @@
 %lang starknet
 
 from onlydust.stream.default_implementation import stream
-from openzeppelin.token.erc721.library import ERC721_owners, _exists, ERC721_balanceOf
+from openzeppelin.token.erc721.library import ERC721_owners, _exists, ERC721_balanceOf, ERC721_name
 from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
 from openzeppelin.utils.constants import TRUE, FALSE
 from starkware.cairo.common.registers import get_label_location
@@ -255,6 +255,7 @@ func Starksheet_tokenURI{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range
     let (value) = _render_cell(token_id.low)
     tempvar pedersen_ptr = pedersen_ptr
 
-    let (token_uri_len, token_uri) = Starksheet_render_token_uri(token_id.low, value)
+    let (name) = ERC721_name()
+    let (token_uri_len, token_uri) = Starksheet_render_token_uri(token_id.low, value, name)
     return (token_uri_len, token_uri)
 end

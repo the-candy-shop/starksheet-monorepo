@@ -110,7 +110,7 @@ end
 
 @view
 func Starksheet_render_token_uri{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
-    token_id : felt, value : felt
+    token_id : felt, value : felt, name : felt
 ) -> (token_uri_len : felt, token_uri : felt*):
     alloc_locals
     let (local cell_index_ascii) = number_to_index(token_id)
@@ -118,8 +118,8 @@ func Starksheet_render_token_uri{pedersen_ptr : HashBuiltin*, syscall_ptr : felt
     let (token_uri) = alloc()
 
     assert [token_uri + 0] = 'data:application/json,{"descrip'
-    assert [token_uri + 1] = 'tion": "Starksheet", "name": "S'
-    assert [token_uri + 2] = 'heet1!'
+    assert [token_uri + 1] = 'tion": "Starksheet", "name": "'
+    assert [token_uri + 2] = name * 256 + '!'
     assert [token_uri + 3] = cell_index_ascii
     assert [token_uri + 4] = '", "image": "data:image/svg+xml'
     assert [token_uri + 5] = ',%3Csvg%20viewBox%3D%270%200%20'
@@ -374,10 +374,11 @@ func Starksheet_render_token_uri{pedersen_ptr : HashBuiltin*, syscall_ptr : felt
     assert [token_uri + 254] = 'A%27%20/%3E%3Ctext%20text-ancho'
     assert [token_uri + 255] = 'r%3D%27end%27%20x%3D%2787%27%20'
     assert [token_uri + 256] = 'y%3D%2752%27%20class%3D%27name%'
-    assert [token_uri + 257] = '27%3ESheet1%21'
-    assert [token_uri + 258] = cell_index_ascii
-    assert [token_uri + 259] = '%3C/text%3E%3C/svg%3E"}'
+    assert [token_uri + 257] = '27%3E'
+    assert [token_uri + 258] = name * 256 * 256 * 256 + '%21'
+    assert [token_uri + 259] = cell_index_ascii
+    assert [token_uri + 260] = '%3C/text%3E%3C/svg%3E"}'
 
-    let token_uri_len = 260
+    let token_uri_len = 261
     return (token_uri_len, token_uri)
 end

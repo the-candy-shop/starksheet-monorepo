@@ -207,7 +207,7 @@ class TestStarksheet:
             ).result.token_uri
             data_uri = "".join([bytes.fromhex(hex(s)[2:]).decode() for s in token_uri])
             token_data = json.loads(data_uri.replace("data:application/json,", ""))
-            assert token_data["name"] == f"Sheet1!{number_to_index(cell.id)}"
+            assert token_data["name"] == f"Starksheet!{number_to_index(cell.id)}"
             svg = ET.fromstring(
                 unquote(token_data["image"]).replace("data:image/svg+xml,", "")
             )
@@ -218,7 +218,7 @@ class TestStarksheet:
             )
             assert (
                 svg.findall("{http://www.w3.org/2000/svg}text")[1].text
-                == f"Sheet1!{number_to_index(cell.id)}"
+                == f"Starksheet!{number_to_index(cell.id)}"
             )
 
         @staticmethod

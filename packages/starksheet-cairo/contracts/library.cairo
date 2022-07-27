@@ -1,7 +1,7 @@
 %lang starknet
 
 from onlydust.stream.default_implementation import stream
-from openzeppelin.token.erc721.library import ERC721_owners, _exists
+from openzeppelin.token.erc721.library import ERC721_owners, _exists, ERC721_balanceOf
 from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
 from openzeppelin.utils.constants import TRUE, FALSE
 from starkware.cairo.common.registers import get_label_location
@@ -14,6 +14,7 @@ from starkware.starknet.common.syscalls import (
 )
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.math_cmp import is_le
 
 from contracts.math import sum, prod, div, sub
 from contracts.constants import SUM_VALUE, PROD_VALUE, DIV_VALUE, SUB_VALUE
@@ -42,7 +43,7 @@ func Starksheet_merkle_root() -> (root : felt):
 end
 
 @storage_var
-func Starksheet_claimed(leaf : felt) -> (claimed : felt):
+func Starksheet_max_per_wallet() -> (max : felt):
 end
 
 @storage_var
@@ -196,7 +197,6 @@ func Starksheet_renderGrid{
     cells : CellRendered*,
     stop : felt,
 }(index : felt):
-    # alloc_locals
     if index == stop:
         return ()
     end
@@ -210,18 +210,37 @@ func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_che
 ):
     alloc_locals
     let (local caller_address) = get_caller_address()
-    let (leaf) = hash2{hash_ptr=pedersen_ptr}(caller_address, caller_address)
     let (root) = Starksheet_merkle_root.read()
-    let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
-    with_attr error_message("mint: proof is not valid"):
-        assert is_allow_list = TRUE
+    if root != 0:
+        let (leaf) = hash2{hash_ptr=pedersen_ptr}(caller_address, caller_address)
+        let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
+        with_attr error_message("mint: proof is not valid"):
+            assert is_allow_list = TRUE
+        end
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar syscall_ptr = syscall_ptr
+        tempvar range_check_ptr = range_check_ptr
+    else:
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar syscall_ptr = syscall_ptr
+        tempvar range_check_ptr = range_check_ptr
     end
-    let (claimed) = Starksheet_claimed.read(leaf)
-    with_attr error_message("mint: token already claimed"):
-        assert claimed = FALSE
+    let (max_per_wallet) = Starksheet_max_per_wallet.read()
+    if max_per_wallet != 0:
+        let (user_balance) = ERC721_balanceOf(caller_address)
+        let (remaining_allocation) = is_le(user_balance.low, max_per_wallet - 1)
+        with_attr error_message("mint: tokens already claimed"):
+            assert remaining_allocation = TRUE
+        end
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar syscall_ptr = syscall_ptr
+        tempvar range_check_ptr = range_check_ptr
+    else:
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar syscall_ptr = syscall_ptr
+        tempvar range_check_ptr = range_check_ptr
     end
     ERC721_Enumerable_mint(caller_address, token_id)
-    Starksheet_claimed.write(leaf, TRUE)
     return ()
 end
 

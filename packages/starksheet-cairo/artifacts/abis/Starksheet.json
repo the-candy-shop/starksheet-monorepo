@@ -462,6 +462,27 @@
     {
         "inputs": [
             {
+                "name": "allow_list_len",
+                "type": "felt"
+            },
+            {
+                "name": "allow_list",
+                "type": "felt*"
+            }
+        ],
+        "name": "getMerkleRootFromList",
+        "outputs": [
+            {
+                "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "tokenId",
                 "type": "felt"
             },

@@ -4,7 +4,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_not_zero
-from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf
+from openzeppelin.token.erc721.library import _exists, ERC721_ownerOf, ERC721_balanceOf
 from starkware.cairo.common.uint256 import split_64, Uint256
 from openzeppelin.utils.constants import TRUE
 
@@ -22,7 +22,22 @@ from contracts.library import (
     Starksheet_merkle_root,
     Starksheet_addressesToLeafs,
     Starksheet_merkleBuild,
+    Starksheet_max_per_wallet,
 )
+
+@external
+func setMaxPerWallet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(max : felt):
+    Ownable_only_owner()
+    Starksheet_max_per_wallet.write(max)
+    return ()
+end
+
+@view
+func getMaxPerWallet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    max : felt
+):
+    return Starksheet_max_per_wallet.read()
+end
 
 @external
 func setMerkleRoot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(root : felt):
@@ -102,7 +117,6 @@ end
 func mintPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
     tokenId : Uint256, proof_len : felt, proof : felt*
 ):
-    # TODO: add some value / payment checks in prod
     Starksheet_mint(tokenId, proof_len, proof)
     return ()
 end

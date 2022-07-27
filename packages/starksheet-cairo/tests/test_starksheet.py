@@ -39,6 +39,7 @@ OTHER = OWNER + 1
 ALLOW_LIST = [OWNER, OTHER]
 LEAFS = [pedersen_hash(address, address) for address in ALLOW_LIST]
 MERKLE_ROOT = merkle_root(LEAFS)
+MAX_PER_WALLET = 10
 FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod, div, sub]}
 CELLS = []
 for id in range(10):
@@ -96,6 +97,7 @@ async def starksheet(starknet: Starknet) -> StarknetContract:
             cell.dependencies,
         ).invoke(caller_address=OWNER)
     await _starksheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
+    await _starksheet.setMaxPerWallet(MAX_PER_WALLET).invoke(caller_address=OWNER)
     return _starksheet
 
 
@@ -252,16 +254,29 @@ class TestStarksheet:
             assert message == "mint: proof is not valid"
 
         @staticmethod
-        async def test_should_mint_public_token_and_revert_second_mint(starksheet):
+        async def test_should_mint_public_token_up_to_max_per_wallet(starksheet):
             token_id = (len(CELLS) + 1, 0)
             await starksheet.mintPublic(token_id, [LEAFS[0]]).invoke(
                 caller_address=OTHER
             )
             owner = await starksheet.ownerOf(token_id).call()
             assert OTHER == owner.result.owner
+            await starksheet.setMaxPerWallet(1).invoke(caller_address=OWNER)
             with pytest.raises(Exception) as e:
                 await starksheet.mintPublic(token_id, [LEAFS[0]]).invoke(
                     caller_address=OTHER
                 )
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == "mint: token already claimed"
+            assert message == "mint: tokens already claimed"
+            await starksheet.setMaxPerWallet(MAX_PER_WALLET).invoke(
+                caller_address=OWNER
+            )
+
+        @staticmethod
+        async def test_should_mint_public_token_when_no_wl(starksheet):
+            token_id = (len(CELLS) + 2, 0)
+            await starksheet.setMerkleRoot(0).invoke(caller_address=OWNER)
+            await starksheet.mintPublic(token_id, []).invoke(caller_address=OTHER + 1)
+            owner = await starksheet.ownerOf(token_id).call()
+            assert OTHER + 1 == owner.result.owner
+            await starksheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)

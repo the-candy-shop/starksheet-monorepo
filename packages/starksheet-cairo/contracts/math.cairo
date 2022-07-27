@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.math import signed_div_rem
 
+@view
 func sum(arr_len : felt, arr : felt*) -> (res : felt):
     if arr_len == 0:
         return (0)
@@ -11,6 +12,7 @@ func sum(arr_len : felt, arr : felt*) -> (res : felt):
     return ([arr] + sum_of_rest)
 end
 
+@view
 func prod(arr_len : felt, arr : felt*) -> (res : felt):
     if arr_len == 0:
         return (1)
@@ -20,6 +22,7 @@ func prod(arr_len : felt, arr : felt*) -> (res : felt):
     return ([arr] * prod_of_rest)
 end
 
+@view
 func div{range_check_ptr}(arr_len : felt, arr : felt*) -> (res : felt):
     with_attr error_message("div only works with 2 arguments, {arr_len} given"):
         assert arr_len = 2
@@ -28,6 +31,7 @@ func div{range_check_ptr}(arr_len : felt, arr : felt*) -> (res : felt):
     return (q)
 end
 
+@view
 func sub(arr_len : felt, arr : felt*) -> (res : felt):
     with_attr error_message("sub only works with 2 arguments, {arr_len} given"):
         assert arr_len = 2

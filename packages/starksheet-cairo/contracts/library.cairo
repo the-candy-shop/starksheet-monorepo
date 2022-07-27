@@ -17,9 +17,9 @@ from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.math_cmp import is_le
 
 from contracts.math import sum, prod, div, sub
-from contracts.constants import SUM_VALUE, PROD_VALUE, DIV_VALUE, SUB_VALUE
 from contracts.rendering import Starksheet_render_token_uri
 from contracts.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build
+from starkware.cairo.common.memcpy import memcpy
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -141,41 +141,19 @@ func _render_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
         return (result)
     end
     let (dependencies) = stream.map(_render_cell, dependencies_len, dependencies)
+    let (calldata : felt*) = alloc()
+    assert calldata[0] = dependencies_len
+    memcpy(calldata + 1, dependencies, dependencies_len)
 
     # TODO: store address in cell to be able to call any function from any contract (math/ml lib for instance)
-    # let (contract_address) = get_contract_address()
-    # %{
-    #     print(f"{contract_address=}")
-    #     print(f"{value=}")
-    #     breakpoint()
-    # %}
-    # let (retdata_size : felt, retdata : felt*) = call_contract(
-    #     contract_address, value, dependencies_len, dependencies
-    # )
-    # assert retdata_size = 1
-    # let result = retdata[0]
+    let (contract_address) = get_contract_address()
+    let (retdata_size : felt, retdata : felt*) = call_contract(
+        contract_address, value, dependencies_len + 1, calldata
+    )
+    assert retdata_size = 1
+    let result = retdata[0]
 
-    # TODO: can't make the call_contract work, for now this is a workaround to plug the FE
-    if value == SUM_VALUE:
-        let (result) = sum(dependencies_len, dependencies)
-        return (result)
-    end
-    if value == PROD_VALUE:
-        let (result) = prod(dependencies_len, dependencies)
-        return (result)
-    end
-    if value == SUB_VALUE:
-        let (result) = sub(dependencies_len, dependencies)
-        return (result)
-    end
-    if value == DIV_VALUE:
-        let (result) = div(dependencies_len, dependencies)
-        return (result)
-    end
-    with_attr error_message("renderCell: formula {value} not found"):
-        assert 0 = 1
-    end
-    return (0)
+    return (result)
 end
 
 func Starksheet_renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(

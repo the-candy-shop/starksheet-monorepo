@@ -21,6 +21,17 @@ func merkle_verify{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
     end
 end
 
+func _hash_sorted{hash_ptr : HashBuiltin*, range_check_ptr}(a, b) -> (res):
+    let (le) = is_le_felt(a, b)
+
+    if le == 1:
+        let (n) = hash2{hash_ptr=hash_ptr}(a, b)
+    else:
+        let (n) = hash2{hash_ptr=hash_ptr}(b, a)
+    end
+    return (n)
+end
+
 # calculates the merkle root of a given proof
 func _merkle_verify_body{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     curr : felt, proof_len : felt, proof : felt*
@@ -31,19 +42,9 @@ func _merkle_verify_body{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
         return (curr)
     end
 
-    local node
-    local proof_elem = [proof]
-    let (le) = is_le_felt(curr, proof_elem)
+    let (n) = _hash_sorted{hash_ptr=pedersen_ptr}(curr, [proof])
 
-    if le == 1:
-        let (n) = hash2{hash_ptr=pedersen_ptr}(curr, proof_elem)
-        node = n
-    else:
-        let (n) = hash2{hash_ptr=pedersen_ptr}(proof_elem, curr)
-        node = n
-    end
-
-    let (res) = _merkle_verify_body(node, proof_len - 1, proof + 1)
+    let (res) = _merkle_verify_body(n, proof_len - 1, proof + 1)
     return (res)
 end
 
@@ -74,10 +75,10 @@ func _merkle_build_body{
         return ()
     end
     if i == stop - 1:
-        let (n) = hash2{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i])
+        let (n) = _hash_sorted{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i])
         tempvar range_check_ptr = range_check_ptr
     else:
-        let (n) = hash2{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i + 1])
+        let (n) = _hash_sorted{hash_ptr=pedersen_ptr}([leafs + i], [leafs + i + 1])
         tempvar range_check_ptr = range_check_ptr
     end
     assert [new_leafs + i / 2] = n

@@ -179,16 +179,6 @@ class TestStarksheet:
                 cell.dependencies,
             ).invoke(caller_address=OWNER)
 
-        @staticmethod
-        async def test_should_revert_when_value_does_not_exist_and_cell_has_deps(
-            starksheet_cell_altered,
-        ):
-            starksheet, cell = starksheet_cell_altered
-            with pytest.raises(Exception) as e:
-                await starksheet.renderCell(cell.id).call()
-            message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == f"renderCell: formula {cell.value + 1} not found"
-
     class TestRenderGrid:
         @staticmethod
         async def test_should_return_rendered_grid(starksheet):
@@ -248,7 +238,7 @@ class TestStarksheet:
         @staticmethod
         async def test_should_mint_public_token_up_to_max_per_wallet(starksheet):
             token_id = (len(CELLS) + 1, 0)
-            caller = ALLOW_LIST[0]
+            caller = [address for address in ALLOW_LIST if address != OWNER][0]
             proof = merkle_proof(caller, ALLOW_LIST)
             await starksheet.mintPublic(token_id, proof).invoke(caller_address=caller)
             owner = await starksheet.ownerOf(token_id).call()

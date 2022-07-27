@@ -26,8 +26,8 @@
         {}
     </text>
     <rect x="5.5" y="5.5" width="78" height="44" stroke="#FF4F0A" stroke-width="3" />
-    <rect x="45.5" y="45.5" width="42" height="8" fill="#FF4F0A" />
+    <rect x="30" y="45.5" width="58" height="8" fill="#FF4F0A" />
     <text text-anchor="end" x="87" y="52" class="name">
-    Sheet1!{}
+    {}!{}
     </text>
 </svg>

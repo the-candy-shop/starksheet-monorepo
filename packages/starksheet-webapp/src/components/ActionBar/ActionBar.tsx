@@ -4,11 +4,13 @@ import Cell from "../Cell/Cell";
 import { CELL_BORDER_WIDTH } from "../../config";
 import ContentEditable from "react-contenteditable";
 import { buildFormulaDisplay, toPlainTextFormula } from "./formula.utils";
-import { useStarknet, useStarknetCall } from "@starknet-react/core";
+import { useStarknet } from "@starknet-react/core";
 import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
 import SaveButton from "../SaveButton/SaveButton";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import FormulaField from "../FormulaField/FormulaField";
+import LoadingDots from "../LoadingDots/LoadingDots";
+import { useSnackbar } from "notistack";
 
 export type ActionBarProps = {
   selectedCell: { name: string; id: number } | null;
@@ -18,18 +20,11 @@ export type ActionBarProps = {
 
 function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const { cellNames } = useContext(CellValuesContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
-  const { data } = useStarknetCall({
-    contract,
-    method: "getCell",
-    args: [selectedCell?.id],
-  });
-
-  const [unSavedValue, setUnsavedValue] = React.useState<string>(
-    // @ts-ignore
-    selectedCell && data ? toPlainTextFormula(data, cellNames) : ""
-  );
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
   );
@@ -37,22 +32,30 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
 
   React.useEffect(() => {
     if (
-      inputRef.current &&
-      inputRef.current.el &&
-      inputRef.current.el.current
+      contract &&
+      selectedCell &&
+      previousSelectedCell.current !== selectedCell.name
     ) {
-      inputRef.current.el.current.focus();
-    }
+      inputRef?.current?.el?.current?.focus();
+      previousSelectedCell.current = selectedCell ? selectedCell.name : null;
 
-    previousSelectedCell.current = selectedCell ? selectedCell.name : null;
-    // @ts-ignore
-    if (selectedCell && data) {
-      // @ts-ignore
-      setUnsavedValue(toPlainTextFormula(data, cellNames));
-    } else {
-      setUnsavedValue("");
+      setLoading(true);
+      contract
+        .call("getCell", [selectedCell.id])
+        .then((cellData) =>
+          setUnsavedValue(
+            toPlainTextFormula(
+              { value: cellData.value, dependencies: cellData.dependencies },
+              cellNames
+            )
+          )
+        )
+        .catch((error) =>
+          enqueueSnackbar(error.toString(), { variant: "error" })
+        )
+        .finally(() => setLoading(false));
     }
-  }, [cellNames, data, selectedCell]);
+  }, [cellNames, contract, enqueueSnackbar, selectedCell]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -66,7 +69,8 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
           position: "relative",
         }}
       >
-        {selectedCell && (
+        {loading && <LoadingDots />}
+        {!loading && selectedCell && (
           <Box
             sx={{
               display: "flex",

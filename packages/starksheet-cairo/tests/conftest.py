@@ -3,6 +3,9 @@ import asyncio
 import pytest
 import pytest_asyncio
 from starkware.starknet.testing.starknet import Starknet
+from starkware.starknet.compiler.compile import compile_starknet_files
+
+from constants import CONTRACTS
 
 
 @pytest.fixture(scope="session")
@@ -15,3 +18,15 @@ def event_loop():
 @pytest_asyncio.fixture(scope="session")
 async def starknet() -> Starknet:
     return await Starknet.empty()
+
+
+@pytest_asyncio.fixture(scope="session")
+async def math(starknet):
+    return await starknet.deploy(
+        contract_class=compile_starknet_files(
+            [str(CONTRACTS["math"])],
+            debug_info=True,
+            disable_hint_validation=True,
+        ),
+        constructor_calldata=[],
+    )

@@ -17,10 +17,6 @@
         },
         "hints": {},
         "identifiers": {
-            "__main__.DIV_VALUE": {
-                "type": "const",
-                "value": 108192450202678444723308767730487539068408323925754456806249919587336532304
-            },
             "__main__.GRID_SIZE": {
                 "type": "const",
                 "value": 225
@@ -32,18 +28,6 @@
             "__main__.N_ROWS": {
                 "type": "const",
                 "value": 15
-            },
-            "__main__.PROD_VALUE": {
-                "type": "const",
-                "value": 390954762583876961124108005862584803545498882125673813294165296772873328665
-            },
-            "__main__.SUB_VALUE": {
-                "type": "const",
-                "value": 958766071209442778479085403119201594057288230757243102466650545030408647035
-            },
-            "__main__.SUM_VALUE": {
-                "type": "const",
-                "value": 1745323118234039575158332314383998379920114756853600128775583542343013246395
             },
             "starkware.cairo.common.cairo_builtins.BitwiseBuiltin": {
                 "full_name": "starkware.cairo.common.cairo_builtins.BitwiseBuiltin",

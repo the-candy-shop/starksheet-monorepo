@@ -69,7 +69,7 @@ def render(cells):
 
 
 @pytest_asyncio.fixture(scope="session")
-async def starksheet(starknet: Starknet) -> StarknetContract:
+async def starksheet(starknet: Starknet, math: StarknetContract) -> StarknetContract:
     _starksheet = await starknet.deploy(
         contract_class=compile_starknet_files(
             [str(CONTRACTS["Starksheet"])],
@@ -85,6 +85,7 @@ async def starksheet(starknet: Starknet) -> StarknetContract:
     for cell in CELLS:
         await _starksheet.mintOwner(OWNER, (cell.id, 0)).invoke(caller_address=OWNER)
         await _starksheet.setCell(
+            math.contract_address,
             cell.id,
             cell.value,
             cell.dependencies,
@@ -126,7 +127,9 @@ class TestStarksheet:
             starksheet,
         ):
             with pytest.raises(Exception) as e:
-                await starksheet.setCell(len(CELLS), 0, []).invoke(caller_address=OWNER)
+                await starksheet.setCell(0, len(CELLS), 0, []).invoke(
+                    caller_address=OWNER
+                )
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"setCell: tokenId does not exist"
 
@@ -136,6 +139,7 @@ class TestStarksheet:
         ):
             with pytest.raises(Exception) as e:
                 await starksheet.setCell(
+                    0,
                     CELLS[0].id,
                     CELLS[0].value,
                     CELLS[0].dependencies,

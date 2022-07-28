@@ -30,6 +30,7 @@ end
 struct CellData:
     member dependencies_len : felt
     member value : felt
+    member contract_address : felt
 end
 
 struct CellRendered:
@@ -58,7 +59,7 @@ func _set_dependencies{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-    id : felt,
+    token_id : felt,
     index : felt,
     dependencies_len : felt,
 }(dependencies : felt*):
@@ -66,7 +67,7 @@ func _set_dependencies{
     if remaining_data == 0:
         return ()
     end
-    Starksheet_cell_dependencies.write(id, index, [dependencies])
+    Starksheet_cell_dependencies.write(token_id, index, [dependencies])
     let index_new = index + 1
     _set_dependencies{index=index_new}(dependencies + 1)
     return ()
@@ -76,7 +77,7 @@ func _get_dependencies{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-    id : felt,
+    token_id : felt,
     dependencies_len : felt,
     dependencies : felt*,
 }(index : felt):
@@ -84,7 +85,7 @@ func _get_dependencies{
     if remaining_data == 0:
         return ()
     end
-    let (current_data) = Starksheet_cell_dependencies.read(id, index)
+    let (current_data) = Starksheet_cell_dependencies.read(token_id, index)
     assert dependencies[index] = current_data
     _get_dependencies(index + 1)
     return ()
@@ -103,39 +104,45 @@ func Starksheet_merkleBuild{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, ra
 end
 
 func Starksheet_setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    id : felt, value : felt, dependencies_len : felt, dependencies : felt*
+    contract_address : felt,
+    token_id : felt,
+    value : felt,
+    dependencies_len : felt,
+    dependencies : felt*,
 ):
     alloc_locals
-    Starksheet_cell.write(id, CellData(dependencies_len, value))
+    Starksheet_cell.write(
+        token_id,
+        CellData(dependencies_len=dependencies_len, value=value, contract_address=contract_address),
+    )
     local index = 0
-    with id, index, dependencies_len:
+    with token_id, index, dependencies_len:
         _set_dependencies(dependencies)
     end
-    CellUpdated.emit(id, value)
+    CellUpdated.emit(token_id, value)
     return ()
 end
 
 func Starksheet_getCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    id : felt
-) -> (value : felt, dependencies_len : felt, dependencies : felt*):
+    token_id : felt
+) -> (contract_address : felt, value : felt, dependencies_len : felt, dependencies : felt*):
     alloc_locals
     local index = 0
-    let (cell_data) = Starksheet_cell.read(id)
+    let (cell_data) = Starksheet_cell.read(token_id)
     let dependencies_len = cell_data.dependencies_len
 
     let (local dependencies : felt*) = alloc()
-    with id, dependencies, dependencies_len:
+    with token_id, dependencies, dependencies_len:
         _get_dependencies(index)
     end
-    return (cell_data.value, dependencies_len, dependencies)
+    return (cell_data.contract_address, cell_data.value, dependencies_len, dependencies)
 end
 
-# Signature has to be the following to use stream.map, hence the "value" and "result" kwargs
 func _render_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     value : felt
 ) -> (result : felt):
     alloc_locals
-    let (value, dependencies_len, dependencies) = Starksheet_getCell(value)
+    let (contract_address, value, dependencies_len, dependencies) = Starksheet_getCell(value)
     let result = value
     if dependencies_len == 0:
         return (result)
@@ -145,8 +152,6 @@ func _render_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
     assert calldata[0] = dependencies_len
     memcpy(calldata + 1, dependencies, dependencies_len)
 
-    # TODO: store address in cell to be able to call any function from any contract (math/ml lib for instance)
-    let (contract_address) = get_contract_address()
     let (retdata_size : felt, retdata : felt*) = call_contract(
         contract_address, value, dependencies_len + 1, calldata
     )

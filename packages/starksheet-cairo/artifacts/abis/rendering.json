@@ -25,6 +25,10 @@
             {
                 "name": "value",
                 "type": "felt"
+            },
+            {
+                "name": "name",
+                "type": "felt"
             }
         ],
         "name": "Starksheet_render_token_uri",

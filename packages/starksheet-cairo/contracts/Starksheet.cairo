@@ -65,7 +65,11 @@ end
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    tokenId : felt, value : felt, dependencies_len : felt, dependencies : felt*
+    contractAddress : felt,
+    tokenId : felt,
+    value : felt,
+    dependencies_len : felt,
+    dependencies : felt*,
 ):
     alloc_locals
     let (low, high) = split_64(tokenId)
@@ -82,7 +86,7 @@ func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         assert owner = caller
     end
 
-    Starksheet_setCell(tokenId, value, dependencies_len, dependencies)
+    Starksheet_setCell(contractAddress, tokenId, value, dependencies_len, dependencies)
     return ()
 end
 

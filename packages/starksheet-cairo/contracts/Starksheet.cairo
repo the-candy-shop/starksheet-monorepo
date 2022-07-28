@@ -23,7 +23,48 @@ from contracts.library import (
     Starksheet_addressesToLeafs,
     Starksheet_merkleBuild,
     Starksheet_max_per_wallet,
+    Starksheet_getClassHash,
+    Starksheet_setClassHash,
+    Starksheet_getSheet,
+    Starksheet_getSheets,
+    Starksheet_deploySheet,
 )
+
+@external
+func setClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(hash : felt):
+    Ownable_only_owner()
+    Starksheet_setClassHash(hash)
+    return ()
+end
+
+@view
+func getClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    hash : felt
+):
+    return Starksheet_getClassHash()
+end
+
+@view
+func getSheets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    addresses_len : felt, addresses : felt*
+):
+    let (addresses_len, addresses) = Starksheet_getSheets()
+    return (addresses_len, addresses)
+end
+
+@view
+func getSheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(index : felt) -> (
+    address : felt
+):
+    return Starksheet_getSheet(index)
+end
+
+@external
+func deploySheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    name : felt, symbol : felt
+) -> (address : felt):
+    return Starksheet_deploySheet(name, symbol)
+end
 
 @external
 func setMaxPerWallet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(max : felt):

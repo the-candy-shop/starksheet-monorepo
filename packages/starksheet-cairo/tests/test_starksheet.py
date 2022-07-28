@@ -82,6 +82,13 @@ def cells(math):
 
 @pytest_asyncio.fixture(scope="session")
 async def starksheet(starknet: Starknet, cells) -> StarknetContract:
+    class_hash = await starknet.declare(
+        contract_class=compile_starknet_files(
+            [str(CONTRACTS["Starksheet"])],
+            debug_info=True,
+            disable_hint_validation=True,
+        )
+    )
     _starksheet = await starknet.deploy(
         contract_class=compile_starknet_files(
             [str(CONTRACTS["Starksheet"])],
@@ -104,6 +111,7 @@ async def starksheet(starknet: Starknet, cells) -> StarknetContract:
         ).invoke(caller_address=OWNER)
     await _starksheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
     await _starksheet.setMaxPerWallet(MAX_PER_WALLET).invoke(caller_address=OWNER)
+    await _starksheet.setClassHash(class_hash.class_hash).invoke(caller_address=OWNER)
     return _starksheet
 
 
@@ -278,3 +286,24 @@ class TestStarksheet:
             owner = await starksheet.ownerOf(token_id).call()
             assert OTHER + 1 == owner.result.owner
             await starksheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
+
+    class TestDeploySheet:
+        @staticmethod
+        async def test_should_deploy_sheet_with_caller_as_owner_and_given_names(
+            starksheet,
+        ):
+            name = int("MySheet".encode().hex(), 16)
+            symbol = int("MS".encode().hex(), 16)
+            address = (
+                await starksheet.deploySheet(name, symbol).invoke(caller_address=OTHER)
+            ).result.address
+            # TODO: check that the sheet is deployed with the correct name and symbol
+
+        @staticmethod
+        async def test_should_deploy_sheet_with_caller_as_owner_and_default_names(
+            starksheet,
+        ):
+            address = (
+                await starksheet.deploySheet(0, 0).invoke(caller_address=OTHER)
+            ).result.address
+            # TODO: check that the sheet is deployed with the correct name and symbol

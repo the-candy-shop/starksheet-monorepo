@@ -4,21 +4,16 @@ from onlydust.stream.default_implementation import stream
 from openzeppelin.token.erc721.library import ERC721_owners, _exists, ERC721_balanceOf, ERC721_name
 from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
 from openzeppelin.utils.constants import TRUE, FALSE
-from starkware.cairo.common.registers import get_label_location
-from starkware.cairo.common.hash import hash2
-from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.starknet.common.syscalls import (
-    call_contract,
-    get_contract_address,
-    get_caller_address,
-)
 from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.uint256 import Uint256
+from starkware.cairo.common.memcpy import memcpy
+from starkware.starknet.common.syscalls import call_contract, get_caller_address, deploy
 
 from contracts.rendering import Starksheet_render_token_uri
-from contracts.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build
-from starkware.cairo.common.memcpy import memcpy
+from contracts.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build, _hash_sorted
+from contracts.string import str
 
 @event
 func CellUpdated(id : felt, value : felt):
@@ -52,6 +47,99 @@ end
 
 @storage_var
 func Starksheet_cell_dependencies(id : felt, index : felt) -> (value : felt):
+end
+
+@storage_var
+func Starksheet_class_hash() -> (hash : felt):
+end
+
+@storage_var
+func Starksheet_sheets(id : felt) -> (address : felt):
+end
+
+@storage_var
+func Starksheet_sheets_count() -> (count : felt):
+end
+
+func Starksheet_getSheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    id : felt
+) -> (address : felt):
+    return Starksheet_sheets.read(id)
+end
+
+func Starksheet_getSheets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    addresses_len : felt, addresses : felt*
+):
+    alloc_locals
+    let (stop) = Starksheet_sheets_count.read()
+    let (local addresses : felt*) = alloc()
+    _get_sheets_loop{stop=stop, addresses=addresses}(0)
+    return (addresses_len=stop, addresses=addresses)
+end
+
+func _get_sheets_loop{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+    stop : felt,
+    addresses : felt*,
+}(index : felt):
+    if index == stop:
+        return ()
+    end
+    let (address) = Starksheet_sheets.read(index)
+    assert [addresses + index] = address
+    return _get_sheets_loop(index + 1)
+end
+
+func Starksheet_deploySheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    name : felt, symbol : felt
+) -> (address : felt):
+    alloc_locals
+    let (class_hash) = Starksheet_class_hash.read()
+    let (local sheets_count) = Starksheet_sheets_count.read()
+    let (owner) = get_caller_address()
+    let (local constructor_calldata : felt*) = alloc()
+    if name == 0:
+        let (count_str) = str(sheets_count)
+        tempvar sheet_name = 'Sheet ' * 256 * 256 + count_str
+        tempvar sheet_symbol = 'SHT' * 256 * 256 + count_str
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
+    else:
+        tempvar sheet_name = name
+        tempvar sheet_symbol = symbol
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
+    end
+    assert constructor_calldata[0] = sheet_name
+    assert constructor_calldata[1] = sheet_symbol
+    assert constructor_calldata[2] = owner
+
+    let (address) = deploy(
+        class_hash=class_hash,
+        contract_address_salt=sheets_count,
+        constructor_calldata_size=3,
+        constructor_calldata=constructor_calldata,
+    )
+
+    Starksheet_sheets.write(sheets_count, address)
+    Starksheet_sheets_count.write(sheets_count + 1)
+    return (address)
+end
+
+func Starksheet_getClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    ) -> (hash : felt):
+    return Starksheet_class_hash.read()
+end
+
+func Starksheet_setClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    hash : felt
+):
+    Starksheet_class_hash.write(hash)
+    return ()
 end
 
 func _set_dependencies{
@@ -194,7 +282,7 @@ func Starksheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_che
     let (local caller_address) = get_caller_address()
     let (root) = Starksheet_merkle_root.read()
     if root != 0:
-        let (leaf) = hash2{hash_ptr=pedersen_ptr}(caller_address, caller_address)
+        let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(caller_address, caller_address)
         let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
         with_attr error_message("mint: proof is not valid"):
             assert is_allow_list = TRUE

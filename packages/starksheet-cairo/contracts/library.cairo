@@ -16,7 +16,6 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.uint256 import Uint256
 from starkware.cairo.common.math_cmp import is_le
 
-from contracts.math import sum, prod, div, sub
 from contracts.rendering import Starksheet_render_token_uri
 from contracts.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build
 from starkware.cairo.common.memcpy import memcpy
@@ -144,7 +143,7 @@ func _render_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
     alloc_locals
     let (contract_address, value, dependencies_len, dependencies) = Starksheet_getCell(value)
     let result = value
-    if dependencies_len == 0:
+    if contract_address == 0:
         return (result)
     end
     let (dependencies) = stream.map(_render_cell, dependencies_len, dependencies)

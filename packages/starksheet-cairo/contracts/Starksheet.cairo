@@ -92,10 +92,10 @@ end
 
 @view
 func getCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(tokenId : felt) -> (
-    value : felt, dependencies_len : felt, dependencies : felt*
+    contractAddress : felt, value : felt, dependencies_len : felt, dependencies : felt*
 ):
     let res = Starksheet_getCell(tokenId)
-    return (res.value, res.dependencies_len, res.dependencies)
+    return (res.contract_address, res.value, res.dependencies_len, res.dependencies)
 end
 
 @view

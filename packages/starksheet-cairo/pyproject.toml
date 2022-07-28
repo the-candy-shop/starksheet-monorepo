@@ -3,6 +3,9 @@ name = "starksheet"
 version = "0.1.0"
 description = ""
 authors = ["Clément Walter <clement0walter@gmail.com>"]
+packages = [
+    { include = "*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "~3.9"

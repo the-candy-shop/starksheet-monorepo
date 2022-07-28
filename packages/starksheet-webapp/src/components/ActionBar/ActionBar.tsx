@@ -36,8 +36,6 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const inputRef = React.useRef<ContentEditable>(null);
 
   React.useEffect(() => {
-    if (selectedCell === previousSelectedCell.current) return;
-
     if (
       inputRef.current &&
       inputRef.current.el &&
@@ -54,7 +52,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
     } else {
       setUnsavedValue("");
     }
-  }, [selectedCell, data, cellNames]);
+  }, [cellNames, data, selectedCell]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>

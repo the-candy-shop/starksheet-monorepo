@@ -1,11 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-const divRegex = / +"__main__\.DIV_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
-const prodRegex = / +"__main__\.PROD_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
-const subRegex = / +"__main__\.SUB_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
-const sumRegex = / +"__main__\.SUM_VALUE": {\n.*\n.*"value": ([0-9]+)\n +},/;
-
 const network = process.env.REACT_APP_NETWORK;
 
 async function run() {
@@ -14,7 +9,10 @@ async function run() {
     "utf8"
   );
 
-  const address = contractDeployData.split(":")[0];
+  const mathContractData = contractDeployData.split("\n")[0];
+  const starkSheetContractData = contractDeployData.split("\n")[1];
+  const mathAddress = mathContractData.split(":")[0];
+  const starkSheetAddress = starkSheetContractData.split(":")[0];
 
   const abiData = fs.readFileSync(
     path.join(__dirname, "../starksheet-cairo/artifacts/abis/Starksheet.json"),
@@ -24,15 +22,17 @@ async function run() {
   const abi = JSON.parse(abiData);
 
   const constantsData = fs.readFileSync(
-    path.join(__dirname, "../starksheet-cairo/artifacts/constants.json"),
+    path.join(__dirname, "../starksheet-cairo/selectors.json"),
     "utf8"
   );
 
+  const constants = JSON.parse(constantsData);
+
   const operations = {
-    SUM: constantsData.match(sumRegex)[1],
-    MINUS: constantsData.match(subRegex)[1],
-    DIVIDE: constantsData.match(divRegex)[1],
-    PRODUCT: constantsData.match(prodRegex)[1],
+    SUM: constants.sum,
+    MINUS: constants.sub,
+    DIVIDE: constants.div,
+    PRODUCT: constants.prod,
   };
 
   const allowlistData = fs.readFileSync(
@@ -43,7 +43,8 @@ async function run() {
   const allowlist = JSON.parse(allowlistData);
 
   const data = {
-    address,
+    address: starkSheetAddress,
+    mathAddress: mathAddress,
     operations,
     abi,
     allowlist,

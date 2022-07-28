@@ -50,6 +50,7 @@ function FormulaField({
           .filter((op) => op.startsWith(value) && !value.includes(op))
           .map((op) => (
             <Box
+              key={op}
               onClick={() => {
                 setValue(`${op}(`);
                 // @ts-ignore

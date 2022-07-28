@@ -1,12 +1,11 @@
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Box, BoxProps } from "@mui/material";
 import Button from "../Button/Button";
 import { useStarknet } from "@starknet-react/core";
 import Cell from "../Cell/Cell";
 import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
-import { getError, operationNumbers, parse } from "../ActionBar/formula.utils";
-import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { getError, parse } from "../ActionBar/formula.utils";
 import LoadingDots from "../LoadingDots/LoadingDots";
 import Tooltip from "../../Tooltip/Tooltip";
 
@@ -26,7 +25,6 @@ function SaveButton({
   const { account } = useStarknet();
   const { mint, loading: loadingMint } = useMint();
   const { setCell, loading: loadingSetCell } = useSetCell();
-  const { cellNames } = useContext(CellValuesContext);
 
   const onClick = useCallback(() => {
     if (!selectedCell) return;
@@ -40,21 +38,10 @@ function SaveButton({
 
       if (!parsedValue) return;
 
-      if (parsedValue.type === "number") {
-        return setCell(selectedCell.id, unSavedValue);
-      } else if (parsedValue.type === "formula") {
-        return setCell(
-          selectedCell.id,
-          // @ts-ignore
-          operationNumbers[parsedValue.operation],
-          // @ts-ignore
-          parsedValue.dependencies.map((dep) => cellNames.indexOf(dep))
-        );
-      }
+      return setCell(selectedCell.id, unSavedValue, parsedValue);
     }
   }, [
     account,
-    cellNames,
     currentCellOwnerAddress,
     mint,
     selectedCell,

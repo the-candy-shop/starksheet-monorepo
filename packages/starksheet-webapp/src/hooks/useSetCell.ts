@@ -4,12 +4,17 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { CellValuesContext } from "../contexts/CellValuesContext";
 import { BigNumberish } from "starknet/utils/number";
 import { useSnackbar } from "notistack";
+import {
+  CellValue,
+  operationNumbers,
+} from "../components/ActionBar/formula.utils";
+import StarkSheetContract from "../contract.json";
 
 export const useSetCell = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
-  const { refresh } = useContext(CellValuesContext);
+  const { refresh, cellNames } = useContext(CellValuesContext);
   const [loading, setLoading] = useState<boolean>(false);
   const { invoke, error, reset } = useStarknetInvoke({
     contract,
@@ -52,20 +57,28 @@ export const useSetCell = () => {
   );
 
   const setCell = useCallback(
-    async (
-      id: number,
-      value: BigNumberish,
-      dependencies: BigNumberish[] = []
-    ) => {
+    async (id: number, value: string, parsedValue: CellValue) => {
       if (!contract || !account) return;
 
       try {
         setLoading(true);
-        await invoke({ args: [id, value, dependencies] });
+
+        if (parsedValue.type === "number") {
+          await invoke({ args: [0, id, value, []] });
+        } else if (parsedValue.type === "formula") {
+          await invoke({
+            args: [
+              StarkSheetContract.mathAddress,
+              id,
+              // @ts-ignore
+              operationNumbers[parsedValue.operation],
+              // @ts-ignore
+              parsedValue.dependencies.map((dep) => cellNames.indexOf(dep)),
+            ],
+          });
+        }
 
         await waitForTransaction(id, value);
-        // const render = await contract.call("renderCell", [id]);
-        // updateValue(id, render.cell.value);
         await refresh();
       } catch (e) {
         console.log("e", e);
@@ -73,7 +86,7 @@ export const useSetCell = () => {
         setLoading(false);
       }
     },
-    [account, contract, invoke, refresh, waitForTransaction]
+    [account, cellNames, contract, invoke, refresh, waitForTransaction]
   );
 
   return { setCell, loading };

@@ -76,7 +76,7 @@ def merkle_verify(leaf, root, proof):
 
 def deploy(nre: NileRuntimeEnvironment, contract_name, arguments):
     alias = snakecase(contract_name)
-    contract_file = next(Path(CONTRACTS_DIRECTORY).glob(f"{contract_name}.cairo"))
+    contract_file = next(Path(CONTRACTS_DIRECTORY).glob(f"**/{contract_name}.cairo"))
     abi_file = Path(ABIS_DIRECTORY) / f"{contract_name}.json"
     prev_abi = {}
     try:
@@ -93,6 +93,7 @@ def deploy(nre: NileRuntimeEnvironment, contract_name, arguments):
     nre.compile([contract_file])
 
     new_abi = json.load(open(abi_file))
+    address = 0
     if new_abi != prev_abi:
         if prev_abi != {}:
             logger.info(f"Contract {contract_name} has changed, redeploying...")
@@ -112,4 +113,4 @@ def deploy(nre: NileRuntimeEnvironment, contract_name, arguments):
         logger.info(f"Deployed {contract_name} at {address} in network {nre.network}")
     else:
         logger.info(f"Contract {contract_name} is up to date, skipping...")
-    return new_abi
+    return address, new_abi

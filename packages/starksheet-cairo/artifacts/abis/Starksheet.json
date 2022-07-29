@@ -17,28 +17,6 @@
         "type": "struct"
     },
     {
-        "members": [
-            {
-                "name": "id",
-                "offset": 0,
-                "type": "felt"
-            },
-            {
-                "name": "owner",
-                "offset": 1,
-                "type": "felt"
-            },
-            {
-                "name": "value",
-                "offset": 2,
-                "type": "felt"
-            }
-        ],
-        "name": "CellRendered",
-        "size": 3,
-        "type": "struct"
-    },
-    {
         "data": [
             {
                 "name": "from_",
@@ -98,347 +76,25 @@
     {
         "inputs": [
             {
-                "name": "name",
-                "type": "felt"
-            },
-            {
-                "name": "symbol",
-                "type": "felt"
-            },
-            {
-                "name": "owner",
+                "name": "address",
                 "type": "felt"
             }
         ],
-        "name": "constructor",
+        "name": "setSheetDefaultRendererAddress",
         "outputs": [],
-        "type": "constructor"
-    },
-    {
-        "inputs": [],
-        "name": "totalSupply",
-        "outputs": [
-            {
-                "name": "totalSupply",
-                "type": "Uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "index",
-                "type": "Uint256"
-            }
-        ],
-        "name": "tokenByIndex",
-        "outputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "owner",
-                "type": "felt"
-            },
-            {
-                "name": "index",
-                "type": "Uint256"
-            }
-        ],
-        "name": "tokenOfOwnerByIndex",
-        "outputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "interfaceId",
-                "type": "felt"
-            }
-        ],
-        "name": "supportsInterface",
-        "outputs": [
-            {
-                "name": "success",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [],
-        "name": "name",
+        "name": "getSheetDefaultRendererAddress",
         "outputs": [
             {
-                "name": "name",
+                "name": "address",
                 "type": "felt"
             }
         ],
         "stateMutability": "view",
         "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
-            {
-                "name": "symbol",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "owner",
-                "type": "felt"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-            {
-                "name": "balance",
-                "type": "Uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "ownerOf",
-        "outputs": [
-            {
-                "name": "owner",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "getApproved",
-        "outputs": [
-            {
-                "name": "approved",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "owner",
-                "type": "felt"
-            },
-            {
-                "name": "operator",
-                "type": "felt"
-            }
-        ],
-        "name": "isApprovedForAll",
-        "outputs": [
-            {
-                "name": "isApproved",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "to",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "approve",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "operator",
-                "type": "felt"
-            },
-            {
-                "name": "approved",
-                "type": "felt"
-            }
-        ],
-        "name": "setApprovalForAll",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "from_",
-                "type": "felt"
-            },
-            {
-                "name": "to",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "transferFrom",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "from_",
-                "type": "felt"
-            },
-            {
-                "name": "to",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            },
-            {
-                "name": "data_len",
-                "type": "felt"
-            },
-            {
-                "name": "data",
-                "type": "felt*"
-            }
-        ],
-        "name": "safeTransferFrom",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "to",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "mintOwner",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "burn",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "token_id",
-                "type": "felt"
-            }
-        ],
-        "name": "number_to_index",
-        "outputs": [
-            {
-                "name": "res",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "token_id",
-                "type": "felt"
-            },
-            {
-                "name": "value",
-                "type": "felt"
-            },
-            {
-                "name": "name",
-                "type": "felt"
-            }
-        ],
-        "name": "Starksheet_render_token_uri",
-        "outputs": [
-            {
-                "name": "token_uri_len",
-                "type": "felt"
-            },
-            {
-                "name": "token_uri",
-                "type": "felt*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "data": [
-            {
-                "name": "id",
-                "type": "felt"
-            },
-            {
-                "name": "value",
-                "type": "felt"
-            }
-        ],
-        "keys": [],
-        "name": "CellUpdated",
-        "type": "event"
     },
     {
         "inputs": [
@@ -447,13 +103,13 @@
                 "type": "felt"
             }
         ],
-        "name": "setClassHash",
+        "name": "setSheetClassHash",
         "outputs": [],
         "type": "function"
     },
     {
         "inputs": [],
-        "name": "getClassHash",
+        "name": "getSheetClassHash",
         "outputs": [
             {
                 "name": "hash",
@@ -507,7 +163,7 @@
                 "type": "felt"
             }
         ],
-        "name": "deploySheet",
+        "name": "addSheet",
         "outputs": [
             {
                 "name": "address",
@@ -519,197 +175,20 @@
     {
         "inputs": [
             {
-                "name": "max",
+                "name": "owner",
+                "type": "felt"
+            },
+            {
+                "name": "sheet_class_hash",
+                "type": "felt"
+            },
+            {
+                "name": "default_renderer_address",
                 "type": "felt"
             }
         ],
-        "name": "setMaxPerWallet",
+        "name": "constructor",
         "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getMaxPerWallet",
-        "outputs": [
-            {
-                "name": "max",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "root",
-                "type": "felt"
-            }
-        ],
-        "name": "setMerkleRoot",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getMerkleRoot",
-        "outputs": [
-            {
-                "name": "root",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "allow_list_len",
-                "type": "felt"
-            },
-            {
-                "name": "allow_list",
-                "type": "felt*"
-            }
-        ],
-        "name": "getMerkleRootFromList",
-        "outputs": [
-            {
-                "name": "res",
-                "type": "felt"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "contractAddress",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "felt"
-            },
-            {
-                "name": "value",
-                "type": "felt"
-            },
-            {
-                "name": "dependencies_len",
-                "type": "felt"
-            },
-            {
-                "name": "dependencies",
-                "type": "felt*"
-            }
-        ],
-        "name": "setCell",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "felt"
-            }
-        ],
-        "name": "getCell",
-        "outputs": [
-            {
-                "name": "contractAddress",
-                "type": "felt"
-            },
-            {
-                "name": "value",
-                "type": "felt"
-            },
-            {
-                "name": "dependencies_len",
-                "type": "felt"
-            },
-            {
-                "name": "dependencies",
-                "type": "felt*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "felt"
-            }
-        ],
-        "name": "renderCell",
-        "outputs": [
-            {
-                "name": "cell",
-                "type": "CellRendered"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "renderGrid",
-        "outputs": [
-            {
-                "name": "cells_len",
-                "type": "felt"
-            },
-            {
-                "name": "cells",
-                "type": "CellRendered*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            },
-            {
-                "name": "proof_len",
-                "type": "felt"
-            },
-            {
-                "name": "proof",
-                "type": "felt*"
-            }
-        ],
-        "name": "mintPublic",
-        "outputs": [],
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "name": "tokenURI",
-        "outputs": [
-            {
-                "name": "token_uri_len",
-                "type": "felt"
-            },
-            {
-                "name": "token_uri",
-                "type": "felt*"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        "type": "constructor"
     }
 ]

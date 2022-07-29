@@ -1,6 +1,6 @@
 from pathlib import Path
 
-CONTRACTS = {p.stem: p for p in list(Path("contracts").glob("*.cairo"))}
+CONTRACTS = {p.stem: p for p in list(Path("contracts").glob("**/*.cairo"))}
 
 OWNER = int("0x01C8D2BB17CDDF22728553C9700ADFBBD42D1999194B409B1188B17191CC2EFD", 16)
 N_COLS = 15
@@ -10,4 +10,5 @@ ALLOW_LIST = [
     OWNER,
     int("0x02a1eC511Dbced8D34997fbaDfcB72e173910CA00901ee123eEf6a0548EC5E66", 16),
     int("0x458e8922dbe02db12182e2b3b7374cd51054cb11b442df96f79f07d02d7a7e3", 16),
+    int("0x00140440374ca75f0732670014042D2645F637356A34d16c2F44955ea7941d3D", 16),
 ]

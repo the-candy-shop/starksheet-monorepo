@@ -1,5 +1,7 @@
 import json
 import logging
+import re
+import subprocess
 
 from nile.nre import NileRuntimeEnvironment
 
@@ -11,13 +13,36 @@ logger.setLevel(logging.INFO)
 
 
 def run(nre: NileRuntimeEnvironment) -> None:
+    logger.info("Declaring Sheet")
+    output = subprocess.run(
+        [
+            "starknet",
+            "declare",
+            "--contract",
+            "artifacts/Sheet.json",
+            "--network",
+            "alpha-goerli",
+        ],
+        capture_output=True,
+    )
+    sheet_class_hash = re.search(
+        r"contract class hash: (.*)", output.stdout.splitlines()[1].decode().lower()  # type: ignore
+    )[1]
+    logger.info("Sheet declared with class hash: %s", sheet_class_hash)
+
+    renderer_address, _ = deploy(
+        nre,
+        "BasicCellRenderer",
+        [],
+    )
+
     deploy(
         nre,
         "Starksheet",
         [
-            "0x" + "Starksheet".encode().hex(),
-            "0x" + "STRK".encode().hex(),
             hex(OWNER),
+            sheet_class_hash,
+            renderer_address,
         ],
     )
 

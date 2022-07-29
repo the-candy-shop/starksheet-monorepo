@@ -3578,21 +3578,21 @@
                         "end_col": 39,
                         "end_line": 12,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 45,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 66,
                                         "end_line": 15,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 23,
                                         "start_line": 15
@@ -3619,21 +3619,21 @@
                         "end_col": 68,
                         "end_line": 12,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 74,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 66,
                                         "end_line": 15,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 23,
                                         "start_line": 15
@@ -3660,21 +3660,21 @@
                         "end_col": 85,
                         "end_line": 12,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 91,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 66,
                                         "end_line": 15,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 23,
                                         "start_line": 15
@@ -3701,14 +3701,14 @@
                         "end_col": 16,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 47,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 43,
                                 "start_line": 15
@@ -3730,14 +3730,14 @@
                         "end_col": 47,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 58,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 49,
                                 "start_line": 15
@@ -3759,14 +3759,14 @@
                         "end_col": 62,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 65,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 60,
                                 "start_line": 15
@@ -3788,7 +3788,7 @@
                         "end_col": 66,
                         "end_line": 15,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 23,
                         "start_line": 15
@@ -3805,7 +3805,7 @@
                         "end_col": 25,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 8,
                         "start_line": 17
@@ -3822,7 +3822,7 @@
                         "end_col": 7,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 17
@@ -3839,28 +3839,28 @@
                         "end_col": 45,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 66,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 39,
                                         "end_line": 12,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 18
@@ -3892,28 +3892,28 @@
                         "end_col": 74,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 66,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 68,
                                         "end_line": 12,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 18
@@ -3945,28 +3945,28 @@
                         "end_col": 91,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 66,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 85,
                                         "end_line": 12,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 18
@@ -3998,7 +3998,7 @@
                         "end_col": 18,
                         "end_line": 18,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 17,
                         "start_line": 18
@@ -4015,7 +4015,7 @@
                         "end_col": 19,
                         "end_line": 18,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 9,
                         "start_line": 18
@@ -4032,28 +4032,28 @@
                         "end_col": 45,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 66,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 39,
                                         "end_line": 12,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 20,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 20
@@ -4085,28 +4085,28 @@
                         "end_col": 74,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 66,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 68,
                                         "end_line": 12,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 20,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 20
@@ -4138,28 +4138,28 @@
                         "end_col": 91,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 66,
                                 "end_line": 15,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 85,
                                         "end_line": 12,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 20,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 20
@@ -4191,7 +4191,7 @@
                         "end_col": 18,
                         "end_line": 20,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 17,
                         "start_line": 20
@@ -4208,7 +4208,7 @@
                         "end_col": 19,
                         "end_line": 20,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 9,
                         "start_line": 20
@@ -4225,7 +4225,7 @@
                         "end_col": 59,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
@@ -4239,7 +4239,7 @@
                                         "end_col": 32,
                                         "end_line": 25,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 16,
                                         "start_line": 25
@@ -4266,14 +4266,14 @@
                         "end_col": 62,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 28,
                                 "end_line": 25,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 27,
                                 "start_line": 25
@@ -4295,14 +4295,14 @@
                         "end_col": 65,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 31,
                                 "end_line": 25,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 30,
                                 "start_line": 25
@@ -4324,7 +4324,7 @@
                         "end_col": 32,
                         "end_line": 25,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 16,
                         "start_line": 25
@@ -4341,7 +4341,7 @@
                         "end_col": 15,
                         "end_line": 27,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 8,
                         "start_line": 27
@@ -4358,7 +4358,7 @@
                         "end_col": 7,
                         "end_line": 27,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 27
@@ -4375,14 +4375,14 @@
                         "end_col": 42,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 42,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 34,
                                 "start_line": 28
@@ -4404,14 +4404,14 @@
                         "end_col": 62,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 45,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 44,
                                 "start_line": 28
@@ -4433,14 +4433,14 @@
                         "end_col": 65,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 48,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 47,
                                 "start_line": 28
@@ -4462,7 +4462,7 @@
                         "end_col": 49,
                         "end_line": 28,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 19,
                         "start_line": 28
@@ -4479,7 +4479,7 @@
                         "end_col": 7,
                         "end_line": 27,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 27
@@ -4496,14 +4496,14 @@
                         "end_col": 42,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 42,
                                 "end_line": 30,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 34,
                                 "start_line": 30
@@ -4525,14 +4525,14 @@
                         "end_col": 65,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 45,
                                 "end_line": 30,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 44,
                                 "start_line": 30
@@ -4554,14 +4554,14 @@
                         "end_col": 62,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 48,
                                 "end_line": 30,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 47,
                                 "start_line": 30
@@ -4583,7 +4583,7 @@
                         "end_col": 49,
                         "end_line": 30,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 19,
                         "start_line": 30
@@ -4600,21 +4600,21 @@
                         "end_col": 42,
                         "end_line": 30,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 42,
                                 "end_line": 24,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 15,
                                         "end_line": 32,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 32
@@ -4648,21 +4648,21 @@
                                 "end_col": 32,
                                 "end_line": 25,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 59,
                                         "end_line": 24,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 15,
                                                 "end_line": 32,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 32
@@ -4694,14 +4694,14 @@
                         "end_col": 15,
                         "end_line": 30,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 14,
                                 "end_line": 32,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 13,
                                 "start_line": 32
@@ -4723,7 +4723,7 @@
                         "end_col": 15,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 32
@@ -4740,7 +4740,7 @@
                         "end_col": 17,
                         "end_line": 39,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 39
@@ -4757,7 +4757,7 @@
                         "end_col": 7,
                         "end_line": 41,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 41
@@ -4774,21 +4774,21 @@
                         "end_col": 45,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 45,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 22,
                                         "end_line": 42,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 42
@@ -4815,21 +4815,21 @@
                         "end_col": 74,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 74,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 22,
                                         "end_line": 42,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 42
@@ -4856,21 +4856,21 @@
                         "end_col": 91,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 91,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 22,
                                         "end_line": 42,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 42
@@ -4897,14 +4897,14 @@
                         "end_col": 16,
                         "end_line": 37,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 21,
                                 "end_line": 42,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 17,
                                 "start_line": 42
@@ -4926,7 +4926,7 @@
                         "end_col": 22,
                         "end_line": 42,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 9,
                         "start_line": 42
@@ -4943,14 +4943,14 @@
                         "end_col": 74,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 49,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 37,
                                 "start_line": 45
@@ -4972,21 +4972,21 @@
                         "end_col": 91,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 59,
                                 "end_line": 24,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 65,
                                         "end_line": 45,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 15,
                                         "start_line": 45
@@ -5013,14 +5013,14 @@
                         "end_col": 16,
                         "end_line": 37,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 55,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 51,
                                 "start_line": 45
@@ -5042,7 +5042,7 @@
                         "end_col": 64,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 57,
                         "start_line": 45
@@ -5059,7 +5059,7 @@
                         "end_col": 65,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 15,
                         "start_line": 45
@@ -5076,21 +5076,21 @@
                         "end_col": 45,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 45,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 65,
                                         "end_line": 47,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 17,
                                         "start_line": 47
@@ -5117,21 +5117,21 @@
                         "end_col": 49,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 74,
                                 "end_line": 36,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 65,
                                         "end_line": 47,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 17,
                                         "start_line": 47
@@ -5158,28 +5158,28 @@
                         "end_col": 59,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 65,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 91,
                                         "end_line": 36,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 65,
                                                 "end_line": 47,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 17,
                                                 "start_line": 47
@@ -5211,14 +5211,14 @@
                         "end_col": 11,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 38,
                                 "end_line": 47,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 37,
                                 "start_line": 47
@@ -5240,7 +5240,7 @@
                         "end_col": 53,
                         "end_line": 47,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 40,
                         "start_line": 47
@@ -5257,7 +5257,7 @@
                         "end_col": 64,
                         "end_line": 47,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 55,
                         "start_line": 47
@@ -5274,7 +5274,7 @@
                         "end_col": 65,
                         "end_line": 47,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 17,
                         "start_line": 47
@@ -5291,7 +5291,7 @@
                         "end_col": 17,
                         "end_line": 48,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 48
@@ -5308,7 +5308,7 @@
                         "end_col": 17,
                         "end_line": 54,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 54
@@ -5325,7 +5325,7 @@
                         "end_col": 22,
                         "end_line": 55,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 8,
                         "start_line": 55
@@ -5342,7 +5342,7 @@
                         "end_col": 7,
                         "end_line": 55,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 55
@@ -5359,21 +5359,21 @@
                         "end_col": 38,
                         "end_line": 51,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 38,
                                 "end_line": 51,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 25,
                                         "end_line": 56,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 56
@@ -5400,21 +5400,21 @@
                         "end_col": 67,
                         "end_line": 51,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 67,
                                 "end_line": 51,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 25,
                                         "end_line": 56,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 56
@@ -5441,21 +5441,21 @@
                         "end_col": 84,
                         "end_line": 51,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 84,
                                 "end_line": 51,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 25,
                                         "end_line": 56,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 56
@@ -5482,7 +5482,7 @@
                         "end_col": 24,
                         "end_line": 56,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 17,
                         "start_line": 56
@@ -5499,7 +5499,7 @@
                         "end_col": 25,
                         "end_line": 56,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 9,
                         "start_line": 56
@@ -5516,7 +5516,7 @@
                         "end_col": 36,
                         "end_line": 58,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 29,
                         "start_line": 58
@@ -5533,7 +5533,7 @@
                         "end_col": 25,
                         "end_line": 58,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 10,
                         "start_line": 58
@@ -5550,21 +5550,21 @@
                         "end_col": 38,
                         "end_line": 51,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 24,
                                 "end_line": 66,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 76,
                                         "end_line": 59,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 59
@@ -5591,21 +5591,21 @@
                         "end_col": 67,
                         "end_line": 51,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 32,
                                 "end_line": 67,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 76,
                                         "end_line": 59,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 59
@@ -5632,21 +5632,21 @@
                         "end_col": 84,
                         "end_line": 51,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 20,
                                 "end_line": 68,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 76,
                                         "end_line": 59,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 59
@@ -5673,14 +5673,14 @@
                         "end_col": 25,
                         "end_line": 58,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 43,
                                 "end_line": 59,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 34,
                                 "start_line": 59
@@ -5702,14 +5702,14 @@
                         "end_col": 36,
                         "end_line": 52,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 56,
                                 "end_line": 59,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 51,
                                 "start_line": 59
@@ -5731,14 +5731,14 @@
                         "end_col": 21,
                         "end_line": 52,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 72,
                                 "end_line": 59,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 63,
                                 "start_line": 59
@@ -5760,7 +5760,7 @@
                         "end_col": 75,
                         "end_line": 59,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 74,
                         "start_line": 59
@@ -5777,7 +5777,7 @@
                         "end_col": 76,
                         "end_line": 59,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 59
@@ -5794,14 +5794,14 @@
                         "end_col": 20,
                         "end_line": 68,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 76,
                                 "end_line": 59,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5815,7 +5815,7 @@
                                                 "end_col": 48,
                                                 "end_line": 61,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 18,
                                                 "start_line": 61
@@ -5847,14 +5847,14 @@
                         "end_col": 72,
                         "end_line": 59,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 44,
                                 "end_line": 61,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 35,
                                 "start_line": 61
@@ -5876,7 +5876,7 @@
                         "end_col": 47,
                         "end_line": 61,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 46,
                         "start_line": 61
@@ -5893,7 +5893,7 @@
                         "end_col": 48,
                         "end_line": 61,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 18,
                         "start_line": 61
@@ -5910,28 +5910,28 @@
                         "end_col": 24,
                         "end_line": 66,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 76,
                                 "end_line": 59,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 38,
                                         "end_line": 51,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 42,
                                                 "end_line": 62,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 12,
                                                 "start_line": 62
@@ -5963,28 +5963,28 @@
                         "end_col": 32,
                         "end_line": 67,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 76,
                                 "end_line": 59,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 67,
                                         "end_line": 51,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 42,
                                                 "end_line": 62,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 12,
                                                 "start_line": 62
@@ -6023,21 +6023,21 @@
                                 "end_col": 48,
                                 "end_line": 61,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 84,
                                         "end_line": 51,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 42,
                                                 "end_line": 62,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 12,
                                                 "start_line": 62
@@ -6069,7 +6069,7 @@
                         "end_col": 30,
                         "end_line": 62,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 25,
                         "start_line": 62
@@ -6086,14 +6086,14 @@
                         "end_col": 43,
                         "end_line": 59,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 41,
                                 "end_line": 62,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 32,
                                 "start_line": 62
@@ -6115,7 +6115,7 @@
                         "end_col": 42,
                         "end_line": 62,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 12,
                         "start_line": 62
@@ -6132,7 +6132,7 @@
                         "end_col": 42,
                         "end_line": 62,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 62
@@ -6149,7 +6149,7 @@
                         "end_col": 20,
                         "end_line": 68,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
@@ -6163,7 +6163,7 @@
                                         "end_col": 42,
                                         "end_line": 73,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 23,
                                         "start_line": 73
@@ -6190,14 +6190,14 @@
                         "end_col": 16,
                         "end_line": 71,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 38,
                                 "end_line": 73,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 34,
                                 "start_line": 73
@@ -6219,14 +6219,14 @@
                         "end_col": 11,
                         "end_line": 72,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 41,
                                 "end_line": 73,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 40,
                                 "start_line": 73
@@ -6248,7 +6248,7 @@
                         "end_col": 42,
                         "end_line": 73,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 23,
                         "start_line": 73
@@ -6265,7 +6265,7 @@
                         "end_col": 25,
                         "end_line": 74,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 8,
                         "start_line": 74
@@ -6282,7 +6282,7 @@
                         "end_col": 7,
                         "end_line": 74,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 74
@@ -6299,21 +6299,21 @@
                         "end_col": 24,
                         "end_line": 66,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 24,
                                 "end_line": 66,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 75,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 75
@@ -6340,21 +6340,21 @@
                         "end_col": 32,
                         "end_line": 67,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 32,
                                 "end_line": 67,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 75,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 75
@@ -6388,21 +6388,21 @@
                                 "end_col": 42,
                                 "end_line": 73,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 20,
                                         "end_line": 68,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 18,
                                                 "end_line": 75,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 9,
                                                 "start_line": 75
@@ -6434,21 +6434,21 @@
                         "end_col": 22,
                         "end_line": 69,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 22,
                                 "end_line": 69,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 75,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 75
@@ -6475,21 +6475,21 @@
                         "end_col": 18,
                         "end_line": 70,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 18,
                                 "end_line": 70,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 75,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 75
@@ -6516,21 +6516,21 @@
                         "end_col": 16,
                         "end_line": 71,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 16,
                                 "end_line": 71,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 75,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 75
@@ -6557,7 +6557,7 @@
                         "end_col": 18,
                         "end_line": 75,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 9,
                         "start_line": 75
@@ -6574,7 +6574,7 @@
                         "end_col": 21,
                         "end_line": 77,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 13,
                         "start_line": 77
@@ -6591,7 +6591,7 @@
                         "end_col": 21,
                         "end_line": 77,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 8,
                         "start_line": 77
@@ -6608,7 +6608,7 @@
                         "end_col": 7,
                         "end_line": 77,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 77
@@ -6625,7 +6625,7 @@
                         "end_col": 65,
                         "end_line": 78,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 56,
                         "start_line": 78
@@ -6642,7 +6642,7 @@
                         "end_col": 78,
                         "end_line": 78,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 69,
                         "start_line": 78
@@ -6659,14 +6659,14 @@
                         "end_col": 32,
                         "end_line": 67,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 53,
                                 "end_line": 78,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 41,
                                 "start_line": 78
@@ -6695,21 +6695,21 @@
                                 "end_col": 42,
                                 "end_line": 73,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 59,
                                         "end_line": 24,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 80,
                                                 "end_line": 78,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 19,
                                                 "start_line": 78
@@ -6741,7 +6741,7 @@
                         "end_col": 66,
                         "end_line": 78,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 55,
                         "start_line": 78
@@ -6758,7 +6758,7 @@
                         "end_col": 79,
                         "end_line": 78,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 68,
                         "start_line": 78
@@ -6775,7 +6775,7 @@
                         "end_col": 80,
                         "end_line": 78,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 19,
                         "start_line": 78
@@ -6792,21 +6792,21 @@
                         "end_col": 59,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 80,
                                 "end_line": 78,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 50,
                                         "end_line": 79,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 35,
                                         "start_line": 79
@@ -6833,7 +6833,7 @@
                         "end_col": 7,
                         "end_line": 77,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 77
@@ -6850,7 +6850,7 @@
                         "end_col": 65,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 56,
                         "start_line": 81
@@ -6867,7 +6867,7 @@
                         "end_col": 82,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 69,
                         "start_line": 81
@@ -6884,7 +6884,7 @@
                         "end_col": 82,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 69,
                         "start_line": 81
@@ -6901,14 +6901,14 @@
                         "end_col": 32,
                         "end_line": 67,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 53,
                                 "end_line": 81,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 41,
                                 "start_line": 81
@@ -6937,21 +6937,21 @@
                                 "end_col": 42,
                                 "end_line": 73,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 59,
                                         "end_line": 24,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 84,
                                                 "end_line": 81,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 19,
                                                 "start_line": 81
@@ -6983,7 +6983,7 @@
                         "end_col": 66,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 55,
                         "start_line": 81
@@ -7000,7 +7000,7 @@
                         "end_col": 83,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 68,
                         "start_line": 81
@@ -7017,7 +7017,7 @@
                         "end_col": 84,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 19,
                         "start_line": 81
@@ -7034,21 +7034,21 @@
                         "end_col": 59,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 84,
                                 "end_line": 81,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 50,
                                         "end_line": 82,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 35,
                                         "start_line": 82
@@ -7075,7 +7075,7 @@
                         "end_col": 30,
                         "end_line": 84,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 25,
                         "start_line": 84
@@ -7092,7 +7092,7 @@
                         "end_col": 30,
                         "end_line": 84,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 13,
                         "start_line": 84
@@ -7109,7 +7109,7 @@
                         "end_col": 35,
                         "end_line": 84,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 84
@@ -7126,21 +7126,21 @@
                         "end_col": 24,
                         "end_line": 66,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 24,
                                 "end_line": 66,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 37,
                                         "end_line": 85,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 85
@@ -7167,21 +7167,21 @@
                         "end_col": 53,
                         "end_line": 81,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 32,
                                 "end_line": 67,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 37,
                                         "end_line": 85,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 85
@@ -7208,21 +7208,21 @@
                         "end_col": 32,
                         "end_line": 82,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 20,
                                 "end_line": 68,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 37,
                                         "end_line": 85,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 85
@@ -7249,21 +7249,21 @@
                         "end_col": 22,
                         "end_line": 69,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 22,
                                 "end_line": 69,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 37,
                                         "end_line": 85,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 85
@@ -7290,21 +7290,21 @@
                         "end_col": 18,
                         "end_line": 70,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 18,
                                 "end_line": 70,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 37,
                                         "end_line": 85,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 85
@@ -7331,21 +7331,21 @@
                         "end_col": 16,
                         "end_line": 71,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 16,
                                 "end_line": 71,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 37,
                                         "end_line": 85,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 85
@@ -7372,7 +7372,7 @@
                         "end_col": 36,
                         "end_line": 85,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 31,
                         "start_line": 85
@@ -7389,7 +7389,7 @@
                         "end_col": 37,
                         "end_line": 85,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 12,
                         "start_line": 85
@@ -7406,7 +7406,7 @@
                         "end_col": 37,
                         "end_line": 85,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 85
@@ -7423,7 +7423,7 @@
                         "end_col": 17,
                         "end_line": 91,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 91
@@ -7440,7 +7440,7 @@
                         "end_col": 32,
                         "end_line": 92,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 25,
                         "start_line": 92
@@ -7457,7 +7457,7 @@
                         "end_col": 21,
                         "end_line": 92,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 10,
                         "start_line": 92
@@ -7474,21 +7474,21 @@
                         "end_col": 44,
                         "end_line": 88,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 24,
                                 "end_line": 98,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 89,
                                         "end_line": 93,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 93
@@ -7515,21 +7515,21 @@
                         "end_col": 73,
                         "end_line": 88,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 32,
                                 "end_line": 99,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 89,
                                         "end_line": 93,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 93
@@ -7556,21 +7556,21 @@
                         "end_col": 90,
                         "end_line": 88,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 20,
                                 "end_line": 100,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 89,
                                         "end_line": 93,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 93
@@ -7597,14 +7597,14 @@
                         "end_col": 21,
                         "end_line": 92,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 41,
                                 "end_line": 93,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 36,
                                 "start_line": 93
@@ -7626,14 +7626,14 @@
                         "end_col": 46,
                         "end_line": 89,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 64,
                                 "end_line": 93,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 54,
                                 "start_line": 93
@@ -7655,14 +7655,14 @@
                         "end_col": 26,
                         "end_line": 89,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 85,
                                 "end_line": 93,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 71,
                                 "start_line": 93
@@ -7684,7 +7684,7 @@
                         "end_col": 88,
                         "end_line": 93,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 87,
                         "start_line": 93
@@ -7701,7 +7701,7 @@
                         "end_col": 89,
                         "end_line": 93,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 93
@@ -7718,28 +7718,28 @@
                         "end_col": 24,
                         "end_line": 98,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 89,
                                 "end_line": 93,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 44,
                                         "end_line": 88,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 35,
                                                 "end_line": 94,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 94
@@ -7771,28 +7771,28 @@
                         "end_col": 32,
                         "end_line": 99,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 89,
                                 "end_line": 93,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 73,
                                         "end_line": 88,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 35,
                                                 "end_line": 94,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 94
@@ -7824,28 +7824,28 @@
                         "end_col": 20,
                         "end_line": 100,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 89,
                                 "end_line": 93,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 90,
                                         "end_line": 88,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 35,
                                                 "end_line": 94,
                                                 "input_file": {
-                                                    "filename": "contracts/merkle_tree.cairo"
+                                                    "filename": "contracts/utils/merkle_tree.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 94
@@ -7877,14 +7877,14 @@
                         "end_col": 85,
                         "end_line": 93,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 27,
                                 "end_line": 94,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 13,
                                 "start_line": 94
@@ -7906,14 +7906,14 @@
                         "end_col": 41,
                         "end_line": 93,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 34,
                                 "end_line": 94,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 29,
                                 "start_line": 94
@@ -7935,7 +7935,7 @@
                         "end_col": 35,
                         "end_line": 94,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 94
@@ -7952,7 +7952,7 @@
                         "end_col": 17,
                         "end_line": 105,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 8,
                         "start_line": 105
@@ -7969,7 +7969,7 @@
                         "end_col": 7,
                         "end_line": 105,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 105
@@ -7986,21 +7986,21 @@
                         "end_col": 24,
                         "end_line": 98,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 24,
                                 "end_line": 98,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 106,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 106
@@ -8027,21 +8027,21 @@
                         "end_col": 32,
                         "end_line": 99,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 32,
                                 "end_line": 99,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 106,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 106
@@ -8068,21 +8068,21 @@
                         "end_col": 20,
                         "end_line": 100,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 20,
                                 "end_line": 100,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 106,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 106
@@ -8109,21 +8109,21 @@
                         "end_col": 18,
                         "end_line": 101,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 18,
                                 "end_line": 101,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 106,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 106
@@ -8150,21 +8150,21 @@
                         "end_col": 23,
                         "end_line": 102,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 23,
                                 "end_line": 102,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 106,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 106
@@ -8191,21 +8191,21 @@
                         "end_col": 16,
                         "end_line": 103,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 16,
                                 "end_line": 103,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 18,
                                         "end_line": 106,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 106
@@ -8232,7 +8232,7 @@
                         "end_col": 18,
                         "end_line": 106,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 9,
                         "start_line": 106
@@ -8249,7 +8249,7 @@
                         "end_col": 59,
                         "end_line": 108,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 45,
                         "start_line": 108
@@ -8266,7 +8266,7 @@
                         "end_col": 77,
                         "end_line": 108,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 63,
                         "start_line": 108
@@ -8283,14 +8283,14 @@
                         "end_col": 32,
                         "end_line": 99,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 42,
                                 "end_line": 108,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "start_col": 30,
                                 "start_line": 108
@@ -8312,7 +8312,7 @@
                         "end_col": 60,
                         "end_line": 108,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 44,
                         "start_line": 108
@@ -8329,7 +8329,7 @@
                         "end_col": 78,
                         "end_line": 108,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 62,
                         "start_line": 108
@@ -8346,7 +8346,7 @@
                         "end_col": 79,
                         "end_line": 108,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 15,
                         "start_line": 108
@@ -8363,7 +8363,7 @@
                         "end_col": 22,
                         "end_line": 109,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 13,
                         "start_line": 109
@@ -8380,7 +8380,7 @@
                         "end_col": 27,
                         "end_line": 109,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 109
@@ -8397,21 +8397,21 @@
                         "end_col": 24,
                         "end_line": 98,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 24,
                                 "end_line": 98,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 43,
                                         "end_line": 110,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 110
@@ -8438,21 +8438,21 @@
                         "end_col": 42,
                         "end_line": 108,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 32,
                                 "end_line": 99,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 43,
                                         "end_line": 110,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 110
@@ -8479,21 +8479,21 @@
                         "end_col": 20,
                         "end_line": 100,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 20,
                                 "end_line": 100,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 43,
                                         "end_line": 110,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 110
@@ -8520,21 +8520,21 @@
                         "end_col": 18,
                         "end_line": 101,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 18,
                                 "end_line": 101,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 43,
                                         "end_line": 110,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 110
@@ -8561,21 +8561,21 @@
                         "end_col": 23,
                         "end_line": 102,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 23,
                                 "end_line": 102,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 43,
                                         "end_line": 110,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 110
@@ -8602,21 +8602,21 @@
                         "end_col": 16,
                         "end_line": 103,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 16,
                                 "end_line": 103,
                                 "input_file": {
-                                    "filename": "contracts/merkle_tree.cairo"
+                                    "filename": "contracts/utils/merkle_tree.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 43,
                                         "end_line": 110,
                                         "input_file": {
-                                            "filename": "contracts/merkle_tree.cairo"
+                                            "filename": "contracts/utils/merkle_tree.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 110
@@ -8643,7 +8643,7 @@
                         "end_col": 42,
                         "end_line": 110,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 37,
                         "start_line": 110
@@ -8660,7 +8660,7 @@
                         "end_col": 43,
                         "end_line": 110,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 12,
                         "start_line": 110
@@ -8677,7 +8677,7 @@
                         "end_col": 43,
                         "end_line": 110,
                         "input_file": {
-                            "filename": "contracts/merkle_tree.cairo"
+                            "filename": "contracts/utils/merkle_tree.cairo"
                         },
                         "start_col": 5,
                         "start_line": 110

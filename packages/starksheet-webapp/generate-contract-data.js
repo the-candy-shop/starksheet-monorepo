@@ -9,17 +9,32 @@ async function run() {
     "utf8"
   );
 
-  const mathContractData = contractDeployData.split("\n")[0];
-  const starkSheetContractData = contractDeployData.split("\n")[1];
+  const splittedDeployedData = contractDeployData.split("\n");
+
+  const mathContractData = splittedDeployedData.find((data) =>
+    data.includes(":math")
+  );
+
+  const starkSheetContractData = splittedDeployedData.find((data) =>
+    data.includes(":starksheet")
+  );
+
   const mathAddress = mathContractData.split(":")[0];
   const starkSheetAddress = starkSheetContractData.split(":")[0];
 
-  const abiData = fs.readFileSync(
+  const starkSheetAbiData = fs.readFileSync(
     path.join(__dirname, "../starksheet-cairo/artifacts/abis/Starksheet.json"),
     "utf8"
   );
 
-  const abi = JSON.parse(abiData);
+  const starkSheetAbi = JSON.parse(starkSheetAbiData);
+
+  const sheetAbiData = fs.readFileSync(
+    path.join(__dirname, "../starksheet-cairo/artifacts/abis/Sheet.json"),
+    "utf8"
+  );
+
+  const sheetAbi = JSON.parse(sheetAbiData);
 
   const constantsData = fs.readFileSync(
     path.join(__dirname, "../starksheet-cairo/selectors.json"),
@@ -46,7 +61,8 @@ async function run() {
     address: starkSheetAddress,
     mathAddress: mathAddress,
     operations,
-    abi,
+    starkSheetAbi,
+    sheetAbi,
     allowlist,
   };
 

@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useCallback, useRef} from "react";
+import React, { PropsWithChildren, useCallback, useRef } from "react";
 import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
 import { useStarknetCall } from "@starknet-react/core";
 import { BigNumberish } from "starknet/utils/number";
@@ -33,6 +33,7 @@ export const CellValuesContextProvider = ({
   const [cellNames, setCellNames] = React.useState<string[]>([]);
 
   const { contract } = useStarkSheetContract();
+  console.log("contract", contract);
   const {
     data: gridData,
     loading,
@@ -48,9 +49,14 @@ export const CellValuesContextProvider = ({
       if (previousGridData.current) {
         // @ts-ignore
         gridData.cells?.forEach((cell, index) => {
-          if (previousGridData.current.cells[index].value.toString() !== cell.value.toString()) {
-            console.log('fetch', index);
-            fetch(`https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`)
+          if (
+            previousGridData.current.cells[index].value.toString() !==
+            cell.value.toString()
+          ) {
+            console.log("fetch", index);
+            fetch(
+              `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
+            );
           }
         });
       }

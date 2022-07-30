@@ -22,7 +22,12 @@ function Footer({ sx }: FooterProps) {
   return (
     <Box sx={{ display: "flex", ...sx }}>
       {addresses &&
-        addresses.map((address) => <SheetButton address={address} />)}
+        addresses.map((address, index) => (
+          <SheetButton
+            address={address}
+            sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
+          />
+        ))}
       <GreyCell
         sx={{
           marginLeft: `-${CELL_BORDER_WIDTH}px`,

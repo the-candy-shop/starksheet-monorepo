@@ -109,7 +109,7 @@ function App() {
               owner={selectedCellOwner}
               sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
             />
-            {((loading && !hasLoaded) || values.length === 0) && (
+            {loading && (
               <Box
                 sx={{
                   display: "flex",
@@ -123,7 +123,7 @@ function App() {
                 <LoadingDots />
               </Box>
             )}
-            {!loading && hasLoaded && values.length !== 0 && (
+            {!loading && values.length !== 0 && (
               <SheetTable
                 selectedCell={selectedCell}
                 setSelectedCell={setSelectedCell}

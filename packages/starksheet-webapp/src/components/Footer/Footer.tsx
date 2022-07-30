@@ -24,6 +24,7 @@ function Footer({ sx }: FooterProps) {
       {addresses &&
         addresses.map((address, index) => (
           <SheetButton
+            key={address}
             address={address}
             sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
           />

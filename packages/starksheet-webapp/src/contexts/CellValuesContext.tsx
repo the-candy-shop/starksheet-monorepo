@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useCallback, useRef } from "react";
 import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
-import { useStarknetCall } from "@starknet-react/core";
 import { BigNumberish } from "starknet/utils/number";
+import { Contract } from "starknet";
 
 export const CellValuesContext = React.createContext<{
   loading: boolean;
@@ -23,48 +23,63 @@ export const CellValuesContext = React.createContext<{
   refresh: () => {},
 });
 
+type CellData = { owner: BigNumberish; value: BigNumberish };
+
 export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const [values, setValues] = React.useState<
-    { owner: BigNumberish; value: BigNumberish }[]
-  >([]);
+  const [values, setValues] = React.useState<CellData[]>([]);
   const previousGridData = useRef<any>(undefined);
   const [cellNames, setCellNames] = React.useState<string[]>([]);
-
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [hasLoaded, setHasLoaded] = React.useState<boolean>(false);
   const { contract } = useStarkSheetContract();
-  const {
-    data: gridData,
-    loading,
-    refresh,
-  } = useStarknetCall({
-    contract,
-    method: "renderGrid",
-    args: [],
-  });
 
-  React.useEffect(() => {
-    if (gridData) {
+  const refreshAspect = useCallback(
+    (cells: CellData[]) => {
       if (previousGridData.current) {
-        // @ts-ignore
-        gridData.cells?.forEach((cell, index) => {
+        cells.forEach((cell, index) => {
           if (
-            previousGridData.current.cells[index].value.toString() !==
+            previousGridData.current[index].value.toString() !==
             cell.value.toString()
           ) {
-            console.log("fetch", index);
             fetch(
               `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
             );
           }
         });
       }
+      previousGridData.current = cells;
+    },
+    [contract?.address]
+  );
 
-      previousGridData.current = gridData;
-      // @ts-ignore
-      setValues(gridData.cells ? gridData.cells : []);
+  const load = useCallback(
+    (contract: Contract) => {
+      setLoading(true);
+      return contract
+        .call("renderGrid", [])
+        .then((gridData) => {
+          refreshAspect(gridData.cells);
+          setValues(gridData.cells);
+          setHasLoaded(true);
+        })
+        .finally(() => setLoading(false));
+    },
+    [refreshAspect]
+  );
+
+  const refresh = useCallback(async () => {
+    if (contract) {
+      return load(contract);
     }
-  }, [contract?.address, gridData]);
+  }, [contract, load]);
+
+  React.useEffect(() => {
+    if (contract) {
+      load(contract);
+    }
+  }, [contract, load]);
 
   const updateValueOwner = useCallback(
     (id: number, owner: BigNumberish) => {
@@ -93,7 +108,7 @@ export const CellValuesContextProvider = ({
         updateValueOwner,
         updateValue,
         loading,
-        hasLoaded: !!gridData,
+        hasLoaded,
         refresh,
       }}
     >

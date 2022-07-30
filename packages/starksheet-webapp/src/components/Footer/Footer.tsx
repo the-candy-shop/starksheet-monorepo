@@ -7,6 +7,8 @@ import starknetLogo from "./starknet.svg";
 import aspectLogo from "./aspect.png";
 import discordLogo from "./discord.svg";
 import StarkSheetContract from "../../contract.json";
+import { useSheetList } from "../../hooks/useSheetList";
+import { SheetButton } from "../SheetButton/SheetButton";
 
 export type FooterProps = {
   sx?: BoxProps["sx"];
@@ -15,13 +17,12 @@ export type FooterProps = {
 const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
+  const addresses = useSheetList();
+
   return (
     <Box sx={{ display: "flex", ...sx }}>
-      <GreyCell
-        sx={{ width: "146px", "& .content": { justifyContent: "center" } }}
-      >
-        Sheet 1
-      </GreyCell>
+      {addresses &&
+        addresses.map((address) => <SheetButton address={address} />)}
       <GreyCell
         sx={{
           marginLeft: `-${CELL_BORDER_WIDTH}px`,

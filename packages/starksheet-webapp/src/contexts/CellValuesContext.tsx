@@ -33,7 +33,6 @@ export const CellValuesContextProvider = ({
   const [cellNames, setCellNames] = React.useState<string[]>([]);
 
   const { contract } = useStarkSheetContract();
-  console.log("contract", contract);
   const {
     data: gridData,
     loading,

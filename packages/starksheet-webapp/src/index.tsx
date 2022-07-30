@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
+import { CurrentSheetContextProvider } from "./contexts/CurrentSheetContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,9 +17,11 @@ root.render(
 
 function Root() {
   return (
-    <CellValuesContextProvider>
-      <App />
-    </CellValuesContextProvider>
+    <CurrentSheetContextProvider>
+      <CellValuesContextProvider>
+        <App />
+      </CellValuesContextProvider>
+    </CurrentSheetContextProvider>
   );
 }
 

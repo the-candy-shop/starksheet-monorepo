@@ -28,26 +28,28 @@ function Footer({ sx }: FooterProps) {
             sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
           />
         ))}
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: "345px",
-          "& .content": {
-            justifyContent: "center",
-            color: "rgba(0,0,0,0.5)",
-          },
-        }}
-      >
-        Sheet 2 (
-        <a
-          href="https://starksheet.notion.site/Starksheet-Roadmap-146530d01d914d6fae8c8779b99d58ec"
-          target="_blank"
-          rel="noreferrer"
+      {addresses && addresses.length === 1 && (
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: "345px",
+            "& .content": {
+              justifyContent: "center",
+              color: "rgba(0,0,0,0.5)",
+            },
+          }}
         >
-          Coming Soon
-        </a>
-        )
-      </GreyCell>
+          Sheet 2 (
+          <a
+            href="https://starksheet.notion.site/Starksheet-Roadmap-146530d01d914d6fae8c8779b99d58ec"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Coming Soon
+          </a>
+          )
+        </GreyCell>
+      )}
       <GreyCell
         sx={{
           flex: 1,

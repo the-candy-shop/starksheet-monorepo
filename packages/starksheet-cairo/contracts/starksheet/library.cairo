@@ -2,9 +2,17 @@
 
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.cairo.common.bool import TRUE
+from starkware.cairo.common.math_cmp import is_not_zero
 from starkware.starknet.common.syscalls import get_caller_address, deploy
 
 from contracts.utils.string import str
+from contracts.utils.merkle_tree import (
+    merkle_verify,
+    addresses_to_leafs,
+    merkle_build,
+    _hash_sorted,
+)
 
 @storage_var
 func Starksheet_sheet_class_hash() -> (hash : felt):
@@ -20,6 +28,10 @@ end
 
 @storage_var
 func Starksheet_sheets_count() -> (count : felt):
+end
+
+@storage_var
+func Starksheet_merkle_root() -> (hash : felt):
 end
 
 namespace Starksheet:
@@ -40,12 +52,21 @@ namespace Starksheet:
     end
 
     func add_sheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        name : felt, symbol : felt
+        name : felt, symbol : felt, proof_len : felt, proof : felt*
     ) -> (address : felt):
         alloc_locals
         let (class_hash) = Starksheet_sheet_class_hash.read()
         let (local sheets_count) = Starksheet_sheets_count.read()
         let (owner) = get_caller_address()
+
+        let (root) = Starksheet_merkle_root.read()
+        let (allow_list_enabled) = is_not_zero(root)
+        let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(owner, owner)
+        let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
+        with_attr error_message("addSheet: proof is not valid"):
+            assert is_allow_list = allow_list_enabled
+        end
+
         let (local constructor_calldata : felt*) = alloc()
         if name == 0:
             let (count_str) = str(sheets_count)
@@ -104,6 +125,19 @@ namespace Starksheet:
         syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
     }(address : felt):
         Starksheet_sheet_default_renderer_address.write(address)
+        return ()
+    end
+
+    func get_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+        hash : felt
+    ):
+        return Starksheet_merkle_root.read()
+    end
+
+    func set_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        hash : felt
+    ):
+        Starksheet_merkle_root.write(hash)
         return ()
     end
 end

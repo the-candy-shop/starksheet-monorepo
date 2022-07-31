@@ -102,6 +102,14 @@
             {
                 "name": "symbol",
                 "type": "felt"
+            },
+            {
+                "name": "proof_len",
+                "type": "felt"
+            },
+            {
+                "name": "proof",
+                "type": "felt*"
             }
         ],
         "name": "addSheet",

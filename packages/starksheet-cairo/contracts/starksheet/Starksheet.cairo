@@ -54,9 +54,9 @@ end
 
 @external
 func addSheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    name : felt, symbol : felt
+    name : felt, symbol : felt, proof_len : felt, proof : felt*
 ) -> (address : felt):
-    return Starksheet.add_sheet(name, symbol)
+    return Starksheet.add_sheet(name, symbol, proof_len, proof)
 end
 
 @constructor

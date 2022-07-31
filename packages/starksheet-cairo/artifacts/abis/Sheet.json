@@ -41,6 +41,21 @@
     {
         "data": [
             {
+                "name": "previousOwner",
+                "type": "felt"
+            },
+            {
+                "name": "newOwner",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "data": [
+            {
                 "name": "from_",
                 "type": "felt"
             },
@@ -112,21 +127,6 @@
         ],
         "keys": [],
         "name": "CellUpdated",
-        "type": "event"
-    },
-    {
-        "data": [
-            {
-                "name": "previousOwner",
-                "type": "felt"
-            },
-            {
-                "name": "newOwner",
-                "type": "felt"
-            }
-        ],
-        "keys": [],
-        "name": "OwnershipTransferred",
         "type": "event"
     },
     {

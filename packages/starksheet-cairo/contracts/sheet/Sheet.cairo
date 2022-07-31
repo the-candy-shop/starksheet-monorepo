@@ -1,29 +1,27 @@
 %lang starknet
 
-from starkware.cairo.common.alloc import alloc
-from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
-from starkware.starknet.common.syscalls import get_caller_address
-from starkware.cairo.common.math_cmp import is_not_zero
-from starkware.cairo.common.uint256 import split_64, Uint256
-
-from starkware.cairo.common.bool import TRUE
+from openzeppelin.access.ownable import Ownable
 from openzeppelin.token.erc721.library import ERC721
 from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable
 from openzeppelin.introspection.ERC165 import ERC165
+from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
+from starkware.cairo.common.math_cmp import is_not_zero
+from starkware.cairo.common.uint256 import split_64, Uint256
+from starkware.cairo.common.bool import TRUE
+from starkware.starknet.common.syscalls import get_caller_address
+
+from starkware.cairo.common.dict import DictAccess
+from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
+
 from contracts.sheet.library import (
-    CellRendered,
-    Sheet_getCell,
-    Sheet_setCell,
-    Sheet_renderCell,
-    Sheet_renderGrid,
-    Sheet_mint,
-    Sheet_tokenURI,
+    Sheet,
     Sheet_merkle_root,
     Sheet_max_per_wallet,
     Sheet_cell_renderer,
+    CellRendered,
+    DEFAULT_VALUE,
 )
-
-from openzeppelin.access.ownable import Ownable
 
 const GRID_SIZE = 15 * 15
 
@@ -109,7 +107,7 @@ func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         assert owner = caller
     end
 
-    Sheet_setCell(contractAddress, tokenId, value, dependencies_len, dependencies)
+    Sheet.set_cell(contractAddress, tokenId, value, dependencies_len, dependencies)
     return ()
 end
 
@@ -117,7 +115,7 @@ end
 func getCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(tokenId : felt) -> (
     contractAddress : felt, value : felt, dependencies_len : felt, dependencies : felt*
 ):
-    let res = Sheet_getCell(tokenId)
+    let res = Sheet.get_cell(tokenId)
     return (res.contract_address, res.value, res.dependencies_len, res.dependencies)
 end
 
@@ -125,7 +123,16 @@ end
 func renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     tokenId : felt
 ) -> (cell : CellRendered):
-    let (cell) = Sheet_renderCell(tokenId)
+    alloc_locals
+    let (local rendered_cells_start) = default_dict_new(default_value=DEFAULT_VALUE)
+    let rendered_cells = rendered_cells_start
+
+    let (cell) = Sheet.render_cell{rendered_cells=rendered_cells}(tokenId)
+
+    let (finalized_rendered_cells_start, finalized_rendered_cells_end) = default_dict_finalize(
+        rendered_cells_start, rendered_cells, DEFAULT_VALUE
+    )
+
     return (cell)
 end
 
@@ -135,8 +142,15 @@ func renderGrid{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 ):
     alloc_locals
     let (local cells : CellRendered*) = alloc()
+    let (local rendered_cells_start) = default_dict_new(default_value=DEFAULT_VALUE)
+    let rendered_cells = rendered_cells_start
     let stop = GRID_SIZE
-    Sheet_renderGrid{cells=cells, stop=stop}(0)
+    Sheet.render_grid{cells=cells, rendered_cells=rendered_cells, stop=stop}(0)
+
+    let (finalized_rendered_cells_start, finalized_rendered_cells_end) = default_dict_finalize(
+        rendered_cells_start, rendered_cells, DEFAULT_VALUE
+    )
+
     return (GRID_SIZE, cells)
 end
 
@@ -144,7 +158,7 @@ end
 func mintPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
     tokenId : Uint256, proof_len : felt, proof : felt*
 ):
-    Sheet_mint(tokenId, proof_len, proof)
+    Sheet.mint(tokenId, proof_len, proof)
     return ()
 end
 
@@ -152,7 +166,7 @@ end
 func tokenURI{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     tokenId : Uint256
 ) -> (token_uri_len : felt, token_uri : felt*):
-    let (token_uri_len, token_uri) = Sheet_tokenURI(tokenId)
+    let (token_uri_len, token_uri) = Sheet.token_uri(tokenId)
     return (token_uri_len, token_uri)
 end
 

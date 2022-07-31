@@ -859,14 +859,6 @@ optional = false
 python-versions = ">=3.8"
 
 [[package]]
-name = "onlydust-cairo-streams"
-version = "0.1.2"
-description = "Array stream library written in pure Cairo"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[[package]]
 name = "openzeppelin-cairo-contracts"
 version = "0.2.1"
 description = "Library for secure smart contract development written in Cairo"
@@ -1423,7 +1415,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.9"
-content-hash = "6d9f342abeb1c1ca5640d98f7bbb27bcc4a7484a0be51285d498b0f9a270f1b1"
+content-hash = "8e7804e344283cadbd72a23c7697b79cf393a57b0336be0d6ac983466053b300"
 
 [metadata.files]
 aiohttp = []
@@ -1492,7 +1484,6 @@ multidict = []
 mypy-extensions = []
 netaddr = []
 numpy = []
-onlydust-cairo-streams = []
 openzeppelin-cairo-contracts = []
 packaging = []
 pandas = []

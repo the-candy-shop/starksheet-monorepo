@@ -3,22 +3,14 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from openzeppelin.access.ownable import Ownable
 
-from contracts.starksheet.library import (
-    Starksheet_getSheetClassHash,
-    Starksheet_setSheetClassHash,
-    Starksheet_getSheetDefaultRendererAddress,
-    Starksheet_setSheetDefaultRendererAddress,
-    Starksheet_getSheet,
-    Starksheet_getSheets,
-    Starksheet_addSheet,
-)
+from contracts.starksheet.library import Starksheet
 
 @external
 func setSheetDefaultRendererAddress{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(address : felt):
     Ownable.assert_only_owner()
-    Starksheet_setSheetDefaultRendererAddress(address)
+    Starksheet.set_sheet_default_renderer_address(address)
     return ()
 end
 
@@ -26,7 +18,7 @@ end
 func getSheetDefaultRendererAddress{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }() -> (address : felt):
-    return Starksheet_getSheetDefaultRendererAddress()
+    return Starksheet.get_sheet_default_renderer_address()
 end
 
 @external
@@ -34,7 +26,7 @@ func setSheetClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     hash : felt
 ):
     Ownable.assert_only_owner()
-    Starksheet_setSheetClassHash(hash)
+    Starksheet.set_sheet_class_hash(hash)
     return ()
 end
 
@@ -42,14 +34,14 @@ end
 func getSheetClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     hash : felt
 ):
-    return Starksheet_getSheetClassHash()
+    return Starksheet.get_sheet_class_hash()
 end
 
 @view
 func getSheets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     addresses_len : felt, addresses : felt*
 ):
-    let (addresses_len, addresses) = Starksheet_getSheets()
+    let (addresses_len, addresses) = Starksheet.get_sheets()
     return (addresses_len, addresses)
 end
 
@@ -57,14 +49,14 @@ end
 func getSheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(index : felt) -> (
     address : felt
 ):
-    return Starksheet_getSheet(index)
+    return Starksheet.get_sheet(index)
 end
 
 @external
 func addSheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     name : felt, symbol : felt
 ) -> (address : felt):
-    return Starksheet_addSheet(name, symbol)
+    return Starksheet.add_sheet(name, symbol)
 end
 
 @constructor
@@ -72,7 +64,7 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     owner : felt, sheet_class_hash : felt, default_renderer_address : felt
 ):
     Ownable.initializer(owner)
-    Starksheet_setSheetClassHash(sheet_class_hash)
-    Starksheet_setSheetDefaultRendererAddress(default_renderer_address)
+    Starksheet.set_sheet_class_hash(sheet_class_hash)
+    Starksheet.set_sheet_default_renderer_address(default_renderer_address)
     return ()
 end

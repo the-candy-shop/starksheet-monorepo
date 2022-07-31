@@ -1,9 +1,9 @@
 %lang starknet
 
 from onlydust.stream.default_implementation import stream
-from openzeppelin.token.erc721.library import ERC721_owners, _exists, ERC721_balanceOf, ERC721_name
-from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
-from openzeppelin.utils.constants import TRUE, FALSE
+from openzeppelin.token.erc721.library import ERC721_owners, ERC721
+from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable
+from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math_cmp import is_le
@@ -142,7 +142,7 @@ func Sheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_pt
     end
     let (max_per_wallet) = Sheet_max_per_wallet.read()
     if max_per_wallet != 0:
-        let (user_balance) = ERC721_balanceOf(caller_address)
+        let (user_balance) = ERC721.balance_of(caller_address)
         let (remaining_allocation) = is_le(user_balance.low, max_per_wallet - 1)
         with_attr error_message("mint: tokens already claimed"):
             assert remaining_allocation = TRUE
@@ -155,14 +155,14 @@ func Sheet_mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_pt
         tempvar syscall_ptr = syscall_ptr
         tempvar range_check_ptr = range_check_ptr
     end
-    ERC721_Enumerable_mint(caller_address, token_id)
+    ERC721_Enumerable._mint(caller_address, token_id)
     return ()
 end
 
 func Sheet_tokenURI{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
     token_id : Uint256
 ) -> (token_uri_len : felt, token_uri : felt*):
-    let (exists) = _exists(token_id)
+    let (exists) = ERC721._exists(token_id)
     with_attr error_message("ERC721: tokenURI query for nonexistent token"):
         assert exists = TRUE
     end
@@ -170,7 +170,7 @@ func Sheet_tokenURI{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_chec
     let (value) = _render_cell(token_id.low)
     tempvar pedersen_ptr = pedersen_ptr
 
-    let (name) = ERC721_name()
+    let (name) = ERC721.name()
     let (renderer_address) = Sheet_cell_renderer.read()
     let (token_uri_len, token_uri) = ICellRenderer.token_uri(
         renderer_address, token_id.low, value, name

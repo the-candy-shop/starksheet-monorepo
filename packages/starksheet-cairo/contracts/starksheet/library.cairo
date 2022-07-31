@@ -1,6 +1,5 @@
 %lang starknet
 
-from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable_mint
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_caller_address, deploy
@@ -74,6 +73,7 @@ func Starksheet_addSheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range
         contract_address_salt=sheets_count,
         constructor_calldata_size=6,
         constructor_calldata=constructor_calldata,
+        deploy_from_zero=0,
     )
 
     Starksheet_sheets.write(sheets_count, address)

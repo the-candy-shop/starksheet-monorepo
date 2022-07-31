@@ -1,76 +1,17 @@
 [
     {
-        "members": [
-            {
-                "name": "low",
-                "offset": 0,
-                "type": "felt"
-            },
-            {
-                "name": "high",
-                "offset": 1,
-                "type": "felt"
-            }
-        ],
-        "name": "Uint256",
-        "size": 2,
-        "type": "struct"
-    },
-    {
         "data": [
             {
-                "name": "from_",
+                "name": "previousOwner",
                 "type": "felt"
             },
             {
-                "name": "to",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "keys": [],
-        "name": "Transfer",
-        "type": "event"
-    },
-    {
-        "data": [
-            {
-                "name": "owner",
-                "type": "felt"
-            },
-            {
-                "name": "approved",
-                "type": "felt"
-            },
-            {
-                "name": "tokenId",
-                "type": "Uint256"
-            }
-        ],
-        "keys": [],
-        "name": "Approval",
-        "type": "event"
-    },
-    {
-        "data": [
-            {
-                "name": "owner",
-                "type": "felt"
-            },
-            {
-                "name": "operator",
-                "type": "felt"
-            },
-            {
-                "name": "approved",
+                "name": "newOwner",
                 "type": "felt"
             }
         ],
         "keys": [],
-        "name": "ApprovalForAll",
+        "name": "OwnershipTransferred",
         "type": "event"
     },
     {

@@ -8826,7 +8826,7 @@
                 "type": "alias"
             },
             "__main__.TRUE": {
-                "destination": "openzeppelin.utils.constants.TRUE",
+                "destination": "starkware.cairo.common.bool.TRUE",
                 "type": "alias"
             },
             "__main__.Uint256": {
@@ -9202,22 +9202,6 @@
                 "destination": "starkware.cairo.common.math.unsigned_div_rem",
                 "type": "alias"
             },
-            "openzeppelin.utils.constants.FALSE": {
-                "type": "const",
-                "value": 0
-            },
-            "openzeppelin.utils.constants.PREFIX_TRANSACTION": {
-                "type": "const",
-                "value": 476441609247967894954472788179128007176248455022
-            },
-            "openzeppelin.utils.constants.TRUE": {
-                "type": "const",
-                "value": 1
-            },
-            "openzeppelin.utils.constants.UINT8_MAX": {
-                "type": "const",
-                "value": 256
-            },
             "starkware.cairo.common.alloc.alloc": {
                 "decorators": [],
                 "pc": 0,
@@ -9250,6 +9234,14 @@
             "starkware.cairo.common.bitwise.BitwiseBuiltin": {
                 "destination": "starkware.cairo.common.cairo_builtins.BitwiseBuiltin",
                 "type": "alias"
+            },
+            "starkware.cairo.common.bool.FALSE": {
+                "type": "const",
+                "value": 0
+            },
+            "starkware.cairo.common.bool.TRUE": {
+                "type": "const",
+                "value": 1
             },
             "starkware.cairo.common.cairo_builtins.BitwiseBuiltin": {
                 "full_name": "starkware.cairo.common.cairo_builtins.BitwiseBuiltin",
@@ -10228,7 +10220,7 @@
                         "cairo_type": "felt",
                         "offset": 2
                     },
-                    "reserved": {
+                    "deploy_from_zero": {
                         "cairo_type": "felt",
                         "offset": 5
                     },

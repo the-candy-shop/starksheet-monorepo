@@ -1,7 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
-from openzeppelin.access.ownable import Ownable_only_owner, Ownable_initializer
+from openzeppelin.access.ownable import Ownable
 
 from contracts.starksheet.library import (
     Starksheet_getSheetClassHash,
@@ -17,7 +17,7 @@ from contracts.starksheet.library import (
 func setSheetDefaultRendererAddress{
     syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
 }(address : felt):
-    Ownable_only_owner()
+    Ownable.assert_only_owner()
     Starksheet_setSheetDefaultRendererAddress(address)
     return ()
 end
@@ -33,7 +33,7 @@ end
 func setSheetClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     hash : felt
 ):
-    Ownable_only_owner()
+    Ownable.assert_only_owner()
     Starksheet_setSheetClassHash(hash)
     return ()
 end
@@ -71,7 +71,7 @@ end
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
     owner : felt, sheet_class_hash : felt, default_renderer_address : felt
 ):
-    Ownable_initializer(owner)
+    Ownable.initializer(owner)
     Starksheet_setSheetClassHash(sheet_class_hash)
     Starksheet_setSheetDefaultRendererAddress(default_renderer_address)
     return ()

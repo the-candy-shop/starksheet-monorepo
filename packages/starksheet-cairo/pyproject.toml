@@ -9,7 +9,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "~3.9"
-cairo-nile = "^0.6.1"
 cairo-lang = "^0.9.1"
 starknet-devnet = "^0.2.4"
 pytest = "^7.1.2"

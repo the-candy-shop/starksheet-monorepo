@@ -2,13 +2,14 @@ import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet, useStarknetInvoke } from "@starknet-react/core";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { CellValuesContext } from "../contexts/CellValuesContext";
-import { BigNumberish } from "starknet/utils/number";
 import { useSnackbar } from "notistack";
 import {
   CellValue,
   operationNumbers,
 } from "../components/ActionBar/formula.utils";
 import StarkSheetContract from "../contract.json";
+import BN from "bn.js";
+import { toBN } from "starknet/utils/number";
 
 export const useSetCell = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -30,21 +31,27 @@ export const useSetCell = () => {
   }, [enqueueSnackbar, error, reset]);
 
   const waitForTransaction = useCallback(
-    (id: number, value: BigNumberish): Promise<void> => {
+    (id: number, value: BN, dependencies: BN[]): Promise<void> => {
       if (contract && account) {
         return new Promise((resolve) => {
           setTimeout(async () => {
             try {
               const cell = await contract.call("getCell", [id]);
 
-              if (cell && cell.value.toString() === value.toString()) {
+              if (
+                cell &&
+                cell.value.toString() === value.toString() &&
+                JSON.stringify(cell.dependencies) ===
+                  JSON.stringify(dependencies)
+              ) {
                 resolve();
               } else {
-                await waitForTransaction(id, value);
+                await waitForTransaction(id, value, dependencies);
                 resolve();
               }
-            } catch {
-              await waitForTransaction(id, value);
+            } catch (e) {
+              console.error(e);
+              await waitForTransaction(id, value, dependencies);
               resolve();
             }
           }, 5000);
@@ -65,20 +72,25 @@ export const useSetCell = () => {
 
         if (parsedValue.type === "number") {
           await invoke({ args: [0, id, value, []] });
+          await waitForTransaction(id, toBN(value), []);
         } else if (parsedValue.type === "formula") {
+          // @ts-ignore
+          const operationValue = operationNumbers[parsedValue.operation];
+          // @ts-ignore
+          const dependencies = parsedValue.dependencies.map((dep) =>
+            toBN(cellNames.indexOf(dep))
+          );
           await invoke({
             args: [
               StarkSheetContract.mathAddress,
               id,
-              // @ts-ignore
-              operationNumbers[parsedValue.operation],
-              // @ts-ignore
-              parsedValue.dependencies.map((dep) => cellNames.indexOf(dep)),
+              operationValue,
+              dependencies,
             ],
           });
+          await waitForTransaction(id, operationValue, dependencies);
         }
 
-        await waitForTransaction(id, value);
         await refresh();
       } catch (e) {
         console.log("e", e);

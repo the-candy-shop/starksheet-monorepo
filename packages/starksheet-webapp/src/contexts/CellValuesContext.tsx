@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useRef } from "react";
 import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
-import { BigNumberish } from "starknet/utils/number";
+import { BigNumberish, toBN } from "starknet/utils/number";
 import { Contract } from "starknet";
 
 export const CellValuesContext = React.createContext<{
@@ -40,8 +40,8 @@ export const CellValuesContextProvider = ({
       if (previousGridData.current) {
         cells.forEach((cell, index) => {
           if (
-            previousGridData.current[index].value.toString() !==
-            cell.value.toString()
+            previousGridData.current[index]?.value?.toString() !==
+            cell?.value?.toString()
           ) {
             fetch(
               `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
@@ -84,7 +84,10 @@ export const CellValuesContextProvider = ({
   const updateValueOwner = useCallback(
     (id: number, owner: BigNumberish) => {
       const newValues = [...values];
-      newValues[id] = { ...values[id], owner: owner };
+      newValues[id] = {
+        owner: owner,
+        value: values[id]?.value || toBN(0),
+      };
       setValues(newValues);
     },
     [values]

@@ -46,6 +46,7 @@ function App() {
     () =>
       hasLoaded &&
       selectedCell &&
+      values[selectedCell.id] &&
       values[selectedCell.id].owner &&
       values[selectedCell.id].owner.toString() !== "0"
         ? toHex(values[selectedCell.id].owner as BN)
@@ -123,7 +124,7 @@ function App() {
                 <LoadingDots />
               </Box>
             )}
-            {!loading && values.length !== 0 && (
+            {!loading && hasLoaded && (
               <SheetTable
                 selectedCell={selectedCell}
                 setSelectedCell={setSelectedCell}

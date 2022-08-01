@@ -102,11 +102,11 @@ namespace Sheet:
         pedersen_ptr : HashBuiltin*,
         range_check_ptr,
         rendered_cells : DictAccess*,
-    }(value : felt) -> (cell : CellRendered):
-        let (result) = _render_cell(value)
-        let token_id = Uint256(value, 0)
-        let (owner) = ERC721_owners.read(token_id)
-        return (CellRendered(id=value, owner=owner, value=result))
+    }(token_id : felt) -> (cell : CellRendered):
+        let (value) = _render_cell(token_id)
+        let token_id_256 = Uint256(token_id, 0)
+        let (owner) = ERC721_owners.read(token_id_256)
+        return (CellRendered(id=token_id, owner=owner, value=value))
     end
 
     # TODO: Merge rendered_cells and cells. At the moment not able to use only cells because
@@ -124,7 +124,8 @@ namespace Sheet:
         if index == stop:
             return ()
         end
-        let (cell) = render_cell(index)
+        let (token_id) = ERC721_Enumerable.token_by_index(Uint256(index, 0))
+        let (cell) = render_cell(token_id.low)
         assert [cells + CellRendered.SIZE * index] = cell
         return render_grid(index + 1)
     end

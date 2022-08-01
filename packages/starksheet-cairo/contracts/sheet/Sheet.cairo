@@ -23,8 +23,6 @@ from contracts.sheet.library import (
     DEFAULT_VALUE,
 )
 
-const GRID_SIZE = 15 * 15
-
 @view
 func getOwner{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     owner : felt
@@ -144,14 +142,15 @@ func renderGrid{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
     let (local cells : CellRendered*) = alloc()
     let (local rendered_cells_start) = default_dict_new(default_value=DEFAULT_VALUE)
     let rendered_cells = rendered_cells_start
-    let stop = GRID_SIZE
+    let (total_supply) = ERC721_Enumerable.total_supply()
+    let stop = total_supply.low
     Sheet.render_grid{cells=cells, rendered_cells=rendered_cells, stop=stop}(0)
 
     let (finalized_rendered_cells_start, finalized_rendered_cells_end) = default_dict_finalize(
         rendered_cells_start, rendered_cells, DEFAULT_VALUE
     )
 
-    return (GRID_SIZE, cells)
+    return (stop, cells)
 end
 
 @external

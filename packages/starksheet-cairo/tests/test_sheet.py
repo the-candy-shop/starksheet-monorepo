@@ -190,10 +190,10 @@ class TestSheet:
         @staticmethod
         async def test_should_return_rendered_grid(sheet, cells):
             result = (await sheet.renderGrid().call()).result.cells
-            grid = [render(cells)(i) % FIELD_PRIME for i in range(GRID_SIZE)]
+            grid = [render(cells)(i) % FIELD_PRIME for i in range(len(cells))]
             assert [cell.value for cell in result] == grid
-            assert {cell.owner for cell in result} == {0, OWNER}
-            assert [cell.id for cell in result] == list(range(GRID_SIZE))
+            assert {cell.owner for cell in result} == {OWNER}
+            assert [cell.id for cell in result] == list(range(len(cells)))
 
     class TestTokenURI:
         @staticmethod

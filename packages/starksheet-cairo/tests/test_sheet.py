@@ -3,9 +3,9 @@ import random
 import re
 import xml.etree.ElementTree as ET
 from collections import namedtuple
-from math import prod
 from urllib.parse import unquote
 
+import numpy as np
 import pytest
 import pytest_asyncio
 from starkware.crypto.signature.signature import FIELD_PRIME
@@ -16,16 +16,24 @@ from starkware.starknet.testing.starknet import Starknet, StarknetContract
 from constants import ALLOW_LIST, CONTRACTS, OWNER
 from utils import address_to_leaf, merkle_proof, merkle_root, number_to_index
 
-Cell = namedtuple("Cell", ["contract_address", "id", "value", "dependencies"])
+Cell = namedtuple("Cell", ["contract_address", "id", "value", "calldata"])
 random.seed(0)
 
 
-def div(l):
+def _div(l_len, *l):
     return l[0] // l[1]
 
 
-def sub(l):
+def _sub(l_len, *l):
     return l[0] - l[1]
+
+
+def _prod(l_len, *l):
+    return np.prod(l)
+
+
+def _sum(l_len, *l):
+    return np.sum(l)
 
 
 GRID_SIZE = 15 * 15
@@ -33,7 +41,9 @@ OTHER = OWNER + 1
 LEAFS = [address_to_leaf(address) for address in ALLOW_LIST]
 MERKLE_ROOT = merkle_root(LEAFS)
 MAX_PER_WALLET = 10
-FUNCTIONS = {get_selector_from_name(ops.__name__): ops for ops in [sum, prod, div, sub]}
+FUNCTIONS = {
+    get_selector_from_name(ops.__name__[1:]): ops for ops in [_sum, _prod, _div, _sub]
+}
 NAME = "Sheet 1"
 SYMBOL = "SHT1"
 
@@ -46,10 +56,14 @@ def render(cells):
         if cell.contract_address == 0:
             return cell.value
         return FUNCTIONS[cell.value](
-            [_render(dependency) for dependency in cell.dependencies]
+            *[_render(d >> 1) if d & 1 else d >> 1 for d in cell.calldata]
         )
 
     return _render
+
+
+def dependencies_to_calldata(dependencies):
+    return [len(dependencies) << 1, *[d << 1 + 1 for d in dependencies]]
 
 
 @pytest.fixture(scope="session")
@@ -63,7 +77,7 @@ def cells(math):
         )
         if id < 2:
             value = random.sample(
-                [get_selector_from_name(ops.__name__) for ops in [sum, prod]], k=1
+                [get_selector_from_name(ops.__name__) for ops in [_sum, _prod]], k=1
             )[0]
         else:
             value = random.sample(list(FUNCTIONS.keys()), k=1)[0]
@@ -71,13 +85,25 @@ def cells(math):
         if not dependencies:
             value = random.randint(0, 2**16 - 1)
             contract_address = 0
-        if value in [get_selector_from_name(ops.__name__) for ops in [div, sub]]:
+        if value in [get_selector_from_name(ops.__name__[1:]) for ops in [_div, _sub]]:
             dependencies = random.sample(list(range(id)), k=2)
-        _cells.append(Cell(contract_address, id, value, dependencies))
+        _cells.append(
+            Cell(
+                contract_address,
+                id,
+                value,
+                dependencies_to_calldata(dependencies),
+            )
+        )
         rendered = render(_cells)(id)
         while rendered > 2**64 - 1:
             dependencies.pop()
-            _cells[-1] = Cell(contract_address, id, value, dependencies)
+            _cells[-1] = Cell(
+                contract_address,
+                id,
+                value,
+                dependencies_to_calldata(dependencies),
+            )
             rendered = render(_cells)(id)
     return _cells
 
@@ -105,7 +131,7 @@ async def sheet(starknet: Starknet, renderer, cells) -> StarknetContract:
             cell.id,
             cell.contract_address,
             cell.value,
-            [len(cell.dependencies), *cell.dependencies],
+            cell.calldata,
         ).invoke(caller_address=OWNER)
     return _sheet
 
@@ -128,10 +154,7 @@ class TestSheet:
             for cell in cells:
                 result = (await sheet.getCell(cell.id).call()).result
                 assert result.value == cell.value
-                assert result.cell_calldata == [
-                    len(cell.dependencies),
-                    *cell.dependencies,
-                ]
+                assert result.cell_calldata == cell.calldata
 
     class TestSetCell:
         @staticmethod
@@ -148,7 +171,7 @@ class TestSheet:
                     0,
                     cells[0].id,
                     cells[0].value,
-                    cells[0].dependencies,
+                    cells[0].calldata,
                 ).invoke(caller_address=OTHER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "setCell: caller is not owner"
@@ -162,10 +185,7 @@ class TestSheet:
             for cell in cells:
                 result = (await sheet.getCell(cell.id).call()).result
                 assert result.value == cell.value
-                assert result.cell_calldata == [
-                    len(cell.dependencies),
-                    *cell.dependencies,
-                ]
+                assert result.cell_calldata == cell.calldata
 
     class TestRenderCell:
         @staticmethod
@@ -175,22 +195,6 @@ class TestSheet:
                 assert result.value == render(cells)(cell.id) % FIELD_PRIME
                 assert result.id == cell.id
                 assert result.owner == OWNER
-
-        @staticmethod
-        @pytest_asyncio.fixture
-        async def starksheet_cell_altered(sheet, cells):
-            cell = next(iter([cell for cell in cells if cell.dependencies]))
-            await sheet.setCell(
-                cell.id,
-                cell.value + 1,
-                cell.dependencies,
-            ).invoke(caller_address=OWNER)
-            yield sheet, cell
-            await sheet.setCell(
-                cell.id,
-                cell.value,
-                cell.dependencies,
-            ).invoke(caller_address=OWNER)
 
     class TestRenderGrid:
         @staticmethod

@@ -84,11 +84,11 @@ end
 
 @external
 func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    contractAddress : felt,
     tokenId : felt,
+    contractAddress : felt,
     value : felt,
-    dependencies_len : felt,
-    dependencies : felt*,
+    cell_calldata_len : felt,
+    cell_calldata : felt*,
 ):
     alloc_locals
     let (low, high) = split_64(tokenId)
@@ -105,16 +105,16 @@ func setCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         assert owner = caller
     end
 
-    Sheet.set_cell(contractAddress, tokenId, value, dependencies_len, dependencies)
+    Sheet.set_cell(tokenId, contractAddress, value, cell_calldata_len, cell_calldata)
     return ()
 end
 
 @view
 func getCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(tokenId : felt) -> (
-    contractAddress : felt, value : felt, dependencies_len : felt, dependencies : felt*
+    contractAddress : felt, value : felt, cell_calldata_len : felt, cell_calldata : felt*
 ):
     let res = Sheet.get_cell(tokenId)
-    return (res.contract_address, res.value, res.dependencies_len, res.dependencies)
+    return (res.contract_address, res.value, res.calldata_len, res.calldata)
 end
 
 @view

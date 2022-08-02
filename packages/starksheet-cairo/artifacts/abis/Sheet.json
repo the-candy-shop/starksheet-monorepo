@@ -224,11 +224,11 @@
     {
         "inputs": [
             {
-                "name": "contractAddress",
+                "name": "tokenId",
                 "type": "felt"
             },
             {
-                "name": "tokenId",
+                "name": "contractAddress",
                 "type": "felt"
             },
             {
@@ -236,11 +236,11 @@
                 "type": "felt"
             },
             {
-                "name": "dependencies_len",
+                "name": "cell_calldata_len",
                 "type": "felt"
             },
             {
-                "name": "dependencies",
+                "name": "cell_calldata",
                 "type": "felt*"
             }
         ],
@@ -266,11 +266,11 @@
                 "type": "felt"
             },
             {
-                "name": "dependencies_len",
+                "name": "cell_calldata_len",
                 "type": "felt"
             },
             {
-                "name": "dependencies",
+                "name": "cell_calldata",
                 "type": "felt*"
             }
         ],

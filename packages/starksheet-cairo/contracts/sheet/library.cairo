@@ -8,6 +8,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
 from starkware.cairo.common.dict import DictAccess, dict_write, dict_read
 from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.math import signed_div_rem
 from starkware.cairo.common.memcpy import memcpy
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import call_contract, get_caller_address
@@ -22,6 +23,7 @@ from contracts.utils.merkle_tree import (
 from contracts.utils.string import str
 
 const DEFAULT_VALUE = 2 ** 128 - 1
+const SHOULD_RENDER_FLAG = 2
 
 @event
 func CellUpdated(id : felt, value : felt, contract_address : felt):
@@ -250,13 +252,12 @@ func _render_cell{
 
     let (local calldata_rendered : felt*) = alloc()
     if calldata_len != 0:
-        assert calldata_rendered[0] = calldata[0]
         _render_cell_calldata{
             calldata_ids=calldata,
             calldata_rendered=calldata_rendered,
             rendered_cells=rendered_cells,
             stop=calldata_len,
-        }(1)
+        }(0)
         tempvar calldata_len = calldata_len
         tempvar calldata_rendered = calldata_rendered
         tempvar syscall_ptr = syscall_ptr
@@ -275,7 +276,6 @@ func _render_cell{
     let (retdata_size : felt, retdata : felt*) = call_contract(
         contract_address, value, calldata_len, calldata_rendered
     )
-    assert retdata_size = 1
     let value = retdata[0]
 
     dict_write{dict_ptr=rendered_cells}(token_id, value)
@@ -294,7 +294,23 @@ func _render_cell_calldata{
     if index == stop:
         return ()
     end
-    let (result) = _render_cell{rendered_cells=rendered_cells}(calldata_ids[index])
+    let value = calldata_ids[index]
+    # TODO: This is a hack because of "AssertionError: 0 / 2 = 0 is out of the range [0, 0)" in the range checker.
+    let (value, should_render) = signed_div_rem(value, SHOULD_RENDER_FLAG, value + 1)
+    if should_render == TRUE:
+        let (result) = _render_cell{rendered_cells=rendered_cells}(value)
+        tempvar result = result
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
+        tempvar rendered_cells = rendered_cells
+    else:
+        tempvar result = value
+        tempvar syscall_ptr = syscall_ptr
+        tempvar pedersen_ptr = pedersen_ptr
+        tempvar range_check_ptr = range_check_ptr
+        tempvar rendered_cells = rendered_cells
+    end
     assert calldata_rendered[index] = result
     return _render_cell_calldata(index + 1)
 end

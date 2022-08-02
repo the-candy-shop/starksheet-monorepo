@@ -102,10 +102,10 @@ async def sheet(starknet: Starknet, renderer, cells) -> StarknetContract:
     for cell in cells:
         await _sheet.mintOwner(OWNER, (cell.id, 0)).invoke(caller_address=OWNER)
         await _sheet.setCell(
-            cell.id,
             cell.contract_address,
+            cell.id,
             cell.value,
-            [len(cell.dependencies), *cell.dependencies],
+            cell.dependencies,
         ).invoke(caller_address=OWNER)
     return _sheet
 
@@ -120,7 +120,7 @@ class TestSheet:
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "ERC721: owner query for nonexistent token"
             cell = (await sheet.getCell(len(cells)).call()).result
-            assert cell.cell_calldata == []
+            assert cell.dependencies == []
             assert cell.value == 0
 
         @staticmethod
@@ -128,16 +128,13 @@ class TestSheet:
             for cell in cells:
                 result = (await sheet.getCell(cell.id).call()).result
                 assert result.value == cell.value
-                assert result.cell_calldata == [
-                    len(cell.dependencies),
-                    *cell.dependencies,
-                ]
+                assert result.dependencies == cell.dependencies
 
     class TestSetCell:
         @staticmethod
         async def test_should_revert_when_token_does_not_exist(sheet, cells):
             with pytest.raises(Exception) as e:
-                await sheet.setCell(len(cells), 0, 0, []).invoke(caller_address=OWNER)
+                await sheet.setCell(0, len(cells), 0, []).invoke(caller_address=OWNER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"setCell: tokenId does not exist"
 
@@ -162,10 +159,7 @@ class TestSheet:
             for cell in cells:
                 result = (await sheet.getCell(cell.id).call()).result
                 assert result.value == cell.value
-                assert result.cell_calldata == [
-                    len(cell.dependencies),
-                    *cell.dependencies,
-                ]
+                assert result.dependencies == cell.dependencies
 
     class TestRenderCell:
         @staticmethod

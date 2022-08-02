@@ -27,12 +27,12 @@ const DEFAULT_VALUE = 2 ** 128 - 1
 func CellUpdated(id : felt, value : felt, contract_address : felt):
 end
 
-# Each token is a cell in the grid. Each cell has a number of calldata and a value to execute.
+# Each token is a cell in the grid. Each cell has a number of dependencies and a value to execute.
 # If there is no dependency, the value is a constant, otherwise it is a function identifier.
 struct CellData:
-    member contract_address : felt
+    member dependencies_len : felt
     member value : felt
-    member calldata_len : felt
+    member contract_address : felt
 end
 
 struct CellRendered:
@@ -58,41 +58,43 @@ func Sheet_cell(id : felt) -> (cell_data : CellData):
 end
 
 @storage_var
-func Sheet_cell_calldata(id : felt, index : felt) -> (value : felt):
+func Sheet_cell_dependencies(id : felt, index : felt) -> (value : felt):
 end
 
 namespace Sheet:
     func set_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        token_id : felt,
         contract_address : felt,
+        token_id : felt,
         value : felt,
-        cell_calldata_len : felt,
-        cell_calldata : felt*,
+        dependencies_len : felt,
+        dependencies : felt*,
     ):
         alloc_locals
         Sheet_cell.write(
             token_id,
-            CellData(contract_address=contract_address, value=value, calldata_len=cell_calldata_len),
+            CellData(dependencies_len=dependencies_len, value=value, contract_address=contract_address),
         )
         local index = 0
-        _set_calldata{token_id=token_id, index=index, calldata_len=cell_calldata_len}(cell_calldata)
+        with token_id, index, dependencies_len:
+            _set_dependencies(dependencies)
+        end
         CellUpdated.emit(token_id, value, contract_address)
         return ()
     end
 
     func get_cell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
         token_id : felt
-    ) -> (contract_address : felt, value : felt, calldata_len : felt, calldata : felt*):
+    ) -> (contract_address : felt, value : felt, dependencies_len : felt, dependencies : felt*):
         alloc_locals
         local index = 0
         let (cell_data) = Sheet_cell.read(token_id)
-        let calldata_len = cell_data.calldata_len
+        let dependencies_len = cell_data.dependencies_len
 
-        let (local calldata : felt*) = alloc()
-        with token_id, calldata, calldata_len:
-            _get_calldata(index)
+        let (local dependencies : felt*) = alloc()
+        with token_id, dependencies, dependencies_len:
+            _get_dependencies(index)
         end
-        return (cell_data.contract_address, cell_data.value, calldata_len, calldata)
+        return (cell_data.contract_address, cell_data.value, dependencies_len, dependencies)
     end
 
     func render_cell{
@@ -196,39 +198,39 @@ end
 
 # Internals
 
-func _set_calldata{
+func _set_dependencies{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
     token_id : felt,
     index : felt,
-    calldata_len : felt,
-}(calldata : felt*):
-    tempvar remaining_data = calldata_len - index
+    dependencies_len : felt,
+}(dependencies : felt*):
+    tempvar remaining_data = dependencies_len - index
     if remaining_data == 0:
         return ()
     end
-    Sheet_cell_calldata.write(token_id, index, [calldata])
+    Sheet_cell_dependencies.write(token_id, index, [dependencies])
     let index_new = index + 1
-    _set_calldata{index=index_new}(calldata + 1)
+    _set_dependencies{index=index_new}(dependencies + 1)
     return ()
 end
 
-func _get_calldata{
+func _get_dependencies{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
     token_id : felt,
-    calldata_len : felt,
-    calldata : felt*,
+    dependencies_len : felt,
+    dependencies : felt*,
 }(index : felt):
-    tempvar remaining_data = calldata_len - index
+    tempvar remaining_data = dependencies_len - index
     if remaining_data == 0:
         return ()
     end
-    let (current_data) = Sheet_cell_calldata.read(token_id, index)
-    assert calldata[index] = current_data
-    _get_calldata(index + 1)
+    let (current_data) = Sheet_cell_dependencies.read(token_id, index)
+    assert dependencies[index] = current_data
+    _get_dependencies(index + 1)
     return ()
 end
 
@@ -242,38 +244,25 @@ func _render_cell{
         return (stored_result)
     end
 
-    let (contract_address, value, calldata_len, calldata) = Sheet.get_cell(token_id)
+    let (contract_address, value, dependencies_len, dependencies) = Sheet.get_cell(token_id)
     if contract_address == 0:
         dict_write{dict_ptr=rendered_cells}(token_id, value)
         return (value)
     end
 
-    let (local calldata_rendered : felt*) = alloc()
-    if calldata_len != 0:
-        assert calldata_rendered[0] = calldata[0]
-        _render_cell_calldata{
-            calldata_ids=calldata,
-            calldata_rendered=calldata_rendered,
-            rendered_cells=rendered_cells,
-            stop=calldata_len,
-        }(1)
-        tempvar calldata_len = calldata_len
-        tempvar calldata_rendered = calldata_rendered
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-        tempvar rendered_cells = rendered_cells
-    else:
-        tempvar calldata_len = calldata_len
-        tempvar calldata_rendered = calldata_rendered
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-        tempvar rendered_cells = rendered_cells
-    end
+    let (local dependencies_rendered : felt*) = alloc()
+    _render_cell_dependencies{
+        dependencies_ids=dependencies,
+        dependencies_rendered=dependencies_rendered,
+        rendered_cells=rendered_cells,
+        stop=dependencies_len,
+    }(0)
+    let (calldata : felt*) = alloc()
+    assert calldata[0] = dependencies_len
+    memcpy(calldata + 1, dependencies_rendered, dependencies_len)
 
     let (retdata_size : felt, retdata : felt*) = call_contract(
-        contract_address, value, calldata_len, calldata_rendered
+        contract_address, value, dependencies_len + 1, calldata
     )
     assert retdata_size = 1
     let value = retdata[0]
@@ -282,19 +271,19 @@ func _render_cell{
     return (value)
 end
 
-func _render_cell_calldata{
+func _render_cell_dependencies{
     syscall_ptr : felt*,
     pedersen_ptr : HashBuiltin*,
     range_check_ptr,
-    calldata_ids : felt*,
-    calldata_rendered : felt*,
+    dependencies_ids : felt*,
+    dependencies_rendered : felt*,
     rendered_cells : DictAccess*,
     stop : felt,
 }(index : felt):
     if index == stop:
         return ()
     end
-    let (result) = _render_cell{rendered_cells=rendered_cells}(calldata_ids[index])
-    assert calldata_rendered[index] = result
-    return _render_cell_calldata(index + 1)
+    let (result) = _render_cell{rendered_cells=rendered_cells}(dependencies_ids[index])
+    assert dependencies_rendered[index] = result
+    return _render_cell_dependencies(index + 1)
 end

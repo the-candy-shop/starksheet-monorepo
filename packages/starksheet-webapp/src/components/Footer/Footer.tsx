@@ -6,6 +6,7 @@ import twitterLogo from "./twitter.svg";
 import starknetLogo from "./starknet.svg";
 import aspectLogo from "./aspect.png";
 import discordLogo from "./discord.svg";
+import mintSquareLogo from "./mintsquare.svg";
 import StarkSheetContract from "../../contract.json";
 import { useSheetList } from "../../hooks/useSheetList";
 import { SheetButton } from "../SheetButton/SheetButton";
@@ -74,6 +75,24 @@ function Footer({ sx }: FooterProps) {
         }
       >
         <img src={starknetLogo} alt="" />
+      </GreyCell>
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={() =>
+          window.open(
+            network === "mainnet"
+              ? `https://mintsquare.io/collection/starknet/${StarkSheetContract.address}/nfts`
+              : `https://mintsquare.io/collection/starknet-testnet/${StarkSheetContract.address}/nfts`,
+            "_blank"
+          )
+        }
+      >
+        <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
       </GreyCell>
       <GreyCell
         sx={{

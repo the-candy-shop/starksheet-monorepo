@@ -83,24 +83,6 @@ function Footer({ sx }: FooterProps) {
           cursor: "pointer",
           "& .content": { justifyContent: "center" },
         }}
-        onClick={() =>
-          window.open(
-            network === "mainnet"
-              ? `https://mintsquare.io/collection/starknet/${StarkSheetContract.address}/nfts`
-              : `https://mintsquare.io/collection/starknet-testnet/${StarkSheetContract.address}/nfts`,
-            "_blank"
-          )
-        }
-      >
-        <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
-      </GreyCell>
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
         onClick={() => window.open("https://discord.gg/Aab6qdWb5k", "_blank")}
       >
         <img src={discordLogo} alt="" />
@@ -133,6 +115,24 @@ function Footer({ sx }: FooterProps) {
         }
       >
         <img src={aspectLogo} alt="" style={{ width: "18px" }} />
+      </GreyCell>
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={() =>
+          window.open(
+            network === "mainnet"
+              ? `https://mintsquare.io/collection/starknet/${StarkSheetContract.address}/nfts`
+              : `https://mintsquare.io/collection/starknet-testnet/${StarkSheetContract.address}/nfts`,
+            "_blank"
+          )
+        }
+      >
+        <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
       </GreyCell>
     </Box>
   );

@@ -102,7 +102,8 @@ namespace Sheet:
         range_check_ptr,
         rendered_cells : DictAccess*,
     }(token_id : felt) -> (cell : CellRendered):
-        let (value) = _render_cell(token_id)
+        let true = TRUE
+        let (value) = _render_cell{value_is_token_id=true}(token_id)
         let token_id_256 = Uint256(token_id, 0)
         let (owner) = ERC721_owners.read(token_id_256)
         return (CellRendered(id=token_id, owner=owner, value=value))
@@ -155,7 +156,10 @@ namespace Sheet:
         let (local rendered_cells_start) = default_dict_new(default_value=DEFAULT_VALUE)
         let rendered_cells = rendered_cells_start
 
-        let (value) = _render_cell{rendered_cells=rendered_cells}(token_id.low)
+        let true = TRUE
+        let (value) = _render_cell{rendered_cells=rendered_cells, value_is_token_id=true}(
+            token_id.low
+        )
         let (finalized_rendered_cells_start, finalized_rendered_cells_end) = default_dict_finalize(
             rendered_cells_start, rendered_cells, DEFAULT_VALUE
         )
@@ -209,51 +213,43 @@ func _get_calldata{
 end
 
 func _render_cell{
-    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, rendered_cells : DictAccess*
-}(token_id : felt) -> (value : felt):
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+    rendered_cells : DictAccess*,
+    value_is_token_id : felt,
+}(value : felt) -> (result : felt):
     alloc_locals
+    if value_is_token_id == FALSE:
+        return (value)
+    end
 
-    let (stored_result) = dict_read{dict_ptr=rendered_cells}(token_id)
+    let (stored_result) = dict_read{dict_ptr=rendered_cells}(value)
     if stored_result != DEFAULT_VALUE:
         return (stored_result)
     end
 
-    let (contract_address, value, calldata_len, calldata) = Sheet.get_cell(token_id)
+    let (contract_address, result, calldata_len, calldata) = Sheet.get_cell(value)
     if contract_address == 0:
-        dict_write{dict_ptr=rendered_cells}(token_id, value)
-        return (value)
+        dict_write{dict_ptr=rendered_cells}(value, result)
+        return (result)
     end
 
     let (local calldata_rendered : felt*) = alloc()
-    if calldata_len != 0:
-        _render_cell_calldata{
-            calldata_ids=calldata,
-            calldata_rendered=calldata_rendered,
-            rendered_cells=rendered_cells,
-            stop=calldata_len,
-        }(0)
-        tempvar calldata_len = calldata_len
-        tempvar calldata_rendered = calldata_rendered
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-        tempvar rendered_cells = rendered_cells
-    else:
-        tempvar calldata_len = calldata_len
-        tempvar calldata_rendered = calldata_rendered
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-        tempvar rendered_cells = rendered_cells
-    end
+    _render_cell_calldata{
+        calldata_ids=calldata,
+        calldata_rendered=calldata_rendered,
+        rendered_cells=rendered_cells,
+        stop=calldata_len,
+    }(0)
 
     let (retdata_size : felt, retdata : felt*) = call_contract(
-        contract_address, value, calldata_len, calldata_rendered
+        contract_address, result, calldata_len, calldata_rendered
     )
-    let value = retdata[0]
+    let result = retdata[0]
 
-    dict_write{dict_ptr=rendered_cells}(token_id, value)
-    return (value)
+    dict_write{dict_ptr=rendered_cells}(value, result)
+    return (result)
 end
 
 func _render_cell_calldata{
@@ -269,22 +265,12 @@ func _render_cell_calldata{
         return ()
     end
     let value = calldata_ids[index]
-    # TODO: This is a hack because of "AssertionError: 0 / 2 = 0 is out of the range [0, 0)" in the range checker.
-    let (value, should_render) = signed_div_rem(value, SHOULD_RENDER_FLAG, value + 1)
-    if should_render == TRUE:
-        let (result) = _render_cell{rendered_cells=rendered_cells}(value)
-        tempvar result = result
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-        tempvar rendered_cells = rendered_cells
-    else:
-        tempvar result = value
-        tempvar syscall_ptr = syscall_ptr
-        tempvar pedersen_ptr = pedersen_ptr
-        tempvar range_check_ptr = range_check_ptr
-        tempvar rendered_cells = rendered_cells
+    # TODO: "value + 1" is a hard-fix because of "AssertionError: 0 / 2 = 0 is out of the range [0, 0)" in the range checker.
+    let (value, value_is_token_id) = signed_div_rem(value, SHOULD_RENDER_FLAG, value + 1)
+    with rendered_cells, value_is_token_id:
+        let (result) = _render_cell(value)
     end
+
     assert calldata_rendered[index] = result
     return _render_cell_calldata(index + 1)
 end

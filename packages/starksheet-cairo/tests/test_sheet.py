@@ -252,7 +252,7 @@ class TestSheet:
             with pytest.raises(Exception) as e:
                 await sheet.mintPublic((0, 0), []).invoke(caller_address=other)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == "mint: proof is not valid"
+            assert message == f"mint: {other - FIELD_PRIME} is not allowed"
 
         @staticmethod
         async def test_should_mint_public_token_up_to_max_per_wallet(sheet, cells):
@@ -262,11 +262,12 @@ class TestSheet:
             await sheet.mintPublic(token_id, proof).invoke(caller_address=caller)
             owner = await sheet.ownerOf(token_id).call()
             assert caller == owner.result.owner
-            await sheet.setMaxPerWallet(1).invoke(caller_address=OWNER)
+            max_per_wallet = 1
+            await sheet.setMaxPerWallet(max_per_wallet).invoke(caller_address=OWNER)
             with pytest.raises(Exception) as e:
                 await sheet.mintPublic(token_id, proof).invoke(caller_address=caller)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == "mint: tokens already claimed"
+            assert message == f"mint: user {caller} exceeds allocation {max_per_wallet}"
             await sheet.setMaxPerWallet(MAX_PER_WALLET).invoke(caller_address=OWNER)
 
         @staticmethod

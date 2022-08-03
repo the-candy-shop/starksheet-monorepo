@@ -7,7 +7,7 @@ from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
 from starkware.cairo.common.dict import DictAccess, dict_write, dict_read
-from starkware.cairo.common.math_cmp import is_le
+from starkware.cairo.common.math_cmp import is_le, is_not_zero
 from starkware.cairo.common.math import signed_div_rem
 from starkware.cairo.common.memcpy import memcpy
 from starkware.cairo.common.uint256 import Uint256
@@ -86,13 +86,12 @@ namespace Sheet:
         token_id : felt
     ) -> (contract_address : felt, value : felt, calldata_len : felt, calldata : felt*):
         alloc_locals
-        local index = 0
         let (cell_data) = Sheet_cell.read(token_id)
         let calldata_len = cell_data.calldata_len
 
         let (local calldata : felt*) = alloc()
         with token_id, calldata, calldata_len:
-            _get_calldata(index)
+            _get_calldata(0)
         end
         return (cell_data.contract_address, cell_data.value, calldata_len, calldata)
     end
@@ -133,39 +132,14 @@ namespace Sheet:
     func mint{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
         token_id : Uint256, proof_len : felt, proof : felt*
     ):
-        alloc_locals
-        let (local caller_address) = get_caller_address()
-        let (root) = Sheet_merkle_root.read()
-        if root != 0:
-            let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(caller_address, caller_address)
-            let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
-            with_attr error_message("mint: proof is not valid"):
-                assert is_allow_list = TRUE
-            end
-            tempvar pedersen_ptr = pedersen_ptr
-            tempvar syscall_ptr = syscall_ptr
-            tempvar range_check_ptr = range_check_ptr
-        else:
-            tempvar pedersen_ptr = pedersen_ptr
-            tempvar syscall_ptr = syscall_ptr
-            tempvar range_check_ptr = range_check_ptr
+        let (address) = get_caller_address()
+        with address:
+            _assert_is_allowed(proof_len, proof)
+            let (max_per_wallet) = Sheet_max_per_wallet.read()
+            _assert_does_not_exceed_allocation(max_per_wallet)
         end
-        let (max_per_wallet) = Sheet_max_per_wallet.read()
-        if max_per_wallet != 0:
-            let (user_balance) = ERC721.balance_of(caller_address)
-            let (remaining_allocation) = is_le(user_balance.low, max_per_wallet - 1)
-            with_attr error_message("mint: tokens already claimed"):
-                assert remaining_allocation = TRUE
-            end
-            tempvar pedersen_ptr = pedersen_ptr
-            tempvar syscall_ptr = syscall_ptr
-            tempvar range_check_ptr = range_check_ptr
-        else:
-            tempvar pedersen_ptr = pedersen_ptr
-            tempvar syscall_ptr = syscall_ptr
-            tempvar range_check_ptr = range_check_ptr
-        end
-        ERC721_Enumerable._mint(caller_address, token_id)
+
+        ERC721_Enumerable._mint(address, token_id)
         return ()
     end
 
@@ -313,4 +287,33 @@ func _render_cell_calldata{
     end
     assert calldata_rendered[index] = result
     return _render_cell_calldata(index + 1)
+end
+
+# Caller checks
+
+func _assert_is_allowed{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, address : felt
+}(proof_len : felt, proof : felt*):
+    alloc_locals
+    let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(address, address)
+    let (local root) = Sheet_merkle_root.read()
+    let (use_proof) = is_not_zero(root)
+    let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
+    with_attr error_message("mint: {address} is not allowed"):
+        assert is_allow_list * use_proof + (1 - use_proof) = TRUE
+    end
+    return ()
+end
+
+func _assert_does_not_exceed_allocation{
+    syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr, address : felt
+}(allocation : felt):
+    alloc_locals
+    let (local use_allocation) = is_not_zero(allocation)
+    let (user_balance) = ERC721.balance_of(address)
+    let (remaining_allocation) = is_le(user_balance.low, allocation - 1)
+    with_attr error_message("mint: user {address} exceeds allocation {allocation}"):
+        assert remaining_allocation * use_allocation + (1 - use_allocation) = TRUE
+    end
+    return ()
 end

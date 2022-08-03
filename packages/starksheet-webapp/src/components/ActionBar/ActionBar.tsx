@@ -45,7 +45,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         .then((cellData) =>
           setUnsavedValue(
             toPlainTextFormula(
-              { value: cellData.value, dependencies: cellData.dependencies },
+              { value: cellData.value, cell_calldata: cellData.cell_calldata },
               cellNames
             )
           )

@@ -27,14 +27,18 @@ export type CellValue = {
 export function toPlainTextFormula(
   {
     value,
-    dependencies,
+    cell_calldata,
   }: {
     value: BigNumberish;
-    dependencies?: BigNumberish[];
+    cell_calldata?: BN[];
   },
   cellNames: string[]
 ): string {
-  if (!dependencies || dependencies.length === 0) {
+  if (
+    !cell_calldata ||
+    cell_calldata.length === 0 ||
+    cell_calldata[0].toString() === "0"
+  ) {
     return value.toString();
   }
 
@@ -47,8 +51,12 @@ export function toPlainTextFormula(
     return "";
   }
 
+  const dependencies = cell_calldata
+    .slice(1)
+    .map((data) => data.sub(toBN(1)).div(toBN(2)));
+
   return `${operator}(${dependencies
-    .map((dep) => cellNames[dep as number])
+    .map((dep) => cellNames[dep.toNumber()])
     .join(";")})`;
 }
 

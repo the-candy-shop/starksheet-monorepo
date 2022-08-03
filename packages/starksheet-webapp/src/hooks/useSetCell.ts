@@ -31,7 +31,7 @@ export const useSetCell = () => {
   }, [enqueueSnackbar, error, reset]);
 
   const waitForTransaction = useCallback(
-    (id: number, value: BN, dependencies: BN[]): Promise<void> => {
+    (id: number, value: BN, cell_calldata: BN[]): Promise<void> => {
       if (contract && account) {
         return new Promise((resolve) => {
           setTimeout(async () => {
@@ -41,17 +41,17 @@ export const useSetCell = () => {
               if (
                 cell &&
                 cell.value.toString() === value.toString() &&
-                JSON.stringify(cell.dependencies) ===
-                  JSON.stringify(dependencies)
+                JSON.stringify(cell.cell_calldata) ===
+                  JSON.stringify(cell_calldata)
               ) {
                 resolve();
               } else {
-                await waitForTransaction(id, value, dependencies);
+                await waitForTransaction(id, value, cell_calldata);
                 resolve();
               }
             } catch (e) {
               console.error(e);
-              await waitForTransaction(id, value, dependencies);
+              await waitForTransaction(id, value, cell_calldata);
               resolve();
             }
           }, 5000);
@@ -71,7 +71,7 @@ export const useSetCell = () => {
         setLoading(true);
 
         if (parsedValue.type === "number") {
-          await invoke({ args: [0, id, value, []] });
+          await invoke({ args: [id, 0, value, []] });
           await waitForTransaction(id, toBN(value), []);
         } else if (parsedValue.type === "formula") {
           // @ts-ignore
@@ -80,15 +80,19 @@ export const useSetCell = () => {
           const dependencies = parsedValue.dependencies.map((dep) =>
             toBN(cellNames.indexOf(dep))
           );
+          const cell_calldata = [
+            toBN(dependencies.length * 2),
+            ...dependencies.map((dep) => dep.mul(toBN(2)).add(toBN(1))),
+          ];
           await invoke({
             args: [
-              StarkSheetContract.mathAddress,
               id,
+              StarkSheetContract.mathAddress,
               operationValue,
-              dependencies,
+              cell_calldata,
             ],
           });
-          await waitForTransaction(id, operationValue, dependencies);
+          await waitForTransaction(id, operationValue, cell_calldata);
         }
 
         await refresh();

@@ -17,6 +17,7 @@ export const CurrentSheetContextProvider = ({
   >(undefined);
 
   const addresses = useSheetList();
+  console.log("addresses", addresses);
 
   useEffect(() => {
     if (!currentSheetAddress && addresses) {

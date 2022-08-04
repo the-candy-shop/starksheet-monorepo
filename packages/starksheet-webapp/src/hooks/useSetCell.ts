@@ -71,7 +71,7 @@ export const useSetCell = () => {
         setLoading(true);
 
         if (parsedValue.type === "number") {
-          await invoke({ args: [id, toBN(2).pow(128), value, []] });
+          await invoke({ args: [id, toBN(2).pow(toBN(128)), value, []] });
           await waitForTransaction(id, toBN(value), []);
         } else if (parsedValue.type === "formula") {
           // @ts-ignore

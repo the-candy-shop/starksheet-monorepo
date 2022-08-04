@@ -7,7 +7,7 @@ from starkware.cairo.common.bool import TRUE, FALSE
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
 from starkware.cairo.common.dict import DictAccess, dict_write, dict_read
-from starkware.cairo.common.math_cmp import is_le, is_not_zero
+from starkware.cairo.common.math_cmp import is_le, is_not_zero, is_nn, RC_BOUND
 from starkware.cairo.common.math import signed_div_rem
 from starkware.cairo.common.memcpy import memcpy
 from starkware.cairo.common.uint256 import Uint256
@@ -230,11 +230,15 @@ func _render_cell{
     end
 
     let (contract_address, result, calldata_len, calldata) = Sheet.get_cell(value)
-    if contract_address == 0:
+    if contract_address == RC_BOUND:
         dict_write{dict_ptr=rendered_cells}(value, result)
         return (result)
     end
 
+    let (contract_address_is_token_id) = is_nn(contract_address)
+    let (local rendered_contract_address) = _render_cell{
+        value_is_token_id=contract_address_is_token_id
+    }(contract_address)
     let (local calldata_rendered : felt*) = alloc()
     _render_cell_calldata{
         calldata_ids=calldata,
@@ -244,7 +248,7 @@ func _render_cell{
     }(0)
 
     let (retdata_size : felt, retdata : felt*) = call_contract(
-        contract_address, result, calldata_len, calldata_rendered
+        rendered_contract_address, result, calldata_len, calldata_rendered
     )
     let result = retdata[0]
 

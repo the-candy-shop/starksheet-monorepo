@@ -46,6 +46,7 @@ FUNCTIONS = {
 }
 NAME = "Sheet 1"
 SYMBOL = "SHT1"
+RC_BOUND = 2**128
 
 
 def render(cells):
@@ -53,7 +54,7 @@ def render(cells):
         if i >= len(cells):
             return 0
         cell = cells[i]
-        if cell.contract_address == 0:
+        if cell.contract_address == RC_BOUND:
             return cell.value
         return FUNCTIONS[cell.value](
             *[_render(d >> 1) if d & 1 else d >> 1 for d in cell.calldata]
@@ -84,7 +85,7 @@ def cells(math):
         contract_address = math.contract_address
         if not dependencies:
             value = random.randint(0, 2**16 - 1)
-            contract_address = 0
+            contract_address = RC_BOUND
         if value in [get_selector_from_name(ops.__name__[1:]) for ops in [_div, _sub]]:
             dependencies = random.sample(list(range(id)), k=2)
         _cells.append(

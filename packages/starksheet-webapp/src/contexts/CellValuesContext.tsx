@@ -67,7 +67,7 @@ export const CellValuesContextProvider = ({
             (prev, cell) => ({ ...prev, [parseInt(cell.id.toString())]: cell }),
             {} as { [id: number]: CellData }
           );
-          const gridCells = [...Array(GRID_SIZE).keys()].map(
+          const gridCells = Array.from(Array(GRID_SIZE).keys()).map(
             (i) => cells[i] || { id: i, owner: toBN(0), value: toBN(0) }
           );
           refreshAspect(gridCells);

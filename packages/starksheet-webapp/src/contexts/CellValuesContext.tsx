@@ -24,7 +24,9 @@ export const CellValuesContext = React.createContext<{
 });
 
 type CellData = { owner: BigNumberish; value: BigNumberish };
+
 const GRID_SIZE = 15 * 15;
+const network = process.env.REACT_APP_NETWORK;
 
 export const CellValuesContextProvider = ({
   children,
@@ -45,7 +47,15 @@ export const CellValuesContextProvider = ({
             cell?.value?.toString()
           ) {
             fetch(
-              `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
+              network === "mainnet"
+                ? `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
+                : `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
+            );
+            fetch(
+              network === "mainnet"
+                ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${contract?.address}/${index}/`
+                : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${contract?.address}/${index}/`,
+              { method: "POST" }
             );
           }
         });

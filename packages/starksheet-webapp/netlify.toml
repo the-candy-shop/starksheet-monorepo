@@ -7,7 +7,10 @@
   ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . ../starksheet-cairo"
 
 [context.production]
-  environment = { REACT_APP_NETWORK = "goerli" }
+  environment = { REACT_APP_NETWORK = "mainnet" }
 
 [context.staging]
+  environment = { REACT_APP_NETWORK = "goerli" }
+
+[context.deploy-preview]
   environment = { REACT_APP_NETWORK = "goerli" }

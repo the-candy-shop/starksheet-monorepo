@@ -1,15 +1,15 @@
-import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet, useStarknetInvoke } from "@starknet-react/core";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { CellValuesContext } from "../contexts/CellValuesContext";
+import BN from "bn.js";
 import { useSnackbar } from "notistack";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { toBN } from "starknet/utils/number";
 import {
   CellValue,
-  operationNumbers,
+  operationNumbers
 } from "../components/ActionBar/formula.utils";
+import { CellValuesContext } from "../contexts/CellValuesContext";
 import StarkSheetContract from "../contract.json";
-import BN from "bn.js";
-import { toBN } from "starknet/utils/number";
+import { useStarkSheetContract } from "./useStarkSheetContract";
 
 export const useSetCell = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -71,7 +71,7 @@ export const useSetCell = () => {
         setLoading(true);
 
         if (parsedValue.type === "number") {
-          await invoke({ args: [id, 0, value, []] });
+          await invoke({ args: [id, toBN(2).pow(toBN(128)), value, []] });
           await waitForTransaction(id, toBN(value), []);
         } else if (parsedValue.type === "formula") {
           // @ts-ignore

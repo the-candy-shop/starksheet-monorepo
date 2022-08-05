@@ -46,6 +46,7 @@ FUNCTIONS = {
 }
 NAME = "Sheet 1"
 SYMBOL = "SHT1"
+RC_BOUND = 2**128
 
 
 def render(cells):
@@ -53,7 +54,7 @@ def render(cells):
         if i >= len(cells):
             return 0
         cell = cells[i]
-        if cell.contract_address == 0:
+        if cell.contract_address == RC_BOUND:
             return cell.value
         return FUNCTIONS[cell.value](
             *[_render(d >> 1) if d & 1 else d >> 1 for d in cell.calldata]
@@ -84,7 +85,7 @@ def cells(math):
         contract_address = math.contract_address
         if not dependencies:
             value = random.randint(0, 2**16 - 1)
-            contract_address = 0
+            contract_address = RC_BOUND
         if value in [get_selector_from_name(ops.__name__[1:]) for ops in [_div, _sub]]:
             dependencies = random.sample(list(range(id)), k=2)
         _cells.append(
@@ -148,6 +149,7 @@ class TestSheet:
             cell = (await sheet.getCell(len(cells)).call()).result
             assert cell.cell_calldata == []
             assert cell.value == 0
+            assert cell.contractAddress == 2**128
 
         @staticmethod
         async def test_should_return_cell_value_when_token_exists(sheet, cells):
@@ -278,3 +280,15 @@ class TestSheet:
             owner = await sheet.ownerOf(token_id).call()
             assert OTHER + 1 == owner.result.owner
             await sheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
+
+        @staticmethod
+        async def test_should_mint_with_default_contract_address_and_value(
+            sheet, cells
+        ):
+            token_id = (len(cells) + 3, 0)
+            await sheet.setMerkleRoot(0).invoke(caller_address=OWNER)
+            await sheet.mintPublic(token_id, []).invoke(caller_address=OTHER + 1)
+            cell = (await sheet.getCell(token_id[0]).call()).result
+            assert cell.value == 0
+            assert cell.contractAddress == 2**128
+            assert cell.cell_calldata == []

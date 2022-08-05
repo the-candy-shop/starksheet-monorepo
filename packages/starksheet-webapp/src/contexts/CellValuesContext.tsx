@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useCallback, useRef } from "react";
-import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
-import { BigNumberish, toBN } from "starknet/utils/number";
 import { Contract } from "starknet";
+import { BigNumberish, toBN } from "starknet/utils/number";
+import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
 
 export const CellValuesContext = React.createContext<{
   loading: boolean;
@@ -24,6 +24,7 @@ export const CellValuesContext = React.createContext<{
 });
 
 type CellData = { owner: BigNumberish; value: BigNumberish };
+const GRID_SIZE = 15 * 15;
 
 export const CellValuesContextProvider = ({
   children,
@@ -60,8 +61,17 @@ export const CellValuesContextProvider = ({
       return contract
         .call("renderGrid", [])
         .then((gridData) => {
-          refreshAspect(gridData.cells);
-          setValues(gridData.cells);
+          const cells = (
+            gridData.cells as [CellData & { id: BigNumberish }]
+          ).reduce(
+            (prev, cell) => ({ ...prev, [parseInt(cell.id.toString())]: cell }),
+            {} as { [id: number]: CellData }
+          );
+          const gridCells = [...Array(GRID_SIZE).keys()].map(
+            (i) => cells[i] || { id: i, owner: toBN(0), value: toBN(0) }
+          );
+          refreshAspect(gridCells);
+          setValues(gridCells);
           setHasLoaded(true);
         })
         .finally(() => setLoading(false));

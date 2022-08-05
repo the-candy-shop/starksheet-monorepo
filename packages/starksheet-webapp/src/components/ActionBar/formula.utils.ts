@@ -1,6 +1,6 @@
+import BN from "bn.js";
 import { BigNumberish, toBN } from "starknet/utils/number";
 import StarkSheetContract from "../../contract.json";
-import BN from "bn.js";
 
 const PRIME = toBN(2)
   .pow(toBN(251))
@@ -55,8 +55,9 @@ export function toPlainTextFormula(
     .slice(1)
     .map((data) => data.sub(toBN(1)).div(toBN(2)));
 
-  return `${operator}(${dependencies
-    .map((dep) => cellNames[dep.toNumber()])
+  return `${operator}(${cell_calldata
+    .slice(1)
+    .map((data) => data.toNumber() % 2 === 0 ? data.div(toBN(2)) : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()])
     .join(";")})`;
 }
 

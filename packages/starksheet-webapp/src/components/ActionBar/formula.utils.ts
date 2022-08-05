@@ -51,10 +51,6 @@ export function toPlainTextFormula(
     return "";
   }
 
-  const dependencies = cell_calldata
-    .slice(1)
-    .map((data) => data.sub(toBN(1)).div(toBN(2)));
-
   return `${operator}(${cell_calldata
     .slice(1)
     .map((data) => data.toNumber() % 2 === 0 ? data.div(toBN(2)) : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()])

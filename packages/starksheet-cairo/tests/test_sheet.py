@@ -149,6 +149,7 @@ class TestSheet:
             cell = (await sheet.getCell(len(cells)).call()).result
             assert cell.cell_calldata == []
             assert cell.value == 0
+            assert cell.contractAddress == 2**128
 
         @staticmethod
         async def test_should_return_cell_value_when_token_exists(sheet, cells):

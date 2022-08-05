@@ -86,6 +86,12 @@ namespace Sheet:
         token_id : felt
     ) -> (contract_address : felt, value : felt, calldata_len : felt, calldata : felt*):
         alloc_locals
+        let token_id_256 = Uint256(token_id, 0)
+        let (exists) = ERC721._exists(token_id_256)
+        if exists == FALSE:
+            let calldata : felt* = alloc()
+            return (RC_BOUND, 0, 0, calldata)
+        end
         let (cell_data) = Sheet_cell.read(token_id)
         let calldata_len = cell_data.calldata_len
 

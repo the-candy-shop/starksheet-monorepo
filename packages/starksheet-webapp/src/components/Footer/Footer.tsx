@@ -1,15 +1,16 @@
-import React from "react";
-import GreyCell from "../GreyCell/GreyCell";
 import { Box, BoxProps } from "@mui/material";
+import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
-import twitterLogo from "./twitter.svg";
-import starknetLogo from "./starknet.svg";
+import { CurrentSheetContext } from "../../contexts/CurrentSheetContext";
+import StarkSheetContract from "../../contract.json";
+import { useSheetList } from "../../hooks/useSheetList";
+import GreyCell from "../GreyCell/GreyCell";
+import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
 import discordLogo from "./discord.svg";
 import mintSquareLogo from "./mintsquare.svg";
-import StarkSheetContract from "../../contract.json";
-import { useSheetList } from "../../hooks/useSheetList";
-import { SheetButton } from "../SheetButton/SheetButton";
+import starknetLogo from "./starknet.svg";
+import twitterLogo from "./twitter.svg";
 
 export type FooterProps = {
   sx?: BoxProps["sx"];
@@ -19,6 +20,7 @@ const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
   const addresses = useSheetList();
+  const { currentSheetAddress } = useContext(CurrentSheetContext);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -108,8 +110,8 @@ function Footer({ sx }: FooterProps) {
         onClick={() =>
           window.open(
             network === "mainnet"
-              ? `https://aspect.co/collection/${StarkSheetContract.address}`
-              : `https://testnet.aspect.co/collection/${StarkSheetContract.address}`,
+              ? `https://aspect.co/collection/${currentSheetAddress}`
+              : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
             "_blank"
           )
         }
@@ -126,8 +128,8 @@ function Footer({ sx }: FooterProps) {
         onClick={() =>
           window.open(
             network === "mainnet"
-              ? `https://mintsquare.io/collection/starknet/${StarkSheetContract.address}/nfts`
-              : `https://mintsquare.io/collection/starknet-testnet/${StarkSheetContract.address}/nfts`,
+              ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
+              : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
             "_blank"
           )
         }

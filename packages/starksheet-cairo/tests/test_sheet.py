@@ -279,3 +279,15 @@ class TestSheet:
             owner = await sheet.ownerOf(token_id).call()
             assert OTHER + 1 == owner.result.owner
             await sheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
+
+        @staticmethod
+        async def test_should_mint_with_default_contract_address_and_value(
+            sheet, cells
+        ):
+            token_id = (len(cells) + 3, 0)
+            await sheet.setMerkleRoot(0).invoke(caller_address=OWNER)
+            await sheet.mintPublic(token_id, []).invoke(caller_address=OTHER + 1)
+            cell = (await sheet.getCell(token_id[0]).call()).result
+            assert cell.value == 0
+            assert cell.contractAddress == 2**128
+            assert cell.cell_calldata == []

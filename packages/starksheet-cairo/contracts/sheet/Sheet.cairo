@@ -6,7 +6,7 @@ from openzeppelin.token.erc721_enumerable.library import ERC721_Enumerable
 from openzeppelin.introspection.ERC165 import ERC165
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
-from starkware.cairo.common.math_cmp import is_not_zero
+from starkware.cairo.common.math_cmp import is_not_zero, RC_BOUND
 from starkware.cairo.common.uint256 import split_64, Uint256
 from starkware.cairo.common.bool import TRUE
 from starkware.starknet.common.syscalls import get_caller_address
@@ -135,6 +135,14 @@ func renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 end
 
 @view
+func renderCellValue{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    tokenId : felt
+) -> (value : felt):
+    let (cell) = renderCell(tokenId)
+    return (cell.value)
+end
+
+@view
 func renderGrid{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     cells_len : felt, cells : CellRendered*
 ):
@@ -158,6 +166,35 @@ func mintPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_pt
     tokenId : Uint256, proof_len : felt, proof : felt*
 ):
     Sheet.mint(tokenId, proof_len, proof)
+    let cell_calldata : felt* = alloc()
+    Sheet.set_cell(
+        token_id=tokenId.low,
+        contract_address=RC_BOUND,
+        value=0,
+        cell_calldata_len=0,
+        cell_calldata=cell_calldata,
+    )
+    return ()
+end
+
+@external
+func mintAndSetPublic{pedersen_ptr : HashBuiltin*, syscall_ptr : felt*, range_check_ptr}(
+    tokenId : Uint256,
+    proof_len : felt,
+    proof : felt*,
+    contractAddress : felt,
+    value : felt,
+    cellCalldata_len : felt,
+    cellCalldata : felt*,
+):
+    Sheet.mint(tokenId, proof_len, proof)
+    Sheet.set_cell(
+        token_id=tokenId.low,
+        contract_address=contractAddress,
+        value=value,
+        cell_calldata_len=cellCalldata_len,
+        cell_calldata=cellCalldata,
+    )
     return ()
 end
 

@@ -1,6 +1,6 @@
+import BN from "bn.js";
 import { BigNumberish, toBN } from "starknet/utils/number";
 import StarkSheetContract from "../../contract.json";
-import BN from "bn.js";
 
 const PRIME = toBN(2)
   .pow(toBN(251))
@@ -8,7 +8,7 @@ const PRIME = toBN(2)
   .add(toBN(1));
 
 const validFormulaRegex =
-  /^(SUM|MINUS|DIVIDE|PRODUCT)\((([A-Z]+\d+);)+([A-Z]+\d+)\)$/;
+  /^(SUM|MINUS|DIVIDE|PRODUCT)\((([A-Z0-9]+);)+([A-Z0-9]+)\)$/;
 
 export const operationNumbers = {
   SUM: toBN(StarkSheetContract.operations.SUM),
@@ -51,12 +51,9 @@ export function toPlainTextFormula(
     return "";
   }
 
-  const dependencies = cell_calldata
+  return `${operator}(${cell_calldata
     .slice(1)
-    .map((data) => data.sub(toBN(1)).div(toBN(2)));
-
-  return `${operator}(${dependencies
-    .map((dep) => cellNames[dep.toNumber()])
+    .map((data) => data.toNumber() % 2 === 0 ? data.div(toBN(2)) : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()])
     .join(";")})`;
 }
 

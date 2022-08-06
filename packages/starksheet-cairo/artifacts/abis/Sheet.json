@@ -295,6 +295,23 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "felt"
+            }
+        ],
+        "name": "renderCellValue",
+        "outputs": [
+            {
+                "name": "value",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "renderGrid",
         "outputs": [
@@ -326,6 +343,41 @@
             }
         ],
         "name": "mintPublic",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "Uint256"
+            },
+            {
+                "name": "proof_len",
+                "type": "felt"
+            },
+            {
+                "name": "proof",
+                "type": "felt*"
+            },
+            {
+                "name": "contractAddress",
+                "type": "felt"
+            },
+            {
+                "name": "value",
+                "type": "felt"
+            },
+            {
+                "name": "cellCalldata_len",
+                "type": "felt"
+            },
+            {
+                "name": "cellCalldata",
+                "type": "felt*"
+            }
+        ],
+        "name": "mintAndSetPublic",
         "outputs": [],
         "type": "function"
     },

@@ -48,7 +48,7 @@ export const CellValuesContextProvider = ({
           ) {
             fetch(
               network === "mainnet"
-                ? `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
+                ? `https://api.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
                 : `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
             );
             fetch(

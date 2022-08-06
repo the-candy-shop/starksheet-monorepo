@@ -8,7 +8,7 @@ const PRIME = toBN(2)
   .add(toBN(1));
 
 const validFormulaRegex =
-  /^(SUM|MINUS|DIVIDE|PRODUCT)\((([A-Z]+\d+);)+([A-Z]+\d+)\)$/;
+  /^(SUM|MINUS|DIVIDE|PRODUCT)\((([A-Z0-9]+);)+([A-Z0-9]+)\)$/;
 
 export const operationNumbers = {
   SUM: toBN(StarkSheetContract.operations.SUM),

@@ -9,7 +9,7 @@
 [context.production]
   environment = { REACT_APP_NETWORK = "mainnet" }
 
-[context.staging]
+[context.testnet]
   environment = { REACT_APP_NETWORK = "goerli" }
 
 [context.deploy-preview]

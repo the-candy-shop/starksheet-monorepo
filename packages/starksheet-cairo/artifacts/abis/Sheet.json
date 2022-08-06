@@ -295,6 +295,23 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "felt"
+            }
+        ],
+        "name": "renderCellValue",
+        "outputs": [
+            {
+                "name": "value",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "renderGrid",
         "outputs": [

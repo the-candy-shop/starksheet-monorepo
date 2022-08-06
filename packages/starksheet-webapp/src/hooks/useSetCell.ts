@@ -77,13 +77,9 @@ export const useSetCell = () => {
           // @ts-ignore
           const operationValue = operationNumbers[parsedValue.operation];
           // @ts-ignore
-          const dependencies = parsedValue.dependencies.map((dep) =>
-            toBN(cellNames.indexOf(dep))
-          );
-          const cell_calldata = [
-            toBN(dependencies.length * 2),
-            ...dependencies.map((dep) => dep.mul(toBN(2)).add(toBN(1))),
-          ];
+          const cell_calldata = [toBN(parsedValue.dependencies.length * 2), ...parsedValue.dependencies.map((dep) =>
+            toBN(cellNames.indexOf(dep) > -1 ? cellNames.indexOf(dep) * 2 + 1 : parseInt(dep) * 2)
+          )];
           await invoke({
             args: [
               id,

@@ -135,6 +135,14 @@ func renderCell{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
 end
 
 @view
+func renderCellValue{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    tokenId : felt
+) -> (value : felt):
+    let (cell) = renderCell(tokenId)
+    return (cell.value)
+end
+
+@view
 func renderGrid{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     cells_len : felt, cells : CellRendered*
 ):

@@ -78,7 +78,7 @@ class TestStarksheet:
             sheet_name = await sheet.name().call()
             sheet_symbol = await sheet.symbol().call()
             sheet_owner = await sheet.getOwner().call()
-            assert "Sheet 1" == bytes.fromhex(
+            assert "Sheet1" == bytes.fromhex(
                 hex(sheet_name.result.name)[2:]
             ).decode().replace("\x00", "")
 

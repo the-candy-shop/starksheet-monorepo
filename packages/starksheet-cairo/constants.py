@@ -1,8 +1,23 @@
+import json
+import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+from starkware.starknet.wallets.account import DEFAULT_ACCOUNT_DIR
+
+load_dotenv()
+
+NETWORK = os.getenv("STARKNET_NETWORK", "alpha-goerli")
 CONTRACTS = {p.stem: p for p in list(Path("contracts").glob("**/*.cairo"))}
 
-OWNER = int("0x01C8D2BB17CDDF22728553C9700ADFBBD42D1999194B409B1188B17191CC2EFD", 16)
+accounts = {
+    key: value["address"]
+    for key, value in json.load(
+        open(list(Path(DEFAULT_ACCOUNT_DIR).expanduser().glob("*.json"))[0])
+    )[NETWORK].items()
+}
+
+OWNER = int(accounts["starksheet"], 16)
 N_COLS = 15
 N_ROWS = 15
 

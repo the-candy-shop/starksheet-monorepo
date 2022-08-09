@@ -37,6 +37,20 @@ func getSheetClassHash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
     return Starksheet.get_sheet_class_hash()
 end
 
+@external
+func setMerkleRoot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(hash : felt):
+    Ownable.assert_only_owner()
+    Starksheet.set_merkle_root(hash)
+    return ()
+end
+
+@view
+func getMerkleRoot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
+    hash : felt
+):
+    return Starksheet.get_merkle_root()
+end
+
 @view
 func getSheets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
     addresses_len : felt, addresses : felt*

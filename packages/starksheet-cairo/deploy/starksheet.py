@@ -1,13 +1,20 @@
 import json
 import logging
-import re
-import subprocess
 
 import pandas as pd
+import typer
 from starkware.starknet.public.abi import get_selector_from_name
 
-from constants import ALLOW_LIST, OWNER
-from utils import address_to_leaf, merkle_proofs, merkle_root
+from constants import NETWORK, OWNER
+from deploy.cli import (
+    call,
+    declare,
+    deploy,
+    get_alias,
+    get_artifact,
+    invoke,
+    wait_for_transaction,
+)
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -15,95 +22,11 @@ logger.setLevel(logging.INFO)
 
 
 def main():
-    logger.info("Declaring Sheet")
-    output = subprocess.run(
-        [
-            "starknet",
-            "declare",
-            "--contract",
-            "artifacts/Sheet.json",
-            "--network",
-            "alpha-goerli",
-        ],
-        capture_output=True,
-    )
-    sheet_class_hash = re.search(
-        r"contract class hash: (.*)", output.stdout.splitlines()[1].decode().lower()  # type: ignore
-    )[1]
-    logger.info("Sheet declared with class hash: %s", sheet_class_hash)
-
-    logger.info("Deploying BasicCellRenderer")
-    output = subprocess.run(
-        [
-            "starknet",
-            "deploy",
-            "--contract",
-            "artifacts/BasicCellRenderer.json",
-            "--network",
-            "alpha-goerli",
-            "--no_wallet",
-        ],
-        capture_output=True,
-    )
-    renderer_address = re.search(
-        r"contract address: (.*)", output.stdout.splitlines()[1].decode().lower()  # type: ignore
-    )[1]
-    logger.info("BasicCellRenderer deployed at: %s", renderer_address)
-
-    logger.info("Deploying Starksheet")
-    output = subprocess.run(
-        [
-            "starknet",
-            "deploy",
-            "--contract",
-            "artifacts/Starksheet.json",
-            "--network",
-            "alpha-goerli",
-            "--no_wallet",
-            "--inputs",
-        ]
-        + [
-            hex(OWNER),
-            sheet_class_hash,
-            renderer_address,
-        ],
-        capture_output=True,
-    )
-    starksheet_address = re.search(
-        r"contract address: (.*)", output.stdout.splitlines()[1].decode().lower()  # type: ignore
-    )[1]
-    logger.info("Starksheet deployed at: %s", starksheet_address)
-
-    logger.info("Deploying math")
-    output = subprocess.run(
-        [
-            "starknet",
-            "deploy",
-            "--contract",
-            "artifacts/math.json",
-            "--network",
-            "alpha-goerli",
-            "--no_wallet",
-        ],
-        capture_output=True,
-    )
-    math_address = re.search(
-        r"contract address: (.*)", output.stdout.splitlines()[1].decode().lower()  # type: ignore
-    )[1]
-    logger.info("math deployed at: %s", math_address)
-
-    pd.DataFrame(
-        {
-            "address": [renderer_address, starksheet_address, math_address],
-            "artifact": [
-                "artifacts/BasicCellRenderer.json",
-                "artifacts/Starksheet.json",
-                "artifacts/math.json",
-            ],
-            "alias": ["basic_cell_renderer", "starksheet", "math"],
-        }
-    ).to_csv("goerli.deployments.txt", index=False, sep=":", header=False)
-
+    class_hash = {
+        contract_name: declare(contract_name)
+        for contract_name in ["Sheet", "Starksheet", "BasicCellRenderer", "math"]
+    }
+    json.dump(class_hash, open(f"{NETWORK}.declarations.txt", "w"), indent=2)
     json.dump(
         {
             func["name"]: str(get_selector_from_name(func["name"]))
@@ -113,21 +36,43 @@ def main():
         indent=2,
     )
 
-    json.dump(
-        {
-            hex(address): [str(p) for p in proof]
-            for address, proof in merkle_proofs(ALLOW_LIST).items()
-        },
-        open("allow_list.json", "w"),
-        indent=2,
+    deployments = {
+        contract_name: {
+            **dict(zip(["address", "tx"], deploy(contract_name))),
+            "artifact": get_artifact(contract_name),
+            "alias": get_alias(contract_name),
+        }
+        for contract_name in ["BasicCellRenderer", "math"]
+    }
+    deployments["Starksheet"] = {
+        **dict(
+            zip(
+                ["address", "tx"],
+                deploy(
+                    "Starksheet",
+                    hex(OWNER),
+                    class_hash["Sheet"],
+                    deployments["BasicCellRenderer"]["address"],
+                ),
+            )
+        ),
+        "artifact": get_artifact("Starksheet"),
+        "alias": get_alias("Starksheet"),
+    }
+
+    json.dump(deployments, open(f"{NETWORK}.deployments.json", "w"), indent=2)
+    pd.DataFrame(list(deployments.values())).to_csv(
+        f"{NETWORK}.deployments.txt", index=False, sep=":", header=False
     )
 
-    leafs = [address_to_leaf(address) for address in ALLOW_LIST]
-    root = merkle_root(leafs)
-    logger.info(f"Allow list merkle root: {root}")
+    # invoke(network, "Starksheet", "setMerkleRoot", 0, 0, 0)
+    wait_for_transaction(deployments["Starksheet"]["tx"])
+    name = int("Origin".encode().hex(), 16)
+    symbol = int("ORGS".encode().hex(), 16)
+    proof = []
+    tx = invoke("Starksheet", "addSheet", name, symbol, len(proof), *proof)
+    wait_for_transaction(tx)
 
 
 if __name__ == "__main__":
-    main()
-    logger.info("Done")
-    exit(0)
+    typer.run(main)

@@ -109,7 +109,6 @@ function App() {
       <StarknetProvider
         connectors={connectors}
         defaultProvider={starknetProvider}
-        autoConnect
       >
         <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
           <Box

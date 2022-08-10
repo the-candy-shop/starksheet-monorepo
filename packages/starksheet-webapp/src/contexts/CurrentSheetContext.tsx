@@ -1,10 +1,13 @@
 import React, { PropsWithChildren, useEffect, useState } from "react";
-import { useSheetList } from "../hooks/useSheetList";
 
 export const CurrentSheetContext = React.createContext<{
+  addresses: string[];
+  setAddresses: (addresses: string[]) => void;
   currentSheetAddress?: string;
   setCurrentSheetAddress: (address: string) => void;
 }>({
+  addresses: [],
+  setAddresses: () => {},
   currentSheetAddress: undefined,
   setCurrentSheetAddress: () => {},
 });
@@ -12,22 +15,25 @@ export const CurrentSheetContext = React.createContext<{
 export const CurrentSheetContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
+  const [addresses, setAddresses] = useState<string[]>([]);
   const [currentSheetAddress, setCurrentSheetAddress] = useState<
     string | undefined
   >(undefined);
 
-  const addresses = useSheetList();
-  console.log("addresses", addresses);
-
   useEffect(() => {
-    if (!currentSheetAddress && addresses) {
+    if (!currentSheetAddress && addresses.length > 0) {
       setCurrentSheetAddress(addresses[0]);
     }
   }, [addresses, currentSheetAddress]);
 
   return (
     <CurrentSheetContext.Provider
-      value={{ currentSheetAddress, setCurrentSheetAddress }}
+      value={{
+        currentSheetAddress,
+        setCurrentSheetAddress,
+        addresses,
+        setAddresses,
+      }}
     >
       {children}
     </CurrentSheetContext.Provider>

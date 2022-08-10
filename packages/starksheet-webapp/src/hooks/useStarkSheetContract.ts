@@ -1,15 +1,24 @@
-import { useContract } from "@starknet-react/core";
-import { Abi } from "starknet";
+import { Abi, Contract } from "starknet";
 import StarkSheetContract from "../contract.json";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { CurrentSheetContext } from "../contexts/CurrentSheetContext";
+import { starknetProvider } from "../App";
 
 export function useStarkSheetContract(address?: string) {
   const { currentSheetAddress } = useContext(CurrentSheetContext);
   const selectedAddress = address || currentSheetAddress;
 
-  return useContract({
-    abi: StarkSheetContract.sheetAbi as Abi,
-    address: selectedAddress ? selectedAddress : "",
-  });
+  const contract = useMemo(
+    () =>
+      selectedAddress
+        ? new Contract(
+            StarkSheetContract.sheetAbi as Abi,
+            selectedAddress,
+            starknetProvider
+          )
+        : undefined,
+    [selectedAddress]
+  );
+
+  return { contract };
 }

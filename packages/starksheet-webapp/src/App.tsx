@@ -33,6 +33,13 @@ const keyMap = {
   BOTTOM: "ArrowDown",
 };
 
+export const starknetProvider = new Provider({
+  baseUrl:
+    process.env.REACT_APP_NETWORK === "alpha-mainnet"
+      ? "https://alpha-mainnet.starknet.io"
+      : "https://alpha4.starknet.io",
+});
+
 function App() {
   const connectors = getInstalledInjectedConnectors();
   const [selectedCell, setSelectedCell] = React.useState<{
@@ -101,14 +108,8 @@ function App() {
     <SnackbarProvider maxSnack={3}>
       <StarknetProvider
         connectors={connectors}
-        defaultProvider={
-          new Provider({
-            baseUrl:
-              process.env.REACT_APP_NETWORK === "alpha-mainnet"
-                ? "https://alpha-mainnet.starknet.io"
-                : "https://alpha4.starknet.io",
-          })
-        }
+        defaultProvider={starknetProvider}
+        autoConnect
       >
         <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
           <Box

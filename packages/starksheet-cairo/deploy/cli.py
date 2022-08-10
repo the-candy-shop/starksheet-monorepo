@@ -104,6 +104,8 @@ def wait_for_transaction(transaction_hash, network=NETWORK):
         output = subprocess.run(cmd, capture_output=True)
         status = json.loads(output.stdout.decode())["tx_status"]
         logger.info(f"Transaction {transaction_hash} status: {status}")
+    if status == "REJECTED":
+        logger.warning(f"Transaction {transaction_hash} rejected")
 
 
 def invoke(contract_name, function_name, *inputs, address=None, network=NETWORK):

@@ -69,7 +69,7 @@ function Footer({ sx }: FooterProps) {
         }}
         onClick={() =>
           window.open(
-            network === "mainnet"
+            network === "alpha-mainnet"
               ? `https://voyager.online/contract/${StarkSheetContract.address}`
               : `https://goerli.voyager.online/contract/${StarkSheetContract.address}`,
             "_blank"
@@ -109,7 +109,7 @@ function Footer({ sx }: FooterProps) {
         }}
         onClick={() =>
           window.open(
-            network === "mainnet"
+            network === "alpha-mainnet"
               ? `https://aspect.co/collection/${currentSheetAddress}`
               : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
             "_blank"
@@ -127,7 +127,7 @@ function Footer({ sx }: FooterProps) {
         }}
         onClick={() =>
           window.open(
-            network === "mainnet"
+            network === "alpha-mainnet"
               ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
               : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
             "_blank"

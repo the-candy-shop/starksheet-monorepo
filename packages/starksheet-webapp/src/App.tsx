@@ -1,26 +1,27 @@
-import React, { useContext, useMemo } from "react";
-import Header from "./components/Header/Header";
 import { Box } from "@mui/material";
-import SheetTable from "./components/SheetTable/SheetTable";
-import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
-import Footer from "./components/Footer/Footer";
-import ActionBar from "./components/ActionBar/ActionBar";
-import { CellValuesContext } from "./contexts/CellValuesContext";
-import { toHex } from "starknet/utils/number";
 import {
   getInstalledInjectedConnectors,
   StarknetProvider,
 } from "@starknet-react/core";
-import LoadingDots from "./components/LoadingDots/LoadingDots";
 import BN from "bn.js";
+import { SnackbarProvider } from "notistack";
+import React, { useContext, useMemo } from "react";
 import { HotKeys } from "react-hotkeys";
+import { Provider } from "starknet";
+import { toHex } from "starknet/utils/number";
+import ActionBar from "./components/ActionBar/ActionBar";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
+import LoadingDots from "./components/LoadingDots/LoadingDots";
+import SheetTable from "./components/SheetTable/SheetTable";
+import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
+import { CellValuesContext } from "./contexts/CellValuesContext";
 import {
   getBottomCellName,
   getLeftCellName,
   getRightCellName,
   getTopCellName,
 } from "./utils/sheetUtils";
-import { SnackbarProvider } from "notistack";
 
 const MAX_ROWS = 15;
 const MAX_COLUMNS = 15;
@@ -31,6 +32,13 @@ const keyMap = {
   TOP: "ArrowUp",
   BOTTOM: "ArrowDown",
 };
+
+export const starknetProvider = new Provider({
+  baseUrl:
+    process.env.REACT_APP_NETWORK === "alpha-mainnet"
+      ? "https://alpha-mainnet.starknet.io"
+      : "https://alpha4.starknet.io",
+});
 
 function App() {
   const connectors = getInstalledInjectedConnectors();
@@ -98,7 +106,11 @@ function App() {
 
   return (
     <SnackbarProvider maxSnack={3}>
-      <StarknetProvider connectors={connectors}>
+      <StarknetProvider
+        connectors={connectors}
+        defaultProvider={starknetProvider}
+        autoConnect
+      >
         <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
           <Box
             className="App"

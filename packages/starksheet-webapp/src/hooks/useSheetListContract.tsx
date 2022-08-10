@@ -1,10 +1,18 @@
-import { useContract } from "@starknet-react/core";
 import StarkSheetContract from "../contract.json";
-import { Abi } from "starknet";
+import { Abi, Contract } from "starknet";
+import { useMemo } from "react";
+import { starknetProvider } from "../App";
 
 export function useSheetListContract() {
-  return useContract({
-    abi: StarkSheetContract.starkSheetAbi as Abi,
-    address: StarkSheetContract.address,
-  });
+  const contract = useMemo(
+    () =>
+      new Contract(
+        StarkSheetContract.starkSheetAbi as Abi,
+        StarkSheetContract.address,
+        starknetProvider
+      ),
+    []
+  );
+
+  return { contract };
 }

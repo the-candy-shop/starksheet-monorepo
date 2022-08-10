@@ -7,7 +7,6 @@ from starkware.starknet.public.abi import get_selector_from_name
 
 from constants import NETWORK, OWNER
 from deploy.cli import (
-    call,
     declare,
     deploy,
     get_alias,
@@ -26,7 +25,7 @@ def main():
         contract_name: declare(contract_name)
         for contract_name in ["Sheet", "Starksheet", "BasicCellRenderer", "math"]
     }
-    json.dump(class_hash, open(f"{NETWORK}.declarations.txt", "w"), indent=2)
+    json.dump(class_hash, open(f"{NETWORK}.declarations.json", "w"), indent=2)
     json.dump(
         {
             func["name"]: str(get_selector_from_name(func["name"]))

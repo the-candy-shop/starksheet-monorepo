@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import re
 import subprocess
 
@@ -38,7 +39,10 @@ def declare(contract_name, network=NETWORK):
             get_artifact(contract_name),
             "--network",
             f"{network}",
-        ],
+        ]
+        + ["--token", os.environ["STARKNET_TOKEN"]]
+        if NETWORK == "alpha-mainnet"
+        else [],
         capture_output=True,
     )
     if output.returncode != 0:
@@ -52,15 +56,23 @@ def declare(contract_name, network=NETWORK):
 
 def deploy(contract_name, *args, network=NETWORK):
     logger.info(f"Deploying {contract_name}")
-    cmd = [
-        "starknet",
-        "deploy",
-        "--contract",
-        get_artifact(contract_name),
-        "--network",
-        f"{network}",
-        "--no_wallet",
-    ] + ((["--inputs"] + list(args)) if args else [])
+    cmd = (
+        [
+            "starknet",
+            "deploy",
+            "--contract",
+            get_artifact(contract_name),
+            "--network",
+            f"{network}",
+            "--no_wallet",
+        ]
+        + ((["--inputs"] + list(args)) if args else [])
+        + (
+            ["--token", os.environ["STARKNET_TOKEN"]]
+            if NETWORK == "alpha-mainnet"
+            else []
+        )
+    )
     output = subprocess.run(cmd, capture_output=True)
     if output.returncode != 0:
         raise Exception(output.stderr.decode())
@@ -88,10 +100,12 @@ def wait_for_transaction(transaction_hash, network=NETWORK):
         raise Exception(output.stderr.decode())
     status = json.loads(output.stdout.decode())["tx_status"]
     logger.info(f"Transaction {transaction_hash} status: {status}")
-    while status in ["NOT_RECEIVED", "RECEIVED", "PENDING"]:
+    while status in ["NOT_RECEIVED", "RECEIVED"]:
         output = subprocess.run(cmd, capture_output=True)
         status = json.loads(output.stdout.decode())["tx_status"]
         logger.info(f"Transaction {transaction_hash} status: {status}")
+    if status == "REJECTED":
+        logger.warning(f"Transaction {transaction_hash} rejected")
 
 
 def invoke(contract_name, function_name, *inputs, address=None, network=NETWORK):

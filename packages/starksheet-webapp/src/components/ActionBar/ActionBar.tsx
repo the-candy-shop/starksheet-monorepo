@@ -42,7 +42,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       setLoading(true);
       contract
         .call("getCell", [selectedCell.id])
-        .then((cellData) =>
+        .then((cellData: any) =>
           setUnsavedValue(
             toPlainTextFormula(
               { value: cellData.value, cell_calldata: cellData.cell_calldata },
@@ -50,7 +50,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
             )
           )
         )
-        .catch((error) =>
+        .catch((error: any) =>
           enqueueSnackbar(error.toString(), { variant: "error" })
         )
         .finally(() => setLoading(false));

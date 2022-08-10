@@ -61,6 +61,29 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "name": "hash",
+                "type": "felt"
+            }
+        ],
+        "name": "setMerkleRoot",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getMerkleRoot",
+        "outputs": [
+            {
+                "name": "hash",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "getSheets",
         "outputs": [

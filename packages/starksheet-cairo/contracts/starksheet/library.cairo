@@ -70,7 +70,7 @@ namespace Starksheet:
         let (local constructor_calldata : felt*) = alloc()
         if name == 0:
             let (count_str) = str(sheets_count)
-            tempvar sheet_name = 'Sheet ' * 256 * 256 + count_str
+            tempvar sheet_name = 'Sheet' * 256 * 256 + count_str
             tempvar sheet_symbol = 'SHT' * 256 * 256 + count_str
             tempvar syscall_ptr = syscall_ptr
             tempvar pedersen_ptr = pedersen_ptr

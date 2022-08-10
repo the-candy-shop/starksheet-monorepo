@@ -21,6 +21,7 @@ import {
   getTopCellName,
 } from "./utils/sheetUtils";
 import { SnackbarProvider } from "notistack";
+import { Provider } from "starknet";
 
 const MAX_ROWS = 15;
 const MAX_COLUMNS = 15;
@@ -98,7 +99,16 @@ function App() {
 
   return (
     <SnackbarProvider maxSnack={3}>
-      <StarknetProvider connectors={connectors}>
+      <StarknetProvider
+        connectors={connectors}
+        defaultProvider={
+          new Provider({
+            network: (process.env.REACT_APP_NETWORK ?? "goerli-alpha") as
+              | "goerli-alpha"
+              | "mainnet-alpha",
+          })
+        }
+      >
         <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
           <Box
             className="App"

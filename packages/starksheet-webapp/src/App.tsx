@@ -103,9 +103,10 @@ function App() {
         connectors={connectors}
         defaultProvider={
           new Provider({
-            network: (process.env.REACT_APP_NETWORK ?? "alpha-goerli") as
-              | "goerli-alpha"
-              | "mainnet-alpha",
+            baseUrl:
+              process.env.REACT_APP_NETWORK === "alpha-mainnet"
+                ? "https://alpha-mainnet.starknet.io"
+                : "https://alpha4.starknet.io",
           })
         }
       >

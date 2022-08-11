@@ -3,7 +3,7 @@ import logging
 
 import typer
 
-from constants import ALLOW_LIST
+from constants import ALLOW_LIST, NETWORK
 from deploy.cli import call, invoke, wait_for_transaction
 from utils import address_to_leaf, merkle_proofs, merkle_root
 
@@ -27,6 +27,9 @@ def main():
     sheet = call("Starksheet", "getSheet", 0)[0]
     tx = invoke("Sheet", "setMerkleRoot", root, address=sheet)
     wait_for_transaction(tx)
+    if NETWORK == "alpha-mainnet":
+        tx = invoke("Sheet", "setMaxPerWallet", 10, address=sheet)
+        wait_for_transaction(tx)
     logger.info(f"Sheet {sheet} ready to be used!")
 
 

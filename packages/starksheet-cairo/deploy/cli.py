@@ -40,9 +40,11 @@ def declare(contract_name, network=NETWORK):
             "--network",
             f"{network}",
         ]
-        + ["--token", os.environ["STARKNET_TOKEN"]]
-        if NETWORK == "alpha-mainnet"
-        else [],
+        + (
+            ["--token", os.environ["STARKNET_TOKEN"]]
+            if NETWORK == "alpha-mainnet"
+            else []
+        ),
         capture_output=True,
     )
     if output.returncode != 0:
@@ -101,9 +103,12 @@ def wait_for_transaction(transaction_hash, network=NETWORK):
     status = json.loads(output.stdout.decode())["tx_status"]
     logger.info(f"Transaction {transaction_hash} status: {status}")
     while status in ["NOT_RECEIVED", "RECEIVED"]:
-        output = subprocess.run(cmd, capture_output=True)
-        status = json.loads(output.stdout.decode())["tx_status"]
-        logger.info(f"Transaction {transaction_hash} status: {status}")
+        try:
+            output = subprocess.run(cmd, capture_output=True)
+            status = json.loads(output.stdout.decode())["tx_status"]
+            logger.info(f"Transaction {transaction_hash} status: {status}")
+        except json.decoder.JSONDecodeError as e:
+            logger.info(f"Failed to decode transaction status: {e.msg}")
     if status == "REJECTED":
         logger.warning(f"Transaction {transaction_hash} rejected")
 

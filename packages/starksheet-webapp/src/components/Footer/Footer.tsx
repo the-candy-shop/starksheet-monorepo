@@ -45,7 +45,7 @@ function Footer({ sx }: FooterProps) {
         >
           Sheet 1 (
           <a
-            href="https://starksheet.notion.site/Starksheet-Roadmap-146530d01d914d6fae8c8779b99d58ec"
+            href="https://starksheet.notion.site/Product-backlog-dc2507431c7f40e393e0ed3315a4064b"
             target="_blank"
             rel="noreferrer"
           >

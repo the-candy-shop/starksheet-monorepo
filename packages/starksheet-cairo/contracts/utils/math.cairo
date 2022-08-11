@@ -1,6 +1,7 @@
 %lang starknet
 
 from starkware.cairo.common.math import signed_div_rem
+from starkware.cairo.common.math_cmp import RC_BOUND
 
 @view
 func sum(arr_len : felt, arr : felt*) -> (res : felt):
@@ -27,7 +28,7 @@ func div{range_check_ptr}(arr_len : felt, arr : felt*) -> (res : felt):
     with_attr error_message("div only works with 2 arguments, {arr_len} given"):
         assert arr_len = 2
     end
-    let (q, r) = signed_div_rem(arr[0], arr[1], arr[1])
+    let (q, r) = signed_div_rem(arr[0], arr[1], RC_BOUND / 2)
     return (q)
 end
 

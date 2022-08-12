@@ -145,7 +145,11 @@ function App() {
                   fontFamily: "'Press Start 2P', cursive",
                 }}
               >
-                Error: Starksheet cannot render the sheet atm
+                Error: Starksheet cannot render the sheet atm!
+                <br />
+                <br />
+                Team is working on it, we'll let you know on Twitter and Discord
+                when it's back.
               </Box>
             )}
             {!loading && hasLoaded && !failed && (

@@ -11,7 +11,7 @@ import LoadingDots from "../LoadingDots/LoadingDots";
 
 export type SaveButtonProps = {
   unSavedValue: string;
-  cellDependencies: string[];
+  newDependencies: string[];
   selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
   sx?: BoxProps["sx"];
@@ -19,7 +19,7 @@ export type SaveButtonProps = {
 
 function SaveButton({
   unSavedValue,
-  cellDependencies,
+  newDependencies,
   selectedCell,
   currentCellOwnerAddress,
   sx,
@@ -36,7 +36,7 @@ function SaveButton({
     }
 
     if (!!account && currentCellOwnerAddress === account) {
-      const parsedValue = parse(selectedCell.name, unSavedValue);
+      const parsedValue = parse(unSavedValue);
 
       if (!parsedValue) return;
 
@@ -54,9 +54,9 @@ function SaveButton({
   const error = useMemo(
     () =>
       selectedCell
-        ? getError(selectedCell.name, unSavedValue, cellDependencies)
+        ? getError(selectedCell.name, unSavedValue, newDependencies)
         : null,
-    [selectedCell, unSavedValue]
+    [selectedCell, unSavedValue, newDependencies]
   );
   const disabled = useMemo(() => !account, [account]);
 

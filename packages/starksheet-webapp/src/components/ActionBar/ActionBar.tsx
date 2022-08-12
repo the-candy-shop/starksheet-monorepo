@@ -13,6 +13,7 @@ import SaveButton from "../SaveButton/SaveButton";
 import {
   buildFormulaDisplay,
   getDependencies,
+  parse,
   toPlainTextFormula,
 } from "./formula.utils";
 
@@ -28,7 +29,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [dependencies, setDependencies] = React.useState<string[]>([]);
+  const [newDependencies, setNewDependencies] = React.useState<string[]>([]);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
@@ -41,8 +42,6 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       if (!contract) {
         return;
       }
-      console.log(`getAllDependencies(${tokenId})`);
-      console.log(`current _dependencies: ${_dependencies}`);
       return contract
         .call("getCell", [tokenId])
         .then((cellData: any) => {
@@ -75,17 +74,6 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
               cellNames
             )
           );
-          console.log("selectedCell", selectedCell);
-          return getDependencies(cellData.cell_calldata);
-        })
-        .then((deps) => {
-          _deps = [...deps];
-          console.log("_deps", _deps);
-          return Promise.all(deps.map((d) => getAllDependencies(_deps)(d)));
-        })
-        .then(() => {
-          console.log(`final _dependencies: ${_deps}`);
-          setDependencies(Array.from(new Set(_deps)).map((d) => cellNames[d]));
         })
         .catch((error: any) =>
           enqueueSnackbar(error.toString(), { variant: "error" })
@@ -93,6 +81,32 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         .finally(() => setLoading(false));
     }
   }, [cellNames, contract, enqueueSnackbar, selectedCell]);
+
+  React.useEffect(() => {
+    if (!contract) {
+      return;
+    }
+    const formula = parse(unSavedValue);
+    if (formula?.type !== "formula") {
+      return;
+    }
+
+    if (!formula?.dependencies) {
+      return;
+    }
+
+    let _deps = formula.dependencies
+      .map((d) => cellNames.indexOf(d))
+      .filter((d) => d !== -1);
+
+    Promise.all(_deps.map((d) => getAllDependencies(_deps)(d)))
+      .then(() => {
+        setNewDependencies(Array.from(new Set(_deps)).map((d) => cellNames[d]));
+      })
+      .catch((error: any) =>
+        enqueueSnackbar(error.toString(), { variant: "error" })
+      );
+  }, [contract, unSavedValue]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -152,7 +166,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       </Cell>
       <SaveButton
         unSavedValue={unSavedValue}
-        cellDependencies={dependencies}
+        newDependencies={newDependencies}
         selectedCell={selectedCell}
         currentCellOwnerAddress={owner}
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}

@@ -61,24 +61,19 @@ export function toPlainTextFormula(
     .join(";")})`;
 }
 
-export function parse(cellName: string, formula: string): CellValue | null {
+export function parse(formula: string): CellValue | null {
   const parsedNumber = parseNumberValue(formula);
   if (parsedNumber) {
     return parsedNumber;
   }
 
-  const parsedFormula = parseFormulaValue(formula);
-  if (parsedFormula && !parsedFormula.dependencies?.includes(cellName)) {
-    return parsedFormula;
-  }
-
-  return null;
+  return parseFormulaValue(formula);
 }
 
 export function getError(
   cellName: string,
   formula: string,
-  cellDependencies: string[]
+  newDependencies: string[]
 ): string | null {
   const parsedNumber = parseNumberValue(formula);
   if (parsedNumber) {
@@ -86,28 +81,10 @@ export function getError(
   }
 
   const parsedFormula = parseFormulaValue(formula);
-
-  console.log("parsedFormula.dependencies", parsedFormula?.dependencies);
-  console.log("cellDependencies", cellDependencies);
   if (parsedFormula) {
-    if (!parsedFormula.dependencies) {
-      return null;
+    if (newDependencies.includes(cellName)) {
+      return `Invalid formula: circular dependency`;
     }
-
-    if (parsedFormula.dependencies.includes(cellName)) {
-      return "You cannot reference a cell inside itself";
-    }
-
-    const circularDependencies = parsedFormula.dependencies?.filter((d) =>
-      cellDependencies.includes(d)
-    );
-    if (circularDependencies?.length > 0) {
-      return `Invalid formula: circular dependencies with other cells ${circularDependencies.join(
-        ", "
-      )}`;
-    }
-
-    return null;
   }
 
   return "Invalid formula format";

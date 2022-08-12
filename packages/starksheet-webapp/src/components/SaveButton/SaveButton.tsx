@@ -1,25 +1,29 @@
-import React, { useCallback, useMemo } from "react";
 import { Box, BoxProps } from "@mui/material";
-import Button from "../Button/Button";
 import { useStarknet } from "@starknet-react/core";
-import Cell from "../Cell/Cell";
+import { useCallback, useMemo } from "react";
 import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
-import { getError, parse } from "../ActionBar/formula.utils";
-import LoadingDots from "../LoadingDots/LoadingDots";
 import Tooltip from "../../Tooltip/Tooltip";
+import { getError, parse } from "../ActionBar/formula.utils";
+import Button from "../Button/Button";
+import Cell from "../Cell/Cell";
+import LoadingDots from "../LoadingDots/LoadingDots";
 
 export type SaveButtonProps = {
   unSavedValue: string;
+  newDependencies: string[];
   selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
+  disabled?: boolean;
   sx?: BoxProps["sx"];
 };
 
 function SaveButton({
   unSavedValue,
+  newDependencies,
   selectedCell,
   currentCellOwnerAddress,
+  disabled,
   sx,
 }: SaveButtonProps) {
   const { account } = useStarknet();
@@ -34,7 +38,7 @@ function SaveButton({
     }
 
     if (!!account && currentCellOwnerAddress === account) {
-      const parsedValue = parse(selectedCell.name, unSavedValue);
+      const parsedValue = parse(unSavedValue);
 
       if (!parsedValue) return;
 
@@ -50,10 +54,13 @@ function SaveButton({
   ]);
 
   const error = useMemo(
-    () => (selectedCell ? getError(selectedCell.name, unSavedValue) : null),
-    [selectedCell, unSavedValue]
+    () =>
+      selectedCell
+        ? getError(selectedCell.name, unSavedValue, newDependencies)
+        : null,
+    [selectedCell, unSavedValue, newDependencies]
   );
-  const disabled = useMemo(() => !account, [account]);
+  const noAccount = useMemo(() => !account, [account]);
 
   if (
     selectedCell &&
@@ -82,18 +89,20 @@ function SaveButton({
           sx={{
             width: "221px",
             "& .content": {
-              backgroundColor: !disabled ? "#FF4F0A" : undefined,
-              boxShadow: !disabled
+              backgroundColor: !noAccount ? "#FF4F0A" : undefined,
+              boxShadow: !noAccount
                 ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
                 : undefined,
               justifyContent: "center",
               textAlign: "center",
-              color: disabled ? "#8C95A3" : undefined,
+              color: noAccount ? "#8C95A3" : undefined,
             },
             ...sx,
           }}
           onClick={onClick}
-          disabled={disabled || loadingMint || loadingSetCell || !!error}
+          disabled={
+            noAccount || loadingMint || loadingSetCell || !!error || disabled
+          }
         >
           {loadingMint && (
             <Box>

@@ -1,16 +1,20 @@
-import React, { useContext } from "react";
 import { Box, BoxProps } from "@mui/material";
-import Cell from "../Cell/Cell";
-import { CELL_BORDER_WIDTH } from "../../config";
-import ContentEditable from "react-contenteditable";
-import { buildFormulaDisplay, toPlainTextFormula } from "./formula.utils";
 import { useStarknet } from "@starknet-react/core";
-import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
-import SaveButton from "../SaveButton/SaveButton";
+import { useSnackbar } from "notistack";
+import React, { useContext } from "react";
+import ContentEditable from "react-contenteditable";
+import { CELL_BORDER_WIDTH } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
+import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import LoadingDots from "../LoadingDots/LoadingDots";
-import { useSnackbar } from "notistack";
+import SaveButton from "../SaveButton/SaveButton";
+import {
+  buildFormulaDisplay,
+  getDependencies,
+  toPlainTextFormula,
+} from "./formula.utils";
 
 export type ActionBarProps = {
   selectedCell: { name: string; id: number } | null;
@@ -24,11 +28,37 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [dependencies, setDependencies] = React.useState<number[]>([]);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
   );
   const inputRef = React.useRef<ContentEditable>(null);
+
+  const getAllDependencies = async (tokenId: number): Promise<any> => {
+    if (!contract) {
+      return;
+    }
+    console.log("getAllDependencies", tokenId);
+    return contract
+      .call("getCell", [tokenId])
+      .then((cellData: any) => {
+        const deps = getDependencies(cellData.cell_calldata);
+        console.log("deps", deps);
+        console.log("dependencies before", dependencies);
+        setDependencies([...dependencies, ...deps]);
+        console.log("dependencies after", dependencies);
+        return deps;
+      })
+      .then((deps) => Promise.all(deps.map((d) => getAllDependencies(d))))
+      .catch((error: any) =>
+        enqueueSnackbar(error.toString(), { variant: "error" })
+      )
+      .finally(() => {
+        setLoading(false);
+        setDependencies(Array.from(new Set(dependencies)));
+      });
+  };
 
   React.useEffect(() => {
     if (
@@ -42,14 +72,16 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       setLoading(true);
       contract
         .call("getCell", [selectedCell.id])
-        .then((cellData: any) =>
+        .then((cellData: any) => {
           setUnsavedValue(
             toPlainTextFormula(
               { value: cellData.value, cell_calldata: cellData.cell_calldata },
               cellNames
             )
-          )
-        )
+          );
+          return getDependencies(cellData.cell_calldata);
+        })
+        .then((deps) => Promise.all(deps.map((d) => getAllDependencies(d))))
         .catch((error: any) =>
           enqueueSnackbar(error.toString(), { variant: "error" })
         )

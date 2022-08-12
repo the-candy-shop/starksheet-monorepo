@@ -150,3 +150,7 @@ export function getValue(value: BN): BN {
     .mod(PRIME)
     .sub(PRIME.div(toBN(2)).abs());
 }
+
+export function getDependencies(cell_calldata: BN[]): number[] {
+  return cell_calldata.map((data) => data.toNumber()).filter((data) => data % 2 !== 0).map((data) => (data - 1) / 2);
+}

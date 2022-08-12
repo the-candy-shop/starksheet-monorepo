@@ -47,7 +47,7 @@ function App() {
     id: number;
   } | null>(null);
 
-  const { loading, values, hasLoaded, cellNames } =
+  const { loading, failed, values, hasLoaded, cellNames } =
     useContext(CellValuesContext);
 
   const selectedCellOwner = useMemo(
@@ -135,7 +135,20 @@ function App() {
                 <LoadingDots />
               </Box>
             )}
-            {!loading && hasLoaded && (
+            {!loading && failed && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily: "'Press Start 2P', cursive",
+                }}
+              >
+                Error: Starksheet cannot render the sheet atm
+              </Box>
+            )}
+            {!loading && hasLoaded && !failed && (
               <SheetTable
                 selectedCell={selectedCell}
                 setSelectedCell={setSelectedCell}

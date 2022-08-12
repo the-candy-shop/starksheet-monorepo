@@ -1,7 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
 import { useStarknet } from "@starknet-react/core";
 import { useSnackbar } from "notistack";
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import ContentEditable from "react-contenteditable";
 import { CELL_BORDER_WIDTH } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
@@ -30,29 +30,32 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const { contract } = useStarkSheetContract();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [newDependencies, setNewDependencies] = React.useState<string[]>([]);
+  const [disabled, setDisabled] = React.useState<boolean>(false);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
   );
   const inputRef = React.useRef<ContentEditable>(null);
 
-  const getAllDependencies =
+  const getAllDependencies = useCallback(
     (_dependencies: number[]) =>
-    async (tokenId: number): Promise<any> => {
-      if (!contract) {
-        return;
-      }
-      return contract
-        .call("getCell", [tokenId])
-        .then((cellData: any) => {
-          const deps = getDependencies(cellData.cell_calldata);
-          deps.forEach((d) => _dependencies.push(d));
-          return deps;
-        })
-        .then((deps) =>
-          Promise.all(deps.map((d) => getAllDependencies(_dependencies)(d)))
-        );
-    };
+      async (tokenId: number): Promise<any> => {
+        if (!contract) {
+          return;
+        }
+        return contract
+          .call("getCell", [tokenId])
+          .then((cellData: any) => {
+            const deps = getDependencies(cellData.cell_calldata);
+            deps.forEach((d) => _dependencies.push(d));
+            return deps;
+          })
+          .then((deps) =>
+            Promise.all(deps.map((d) => getAllDependencies(_dependencies)(d)))
+          );
+      },
+    [contract]
+  );
 
   React.useEffect(() => {
     if (
@@ -63,7 +66,6 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       inputRef?.current?.el?.current?.focus();
       previousSelectedCell.current = selectedCell ? selectedCell.name : null;
 
-      let _deps: number[] = [];
       setLoading(true);
       contract
         .call("getCell", [selectedCell.id])
@@ -90,10 +92,10 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
     if (formula?.type !== "formula") {
       return;
     }
-
     if (!formula?.dependencies) {
       return;
     }
+    setDisabled(true);
 
     let _deps = formula.dependencies
       .map((d) => cellNames.indexOf(d))
@@ -105,8 +107,9 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       })
       .catch((error: any) =>
         enqueueSnackbar(error.toString(), { variant: "error" })
-      );
-  }, [contract, unSavedValue]);
+      )
+      .finally(() => setDisabled(false));
+  }, [contract, unSavedValue, cellNames, enqueueSnackbar, getAllDependencies]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -168,6 +171,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         unSavedValue={unSavedValue}
         newDependencies={newDependencies}
         selectedCell={selectedCell}
+        disabled={disabled}
         currentCellOwnerAddress={owner}
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
       />

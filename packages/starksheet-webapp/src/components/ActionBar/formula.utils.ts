@@ -85,6 +85,7 @@ export function getError(
     if (newDependencies.includes(cellName)) {
       return `Invalid formula: circular dependency`;
     }
+    return null;
   }
 
   return "Invalid formula format";

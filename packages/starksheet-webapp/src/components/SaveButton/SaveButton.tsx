@@ -14,6 +14,7 @@ export type SaveButtonProps = {
   newDependencies: string[];
   selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
+  disabled?: boolean;
   sx?: BoxProps["sx"];
 };
 
@@ -22,6 +23,7 @@ function SaveButton({
   newDependencies,
   selectedCell,
   currentCellOwnerAddress,
+  disabled,
   sx,
 }: SaveButtonProps) {
   const { account } = useStarknet();
@@ -58,7 +60,7 @@ function SaveButton({
         : null,
     [selectedCell, unSavedValue, newDependencies]
   );
-  const disabled = useMemo(() => !account, [account]);
+  const noAccount = useMemo(() => !account, [account]);
 
   if (
     selectedCell &&
@@ -87,18 +89,20 @@ function SaveButton({
           sx={{
             width: "221px",
             "& .content": {
-              backgroundColor: !disabled ? "#FF4F0A" : undefined,
-              boxShadow: !disabled
+              backgroundColor: !noAccount ? "#FF4F0A" : undefined,
+              boxShadow: !noAccount
                 ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
                 : undefined,
               justifyContent: "center",
               textAlign: "center",
-              color: disabled ? "#8C95A3" : undefined,
+              color: noAccount ? "#8C95A3" : undefined,
             },
             ...sx,
           }}
           onClick={onClick}
-          disabled={disabled || loadingMint || loadingSetCell || !!error}
+          disabled={
+            noAccount || loadingMint || loadingSetCell || !!error || disabled
+          }
         >
           {loadingMint && (
             <Box>

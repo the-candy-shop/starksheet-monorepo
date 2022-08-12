@@ -13,7 +13,7 @@ const validFormulaRegex =
 export const operationNumbers = {
   SUM: toBN(StarkSheetContract.operations.SUM),
   MINUS: toBN(StarkSheetContract.operations.MINUS),
-  DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
+  // DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
   PRODUCT: toBN(StarkSheetContract.operations.PRODUCT),
 };
 

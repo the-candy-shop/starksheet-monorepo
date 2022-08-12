@@ -1,10 +1,10 @@
+import { Box } from "@mui/material";
 import React from "react";
 import ContentEditable, {
   Props as ContentEditableProps,
 } from "react-contenteditable";
-import { buildFormulaDisplay } from "../ActionBar/formula.utils";
-import { Box } from "@mui/material";
 import { CELL_HEIGHT } from "../../config";
+import { buildFormulaDisplay } from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
   inputRef: React.Ref<ContentEditable>;
@@ -19,7 +19,12 @@ function FormulaField({
   value,
   setValue,
 }: FormulaFieldProps) {
-  const operations = ["SUM", "MINUS", "DIVIDE", "PRODUCT"];
+  const operations = [
+    "SUM",
+    "MINUS",
+    // "DIVIDE",
+    "PRODUCT",
+  ];
   return (
     <>
       <ContentEditable

@@ -1,16 +1,21 @@
-import React, { useContext } from "react";
 import { Box, BoxProps } from "@mui/material";
-import Cell from "../Cell/Cell";
-import { CELL_BORDER_WIDTH } from "../../config";
-import ContentEditable from "react-contenteditable";
-import { buildFormulaDisplay, toPlainTextFormula } from "./formula.utils";
 import { useStarknet } from "@starknet-react/core";
-import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
-import SaveButton from "../SaveButton/SaveButton";
+import { useSnackbar } from "notistack";
+import React, { useCallback, useContext } from "react";
+import ContentEditable from "react-contenteditable";
+import { CELL_BORDER_WIDTH } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
+import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import LoadingDots from "../LoadingDots/LoadingDots";
-import { useSnackbar } from "notistack";
+import SaveButton from "../SaveButton/SaveButton";
+import {
+  buildFormulaDisplay,
+  getDependencies,
+  parse,
+  toPlainTextFormula,
+} from "./formula.utils";
 
 export type ActionBarProps = {
   selectedCell: { name: string; id: number } | null;
@@ -24,11 +29,33 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [newDependencies, setNewDependencies] = React.useState<string[]>([]);
+  const [disabled, setDisabled] = React.useState<boolean>(false);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
   );
   const inputRef = React.useRef<ContentEditable>(null);
+
+  const getAllDependencies = useCallback(
+    (_dependencies: number[]) =>
+      async (tokenId: number): Promise<any> => {
+        if (!contract) {
+          return;
+        }
+        return contract
+          .call("getCell", [tokenId])
+          .then((cellData: any) => {
+            const deps = getDependencies(cellData.cell_calldata);
+            deps.forEach((d) => _dependencies.push(d));
+            return deps;
+          })
+          .then((deps) =>
+            Promise.all(deps.map((d) => getAllDependencies(_dependencies)(d)))
+          );
+      },
+    [contract]
+  );
 
   React.useEffect(() => {
     if (
@@ -42,20 +69,47 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       setLoading(true);
       contract
         .call("getCell", [selectedCell.id])
-        .then((cellData: any) =>
+        .then((cellData: any) => {
           setUnsavedValue(
             toPlainTextFormula(
               { value: cellData.value, cell_calldata: cellData.cell_calldata },
               cellNames
             )
-          )
-        )
+          );
+        })
         .catch((error: any) =>
           enqueueSnackbar(error.toString(), { variant: "error" })
         )
         .finally(() => setLoading(false));
     }
   }, [cellNames, contract, enqueueSnackbar, selectedCell]);
+
+  React.useEffect(() => {
+    if (!contract) {
+      return;
+    }
+    const formula = parse(unSavedValue);
+    if (formula?.type !== "formula") {
+      return;
+    }
+    if (!formula?.dependencies) {
+      return;
+    }
+    setDisabled(true);
+
+    let _deps = formula.dependencies
+      .map((d) => cellNames.indexOf(d))
+      .filter((d) => d !== -1);
+
+    Promise.all(_deps.map((d) => getAllDependencies(_deps)(d)))
+      .then(() => {
+        setNewDependencies(Array.from(new Set(_deps)).map((d) => cellNames[d]));
+      })
+      .catch((error: any) =>
+        enqueueSnackbar(error.toString(), { variant: "error" })
+      )
+      .finally(() => setDisabled(false));
+  }, [contract, unSavedValue, cellNames, enqueueSnackbar, getAllDependencies]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -115,7 +169,9 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       </Cell>
       <SaveButton
         unSavedValue={unSavedValue}
+        newDependencies={newDependencies}
         selectedCell={selectedCell}
+        disabled={disabled}
         currentCellOwnerAddress={owner}
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
       />

@@ -46,7 +46,7 @@ async function run() {
   const operations = {
     SUM: constants.sum,
     MINUS: constants.sub,
-    DIVIDE: constants.div,
+    // DIVIDE: constants.div,
     PRODUCT: constants.prod,
   };
 

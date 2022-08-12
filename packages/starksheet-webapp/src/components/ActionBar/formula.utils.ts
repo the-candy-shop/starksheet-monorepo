@@ -13,7 +13,7 @@ const validFormulaRegex =
 export const operationNumbers = {
   SUM: toBN(StarkSheetContract.operations.SUM),
   MINUS: toBN(StarkSheetContract.operations.MINUS),
-  DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
+  // DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
   PRODUCT: toBN(StarkSheetContract.operations.PRODUCT),
 };
 
@@ -53,36 +53,38 @@ export function toPlainTextFormula(
 
   return `${operator}(${cell_calldata
     .slice(1)
-    .map((data) => data.toNumber() % 2 === 0 ? data.div(toBN(2)) : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()])
+    .map((data) =>
+      data.toNumber() % 2 === 0
+        ? data.div(toBN(2))
+        : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()]
+    )
     .join(";")})`;
 }
 
-export function parse(cellName: string, formula: string): CellValue | null {
+export function parse(formula: string): CellValue | null {
   const parsedNumber = parseNumberValue(formula);
   if (parsedNumber) {
     return parsedNumber;
   }
 
-  const parsedFormula = parseFormulaValue(cellName, formula);
-  if (parsedFormula && !parsedFormula.dependencies?.includes(cellName)) {
-    return parsedFormula;
-  }
-
-  return null;
+  return parseFormulaValue(formula);
 }
 
-export function getError(cellName: string, formula: string): string | null {
+export function getError(
+  cellName: string,
+  formula: string,
+  newDependencies: string[]
+): string | null {
   const parsedNumber = parseNumberValue(formula);
   if (parsedNumber) {
     return null;
   }
 
-  const parsedFormula = parseFormulaValue(cellName, formula);
+  const parsedFormula = parseFormulaValue(formula);
   if (parsedFormula) {
-    if (parsedFormula.dependencies?.includes(cellName)) {
-      return "You cannot reference a cell inside itself";
+    if (newDependencies.includes(cellName)) {
+      return `Invalid formula: circular dependency`;
     }
-
     return null;
   }
 
@@ -100,10 +102,7 @@ export function parseNumberValue(formula: string): CellValue | null {
   };
 }
 
-export function parseFormulaValue(
-  cellName: string,
-  formula: string
-): CellValue | null {
+export function parseFormulaValue(formula: string): CellValue | null {
   const match = formula.match(validFormulaRegex);
 
   if (!match) return null;
@@ -149,4 +148,11 @@ export function getValue(value: BN): BN {
     .add(PRIME.div(toBN(2)).abs())
     .mod(PRIME)
     .sub(PRIME.div(toBN(2)).abs());
+}
+
+export function getDependencies(cell_calldata: BN[]): number[] {
+  return cell_calldata
+    .map((data) => data.toNumber())
+    .filter((data) => data % 2 !== 0)
+    .map((data) => (data - 1) / 2);
 }

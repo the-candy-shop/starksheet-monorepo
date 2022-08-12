@@ -89,7 +89,7 @@
         "CONSTRUCTOR": [],
         "EXTERNAL": [
             {
-                "offset": "0x95",
+                "offset": "0x96",
                 "selector": "0x3d3c19047ab1dfb88fcd24c8cf6e6f8fc24e1a3e7ef16889ac38d52d733150"
             },
             {
@@ -97,7 +97,7 @@
                 "selector": "0xdd45c619a4842d6e392a60041fc2a2a896f4e6e2d056acdff7e9c64d9a1819"
             },
             {
-                "offset": "0xbc",
+                "offset": "0xbd",
                 "selector": "0x21ea47215815692a5f1391cff19abbaf694c82fb2151a4c351b6c0eeaaf317b"
             },
             {
@@ -135,7 +135,7 @@
                     "__main__",
                     "__main__.sub"
                 ],
-                "end_pc": 175,
+                "end_pc": 176,
                 "flow_tracking_data": {
                     "ap_tracking": {
                         "group": 16,
@@ -146,7 +146,7 @@
                     }
                 },
                 "name": "error_message",
-                "start_pc": 173,
+                "start_pc": 174,
                 "value": "sub only works with 2 arguments, {arr_len} given"
             }
         ],
@@ -288,9 +288,10 @@
             "0x480a7ffb7fff8000",
             "0x480280007ffd8000",
             "0x480280017ffd8000",
-            "0x480280017ffd8000",
+            "0x480680017fff8000",
+            "0x80000000000000000000000000000000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff83",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff82",
             "0x48127ffd7fff8000",
             "0x48127ffd7fff8000",
             "0x208b7fff7fff7ffe",
@@ -318,7 +319,7 @@
             "0x482680017ffd8000",
             "0x1",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffdf",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffde",
             "0x48127ffe7fff8000",
             "0x1104800180018000",
             "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffe7",
@@ -1154,12 +1155,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 7,
-                        "end_line": 7,
+                        "end_line": 8,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 7
+                        "start_line": 8
                     }
                 },
                 "37": {
@@ -1172,12 +1173,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 8,
+                        "end_line": 9,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 17,
-                        "start_line": 8
+                        "start_line": 9
                     }
                 },
                 "39": {
@@ -1190,12 +1191,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 19,
-                        "end_line": 8,
+                        "end_line": 9,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 9,
-                        "start_line": 8
+                        "start_line": 9
                     }
                 },
                 "40": {
@@ -1208,12 +1209,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 48,
-                        "end_line": 11,
+                        "end_line": 12,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 37,
-                        "start_line": 11
+                        "start_line": 12
                     }
                 },
                 "42": {
@@ -1226,12 +1227,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 61,
-                        "end_line": 11,
+                        "end_line": 12,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 54,
-                        "start_line": 11
+                        "start_line": 12
                     }
                 },
                 "44": {
@@ -1244,12 +1245,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 62,
-                        "end_line": 11,
+                        "end_line": 12,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 25,
-                        "start_line": 11
+                        "start_line": 12
                     }
                 },
                 "46": {
@@ -1262,12 +1263,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 12,
+                        "end_line": 13,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 12
+                        "start_line": 13
                     }
                 },
                 "47": {
@@ -1280,12 +1281,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 32,
-                        "end_line": 12,
+                        "end_line": 13,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 12
+                        "start_line": 13
                     }
                 },
                 "48": {
@@ -1298,12 +1299,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 33,
-                        "end_line": 12,
+                        "end_line": 13,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 12
+                        "start_line": 13
                     }
                 },
                 "49": {
@@ -1325,12 +1326,12 @@
                                 "parent_location": [
                                     {
                                         "end_col": 9,
-                                        "end_line": 6,
+                                        "end_line": 7,
                                         "input_file": {
                                             "filename": "contracts/utils/math.cairo"
                                         },
                                         "start_col": 6,
-                                        "start_line": 6
+                                        "start_line": 7
                                     },
                                     "While handling return value of"
                                 ],
@@ -1349,12 +1350,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value of"
                         ],
@@ -1380,12 +1381,12 @@
                         "parent_location": [
                             {
                                 "end_col": 53,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 43,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value 'res'"
                         ],
@@ -1411,7 +1412,7 @@
                         "parent_location": [
                             {
                                 "end_col": 53,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1425,12 +1426,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling return value of"
                                         ],
@@ -1440,7 +1441,7 @@
                                     "While expanding the reference '__return_value_ptr' in:"
                                 ],
                                 "start_col": 43,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value 'res'"
                         ],
@@ -1466,7 +1467,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1480,12 +1481,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling return value of"
                                         ],
@@ -1495,7 +1496,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value of"
                         ],
@@ -1521,12 +1522,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value of"
                         ],
@@ -1552,7 +1553,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1566,12 +1567,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling return value of"
                                         ],
@@ -1581,7 +1582,7 @@
                                     "While expanding the reference '__return_value_ptr_start' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value of"
                         ],
@@ -1607,12 +1608,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling return value of"
                         ],
@@ -1638,7 +1639,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1652,12 +1653,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -1667,7 +1668,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -1693,7 +1694,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1707,12 +1708,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -1722,7 +1723,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -1748,12 +1749,12 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 26,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -1779,7 +1780,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1793,12 +1794,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -1808,7 +1809,7 @@
                                     "While expanding the reference '__calldata_ptr' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -1834,7 +1835,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1848,12 +1849,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -1863,7 +1864,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -1889,12 +1890,12 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 26,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -1920,12 +1921,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata of"
                         ],
@@ -1951,7 +1952,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -1965,12 +1966,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -1980,7 +1981,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -2006,7 +2007,7 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2020,12 +2021,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2035,7 +2036,7 @@
                                     "While expanding the reference '__calldata_arg_arr' in:"
                                 ],
                                 "start_col": 26,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -2054,12 +2055,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 9,
-                        "end_line": 6,
+                        "end_line": 7,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 6,
-                        "start_line": 6
+                        "start_line": 7
                     }
                 },
                 "71": {
@@ -2080,7 +2081,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2094,7 +2095,7 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
@@ -2108,12 +2109,12 @@
                                                         "parent_location": [
                                                             {
                                                                 "end_col": 9,
-                                                                "end_line": 6,
+                                                                "end_line": 7,
                                                                 "input_file": {
                                                                     "filename": "contracts/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
-                                                                "start_line": 6
+                                                                "start_line": 7
                                                             },
                                                             "While constructing the external wrapper for:"
                                                         ],
@@ -2123,7 +2124,7 @@
                                                     "While expanding the reference 'range_check_ptr' in:"
                                                 ],
                                                 "start_col": 26,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -2133,7 +2134,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2159,7 +2160,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2173,12 +2174,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2188,7 +2189,7 @@
                                     "While expanding the reference 'ret_value' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2214,7 +2215,7 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2228,12 +2229,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2243,7 +2244,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 26,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -2269,12 +2270,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2300,7 +2301,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2314,12 +2315,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2329,7 +2330,7 @@
                                     "While expanding the reference 'syscall_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2355,7 +2356,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2369,12 +2370,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2384,7 +2385,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2410,7 +2411,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2424,12 +2425,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2439,7 +2440,7 @@
                                     "While expanding the reference 'retdata_size' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2465,7 +2466,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2479,12 +2480,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 6,
+                                                "end_line": 7,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 6
+                                                "start_line": 7
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -2494,7 +2495,7 @@
                                     "While expanding the reference 'retdata' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2520,12 +2521,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 6,
+                                "end_line": 7,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 6
+                                "start_line": 7
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -2543,12 +2544,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 7,
-                        "end_line": 17,
+                        "end_line": 18,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 17
+                        "start_line": 18
                     }
                 },
                 "84": {
@@ -2561,12 +2562,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 18,
+                        "end_line": 19,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 17,
-                        "start_line": 18
+                        "start_line": 19
                     }
                 },
                 "86": {
@@ -2579,12 +2580,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 19,
-                        "end_line": 18,
+                        "end_line": 19,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 9,
-                        "start_line": 18
+                        "start_line": 19
                     }
                 },
                 "87": {
@@ -2597,12 +2598,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 50,
-                        "end_line": 21,
+                        "end_line": 22,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 39,
-                        "start_line": 21
+                        "start_line": 22
                     }
                 },
                 "89": {
@@ -2615,12 +2616,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 63,
-                        "end_line": 21,
+                        "end_line": 22,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 56,
-                        "start_line": 21
+                        "start_line": 22
                     }
                 },
                 "91": {
@@ -2633,12 +2634,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 64,
-                        "end_line": 21,
+                        "end_line": 22,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 26,
-                        "start_line": 21
+                        "start_line": 22
                     }
                 },
                 "93": {
@@ -2651,12 +2652,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 18,
-                        "end_line": 22,
+                        "end_line": 23,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 22
+                        "start_line": 23
                     }
                 },
                 "94": {
@@ -2669,12 +2670,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 33,
-                        "end_line": 22,
+                        "end_line": 23,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 13,
-                        "start_line": 22
+                        "start_line": 23
                     }
                 },
                 "95": {
@@ -2687,12 +2688,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 34,
-                        "end_line": 22,
+                        "end_line": 23,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 22
+                        "start_line": 23
                     }
                 },
                 "96": {
@@ -2714,12 +2715,12 @@
                                 "parent_location": [
                                     {
                                         "end_col": 10,
-                                        "end_line": 16,
+                                        "end_line": 17,
                                         "input_file": {
                                             "filename": "contracts/utils/math.cairo"
                                         },
                                         "start_col": 6,
-                                        "start_line": 16
+                                        "start_line": 17
                                     },
                                     "While handling return value of"
                                 ],
@@ -2738,12 +2739,12 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value of"
                         ],
@@ -2769,12 +2770,12 @@
                         "parent_location": [
                             {
                                 "end_col": 54,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 44,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value 'res'"
                         ],
@@ -2800,7 +2801,7 @@
                         "parent_location": [
                             {
                                 "end_col": 54,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2814,12 +2815,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling return value of"
                                         ],
@@ -2829,7 +2830,7 @@
                                     "While expanding the reference '__return_value_ptr' in:"
                                 ],
                                 "start_col": 44,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value 'res'"
                         ],
@@ -2855,7 +2856,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2869,12 +2870,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling return value of"
                                         ],
@@ -2884,7 +2885,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value of"
                         ],
@@ -2910,12 +2911,12 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value of"
                         ],
@@ -2941,7 +2942,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -2955,12 +2956,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling return value of"
                                         ],
@@ -2970,7 +2971,7 @@
                                     "While expanding the reference '__return_value_ptr_start' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value of"
                         ],
@@ -2996,12 +2997,12 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling return value of"
                         ],
@@ -3027,7 +3028,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3041,12 +3042,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 38,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 27,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -3056,7 +3057,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3082,7 +3083,7 @@
                         "parent_location": [
                             {
                                 "end_col": 25,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3096,12 +3097,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 38,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 27,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -3111,7 +3112,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 11,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -3137,12 +3138,12 @@
                         "parent_location": [
                             {
                                 "end_col": 38,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 27,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -3168,7 +3169,7 @@
                         "parent_location": [
                             {
                                 "end_col": 25,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3182,12 +3183,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 38,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 27,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -3197,7 +3198,7 @@
                                     "While expanding the reference '__calldata_ptr' in:"
                                 ],
                                 "start_col": 11,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -3223,7 +3224,7 @@
                         "parent_location": [
                             {
                                 "end_col": 25,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3237,12 +3238,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 38,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 27,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -3252,7 +3253,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 11,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -3278,12 +3279,12 @@
                         "parent_location": [
                             {
                                 "end_col": 38,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 27,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -3309,12 +3310,12 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata of"
                         ],
@@ -3340,7 +3341,7 @@
                         "parent_location": [
                             {
                                 "end_col": 25,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3354,12 +3355,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3369,7 +3370,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 11,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -3395,7 +3396,7 @@
                         "parent_location": [
                             {
                                 "end_col": 38,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3409,12 +3410,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3424,7 +3425,7 @@
                                     "While expanding the reference '__calldata_arg_arr' in:"
                                 ],
                                 "start_col": 27,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -3443,12 +3444,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 10,
-                        "end_line": 16,
+                        "end_line": 17,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 6,
-                        "start_line": 16
+                        "start_line": 17
                     }
                 },
                 "118": {
@@ -3469,7 +3470,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3483,7 +3484,7 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 38,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
@@ -3497,12 +3498,12 @@
                                                         "parent_location": [
                                                             {
                                                                 "end_col": 10,
-                                                                "end_line": 16,
+                                                                "end_line": 17,
                                                                 "input_file": {
                                                                     "filename": "contracts/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
-                                                                "start_line": 16
+                                                                "start_line": 17
                                                             },
                                                             "While constructing the external wrapper for:"
                                                         ],
@@ -3512,7 +3513,7 @@
                                                     "While expanding the reference 'range_check_ptr' in:"
                                                 ],
                                                 "start_col": 27,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -3522,7 +3523,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3548,7 +3549,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3562,12 +3563,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3577,7 +3578,7 @@
                                     "While expanding the reference 'ret_value' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3603,7 +3604,7 @@
                         "parent_location": [
                             {
                                 "end_col": 38,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3617,12 +3618,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3632,7 +3633,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 27,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -3658,12 +3659,12 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3689,7 +3690,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3703,12 +3704,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3718,7 +3719,7 @@
                                     "While expanding the reference 'syscall_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3744,7 +3745,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3758,12 +3759,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3773,7 +3774,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3799,7 +3800,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3813,12 +3814,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3828,7 +3829,7 @@
                                     "While expanding the reference 'retdata_size' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3854,7 +3855,7 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -3868,12 +3869,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 10,
-                                                "end_line": 16,
+                                                "end_line": 17,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 16
+                                                "start_line": 17
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -3883,7 +3884,7 @@
                                     "While expanding the reference 'retdata' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3909,12 +3910,12 @@
                         "parent_location": [
                             {
                                 "end_col": 10,
-                                "end_line": 16,
+                                "end_line": 17,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 16
+                                "start_line": 17
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -3932,12 +3933,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 27,
-                        "end_line": 28,
+                        "end_line": 29,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 9,
-                        "start_line": 28
+                        "start_line": 29
                     }
                 },
                 "131": {
@@ -3950,7 +3951,7 @@
                     "hints": [],
                     "inst": {
                         "end_col": 25,
-                        "end_line": 26,
+                        "end_line": 27,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
@@ -3963,13 +3964,13 @@
                                 },
                                 "parent_location": [
                                     {
-                                        "end_col": 56,
-                                        "end_line": 30,
+                                        "end_col": 62,
+                                        "end_line": 31,
                                         "input_file": {
                                             "filename": "contracts/utils/math.cairo"
                                         },
                                         "start_col": 18,
-                                        "start_line": 30
+                                        "start_line": 31
                                     },
                                     "While trying to retrieve the implicit argument 'range_check_ptr' in:"
                                 ],
@@ -3979,7 +3980,7 @@
                             "While expanding the reference 'range_check_ptr' in:"
                         ],
                         "start_col": 10,
-                        "start_line": 26
+                        "start_line": 27
                     }
                 },
                 "132": {
@@ -3992,12 +3993,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 39,
-                        "end_line": 30,
+                        "end_line": 31,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 33,
-                        "start_line": 30
+                        "start_line": 31
                     }
                 },
                 "133": {
@@ -4010,12 +4011,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 47,
-                        "end_line": 30,
+                        "end_line": 31,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 41,
-                        "start_line": 30
+                        "start_line": 31
                     }
                 },
                 "134": {
@@ -4027,16 +4028,16 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 55,
-                        "end_line": 30,
+                        "end_col": 61,
+                        "end_line": 31,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 49,
-                        "start_line": 30
+                        "start_line": 31
                     }
                 },
-                "135": {
+                "136": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4045,16 +4046,16 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 56,
-                        "end_line": 30,
+                        "end_col": 62,
+                        "end_line": 31,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 18,
-                        "start_line": 30
+                        "start_line": 31
                     }
                 },
-                "137": {
+                "138": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4070,72 +4071,42 @@
                         },
                         "parent_location": [
                             {
-                                "end_col": 56,
-                                "end_line": 30,
+                                "end_col": 62,
+                                "end_line": 31,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 25,
-                                        "end_line": 26,
+                                        "end_line": 27,
                                         "input_file": {
                                             "filename": "contracts/utils/math.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 15,
-                                                "end_line": 31,
+                                                "end_line": 32,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 5,
-                                                "start_line": 31
+                                                "start_line": 32
                                             },
                                             "While trying to retrieve the implicit argument 'range_check_ptr' in:"
                                         ],
                                         "start_col": 10,
-                                        "start_line": 26
+                                        "start_line": 27
                                     },
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 18,
-                                "start_line": 30
+                                "start_line": 31
                             },
                             "While trying to update the implicit return value 'range_check_ptr' in:"
                         ],
                         "start_col": 21,
                         "start_line": 289
-                    }
-                },
-                "138": {
-                    "accessible_scopes": [
-                        "__main__",
-                        "__main__",
-                        "__main__.div"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 11,
-                        "end_line": 30,
-                        "input_file": {
-                            "filename": "contracts/utils/math.cairo"
-                        },
-                        "parent_location": [
-                            {
-                                "end_col": 14,
-                                "end_line": 31,
-                                "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
-                                },
-                                "start_col": 13,
-                                "start_line": 31
-                            },
-                            "While expanding the reference 'q' in:"
-                        ],
-                        "start_col": 10,
-                        "start_line": 30
                     }
                 },
                 "139": {
@@ -4147,16 +4118,46 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 15,
+                        "end_col": 11,
                         "end_line": 31,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
-                        "start_col": 5,
+                        "parent_location": [
+                            {
+                                "end_col": 14,
+                                "end_line": 32,
+                                "input_file": {
+                                    "filename": "contracts/utils/math.cairo"
+                                },
+                                "start_col": 13,
+                                "start_line": 32
+                            },
+                            "While expanding the reference 'q' in:"
+                        ],
+                        "start_col": 10,
                         "start_line": 31
                     }
                 },
                 "140": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__",
+                        "__main__.div"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 15,
+                        "end_line": 32,
+                        "input_file": {
+                            "filename": "contracts/utils/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 32
+                    }
+                },
+                "141": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4175,12 +4176,12 @@
                                 "parent_location": [
                                     {
                                         "end_col": 9,
-                                        "end_line": 26,
+                                        "end_line": 27,
                                         "input_file": {
                                             "filename": "contracts/utils/math.cairo"
                                         },
                                         "start_col": 6,
-                                        "start_line": 26
+                                        "start_line": 27
                                     },
                                     "While handling return value of"
                                 ],
@@ -4199,12 +4200,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value of"
                         ],
@@ -4212,7 +4213,7 @@
                         "start_line": 4
                     }
                 },
-                "142": {
+                "143": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4230,12 +4231,12 @@
                         "parent_location": [
                             {
                                 "end_col": 70,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 60,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value 'res'"
                         ],
@@ -4243,7 +4244,7 @@
                         "start_line": 1
                     }
                 },
-                "143": {
+                "144": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4261,7 +4262,7 @@
                         "parent_location": [
                             {
                                 "end_col": 70,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4275,12 +4276,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling return value of"
                                         ],
@@ -4290,7 +4291,7 @@
                                     "While expanding the reference '__return_value_ptr' in:"
                                 ],
                                 "start_col": 60,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value 'res'"
                         ],
@@ -4298,7 +4299,7 @@
                         "start_line": 2
                     }
                 },
-                "145": {
+                "146": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4316,7 +4317,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4330,12 +4331,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling return value of"
                                         ],
@@ -4345,7 +4346,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value of"
                         ],
@@ -4353,7 +4354,7 @@
                         "start_line": 1
                     }
                 },
-                "146": {
+                "147": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4371,12 +4372,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value of"
                         ],
@@ -4384,7 +4385,7 @@
                         "start_line": 11
                     }
                 },
-                "147": {
+                "148": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4402,7 +4403,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4416,12 +4417,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling return value of"
                                         ],
@@ -4431,7 +4432,7 @@
                                     "While expanding the reference '__return_value_ptr_start' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value of"
                         ],
@@ -4439,7 +4440,7 @@
                         "start_line": 5
                     }
                 },
-                "148": {
+                "149": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4457,12 +4458,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling return value of"
                         ],
@@ -4470,7 +4471,7 @@
                         "start_line": 9
                     }
                 },
-                "149": {
+                "150": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4488,7 +4489,7 @@
                         "parent_location": [
                             {
                                 "end_col": 25,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4502,12 +4503,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 54,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 43,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -4517,7 +4518,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -4525,7 +4526,7 @@
                         "start_line": 1
                     }
                 },
-                "150": {
+                "151": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4543,7 +4544,7 @@
                         "parent_location": [
                             {
                                 "end_col": 41,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4557,12 +4558,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 54,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 43,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -4572,7 +4573,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 27,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -4580,7 +4581,7 @@
                         "start_line": 1
                     }
                 },
-                "151": {
+                "152": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4598,12 +4599,12 @@
                         "parent_location": [
                             {
                                 "end_col": 54,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 43,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -4611,7 +4612,7 @@
                         "start_line": 2
                     }
                 },
-                "152": {
+                "153": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4629,7 +4630,7 @@
                         "parent_location": [
                             {
                                 "end_col": 41,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4643,12 +4644,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 54,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 43,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -4658,7 +4659,7 @@
                                     "While expanding the reference '__calldata_ptr' in:"
                                 ],
                                 "start_col": 27,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -4666,7 +4667,7 @@
                         "start_line": 2
                     }
                 },
-                "154": {
+                "155": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4684,7 +4685,7 @@
                         "parent_location": [
                             {
                                 "end_col": 41,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4698,12 +4699,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 54,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 43,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -4713,7 +4714,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 27,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -4721,7 +4722,7 @@
                         "start_line": 1
                     }
                 },
-                "155": {
+                "156": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4739,12 +4740,12 @@
                         "parent_location": [
                             {
                                 "end_col": 54,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 43,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -4752,7 +4753,7 @@
                         "start_line": 8
                     }
                 },
-                "156": {
+                "157": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4770,12 +4771,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata of"
                         ],
@@ -4783,7 +4784,7 @@
                         "start_line": 1
                     }
                 },
-                "157": {
+                "158": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4801,7 +4802,7 @@
                         "parent_location": [
                             {
                                 "end_col": 25,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4815,7 +4816,7 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 54,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
@@ -4829,12 +4830,12 @@
                                                         "parent_location": [
                                                             {
                                                                 "end_col": 9,
-                                                                "end_line": 26,
+                                                                "end_line": 27,
                                                                 "input_file": {
                                                                     "filename": "contracts/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
-                                                                "start_line": 26
+                                                                "start_line": 27
                                                             },
                                                             "While constructing the external wrapper for:"
                                                         ],
@@ -4844,7 +4845,7 @@
                                                     "While expanding the reference 'range_check_ptr' in:"
                                                 ],
                                                 "start_col": 43,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -4854,7 +4855,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -4862,7 +4863,7 @@
                         "start_line": 1
                     }
                 },
-                "158": {
+                "159": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4880,7 +4881,7 @@
                         "parent_location": [
                             {
                                 "end_col": 54,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4894,12 +4895,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -4909,7 +4910,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 43,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -4917,7 +4918,7 @@
                         "start_line": 3
                     }
                 },
-                "160": {
+                "161": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4935,7 +4936,7 @@
                         "parent_location": [
                             {
                                 "end_col": 41,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -4949,12 +4950,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -4964,7 +4965,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 27,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -4972,7 +4973,7 @@
                         "start_line": 1
                     }
                 },
-                "161": {
+                "162": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -4990,7 +4991,7 @@
                         "parent_location": [
                             {
                                 "end_col": 54,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5004,12 +5005,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -5019,7 +5020,7 @@
                                     "While expanding the reference '__calldata_arg_arr' in:"
                                 ],
                                 "start_col": 43,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -5027,7 +5028,7 @@
                         "start_line": 5
                     }
                 },
-                "163": {
+                "164": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5038,15 +5039,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 9,
-                        "end_line": 26,
+                        "end_line": 27,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 6,
-                        "start_line": 26
+                        "start_line": 27
                     }
                 },
-                "165": {
+                "166": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5064,7 +5065,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5078,12 +5079,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -5093,7 +5094,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5101,7 +5102,7 @@
                         "start_line": 1
                     }
                 },
-                "166": {
+                "167": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5119,12 +5120,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5132,7 +5133,7 @@
                         "start_line": 2
                     }
                 },
-                "168": {
+                "169": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5150,7 +5151,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5164,12 +5165,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -5179,7 +5180,7 @@
                                     "While expanding the reference 'syscall_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5187,7 +5188,7 @@
                         "start_line": 1
                     }
                 },
-                "169": {
+                "170": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5205,7 +5206,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5219,12 +5220,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -5234,7 +5235,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5242,7 +5243,7 @@
                         "start_line": 2
                     }
                 },
-                "170": {
+                "171": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5260,7 +5261,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5274,12 +5275,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -5289,7 +5290,7 @@
                                     "While expanding the reference 'retdata_size' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5297,7 +5298,7 @@
                         "start_line": 2
                     }
                 },
-                "171": {
+                "172": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5315,7 +5316,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5329,12 +5330,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 26,
+                                                "end_line": 27,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 26
+                                                "start_line": 27
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -5344,7 +5345,7 @@
                                     "While expanding the reference 'retdata' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5352,7 +5353,7 @@
                         "start_line": 2
                     }
                 },
-                "172": {
+                "173": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5370,12 +5371,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 26,
+                                "end_line": 27,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 26
+                                "start_line": 27
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5383,7 +5384,7 @@
                         "start_line": 1
                     }
                 },
-                "173": {
+                "174": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5393,30 +5394,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 27,
-                        "end_line": 37,
+                        "end_line": 38,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 9,
-                        "start_line": 37
-                    }
-                },
-                "175": {
-                    "accessible_scopes": [
-                        "__main__",
-                        "__main__",
-                        "__main__.sub"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 19,
-                        "end_line": 39,
-                        "input_file": {
-                            "filename": "contracts/utils/math.cairo"
-                        },
-                        "start_col": 13,
-                        "start_line": 39
+                        "start_line": 38
                     }
                 },
                 "176": {
@@ -5428,13 +5411,13 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
-                        "end_col": 28,
-                        "end_line": 39,
+                        "end_col": 19,
+                        "end_line": 40,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
-                        "start_col": 22,
-                        "start_line": 39
+                        "start_col": 13,
+                        "start_line": 40
                     }
                 },
                 "177": {
@@ -5447,12 +5430,12 @@
                     "hints": [],
                     "inst": {
                         "end_col": 28,
-                        "end_line": 39,
+                        "end_line": 40,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
-                        "start_col": 13,
-                        "start_line": 39
+                        "start_col": 22,
+                        "start_line": 40
                     }
                 },
                 "178": {
@@ -5464,16 +5447,34 @@
                     "flow_tracking_data": null,
                     "hints": [],
                     "inst": {
+                        "end_col": 28,
+                        "end_line": 40,
+                        "input_file": {
+                            "filename": "contracts/utils/math.cairo"
+                        },
+                        "start_col": 13,
+                        "start_line": 40
+                    }
+                },
+                "179": {
+                    "accessible_scopes": [
+                        "__main__",
+                        "__main__",
+                        "__main__.sub"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
                         "end_col": 29,
-                        "end_line": 39,
+                        "end_line": 40,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 5,
-                        "start_line": 39
+                        "start_line": 40
                     }
                 },
-                "179": {
+                "180": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5492,12 +5493,12 @@
                                 "parent_location": [
                                     {
                                         "end_col": 9,
-                                        "end_line": 35,
+                                        "end_line": 36,
                                         "input_file": {
                                             "filename": "contracts/utils/math.cairo"
                                         },
                                         "start_col": 6,
-                                        "start_line": 35
+                                        "start_line": 36
                                     },
                                     "While handling return value of"
                                 ],
@@ -5516,12 +5517,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value of"
                         ],
@@ -5529,7 +5530,7 @@
                         "start_line": 4
                     }
                 },
-                "181": {
+                "182": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5547,12 +5548,12 @@
                         "parent_location": [
                             {
                                 "end_col": 53,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 43,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value 'res'"
                         ],
@@ -5560,7 +5561,7 @@
                         "start_line": 1
                     }
                 },
-                "182": {
+                "183": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5578,7 +5579,7 @@
                         "parent_location": [
                             {
                                 "end_col": 53,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5592,12 +5593,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling return value of"
                                         ],
@@ -5607,7 +5608,7 @@
                                     "While expanding the reference '__return_value_ptr' in:"
                                 ],
                                 "start_col": 43,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value 'res'"
                         ],
@@ -5615,7 +5616,7 @@
                         "start_line": 2
                     }
                 },
-                "184": {
+                "185": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5633,7 +5634,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5647,12 +5648,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling return value of"
                                         ],
@@ -5662,7 +5663,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value of"
                         ],
@@ -5670,7 +5671,7 @@
                         "start_line": 1
                     }
                 },
-                "185": {
+                "186": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5688,12 +5689,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value of"
                         ],
@@ -5701,7 +5702,7 @@
                         "start_line": 11
                     }
                 },
-                "186": {
+                "187": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5719,7 +5720,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5733,12 +5734,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling return value of"
                                         ],
@@ -5748,7 +5749,7 @@
                                     "While expanding the reference '__return_value_ptr_start' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value of"
                         ],
@@ -5756,7 +5757,7 @@
                         "start_line": 5
                     }
                 },
-                "187": {
+                "188": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5774,12 +5775,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling return value of"
                         ],
@@ -5787,7 +5788,7 @@
                         "start_line": 9
                     }
                 },
-                "188": {
+                "189": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5805,7 +5806,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5819,12 +5820,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -5834,7 +5835,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -5842,7 +5843,7 @@
                         "start_line": 1
                     }
                 },
-                "189": {
+                "190": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5860,7 +5861,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5874,12 +5875,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -5889,7 +5890,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -5897,7 +5898,7 @@
                         "start_line": 1
                     }
                 },
-                "190": {
+                "191": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5915,12 +5916,12 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 26,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -5928,7 +5929,7 @@
                         "start_line": 2
                     }
                 },
-                "191": {
+                "192": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -5946,7 +5947,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -5960,12 +5961,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -5975,7 +5976,7 @@
                                     "While expanding the reference '__calldata_ptr' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -5983,7 +5984,7 @@
                         "start_line": 2
                     }
                 },
-                "193": {
+                "194": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6001,7 +6002,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6015,12 +6016,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -6030,7 +6031,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -6038,7 +6039,7 @@
                         "start_line": 1
                     }
                 },
-                "194": {
+                "195": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6056,12 +6057,12 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 26,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -6069,7 +6070,7 @@
                         "start_line": 8
                     }
                 },
-                "195": {
+                "196": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6087,12 +6088,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata of"
                         ],
@@ -6100,7 +6101,7 @@
                         "start_line": 1
                     }
                 },
-                "196": {
+                "197": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6118,7 +6119,7 @@
                         "parent_location": [
                             {
                                 "end_col": 24,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6132,12 +6133,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6147,7 +6148,7 @@
                                     "While expanding the reference '__calldata_arg_arr_len' in:"
                                 ],
                                 "start_col": 10,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr_len'"
                         ],
@@ -6155,7 +6156,7 @@
                         "start_line": 1
                     }
                 },
-                "197": {
+                "198": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6173,7 +6174,7 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6187,12 +6188,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6202,7 +6203,7 @@
                                     "While expanding the reference '__calldata_arg_arr' in:"
                                 ],
                                 "start_col": 26,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -6210,7 +6211,7 @@
                         "start_line": 5
                     }
                 },
-                "199": {
+                "200": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6221,15 +6222,15 @@
                     "hints": [],
                     "inst": {
                         "end_col": 9,
-                        "end_line": 35,
+                        "end_line": 36,
                         "input_file": {
                             "filename": "contracts/utils/math.cairo"
                         },
                         "start_col": 6,
-                        "start_line": 35
+                        "start_line": 36
                     }
                 },
-                "201": {
+                "202": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6247,7 +6248,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6261,7 +6262,7 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 37,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
@@ -6275,12 +6276,12 @@
                                                         "parent_location": [
                                                             {
                                                                 "end_col": 9,
-                                                                "end_line": 35,
+                                                                "end_line": 36,
                                                                 "input_file": {
                                                                     "filename": "contracts/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
-                                                                "start_line": 35
+                                                                "start_line": 36
                                                             },
                                                             "While constructing the external wrapper for:"
                                                         ],
@@ -6290,7 +6291,7 @@
                                                     "While expanding the reference 'range_check_ptr' in:"
                                                 ],
                                                 "start_col": 26,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While handling calldata argument 'arr'"
                                         ],
@@ -6300,7 +6301,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6308,7 +6309,7 @@
                         "start_line": 1
                     }
                 },
-                "202": {
+                "203": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6326,7 +6327,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6340,12 +6341,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6355,7 +6356,7 @@
                                     "While expanding the reference 'ret_value' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6363,7 +6364,7 @@
                         "start_line": 1
                     }
                 },
-                "203": {
+                "204": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6381,7 +6382,7 @@
                         "parent_location": [
                             {
                                 "end_col": 37,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6395,12 +6396,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6410,7 +6411,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 26,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While handling calldata argument 'arr'"
                         ],
@@ -6418,7 +6419,7 @@
                         "start_line": 3
                     }
                 },
-                "205": {
+                "206": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6436,12 +6437,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6449,7 +6450,7 @@
                         "start_line": 2
                     }
                 },
-                "207": {
+                "208": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6467,7 +6468,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6481,12 +6482,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6496,7 +6497,7 @@
                                     "While expanding the reference 'syscall_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6504,7 +6505,7 @@
                         "start_line": 1
                     }
                 },
-                "208": {
+                "209": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6522,7 +6523,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6536,12 +6537,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6551,7 +6552,7 @@
                                     "While expanding the reference 'range_check_ptr' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6559,7 +6560,7 @@
                         "start_line": 2
                     }
                 },
-                "209": {
+                "210": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6577,7 +6578,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6591,12 +6592,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6606,7 +6607,7 @@
                                     "While expanding the reference 'retdata_size' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6614,7 +6615,7 @@
                         "start_line": 2
                     }
                 },
-                "210": {
+                "211": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6632,7 +6633,7 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
@@ -6646,12 +6647,12 @@
                                         "parent_location": [
                                             {
                                                 "end_col": 9,
-                                                "end_line": 35,
+                                                "end_line": 36,
                                                 "input_file": {
                                                     "filename": "contracts/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
-                                                "start_line": 35
+                                                "start_line": 36
                                             },
                                             "While constructing the external wrapper for:"
                                         ],
@@ -6661,7 +6662,7 @@
                                     "While expanding the reference 'retdata' in:"
                                 ],
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6669,7 +6670,7 @@
                         "start_line": 2
                     }
                 },
-                "211": {
+                "212": {
                     "accessible_scopes": [
                         "__main__",
                         "__main__",
@@ -6687,12 +6688,12 @@
                         "parent_location": [
                             {
                                 "end_col": 9,
-                                "end_line": 35,
+                                "end_line": 36,
                                 "input_file": {
                                     "filename": "contracts/utils/math.cairo"
                                 },
                                 "start_col": 6,
-                                "start_line": 35
+                                "start_line": 36
                             },
                             "While constructing the external wrapper for:"
                         ],
@@ -6779,7 +6780,7 @@
                     }
                 }
             ],
-            "140": [
+            "141": [
                 {
                     "accessible_scopes": [
                         "__main__",
@@ -6797,7 +6798,7 @@
                     }
                 }
             ],
-            "179": [
+            "180": [
                 {
                     "accessible_scopes": [
                         "__main__",
@@ -6817,6 +6818,10 @@
             ]
         },
         "identifiers": {
+            "__main__.RC_BOUND": {
+                "destination": "starkware.cairo.common.math_cmp.RC_BOUND",
+                "type": "alias"
+            },
             "__main__.div": {
                 "decorators": [
                     "view"
@@ -6917,7 +6922,7 @@
                 "decorators": [
                     "view"
                 ],
-                "pc": 173,
+                "pc": 174,
                 "type": "function"
             },
             "__main__.sub.Args": {
@@ -6958,7 +6963,7 @@
                             "group": 16,
                             "offset": 0
                         },
-                        "pc": 173,
+                        "pc": 174,
                         "value": "[cast(fp + (-4), felt*)]"
                     }
                 ],
@@ -7004,7 +7009,7 @@
                 "decorators": [
                     "view"
                 ],
-                "pc": 149,
+                "pc": 150,
                 "type": "function"
             },
             "__wrappers__.div.Args": {
@@ -7033,7 +7038,7 @@
             },
             "__wrappers__.div_encode_return": {
                 "decorators": [],
-                "pc": 140,
+                "pc": 141,
                 "type": "function"
             },
             "__wrappers__.div_encode_return.Args": {
@@ -7142,7 +7147,7 @@
                 "decorators": [
                     "view"
                 ],
-                "pc": 188,
+                "pc": 189,
                 "type": "function"
             },
             "__wrappers__.sub.Args": {
@@ -7171,7 +7176,7 @@
             },
             "__wrappers__.sub_encode_return": {
                 "decorators": [],
-                "pc": 179,
+                "pc": 180,
                 "type": "function"
             },
             "__wrappers__.sub_encode_return.Args": {
@@ -7608,6 +7613,18 @@
                     }
                 ],
                 "type": "reference"
+            },
+            "starkware.cairo.common.math_cmp.RC_BOUND": {
+                "type": "const",
+                "value": 340282366920938463463374607431768211456
+            },
+            "starkware.cairo.common.math_cmp.assert_le_felt": {
+                "destination": "starkware.cairo.common.math.assert_le_felt",
+                "type": "alias"
+            },
+            "starkware.cairo.common.math_cmp.assert_lt_felt": {
+                "destination": "starkware.cairo.common.math.assert_lt_felt",
+                "type": "alias"
             },
             "starkware.starknet.common.storage.ADDR_BOUND": {
                 "type": "const",
@@ -8331,7 +8348,7 @@
                         "group": 16,
                         "offset": 0
                     },
-                    "pc": 173,
+                    "pc": 174,
                     "value": "[cast(fp + (-4), felt*)]"
                 }
             ]

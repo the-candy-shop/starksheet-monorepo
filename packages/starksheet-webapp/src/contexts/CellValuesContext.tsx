@@ -5,6 +5,7 @@ import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
 
 export const CellValuesContext = React.createContext<{
   loading: boolean;
+  failed: boolean;
   hasLoaded: boolean;
   values: { owner: BigNumberish; value: BigNumberish }[];
   updateValueOwner: (id: number, owner: BigNumberish) => void;
@@ -14,6 +15,7 @@ export const CellValuesContext = React.createContext<{
   refresh: () => void;
 }>({
   loading: false,
+  failed: false,
   hasLoaded: false,
   values: [],
   updateValueOwner: () => {},
@@ -35,6 +37,7 @@ export const CellValuesContextProvider = ({
   const previousGridData = useRef<any>(undefined);
   const [cellNames, setCellNames] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [failed, setFailed] = React.useState<boolean>(false);
   const [hasLoaded, setHasLoaded] = React.useState<boolean>(false);
   const { contract } = useStarkSheetContract();
 
@@ -68,6 +71,7 @@ export const CellValuesContextProvider = ({
   const load = useCallback(
     (contract: Contract) => {
       setLoading(true);
+      setFailed(false);
       return contract
         .call("renderGrid", [])
         .then((gridData) => {
@@ -83,6 +87,9 @@ export const CellValuesContextProvider = ({
           refreshAspect(gridCells);
           setValues(gridCells);
           setHasLoaded(true);
+        })
+        .catch((error) => {
+          setFailed(true);
         })
         .finally(() => setLoading(false));
     },
@@ -131,6 +138,7 @@ export const CellValuesContextProvider = ({
         updateValueOwner,
         updateValue,
         loading,
+        failed,
         hasLoaded,
         refresh,
       }}

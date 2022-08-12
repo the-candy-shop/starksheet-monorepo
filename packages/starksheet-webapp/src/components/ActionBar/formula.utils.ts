@@ -67,7 +67,7 @@ export function parse(cellName: string, formula: string): CellValue | null {
     return parsedNumber;
   }
 
-  const parsedFormula = parseFormulaValue(cellName, formula);
+  const parsedFormula = parseFormulaValue(formula);
   if (parsedFormula && !parsedFormula.dependencies?.includes(cellName)) {
     return parsedFormula;
   }
@@ -85,7 +85,7 @@ export function getError(
     return null;
   }
 
-  const parsedFormula = parseFormulaValue(cellName, formula);
+  const parsedFormula = parseFormulaValue(formula);
 
   console.log("parsedFormula.dependencies", parsedFormula?.dependencies);
   console.log("cellDependencies", cellDependencies);
@@ -124,10 +124,7 @@ export function parseNumberValue(formula: string): CellValue | null {
   };
 }
 
-export function parseFormulaValue(
-  cellName: string,
-  formula: string
-): CellValue | null {
+export function parseFormulaValue(formula: string): CellValue | null {
   const match = formula.match(validFormulaRegex);
 
   if (!match) return null;

@@ -53,7 +53,11 @@ export function toPlainTextFormula(
 
   return `${operator}(${cell_calldata
     .slice(1)
-    .map((data) => data.toNumber() % 2 === 0 ? data.div(toBN(2)) : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()])
+    .map((data) =>
+      data.toNumber() % 2 === 0
+        ? data.div(toBN(2))
+        : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()]
+    )
     .join(";")})`;
 }
 
@@ -71,16 +75,36 @@ export function parse(cellName: string, formula: string): CellValue | null {
   return null;
 }
 
-export function getError(cellName: string, formula: string): string | null {
+export function getError(
+  cellName: string,
+  formula: string,
+  cellDependencies: string[]
+): string | null {
   const parsedNumber = parseNumberValue(formula);
   if (parsedNumber) {
     return null;
   }
 
   const parsedFormula = parseFormulaValue(cellName, formula);
+
+  console.log("parsedFormula.dependencies", parsedFormula?.dependencies);
+  console.log("cellDependencies", cellDependencies);
   if (parsedFormula) {
-    if (parsedFormula.dependencies?.includes(cellName)) {
+    if (!parsedFormula.dependencies) {
+      return null;
+    }
+
+    if (parsedFormula.dependencies.includes(cellName)) {
       return "You cannot reference a cell inside itself";
+    }
+
+    const circularDependencies = parsedFormula.dependencies?.filter((d) =>
+      cellDependencies.includes(d)
+    );
+    if (circularDependencies?.length > 0) {
+      return `Invalid formula: circular dependencies with other cells ${circularDependencies.join(
+        ", "
+      )}`;
     }
 
     return null;
@@ -152,5 +176,8 @@ export function getValue(value: BN): BN {
 }
 
 export function getDependencies(cell_calldata: BN[]): number[] {
-  return cell_calldata.map((data) => data.toNumber()).filter((data) => data % 2 !== 0).map((data) => (data - 1) / 2);
+  return cell_calldata
+    .map((data) => data.toNumber())
+    .filter((data) => data % 2 !== 0)
+    .map((data) => (data - 1) / 2);
 }

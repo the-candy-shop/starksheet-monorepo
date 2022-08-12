@@ -1,16 +1,17 @@
-import React, { useCallback, useMemo } from "react";
 import { Box, BoxProps } from "@mui/material";
-import Button from "../Button/Button";
 import { useStarknet } from "@starknet-react/core";
-import Cell from "../Cell/Cell";
+import { useCallback, useMemo } from "react";
 import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
-import { getError, parse } from "../ActionBar/formula.utils";
-import LoadingDots from "../LoadingDots/LoadingDots";
 import Tooltip from "../../Tooltip/Tooltip";
+import { getError, parse } from "../ActionBar/formula.utils";
+import Button from "../Button/Button";
+import Cell from "../Cell/Cell";
+import LoadingDots from "../LoadingDots/LoadingDots";
 
 export type SaveButtonProps = {
   unSavedValue: string;
+  cellDependencies: string[];
   selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
   sx?: BoxProps["sx"];
@@ -18,6 +19,7 @@ export type SaveButtonProps = {
 
 function SaveButton({
   unSavedValue,
+  cellDependencies,
   selectedCell,
   currentCellOwnerAddress,
   sx,
@@ -50,7 +52,10 @@ function SaveButton({
   ]);
 
   const error = useMemo(
-    () => (selectedCell ? getError(selectedCell.name, unSavedValue) : null),
+    () =>
+      selectedCell
+        ? getError(selectedCell.name, unSavedValue, cellDependencies)
+        : null,
     [selectedCell, unSavedValue]
   );
   const disabled = useMemo(() => !account, [account]);

@@ -1,10 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import { AbisContextProvider } from "./contexts/AbisContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
 import { CurrentSheetContextProvider } from "./contexts/CurrentSheetContext";
+import contract from "./contract.json";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +21,9 @@ function Root() {
   return (
     <CurrentSheetContextProvider>
       <CellValuesContextProvider>
-        <App />
+        <AbisContextProvider initialContractAbis={contract.contractAbis}>
+          <App />
+        </AbisContextProvider>
       </CellValuesContextProvider>
     </CurrentSheetContextProvider>
   );

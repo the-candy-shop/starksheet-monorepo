@@ -1,9 +1,11 @@
 import { Box, BoxProps } from "@mui/material";
 import { useStarknet } from "@starknet-react/core";
 import { useSnackbar } from "notistack";
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
+import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH } from "../../config";
+import { AbisContext } from "../../contexts/AbisContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
 import Cell from "../Cell/Cell";
@@ -12,6 +14,7 @@ import LoadingDots from "../LoadingDots/LoadingDots";
 import SaveButton from "../SaveButton/SaveButton";
 import {
   buildFormulaDisplay,
+  CellData,
   getDependencies,
   parse,
   toPlainTextFormula,
@@ -25,13 +28,15 @@ export type ActionBarProps = {
 
 function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
   const { cellNames } = useContext(CellValuesContext);
+  const { getAbiForContract } = useContext(AbisContext);
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [newDependencies, setNewDependencies] = React.useState<string[]>([]);
+  const [newDependencies, setNewDependencies] = React.useState<number[]>([]);
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
+  const [cellData, setCellData] = React.useState<CellData | null>(null);
   const previousSelectedCell = React.useRef<string | null>(
     selectedCell ? selectedCell.name : null
   );
@@ -57,7 +62,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
     [contract]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       contract &&
       selectedCell &&
@@ -69,10 +74,21 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
       setLoading(true);
       contract
         .call("getCell", [selectedCell.id])
-        .then((cellData: any) => {
+        .then(async (cellData: any) => {
+          const abi = await getAbiForContract(
+            "0x" + cellData.contractAddress.toString(16)
+          );
+          return { ...cellData, abi };
+        })
+        .then((cellData) => {
           setUnsavedValue(
             toPlainTextFormula(
-              { value: cellData.value, cell_calldata: cellData.cell_calldata },
+              {
+                contractAddress: cellData.contractAddress,
+                abi: cellData.abi,
+                value: cellData.value,
+                calldata: cellData.cell_calldata,
+              },
               cellNames
             )
           );
@@ -82,34 +98,46 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         )
         .finally(() => setLoading(false));
     }
-  }, [cellNames, contract, enqueueSnackbar, selectedCell]);
+  }, [cellNames, contract, enqueueSnackbar, selectedCell, getAbiForContract]);
 
-  React.useEffect(() => {
-    if (!contract) {
+  useEffect(() => {
+    const _cellData = parse(unSavedValue);
+
+    if (!_cellData) {
+      setCellData(_cellData);
       return;
     }
-    const formula = parse(unSavedValue);
-    if (formula?.type !== "formula") {
-      return;
-    }
-    if (!formula?.dependencies) {
-      return;
-    }
+
     setDisabled(true);
 
-    let _deps = formula.dependencies
-      .map((d) => cellNames.indexOf(d))
-      .filter((d) => d !== -1);
+    let _deps = getDependencies(_cellData.calldata);
 
     Promise.all(_deps.map((d) => getAllDependencies(_deps)(d)))
       .then(() => {
-        setNewDependencies(Array.from(new Set(_deps)).map((d) => cellNames[d]));
+        setNewDependencies(Array.from(new Set(_deps)));
       })
       .catch((error: any) =>
         enqueueSnackbar(error.toString(), { variant: "error" })
       )
       .finally(() => setDisabled(false));
-  }, [contract, unSavedValue, cellNames, enqueueSnackbar, getAllDependencies]);
+
+    getAbiForContract("0x" + _cellData.contractAddress.toString(16))
+      .then((abi) => {
+        return !!abi && Object.keys(abi).length > 0
+          ? abi[_cellData.value.toString(16)].inputs
+          : [];
+      })
+      .then((inputs) => {
+        if (inputs.filter((i) => i.type === "felt*").length > 0) {
+          // TODO: this is a very naive way to handle arrays because atm the FE does not let the user pass list and felts
+          _cellData.calldata = [
+            toBN(_cellData.calldata.length * 2),
+            ..._cellData.calldata,
+          ];
+        }
+        setCellData(_cellData);
+      });
+  }, [unSavedValue, enqueueSnackbar, getAllDependencies, getAbiForContract]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -121,6 +149,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
           flex: 1,
           marginLeft: `-${CELL_BORDER_WIDTH}px`,
           position: "relative",
+          overflow: "auto",
         }}
       >
         {loading && <LoadingDots />}
@@ -145,6 +174,9 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
                     dangerouslySetInnerHTML={{
                       __html: buildFormulaDisplay(unSavedValue),
                     }}
+                    sx={{
+                      overflow: "auto",
+                    }}
                   />
                 )}
                 {!!account && account === owner && (
@@ -168,7 +200,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         )}
       </Cell>
       <SaveButton
-        unSavedValue={unSavedValue}
+        cellData={cellData}
         newDependencies={newDependencies}
         selectedCell={selectedCell}
         disabled={disabled}

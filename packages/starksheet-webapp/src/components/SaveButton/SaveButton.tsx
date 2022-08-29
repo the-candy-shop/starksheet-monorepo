@@ -4,14 +4,14 @@ import { useCallback, useMemo } from "react";
 import { useMint } from "../../hooks/useMint";
 import { useSetCell } from "../../hooks/useSetCell";
 import Tooltip from "../../Tooltip/Tooltip";
-import { getError, parse } from "../ActionBar/formula.utils";
+import { CellData, getError } from "../ActionBar/formula.utils";
 import Button from "../Button/Button";
 import Cell from "../Cell/Cell";
 import LoadingDots from "../LoadingDots/LoadingDots";
 
 export type SaveButtonProps = {
-  unSavedValue: string;
-  newDependencies: string[];
+  cellData: CellData | null;
+  newDependencies: number[];
   selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
   disabled?: boolean;
@@ -19,7 +19,7 @@ export type SaveButtonProps = {
 };
 
 function SaveButton({
-  unSavedValue,
+  cellData,
   newDependencies,
   selectedCell,
   currentCellOwnerAddress,
@@ -38,27 +38,18 @@ function SaveButton({
     }
 
     if (!!account && currentCellOwnerAddress === account) {
-      const parsedValue = parse(unSavedValue);
+      if (!cellData) return;
 
-      if (!parsedValue) return;
-
-      return setCell(selectedCell.id, unSavedValue, parsedValue);
+      return setCell(selectedCell.id, cellData);
     }
-  }, [
-    account,
-    currentCellOwnerAddress,
-    mint,
-    selectedCell,
-    setCell,
-    unSavedValue,
-  ]);
+  }, [account, currentCellOwnerAddress, mint, selectedCell, setCell, cellData]);
 
   const error = useMemo(
     () =>
       selectedCell
-        ? getError(selectedCell.name, unSavedValue, newDependencies)
+        ? getError(selectedCell.id, cellData, newDependencies)
         : null,
-    [selectedCell, unSavedValue, newDependencies]
+    [selectedCell, cellData, newDependencies]
   );
   const noAccount = useMemo(() => !account, [account]);
 

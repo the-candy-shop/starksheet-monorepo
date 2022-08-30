@@ -1,8 +1,8 @@
-import StarkSheetContract from "../contract.json";
-import { Abi, Contract } from "starknet";
-import { useMemo } from "react";
-import { starknetProvider } from "../App";
 import { useStarknet } from "@starknet-react/core";
+import { useMemo } from "react";
+import { Abi, Contract } from "starknet";
+import StarkSheetContract from "../contract.json";
+import { starknetProvider } from "../provider";
 
 export function useSheetListContract() {
   const { library } = useStarknet();

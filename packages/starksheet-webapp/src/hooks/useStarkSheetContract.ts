@@ -1,9 +1,9 @@
-import { Abi, Contract } from "starknet";
-import StarkSheetContract from "../contract.json";
-import { useContext, useMemo } from "react";
-import { CurrentSheetContext } from "../contexts/CurrentSheetContext";
-import { starknetProvider } from "../App";
 import { useStarknet } from "@starknet-react/core";
+import { useContext, useMemo } from "react";
+import { Abi, Contract } from "starknet";
+import { CurrentSheetContext } from "../contexts/CurrentSheetContext";
+import StarkSheetContract from "../contract.json";
+import { starknetProvider } from "../provider";
 
 export function useStarkSheetContract(address?: string) {
   const { currentSheetAddress } = useContext(CurrentSheetContext);

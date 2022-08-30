@@ -1,6 +1,6 @@
-import { useStarknet } from "@starknet-react/core";
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
+import { starknetProvider } from "../provider";
 import {
   ContractAbi,
   ContractAbis,
@@ -32,15 +32,13 @@ export const AbisContextProvider = ({
   const [contractAbis, setContractAbis] =
     useState<ContractAbis>(_initialContractAbis);
 
-  const { library } = useStarknet();
-
   const setAbiForContract = (address: string, abi: Abi) => {
     setContractAbis({ ...contractAbis, [address]: parseAbi(abi) });
   };
 
   const getAbiForContract = async (address: string) => {
     if (!(address in contractAbis)) {
-      const response = await library.getCode(address);
+      const response = await starknetProvider.getCode(address);
       setAbiForContract(address, response.abi);
       return parseAbi(response.abi);
     } else {

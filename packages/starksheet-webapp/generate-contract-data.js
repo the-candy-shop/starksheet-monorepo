@@ -17,7 +17,8 @@ async function run() {
   const contractAbis = Object.values(contractDeployData).reduce(
     (prev, cur) => ({
       ...prev,
-      [cur.address]: require(`../starksheet-cairo/${cur.artifact}`)["abi"],
+      ["0x" + BigInt(cur.address).toString(16)]:
+        require(`../starksheet-cairo/${cur.artifact}`)["abi"],
     }),
     {}
   );

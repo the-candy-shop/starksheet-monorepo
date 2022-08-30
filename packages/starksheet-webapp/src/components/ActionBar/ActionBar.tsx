@@ -148,7 +148,7 @@ function ActionBar({ selectedCell, owner, sx }: ActionBarProps) {
         sx={{
           flex: 1,
           marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          position: "relative",
+          position: "static",
           overflow: "auto",
         }}
       >

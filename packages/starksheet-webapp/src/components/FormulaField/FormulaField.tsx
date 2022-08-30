@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ContentEditable, {
   Props as ContentEditableProps,
 } from "react-contenteditable";
-import { CELL_HEIGHT } from "../../config";
+import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { buildFormulaDisplay, RC_BOUND } from "../ActionBar/formula.utils";
 
@@ -65,8 +65,8 @@ function FormulaField({
           position: "absolute",
           background: "white",
           zIndex: 1,
-          top: `${CELL_HEIGHT}px`,
-          left: "54px",
+          top: `${CELL_HEIGHT * 2 - CELL_BORDER_WIDTH}px`,
+          left: `${CELL_WIDTH * 2 - CELL_BORDER_WIDTH}px`,
           border: "1px solid black",
           maxHeight: "300px",
           overflow: "auto",

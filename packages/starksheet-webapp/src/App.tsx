@@ -7,7 +7,6 @@ import BN from "bn.js";
 import { SnackbarProvider } from "notistack";
 import React, { useContext, useMemo } from "react";
 import { HotKeys } from "react-hotkeys";
-import { Provider } from "starknet";
 import { toHex } from "starknet/utils/number";
 import ActionBar from "./components/ActionBar/ActionBar";
 import Footer from "./components/Footer/Footer";
@@ -16,6 +15,7 @@ import LoadingDots from "./components/LoadingDots/LoadingDots";
 import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
 import { CellValuesContext } from "./contexts/CellValuesContext";
+import { starknetProvider } from "./provider";
 import {
   getBottomCellName,
   getLeftCellName,
@@ -32,13 +32,6 @@ const keyMap = {
   TOP: "ArrowUp",
   BOTTOM: "ArrowDown",
 };
-
-export const starknetProvider = new Provider({
-  baseUrl:
-    process.env.REACT_APP_NETWORK === "alpha-mainnet"
-      ? "https://alpha-mainnet.starknet.io"
-      : "https://alpha4.starknet.io",
-});
 
 function App() {
   const connectors = getInstalledInjectedConnectors();

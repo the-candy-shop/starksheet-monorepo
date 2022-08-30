@@ -3,19 +3,15 @@ import BN from "bn.js";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toBN } from "starknet/utils/number";
-import {
-  CellValue,
-  operationNumbers
-} from "../components/ActionBar/formula.utils";
+import { CellData } from "../components/ActionBar/formula.utils";
 import { CellValuesContext } from "../contexts/CellValuesContext";
-import StarkSheetContract from "../contract.json";
 import { useStarkSheetContract } from "./useStarkSheetContract";
 
 export const useSetCell = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useStarknet();
   const { contract } = useStarkSheetContract();
-  const { refresh, cellNames } = useContext(CellValuesContext);
+  const { refresh } = useContext(CellValuesContext);
   const [loading, setLoading] = useState<boolean>(false);
   const { invoke, error, reset } = useStarknetInvoke({
     contract,
@@ -64,41 +60,30 @@ export const useSetCell = () => {
   );
 
   const setCell = useCallback(
-    async (id: number, value: string, parsedValue: CellValue) => {
+    async (id: number, cellData: CellData) => {
       if (!contract || !account) return;
 
       try {
         setLoading(true);
 
-        if (parsedValue.type === "number") {
-          await invoke({ args: [id, toBN(2).pow(toBN(128)), value, []] });
-          await waitForTransaction(id, toBN(value), []);
-        } else if (parsedValue.type === "formula") {
-          // @ts-ignore
-          const operationValue = operationNumbers[parsedValue.operation];
-          // @ts-ignore
-          const cell_calldata = [toBN(parsedValue.dependencies.length * 2), ...parsedValue.dependencies.map((dep) =>
-            toBN(cellNames.indexOf(dep) > -1 ? cellNames.indexOf(dep) * 2 + 1 : parseInt(dep) * 2)
-          )];
-          await invoke({
-            args: [
-              id,
-              StarkSheetContract.mathAddress,
-              operationValue,
-              cell_calldata,
-            ],
-          });
-          await waitForTransaction(id, operationValue, cell_calldata);
-        }
+        await invoke({
+          args: [
+            id,
+            cellData.contractAddress,
+            cellData.value,
+            cellData.calldata,
+          ],
+        });
+        await waitForTransaction(id, toBN(cellData.value), cellData.calldata);
 
-        await refresh();
+        refresh();
       } catch (e) {
         console.log("e", e);
       } finally {
         setLoading(false);
       }
     },
-    [account, cellNames, contract, invoke, refresh, waitForTransaction]
+    [account, contract, invoke, refresh, waitForTransaction]
   );
 
   return { setCell, loading };

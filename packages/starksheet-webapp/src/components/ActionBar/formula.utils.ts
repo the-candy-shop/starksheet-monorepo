@@ -1,57 +1,35 @@
 import BN from "bn.js";
+import { constants } from "starknet";
+import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { BigNumberish, toBN } from "starknet/utils/number";
-import StarkSheetContract from "../../contract.json";
+import { ContractAbi } from "../../utils/abiUtils";
 
-const PRIME = toBN(2)
-  .pow(toBN(251))
-  .add(toBN(17).mul(toBN(2).pow(toBN(192))))
-  .add(toBN(1));
+export const RC_BOUND = toBN(2).pow(toBN(128));
 
-const validFormulaRegex =
-  /^(SUM|MINUS|DIVIDE|PRODUCT)\((([A-Z0-9]+);)+([A-Z0-9]+)\)$/;
+const contractCallRegex =
+  /(?<contractAddress>0x[a-f0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9; ]*)\)/i;
 
-export const operationNumbers = {
-  SUM: toBN(StarkSheetContract.operations.SUM),
-  MINUS: toBN(StarkSheetContract.operations.MINUS),
-  // DIVIDE: toBN(StarkSheetContract.operations.DIVIDE),
-  PRODUCT: toBN(StarkSheetContract.operations.PRODUCT),
-};
-
-export type CellValue = {
-  type: "number" | "formula";
-  operation?: "SUM" | "MINUS" | "DIVIDE" | "PRODUCT";
-  dependencies?: string[];
-  value?: number;
+export type CellData = {
+  contractAddress: BigNumberish;
+  value: BigNumberish;
+  calldata: BN[];
 };
 
 export function toPlainTextFormula(
-  {
-    value,
-    cell_calldata,
-  }: {
-    value: BigNumberish;
-    cell_calldata?: BN[];
-  },
+  { contractAddress, abi, value, calldata }: CellData & { abi: ContractAbi },
   cellNames: string[]
 ): string {
-  if (
-    !cell_calldata ||
-    cell_calldata.length === 0 ||
-    cell_calldata[0].toString() === "0"
-  ) {
+  const selector = "0x" + value.toString(16);
+  if (!abi[selector]) {
     return value.toString();
   }
 
-  const operator = Object.keys(operationNumbers).find(
-    // @ts-ignore
-    (key) => operationNumbers[key].toString() === value.toString()
-  );
+  const operator = abi[selector].name;
 
-  if (!operator) {
-    return "";
-  }
-
-  return `${operator}(${cell_calldata
+  return `0x${
+    contractAddress.toString(16)
+    // .replace(/(.{4})..+(.{4})/, "$1...$2")
+  }.${operator}(${calldata
     .slice(1)
     .map((data) =>
       data.toNumber() % 2 === 0
@@ -61,28 +39,55 @@ export function toPlainTextFormula(
     .join(";")})`;
 }
 
-export function parse(formula: string): CellValue | null {
-  const parsedNumber = parseNumberValue(formula);
-  if (parsedNumber) {
-    return parsedNumber;
+export function parse(formula: string): CellData | null {
+  const formulaMatch = formula.match(contractCallRegex);
+  if (!formulaMatch?.groups) {
+    if (!formula.match(/^(0x)?[a-f0-9]+$/i)) {
+      return null;
+    }
+    return {
+      contractAddress: RC_BOUND,
+      value: toBN(formula),
+      calldata: [],
+    };
   }
+  const args = formulaMatch.groups.args
+    .toLowerCase()
+    .split(";")
+    .filter((arg) => !!arg)
+    .map(parseArg)
+    .map(toBN);
 
-  return parseFormulaValue(formula);
+  return {
+    contractAddress: toBN(formulaMatch.groups.contractAddress),
+    value: getSelectorFromName(formulaMatch.groups.selector),
+    calldata: args,
+  };
+}
+
+const parseArg = (cellName: string) => {
+  if (cellName.match(/^[a-z]\d+$/i)) {
+    const col = cellName.charCodeAt(0) - "a".charCodeAt(0);
+    const row = parseInt(cellName.slice(1)) - 1;
+    const tokenId = col + row * 15;
+    return 2 * tokenId + 1;
+  }
+  return 2 * parseInt(cellName);
+};
+
+export const isDependency = (arg: BN): boolean => arg.toNumber() % 2 !== 0;
+
+export function getDependencies(calldata: BN[]): number[] {
+  return calldata.filter(isDependency).map((data) => (data.toNumber() - 1) / 2);
 }
 
 export function getError(
-  cellName: string,
-  formula: string,
-  newDependencies: string[]
+  cellId: number,
+  cellData: CellData | null,
+  newDependencies: number[]
 ): string | null {
-  const parsedNumber = parseNumberValue(formula);
-  if (parsedNumber) {
-    return null;
-  }
-
-  const parsedFormula = parseFormulaValue(formula);
-  if (parsedFormula) {
-    if (newDependencies.includes(cellName)) {
+  if (cellData) {
+    if (newDependencies.includes(cellId)) {
       return `Invalid formula: circular dependency`;
     }
     return null;
@@ -91,46 +96,20 @@ export function getError(
   return "Invalid formula format";
 }
 
-export function parseNumberValue(formula: string): CellValue | null {
-  const match = formula.match(/^\d+$/);
-
-  if (!match) return null;
-
-  return {
-    type: "number",
-    value: parseInt(formula),
-  };
-}
-
-export function parseFormulaValue(formula: string): CellValue | null {
-  const match = formula.match(validFormulaRegex);
-
-  if (!match) return null;
-
-  const operation = match[1] as "SUM" | "MINUS" | "DIVIDE" | "PRODUCT";
-  const dependencies = formula
-    .replace(operation, "")
-    .replace("(", "")
-    .replace(")", "")
-    .split(";");
-
-  return {
-    type: "formula",
-    operation,
-    dependencies,
-  };
-}
-
 export function buildFormulaDisplay(formula: string): string {
-  const operator = formula.match(/(SUM|MINUS|DIVIDE|PRODUCT)/);
+  const operator = formula.match(contractCallRegex);
   const cellNames = formula.match(/[A-Z]+\d+/g);
 
   let result = formula;
 
-  if (operator) {
+  if (operator?.groups) {
     result = result.replace(
-      operator[0],
-      `<span class="operator">${operator[0]}</span>`
+      operator.groups.contractAddress,
+      `<span class="operator">${operator.groups.contractAddress}</span>`
+    );
+    result = result.replace(
+      operator.groups.selector,
+      `<span class="operator">${operator.groups.selector}</span>`
     );
   }
 
@@ -145,14 +124,7 @@ export function buildFormulaDisplay(formula: string): string {
 
 export function getValue(value: BN): BN {
   return value
-    .add(PRIME.div(toBN(2)).abs())
-    .mod(PRIME)
-    .sub(PRIME.div(toBN(2)).abs());
-}
-
-export function getDependencies(cell_calldata: BN[]): number[] {
-  return cell_calldata
-    .map((data) => data.toNumber())
-    .filter((data) => data % 2 !== 0)
-    .map((data) => (data - 1) / 2);
+    .add(toBN(constants.FIELD_PRIME).div(toBN(2)).abs())
+    .mod(toBN(constants.FIELD_PRIME))
+    .sub(toBN(constants.FIELD_PRIME).div(toBN(2)).abs());
 }

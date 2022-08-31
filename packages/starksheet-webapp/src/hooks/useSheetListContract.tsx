@@ -2,7 +2,7 @@ import { useStarknet } from "@starknet-react/core";
 import { useMemo } from "react";
 import { Abi, Contract } from "starknet";
 import StarkSheetContract from "../contract.json";
-import { starknetProvider } from "../provider";
+import { starknetSequencerProvider } from "../provider";
 
 export function useSheetListContract() {
   const { library } = useStarknet();
@@ -13,7 +13,7 @@ export function useSheetListContract() {
         StarkSheetContract.starkSheetAbi as Abi,
         StarkSheetContract.address,
         // @ts-ignore
-        library.address ? library : starknetProvider
+        library.address ? library : starknetSequencerProvider
       ),
     [library]
   );

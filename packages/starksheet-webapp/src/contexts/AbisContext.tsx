@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
-import { starknetProvider } from "../provider";
+import { starknetSequencerProvider } from "../provider";
 import {
   ContractAbi,
   ContractAbis,
@@ -38,9 +38,16 @@ export const AbisContextProvider = ({
 
   const getAbiForContract = async (address: string) => {
     if (!(address in contractAbis)) {
-      const response = await starknetProvider.getCode(address);
-      setAbiForContract(address, response.abi);
-      return parseAbi(response.abi);
+      let abi: Abi = [];
+      try {
+        const response = await starknetSequencerProvider.getClassAt(address);
+        abi = response.abi || abi;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setAbiForContract(address, abi);
+        return parseAbi(abi);
+      }
     } else {
       return contractAbis[address];
     }

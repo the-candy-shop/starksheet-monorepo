@@ -3,7 +3,7 @@ import { useContext, useMemo } from "react";
 import { Abi, Contract } from "starknet";
 import { CurrentSheetContext } from "../contexts/CurrentSheetContext";
 import StarkSheetContract from "../contract.json";
-import { starknetProvider } from "../provider";
+import { starknetSequencerProvider } from "../provider";
 
 export function useStarkSheetContract(address?: string) {
   const { currentSheetAddress } = useContext(CurrentSheetContext);
@@ -17,7 +17,7 @@ export function useStarkSheetContract(address?: string) {
             StarkSheetContract.sheetAbi as Abi,
             selectedAddress,
             // @ts-ignore
-            library.address ? library : starknetProvider
+            library.address ? library : starknetSequencerProvider
           )
         : undefined,
     [selectedAddress, library]

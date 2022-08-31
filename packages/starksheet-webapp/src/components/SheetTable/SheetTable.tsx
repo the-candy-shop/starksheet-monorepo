@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
-import GreyCell from "../GreyCell/GreyCell";
-import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { Box, BoxProps } from "@mui/material";
-import ComputedCell from "../ComputedCell/ComputedCell";
-import { BigNumberish, toHex } from "starknet/utils/number";
-import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { getValue } from "../ActionBar/formula.utils";
 import BN from "bn.js";
+import React, { useContext } from "react";
+import { BigNumberish, toHex } from "starknet/utils/number";
+import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
+import { getValue } from "../ActionBar/formula.utils";
+import ComputedCell from "../ComputedCell/ComputedCell";
+import GreyCell from "../GreyCell/GreyCell";
 
 export type SheetTableProps = {
   selectedCell: { name: string; id: number } | null;
   setSelectedCell: (value: { name: string; id: number } | null) => void;
-  cellsData: { value: BigNumberish; owner: BigNumberish }[];
+  cellsData: { value: BigNumberish; owner: BigNumberish; error?: boolean }[];
   rows?: number;
   columns?: number;
   sx?: BoxProps["sx"];
@@ -104,6 +104,7 @@ function SheetTable({
               cellsData[id] && cellsData[id].owner.toString() !== "0"
                 ? toHex(cellsData[id].owner as BN)
                 : undefined;
+            const error = cellsData[id] ? cellsData[id].error : undefined;
 
             return (
               <ComputedCell
@@ -112,6 +113,7 @@ function SheetTable({
                 id={id}
                 value={value}
                 owner={owner}
+                error={error}
                 selected={`${columnName}${rowName}` === selectedCell?.name}
                 setSelectedCell={setSelectedCell}
               />

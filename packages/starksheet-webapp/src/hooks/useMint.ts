@@ -1,10 +1,11 @@
-import { useStarkSheetContract } from "./useStarkSheetContract";
 import { useStarknet } from "@starknet-react/core";
-import { useCallback, useContext, useMemo, useState } from "react";
-import { CellValuesContext } from "../contexts/CellValuesContext";
-import { toBN } from "starknet/utils/number";
 import { useSnackbar } from "notistack";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { toBN } from "starknet/utils/number";
+import { CellValuesContext } from "../contexts/CellValuesContext";
 import StarkSheetContract from "../contract.json";
+import { starknetRpcProvider } from "../provider";
+import { useStarkSheetContract } from "./useStarkSheetContract";
 
 export const useMint = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -19,33 +20,6 @@ export const useMint = () => {
     [account]
   );
 
-  const waitForMint = useCallback(
-    (id: number): Promise<void> => {
-      if (contract && account) {
-        return new Promise((resolve) => {
-          setTimeout(async () => {
-            try {
-              const exists = await contract.call("ownerOf", [[id, "0"]]);
-
-              if (exists) {
-                resolve();
-              } else {
-                await waitForMint(id);
-                resolve();
-              }
-            } catch {
-              await waitForMint(id);
-              resolve();
-            }
-          }, 5000);
-        });
-      } else {
-        return Promise.resolve();
-      }
-    },
-    [account, contract]
-  );
-
   const mint = useCallback(
     async (id: number) => {
       if (!contract || !account) return;
@@ -56,19 +30,21 @@ export const useMint = () => {
         }
 
         setLoading(true);
-        const result = await contract.invoke("mintPublic", [
+        const response = await contract.invoke("mintPublic", [
           [id, "0"],
           addressProof,
         ]);
+        await starknetRpcProvider.waitForTransaction(response.transaction_hash);
+        const receipt = await starknetRpcProvider.getTransactionReceipt(
+          response.transaction_hash
+        );
 
-        if (result.code && result.code.includes("StarknetErrorCode")) {
-          // @ts-ignore
-          console.error(result.message);
-          // @ts-ignore
-          throw new Error(result.message);
+        if (receipt.status === "REJECTED") {
+          throw new Error(
+            `Transacation ${receipt.status}; status_data:${receipt.status_data}`
+          );
         }
 
-        await waitForMint(id);
         updateValueOwner(id, toBN(account));
       } catch (e: any) {
         enqueueSnackbar(e.toString(), { variant: "error" });
@@ -76,14 +52,7 @@ export const useMint = () => {
         setLoading(false);
       }
     },
-    [
-      account,
-      addressProof,
-      contract,
-      enqueueSnackbar,
-      updateValueOwner,
-      waitForMint,
-    ]
+    [account, addressProof, contract, enqueueSnackbar, updateValueOwner]
   );
 
   return { mint, loading };

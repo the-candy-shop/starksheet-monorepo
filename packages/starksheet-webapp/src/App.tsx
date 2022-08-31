@@ -15,7 +15,7 @@ import LoadingDots from "./components/LoadingDots/LoadingDots";
 import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
 import { CellValuesContext } from "./contexts/CellValuesContext";
-import { starknetProvider } from "./provider";
+import { starknetSequencerProvider } from "./provider";
 import {
   getBottomCellName,
   getLeftCellName,
@@ -101,7 +101,7 @@ function App() {
     <SnackbarProvider maxSnack={3}>
       <StarknetProvider
         connectors={connectors}
-        defaultProvider={starknetProvider}
+        defaultProvider={starknetSequencerProvider}
       >
         <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
           <Box

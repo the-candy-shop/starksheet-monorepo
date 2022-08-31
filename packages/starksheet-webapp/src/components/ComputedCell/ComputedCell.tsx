@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
-import Cell from "../Cell/Cell";
 import { useStarknet } from "@starknet-react/core";
+import { useMemo } from "react";
+import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import Tooltip from "../../Tooltip/Tooltip";
+import Cell from "../Cell/Cell";
 
 export type ComputedCellProps = {
   name: string;
@@ -10,6 +10,7 @@ export type ComputedCellProps = {
   value?: string;
   owner?: string;
   selected: boolean;
+  error?: boolean;
   setSelectedCell: (value: { name: string; id: number } | null) => void;
 };
 
@@ -46,6 +47,7 @@ function ComputedCell({
   owner,
   selected,
   setSelectedCell,
+  error,
 }: ComputedCellProps) {
   const { account } = useStarknet();
 
@@ -84,7 +86,7 @@ function ComputedCell({
             },
           }}
         >
-          {!!owner ? value : ""}
+          {error ? "ERROR" : !!owner ? value : ""}
         </Cell>
       </span>
     </Tooltip>

@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useCallback, useRef } from "react";
 import { Contract } from "starknet";
 import { BigNumberish, toBN } from "starknet/utils/number";
 import { useStarkSheetContract } from "../hooks/useStarkSheetContract";
+import { starknetRpcProvider } from "../provider";
 
 export const CellValuesContext = React.createContext<{
   loading: boolean;
@@ -25,7 +26,7 @@ export const CellValuesContext = React.createContext<{
   refresh: () => {},
 });
 
-type CellData = { owner: BigNumberish; value: BigNumberish };
+type CellData = { owner: BigNumberish; value: BigNumberish; error?: boolean };
 
 const GRID_SIZE = 15 * 15;
 const network = process.env.REACT_APP_NETWORK;
@@ -72,15 +73,69 @@ export const CellValuesContextProvider = ({
     (contract: Contract) => {
       setLoading(true);
       setFailed(false);
-      return contract
-        .call("renderGrid", [])
-        .then((gridData) => {
-          const cells = (
-            gridData.cells as [CellData & { id: BigNumberish }]
-          ).reduce(
-            (prev, cell) => ({ ...prev, [parseInt(cell.id.toString())]: cell }),
+      contract.connect(starknetRpcProvider);
+
+      const timedoutRenderGrid = Promise.race([
+        contract.call("renderGrid", []).then((result) => result.cells),
+        new Promise((resolve, reject) =>
+          setTimeout(() => reject(new Error("timeoutRenderGrid")), 60000)
+        ),
+      ]);
+
+      const timedoutRenderCell = (tokenId: number) =>
+        Promise.race([
+          contract.call("renderCell", [tokenId]).then((result) => result.cell),
+          new Promise((resolve, reject) =>
+            setTimeout(() => reject(new Error("timeoutRenderGrid")), 10000)
+          ),
+        ]);
+
+      const renderCells = contract
+        .call("totalSupply", [])
+        .then((response) => {
+          return Promise.all(
+            Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
+              (i) =>
+                contract.call("tokenByIndex", [[i, "0"]]).then((result) => {
+                  return result.tokenId.low.toNumber();
+                })
+            )
+          );
+        })
+        .then((tokenIds) => {
+          return Promise.all(
+            tokenIds.map((tokenId) =>
+              timedoutRenderCell(tokenId).catch((error) => {
+                console.log(`renderCell(${tokenId}) error`, error);
+                return contract
+                  .call("ownerOf", [[tokenId, "0"]])
+                  .then((owner) => {
+                    return {
+                      id: tokenId,
+                      owner: owner.owner,
+                      value: toBN(0),
+                      error: true,
+                    };
+                  });
+              })
+            )
+          );
+        });
+
+      return timedoutRenderGrid
+        .catch((error) => {
+          console.log("renderGrid error", error);
+          return renderCells;
+        })
+        .then((gridData: [CellData & { id: BigNumberish }]) => {
+          const cells = gridData.reduce(
+            (prev, cell) => ({
+              ...prev,
+              [parseInt(cell.id.toString())]: cell,
+            }),
             {} as { [id: number]: CellData }
           );
+
           const gridCells = Array.from(Array(GRID_SIZE).keys()).map(
             (i) => cells[i] || { id: i, owner: toBN(0), value: toBN(0) }
           );
@@ -89,9 +144,12 @@ export const CellValuesContextProvider = ({
           setHasLoaded(true);
         })
         .catch((error) => {
+          console.log("Failed loading grid", error);
           setFailed(true);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [refreshAspect]
   );

@@ -20,11 +20,11 @@ export function toPlainTextFormula(
   cellNames: string[]
 ): string {
   const selector = "0x" + value.toString(16);
-  if (!abi[selector]) {
+  if (contractAddress.toString(16) === RC_BOUND.toString(16)) {
     return value.toString();
   }
 
-  const operator = abi[selector].name;
+  const operator = abi[selector]?.name || selector;
 
   return `0x${
     contractAddress.toString(16)

@@ -5,7 +5,7 @@ import ContentEditable, {
 } from "react-contenteditable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
-import { buildFormulaDisplay, RC_BOUND } from "../ActionBar/formula.utils";
+import { buildFormulaDisplay } from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
   inputRef: React.Ref<ContentEditable>;
@@ -24,7 +24,7 @@ function FormulaField({
   const [abi, setAbi] = useState<string[]>([]);
   const [selectedContractAddress, setSelectedContractAddress] = useState("");
   const contractAddresses = Object.keys(contractAbis).filter(
-    (address) => address !== "0x" + RC_BOUND.toString(16)
+    (address) => Object.keys(contractAbis[address] || {}).length > 0
   );
   useEffect(() => {
     if (value.slice(-1) === ".") {

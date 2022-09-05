@@ -150,7 +150,7 @@ export const CellValuesContextProvider = ({
           .call("renderGrid", [])
           .then((result) => result.cells as CellRendered[]),
         new Promise((resolve, reject) =>
-          setTimeout(() => reject(new Error("timeoutRenderGrid")), 60000)
+          setTimeout(() => reject(new Error("timeoutRenderGrid")), 80000)
         ),
       ]);
 
@@ -162,7 +162,7 @@ export const CellValuesContextProvider = ({
           new Promise((resolve, reject) =>
             setTimeout(
               () => reject(new Error(`timeoutRenderCell(${tokenId})`)),
-              10000
+              20000
             )
           ),
         ]);

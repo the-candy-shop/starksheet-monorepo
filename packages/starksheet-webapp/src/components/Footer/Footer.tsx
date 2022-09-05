@@ -58,107 +58,113 @@ function Footer({ sx }: FooterProps) {
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
-      {addresses &&
-        addresses.map((address, index) => (
-          <SheetButton
-            key={address}
-            address={address}
-            sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
-          />
-        ))}
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
-        onClick={addSheet}
-      >
-        +
-      </GreyCell>
+      <Box sx={{ display: "flex", overflow: "auto" }}>
+        {addresses &&
+          addresses.map((address, index) => (
+            <SheetButton
+              key={address}
+              address={address}
+              sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
+            />
+          ))}
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={addSheet}
+        >
+          +
+        </GreyCell>
+      </Box>
       <GreyCell
         sx={{
           flex: 1,
           marginLeft: `-${CELL_BORDER_WIDTH}px`,
         }}
       />
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
-        onClick={() =>
-          window.open(
-            network === "alpha-mainnet"
-              ? `https://voyager.online/contract/${starksheetContractData.address}`
-              : `https://goerli.voyager.online/contract/${starksheetContractData.address}`,
-            "_blank"
-          )
-        }
-      >
-        <img src={starknetLogo} alt="" />
-      </GreyCell>
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
-        onClick={() => window.open("https://discord.gg/Aab6qdWb5k", "_blank")}
-      >
-        <img src={discordLogo} alt="" />
-      </GreyCell>
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
-        onClick={() => window.open("https://twitter.com/starksheet", "_blank")}
-      >
-        <img src={twitterLogo} alt="" />
-      </GreyCell>
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
-        onClick={() =>
-          window.open(
-            network === "alpha-mainnet"
-              ? `https://aspect.co/collection/${currentSheetAddress}`
-              : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
-            "_blank"
-          )
-        }
-      >
-        <img src={aspectLogo} alt="" style={{ width: "18px" }} />
-      </GreyCell>
-      <GreyCell
-        sx={{
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
-          width: `${CELL_HEIGHT}px`,
-          cursor: "pointer",
-          "& .content": { justifyContent: "center" },
-        }}
-        onClick={() =>
-          window.open(
-            network === "alpha-mainnet"
-              ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
-              : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
-            "_blank"
-          )
-        }
-      >
-        <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
-      </GreyCell>
+      <Box sx={{ display: "flex", justifyContent: "right" }}>
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={() =>
+            window.open(
+              network === "alpha-mainnet"
+                ? `https://voyager.online/contract/${starksheetContractData.address}`
+                : `https://goerli.voyager.online/contract/${starksheetContractData.address}`,
+              "_blank"
+            )
+          }
+        >
+          <img src={starknetLogo} alt="" />
+        </GreyCell>
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={() => window.open("https://discord.gg/Aab6qdWb5k", "_blank")}
+        >
+          <img src={discordLogo} alt="" />
+        </GreyCell>
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={() =>
+            window.open("https://twitter.com/starksheet", "_blank")
+          }
+        >
+          <img src={twitterLogo} alt="" />
+        </GreyCell>
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={() =>
+            window.open(
+              network === "alpha-mainnet"
+                ? `https://aspect.co/collection/${currentSheetAddress}`
+                : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
+              "_blank"
+            )
+          }
+        >
+          <img src={aspectLogo} alt="" style={{ width: "18px" }} />
+        </GreyCell>
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={() =>
+            window.open(
+              network === "alpha-mainnet"
+                ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
+                : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
+              "_blank"
+            )
+          }
+        >
+          <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
+        </GreyCell>
+      </Box>
     </Box>
   );
 }

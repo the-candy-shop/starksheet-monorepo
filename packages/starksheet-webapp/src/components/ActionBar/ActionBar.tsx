@@ -72,33 +72,42 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       const updatedCells: CellType[] = [];
       if (currentCell !== null && cellData !== null && account !== undefined) {
         const _values = values.map((value) => value.value);
-        computeValue(_values)(cellData).then(async (value) => {
-          if (!(value.eq(toBN(0)) && cellData.contractAddress.eq(RC_BOUND))) {
-            updatedCells.push({
-              ...values[currentCell],
-              ...cellData,
-              value,
-            });
-            _values[currentCell] = value;
-
-            const children: CellChildren = {};
-            buildChildren(children)(currentCell);
-            const indexes = Object.entries(children)
-              .sort((a, b) => a[1] - b[1])
-              .map((entry) => parseInt(entry[0]))
-              .map((id) => values[id]);
-
-            for (const cell of indexes) {
-              const value = await computeValue(_values)(cell);
-              _values[cell.id.toNumber()] = value;
+        computeValue(_values)(cellData)
+          .then(async (value) => {
+            if (!(value.eq(toBN(0)) && cellData.contractAddress.eq(RC_BOUND))) {
               updatedCells.push({
-                ...cell,
+                ...values[currentCell],
+                ...cellData,
                 value,
               });
+              _values[currentCell] = value;
+
+              const children: CellChildren = {};
+              buildChildren(children)(currentCell);
+              const indexes = Object.entries(children)
+                .sort((a, b) => a[1] - b[1])
+                .map((entry) => parseInt(entry[0]))
+                .map((id) => values[id]);
+
+              for (const cell of indexes) {
+                const value = await computeValue(_values)(cell);
+                _values[cell.id.toNumber()] = value;
+                updatedCells.push({
+                  ...cell,
+                  value,
+                });
+              }
             }
-          }
-          updateCells(updatedCells);
-        });
+            updateCells(updatedCells);
+          })
+          .catch((error) => {
+            enqueueSnackbar(
+              `Cannot compute value of cell ${cellNames[currentCell]}, check ABI?`,
+              {
+                variant: "error",
+              }
+            );
+          });
       }
 
       previousSelectedCell.current = selectedCell ? selectedCell.id : null;

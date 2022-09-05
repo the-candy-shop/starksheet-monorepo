@@ -2,7 +2,7 @@ import { Box, BoxProps } from "@mui/material";
 import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { CurrentSheetContext } from "../../contexts/CurrentSheetContext";
-import StarkSheetContract from "../../contract.json";
+import starksheetContractData from "../../contract.json";
 import { useSheetList } from "../../hooks/useSheetList";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
@@ -70,8 +70,8 @@ function Footer({ sx }: FooterProps) {
         onClick={() =>
           window.open(
             network === "alpha-mainnet"
-              ? `https://voyager.online/contract/${StarkSheetContract.address}`
-              : `https://goerli.voyager.online/contract/${StarkSheetContract.address}`,
+              ? `https://voyager.online/contract/${starksheetContractData.address}`
+              : `https://goerli.voyager.online/contract/${starksheetContractData.address}`,
             "_blank"
           )
         }

@@ -11,11 +11,11 @@ import {
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;
   setAbiForContract: (address: string, abi: Abi) => void;
-  getAbiForContract: (address: string) => Promise<ContractAbi | void>;
+  getAbiForContract: (address: string) => Promise<ContractAbi>;
 }>({
   contractAbis: {},
   setAbiForContract: () => {},
-  getAbiForContract: async () => {},
+  getAbiForContract: async () => ({}),
 });
 
 export const AbisContextProvider = ({
@@ -48,15 +48,15 @@ export const AbisContextProvider = ({
         setAbiForContract(address, abi);
         return parseAbi(abi);
       }
-    } else {
-      return contractAbis[address];
     }
+    return contractAbis[address];
   };
 
   return (
     <AbisContext.Provider
       value={{
         contractAbis,
+        // @ts-ignore
         getAbiForContract,
         setAbiForContract,
       }}

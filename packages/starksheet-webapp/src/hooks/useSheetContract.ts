@@ -2,10 +2,10 @@ import { useStarknet } from "@starknet-react/core";
 import { useContext, useMemo } from "react";
 import { Abi, Contract } from "starknet";
 import { CurrentSheetContext } from "../contexts/CurrentSheetContext";
-import StarkSheetContract from "../contract.json";
+import starksheetContractData from "../contract.json";
 import { starknetSequencerProvider } from "../provider";
 
-export function useStarkSheetContract(address?: string) {
+export function useSheetContract(address?: string) {
   const { currentSheetAddress } = useContext(CurrentSheetContext);
   const selectedAddress = address || currentSheetAddress;
   const { library } = useStarknet();
@@ -14,7 +14,7 @@ export function useStarkSheetContract(address?: string) {
     () =>
       selectedAddress
         ? new Contract(
-            StarkSheetContract.sheetAbi as Abi,
+            starksheetContractData.sheetAbi as Abi,
             selectedAddress,
             // @ts-ignore
             library.address ? library : starknetSequencerProvider

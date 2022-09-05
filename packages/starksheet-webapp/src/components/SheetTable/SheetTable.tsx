@@ -1,7 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
 import BN from "bn.js";
 import React, { useContext } from "react";
-import { BigNumberish, toHex } from "starknet/utils/number";
+import { toHex } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
@@ -12,7 +12,6 @@ import GreyCell from "../GreyCell/GreyCell";
 export type SheetTableProps = {
   selectedCell: { name: string; id: number } | null;
   setSelectedCell: (value: { name: string; id: number } | null) => void;
-  cellsData: { value: BigNumberish; owner: BigNumberish; error?: boolean }[];
   rows?: number;
   columns?: number;
   sx?: BoxProps["sx"];
@@ -21,7 +20,6 @@ export type SheetTableProps = {
 function SheetTable({
   selectedCell,
   setSelectedCell,
-  cellsData,
   rows = 15,
   columns = 15,
   sx,
@@ -31,7 +29,7 @@ function SheetTable({
     [columns]
   );
   const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
-  const { setCellNames } = useContext(CellValuesContext);
+  const { setCellNames, values } = useContext(CellValuesContext);
 
   React.useEffect(() => {
     const result: string[] = [];
@@ -97,14 +95,14 @@ function SheetTable({
           </GreyCell>
           {columnNames.map((columnName, columnIndex) => {
             const id = columnIndex + columnNames.length * rowIndex;
-            const value = cellsData[id]
-              ? getValue(cellsData[id].value as BN).toString()
+            const value = values[id]
+              ? getValue(values[id].value as BN).toString()
               : undefined;
             const owner =
-              cellsData[id] && cellsData[id].owner.toString() !== "0"
-                ? toHex(cellsData[id].owner as BN)
+              values[id] && values[id].owner.toString() !== "0"
+                ? toHex(values[id].owner as BN)
                 : undefined;
-            const error = cellsData[id] ? cellsData[id].error : undefined;
+            const error = values[id] ? values[id].error : undefined;
 
             return (
               <ComputedCell

@@ -8,7 +8,7 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { buildFormulaDisplay } from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
-  inputRef: React.Ref<ContentEditable>;
+  inputRef: React.RefObject<ContentEditable>;
   onChange: ContentEditableProps["onChange"];
   setValue: (value: string) => void;
   value: string;
@@ -72,26 +72,27 @@ function FormulaField({
           overflow: "auto",
         }}
       >
-        {contractAddresses
-          .filter((op) => op.startsWith(value) && !value.includes(op))
-          .map((op) => (
-            <Box
-              key={op}
-              onClick={() => {
-                setValue(`${op}.`);
-                // @ts-ignore
-                inputRef?.current?.el.current.focus();
-              }}
-              sx={{
-                cursor: "pointer",
-                border: "2px solid black",
-                padding: "8px",
-                "&:hover": { background: "#e2e2e2" },
-              }}
-            >
-              {op}
-            </Box>
-          ))}
+        {value !== "0" &&
+          contractAddresses
+            .filter((op) => op.startsWith(value) && !value.includes(op))
+            .map((op) => (
+              <Box
+                key={op}
+                onClick={() => {
+                  setValue(`${op}.`);
+                  // @ts-ignore
+                  inputRef?.current?.el.current.focus();
+                }}
+                sx={{
+                  cursor: "pointer",
+                  border: "2px solid black",
+                  padding: "8px",
+                  "&:hover": { background: "#e2e2e2" },
+                }}
+              >
+                {op}
+              </Box>
+            ))}
         {!!abi &&
           abi
             .filter(

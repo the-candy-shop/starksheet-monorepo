@@ -3,11 +3,10 @@ import {
   getInstalledInjectedConnectors,
   StarknetProvider,
 } from "@starknet-react/core";
-import BN from "bn.js";
 import { SnackbarProvider } from "notistack";
 import React, { useContext, useMemo } from "react";
+import ContentEditable from "react-contenteditable";
 import { HotKeys } from "react-hotkeys";
-import { toHex } from "starknet/utils/number";
 import ActionBar from "./components/ActionBar/ActionBar";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -31,6 +30,8 @@ const keyMap = {
   LEFT: "ArrowLeft",
   TOP: "ArrowUp",
   BOTTOM: "ArrowDown",
+  ESC: "Escape",
+  TAB: "Tab",
 };
 
 function App() {
@@ -40,20 +41,10 @@ function App() {
     id: number;
   } | null>(null);
 
-  const { loading, failed, values, hasLoaded, cellNames } =
+  const { loading, message, failed, hasLoaded, cellNames } =
     useContext(CellValuesContext);
 
-  const selectedCellOwner = useMemo(
-    () =>
-      hasLoaded &&
-      selectedCell &&
-      values[selectedCell.id] &&
-      values[selectedCell.id].owner &&
-      values[selectedCell.id].owner.toString() !== "0"
-        ? toHex(values[selectedCell.id].owner as BN)
-        : undefined,
-    [values, hasLoaded, selectedCell]
-  );
+  const inputRef = React.useRef<ContentEditable>(null);
 
   const handlers = useMemo(
     () => ({
@@ -93,6 +84,21 @@ function App() {
           });
         }
       },
+      ESC: () => {
+        if (selectedCell) {
+          setSelectedCell(null);
+          inputRef?.current?.el.current.blur();
+        }
+      },
+      TAB: () => {
+        if (selectedCell) {
+          const newName = getRightCellName(selectedCell.name, MAX_COLUMNS);
+          setSelectedCell({
+            name: newName,
+            id: cellNames.indexOf(newName),
+          });
+        }
+      },
     }),
     [cellNames, selectedCell]
   );
@@ -110,8 +116,8 @@ function App() {
           >
             <Header />
             <ActionBar
+              inputRef={inputRef}
               selectedCell={selectedCell}
-              owner={selectedCellOwner}
               sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
             />
             {loading && (
@@ -124,7 +130,7 @@ function App() {
                   fontFamily: "'Press Start 2P', cursive",
                 }}
               >
-                Loading
+                {message}
                 <LoadingDots />
               </Box>
             )}
@@ -149,7 +155,6 @@ function App() {
               <SheetTable
                 selectedCell={selectedCell}
                 setSelectedCell={setSelectedCell}
-                cellsData={values}
                 columns={MAX_COLUMNS}
                 rows={MAX_ROWS}
                 sx={{

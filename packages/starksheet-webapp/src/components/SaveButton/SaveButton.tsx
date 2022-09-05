@@ -1,10 +1,13 @@
 import { Box, BoxProps } from "@mui/material";
 import { useStarknet } from "@starknet-react/core";
-import { useCallback, useMemo } from "react";
-import { useMint } from "../../hooks/useMint";
-import { useSetCell } from "../../hooks/useSetCell";
+import { useSnackbar } from "notistack";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { CellData, CellValuesContext } from "../../contexts/CellValuesContext";
+import starksheetContractData from "../../contract.json";
+import { useSheetContract } from "../../hooks/useSheetContract";
+import { starknetRpcProvider } from "../../provider";
 import Tooltip from "../../Tooltip/Tooltip";
-import { CellData, getError } from "../ActionBar/formula.utils";
+import { getError } from "../ActionBar/formula.utils";
 import Button from "../Button/Button";
 import Cell from "../Cell/Cell";
 import LoadingDots from "../LoadingDots/LoadingDots";
@@ -27,22 +30,76 @@ function SaveButton({
   sx,
 }: SaveButtonProps) {
   const { account } = useStarknet();
-  const { mint, loading: loadingMint } = useMint();
-  const { setCell, loading: loadingSetCell } = useSetCell();
+  const { contract } = useSheetContract();
+  const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const addressProof = useMemo(
+    // @ts-ignore
+    () => starksheetContractData.allowlist[account] || [],
+    [account]
+  );
 
   const onClick = useCallback(() => {
-    if (!selectedCell) return;
-
-    if (!currentCellOwnerAddress) {
-      return mint(selectedCell.id);
+    if (!contract) {
+      return;
     }
-
-    if (!!account && currentCellOwnerAddress === account) {
-      if (!cellData) return;
-
-      return setCell(selectedCell.id, cellData);
-    }
-  }, [account, currentCellOwnerAddress, mint, selectedCell, setCell, cellData]);
+    setLoading(true);
+    Promise.all(
+      Object.entries(updatedValues).map(([tokenId, cell]) => {
+        if ("0x" + cell.owner.toString(16) !== account) {
+          return contract.invoke("mintAndSetPublic", [
+            [tokenId, "0"],
+            addressProof,
+            cell.contractAddress,
+            cell.selector,
+            cell.calldata,
+          ]);
+        }
+        return contract.invoke("setCell", [
+          tokenId,
+          cell.contractAddress,
+          cell.selector,
+          cell.calldata,
+        ]);
+      })
+    )
+      .then((txs) => {
+        return Promise.all(
+          txs.map(async (tx) => {
+            await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
+            return starknetRpcProvider.getTransactionReceipt(
+              tx.transaction_hash
+            );
+          })
+        );
+      })
+      .then((receipts) => {
+        const success = receipts
+          .map((receipt, index) => ({ ...receipt, index }))
+          .filter((receipt) => receipt.status !== "REJECTED")
+          .map((receipt) => receipt.index);
+        setUpdatedValues(
+          Object.fromEntries(
+            Object.entries(updatedValues).filter(
+              ([key]) => !success.includes(parseInt(key))
+            )
+          )
+        );
+      })
+      .catch((error: any) =>
+        enqueueSnackbar(error.toString(), { variant: "error" })
+      )
+      .finally(() => setLoading(false));
+  }, [
+    account,
+    addressProof,
+    contract,
+    setUpdatedValues,
+    updatedValues,
+    enqueueSnackbar,
+  ]);
 
   const error = useMemo(
     () =>
@@ -56,7 +113,8 @@ function SaveButton({
   if (
     selectedCell &&
     currentCellOwnerAddress &&
-    currentCellOwnerAddress !== account
+    currentCellOwnerAddress !== account &&
+    currentCellOwnerAddress !== "0x0"
   ) {
     return (
       <Cell
@@ -92,24 +150,20 @@ function SaveButton({
           }}
           onClick={onClick}
           disabled={
-            noAccount || loadingMint || loadingSetCell || !!error || disabled
+            noAccount ||
+            loading ||
+            !!error ||
+            disabled ||
+            Object.keys(updatedValues).length === 0
           }
         >
-          {loadingMint && (
+          {loading && (
             <Box>
-              MINTING
+              Saving
               <LoadingDots />
             </Box>
           )}
-          {loadingSetCell && (
-            <Box>
-              Saving value
-              <LoadingDots />
-            </Box>
-          )}
-          {!loadingMint &&
-            !loadingSetCell &&
-            (currentCellOwnerAddress ? "Save Value" : "MINT ACCESS")}
+          {!loading && `Save`}
         </Button>
       </span>
     </Tooltip>

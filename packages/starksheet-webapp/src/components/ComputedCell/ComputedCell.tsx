@@ -1,8 +1,13 @@
 import { useStarknet } from "@starknet-react/core";
 import { useMemo } from "react";
+import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import Tooltip from "../../Tooltip/Tooltip";
 import Cell from "../Cell/Cell";
+
+const BLUE = "#0000FF";
+const GREY = "#DEE5F0";
+const RED = "#FF4F0A";
 
 export type ComputedCellProps = {
   name: string;
@@ -16,28 +21,26 @@ export type ComputedCellProps = {
 
 function buildBackground(
   cellOwner: string | undefined,
-  account: string | undefined
+  account: string | undefined,
+  value: string | undefined
 ): string {
-  if (!cellOwner) return "white";
-  if (!account || cellOwner !== account) return "#DEE5F0";
-  return "#0000FF";
+  if (!cellOwner && value === "0") return "white";
+  if (
+    account === cellOwner ||
+    (cellOwner === undefined && !toBN(value || "0").eq(toBN(0)))
+  )
+    return BLUE;
+  return GREY;
 }
 
-function buildSelectionBorderColor(
-  cellOwner: string | undefined,
-  account: string | undefined
-): string {
-  if (!cellOwner) return "#0000FF";
-  if (!account || cellOwner !== account) return "#0000FF";
-  return "#FF4F0A";
+function buildSelectionBorderColor(background: string): string {
+  if (background === BLUE) return RED;
+  return BLUE;
 }
-function buildColor(
-  cellOwner: string | undefined,
-  account: string | undefined
-): string {
-  if (!cellOwner) return "black";
-  if (!account || cellOwner !== account) return "black";
-  return "white";
+
+function buildColor(background: string): string {
+  if (background === BLUE) return "white";
+  return "black";
 }
 
 function ComputedCell({
@@ -52,14 +55,16 @@ function ComputedCell({
   const { account } = useStarknet();
 
   const background = useMemo(
-    () => buildBackground(owner, account),
-    [owner, account]
+    () => buildBackground(owner, account, value),
+    [owner, account, value]
   );
+
   const borderColor = useMemo(
-    () => buildSelectionBorderColor(owner, account),
-    [owner, account]
+    () => buildSelectionBorderColor(background),
+    [background]
   );
-  const color = useMemo(() => buildColor(owner, account), [owner, account]);
+
+  const color = useMemo(() => buildColor(background), [background]);
 
   return (
     <Tooltip title={value && value.length > 4 ? value : false} followCursor>
@@ -86,7 +91,7 @@ function ComputedCell({
             },
           }}
         >
-          {error ? "ERROR" : !!owner ? value : ""}
+          {error ? "ERROR" : !!owner || value !== "0" ? value : ""}
         </Cell>
       </span>
     </Tooltip>

@@ -1,10 +1,10 @@
-import GreyCell, { GreyCellProps } from "../GreyCell/GreyCell";
-import React, { useContext, useMemo } from "react";
-import { useStarkSheetContract } from "../../hooks/useStarkSheetContract";
 import { useStarknetCall } from "@starknet-react/core";
 import BN from "bn.js";
-import { CurrentSheetContext } from "../../contexts/CurrentSheetContext";
+import { useContext, useMemo } from "react";
 import { toHex } from "starknet/utils/number";
+import { CurrentSheetContext } from "../../contexts/CurrentSheetContext";
+import { useSheetContract } from "../../hooks/useSheetContract";
+import GreyCell, { GreyCellProps } from "../GreyCell/GreyCell";
 
 export type SheetButtonProps = {
   address: string;
@@ -20,7 +20,7 @@ function hexToAscii(hex: string): string {
 }
 
 export function SheetButton({ address, sx }: SheetButtonProps) {
-  const { contract } = useStarkSheetContract(address);
+  const { contract } = useSheetContract(address);
   const { setCurrentSheetAddress, currentSheetAddress } =
     useContext(CurrentSheetContext);
 

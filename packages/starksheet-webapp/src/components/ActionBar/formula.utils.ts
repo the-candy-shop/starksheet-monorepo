@@ -1,40 +1,41 @@
 import BN from "bn.js";
 import { constants } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
-import { BigNumberish, toBN } from "starknet/utils/number";
+import { toBN } from "starknet/utils/number";
+import { CellData } from "../../contexts/CellValuesContext";
 import { ContractAbi } from "../../utils/abiUtils";
 
 export const RC_BOUND = toBN(2).pow(toBN(128));
 
 const contractCallRegex =
   /(?<contractAddress>0x[a-f0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9; ]*)\)/i;
-
-export type CellData = {
-  contractAddress: BigNumberish;
-  value: BigNumberish;
-  calldata: BN[];
-};
+const cellNameRegex = /^[a-z]\d+$/i;
 
 export function toPlainTextFormula(
-  { contractAddress, abi, value, calldata }: CellData & { abi: ContractAbi },
+  { contractAddress, selector, calldata, abi }: CellData & { abi: ContractAbi },
   cellNames: string[]
 ): string {
-  const selector = "0x" + value.toString(16);
-  if (!abi[selector]) {
-    return value.toString();
+  if (contractAddress.toString() === RC_BOUND.toString()) {
+    return selector.gte(RC_BOUND)
+      ? "0x" + selector.toString(16)
+      : selector.toString();
   }
 
-  const operator = abi[selector].name;
+  const contractHexString = "0x" + contractAddress.toString(16);
+  const selectorHexString = "0x" + selector.toString(16);
+  const operator = abi[selectorHexString]?.name || selectorHexString;
 
-  return `0x${
-    contractAddress.toString(16)
-    // .replace(/(.{4})..+(.{4})/, "$1...$2")
-  }.${operator}(${calldata
-    .slice(1)
-    .map((data) =>
-      data.toNumber() % 2 === 0
-        ? data.div(toBN(2))
-        : cellNames[data.sub(toBN(1)).div(toBN(2)).toNumber()]
+  const args = abi[selectorHexString]?.inputs[0]?.name?.endsWith("_len")
+    ? calldata.slice(1)
+    : calldata;
+
+  return `${contractHexString}.${operator}(${args
+    .map((arg) =>
+      arg.mod(toBN(2)).toNumber() === 0
+        ? arg.gte(RC_BOUND)
+          ? "0x" + arg.div(toBN(2)).toString(16)
+          : arg.div(toBN(2))
+        : cellNames[arg.sub(toBN(1)).div(toBN(2)).toNumber()]
     )
     .join(";")})`;
 }
@@ -47,35 +48,36 @@ export function parse(formula: string): CellData | null {
     }
     return {
       contractAddress: RC_BOUND,
-      value: toBN(formula),
+      selector: toBN(formula),
       calldata: [],
     };
   }
   const args = formulaMatch.groups.args
     .toLowerCase()
     .split(";")
-    .filter((arg) => !!arg)
     .map(parseArg)
-    .map(toBN);
+    .filter((arg) => arg !== undefined) as BN[];
 
   return {
     contractAddress: toBN(formulaMatch.groups.contractAddress),
-    value: getSelectorFromName(formulaMatch.groups.selector),
+    selector: toBN(getSelectorFromName(formulaMatch.groups.selector)),
     calldata: args,
   };
 }
 
-const parseArg = (cellName: string) => {
-  if (cellName.match(/^[a-z]\d+$/i)) {
-    const col = cellName.charCodeAt(0) - "a".charCodeAt(0);
-    const row = parseInt(cellName.slice(1)) - 1;
+const parseArg = (arg: string): BN | undefined => {
+  if (arg.match(/^[a-z]\d+$/i)) {
+    const col = arg.charCodeAt(0) - "a".charCodeAt(0);
+    const row = parseInt(arg.slice(1)) - 1;
     const tokenId = col + row * 15;
-    return 2 * tokenId + 1;
+    return toBN(2 * tokenId + 1);
   }
-  return 2 * parseInt(cellName);
+  if (arg.match(/^\d+$/i)) return toBN(arg).mul(toBN(2));
+  return undefined;
 };
 
-export const isDependency = (arg: BN): boolean => arg.toNumber() % 2 !== 0;
+export const isDependency = (arg: BN): boolean =>
+  arg.mod(toBN(2)).toNumber() !== 0;
 
 export function getDependencies(calldata: BN[]): number[] {
   return calldata.filter(isDependency).map((data) => (data.toNumber() - 1) / 2);
@@ -98,7 +100,6 @@ export function getError(
 
 export function buildFormulaDisplay(formula: string): string {
   const operator = formula.match(contractCallRegex);
-  const cellNames = formula.match(/[A-Z]+\d+/g);
 
   let result = formula;
 
@@ -111,12 +112,13 @@ export function buildFormulaDisplay(formula: string): string {
       operator.groups.selector,
       `<span class="operator">${operator.groups.selector}</span>`
     );
-  }
 
-  if (cellNames) {
-    cellNames.forEach((name) => {
-      result = result.replace(name, `<span class="cell">${name}</span>`);
-    });
+    operator.groups.args
+      .split(";")
+      .filter((arg) => arg.match(cellNameRegex))
+      .forEach((name) => {
+        result = result.replace(name, `<span class="cell">${name}</span>`);
+      });
   }
 
   return result;

@@ -4,7 +4,7 @@ import App from "./App";
 import { AbisContextProvider } from "./contexts/AbisContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
 import { CurrentSheetContextProvider } from "./contexts/CurrentSheetContext";
-import contract from "./contract.json";
+import starksheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -19,13 +19,15 @@ root.render(
 
 function Root() {
   return (
-    <CurrentSheetContextProvider>
-      <CellValuesContextProvider>
-        <AbisContextProvider initialContractAbis={contract.contractAbis}>
+    <AbisContextProvider
+      initialContractAbis={starksheetContractData.contractAbis}
+    >
+      <CurrentSheetContextProvider>
+        <CellValuesContextProvider>
           <App />
-        </AbisContextProvider>
-      </CellValuesContextProvider>
-    </CurrentSheetContextProvider>
+        </CellValuesContextProvider>
+      </CurrentSheetContextProvider>
+    </AbisContextProvider>
   );
 }
 

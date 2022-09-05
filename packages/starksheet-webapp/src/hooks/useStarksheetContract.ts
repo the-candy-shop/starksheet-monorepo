@@ -4,7 +4,7 @@ import { Abi, Contract } from "starknet";
 import starksheetContractData from "../contract.json";
 import { starknetSequencerProvider } from "../provider";
 
-export function useSheetListContract() {
+export function useStarksheetContract() {
   const { library } = useStarknet();
 
   const contract = useMemo(

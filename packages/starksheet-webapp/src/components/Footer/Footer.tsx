@@ -1,9 +1,13 @@
 import { Box, BoxProps } from "@mui/material";
-import { useContext } from "react";
+import { useStarknet } from "@starknet-react/core";
+import { useContext, useMemo } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { CurrentSheetContext } from "../../contexts/CurrentSheetContext";
 import starksheetContractData from "../../contract.json";
 import { useSheetList } from "../../hooks/useSheetList";
+import { useStarksheetContract } from "../../hooks/useStarksheetContract";
+import { starknetRpcProvider } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
@@ -17,10 +21,40 @@ export type FooterProps = {
 };
 
 const network = process.env.REACT_APP_NETWORK;
-
+const str2hex = (s: string) =>
+  "0x" +
+  Array.from(Array(s.length).keys())
+    .map((i) => s.charCodeAt(i).toString(16))
+    .join("");
 function Footer({ sx }: FooterProps) {
-  const addresses = useSheetList();
-  const { currentSheetAddress } = useContext(CurrentSheetContext);
+  const { addresses, updateAddresses } = useSheetList();
+  const { account } = useStarknet();
+  const { currentSheetAddress, setCurrentSheetAddress } =
+    useContext(CurrentSheetContext);
+  const { setLoading, setMessage } = useContext(CellValuesContext);
+  const { contract } = useStarksheetContract();
+
+  const addressProof = useMemo(
+    // @ts-ignore
+    () => starksheetContractData.allowlist[account] || [],
+    [account]
+  );
+
+  const addSheet = async () => {
+    if (!account) return;
+    setMessage("Adding a new sheet");
+    setLoading(true);
+    const tx = await contract.invoke("addSheet", [
+      str2hex(`Sheet${addresses.length}`),
+      str2hex(`SHT${addresses.length}`),
+      addressProof,
+    ]);
+    await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
+    const newAddresses = await updateAddresses();
+    setMessage("");
+    setLoading(false);
+    setCurrentSheetAddress(newAddresses.slice(-1)[0]);
+  };
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -32,28 +66,17 @@ function Footer({ sx }: FooterProps) {
             sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
           />
         ))}
-      {addresses && addresses.length === 1 && (
-        <GreyCell
-          sx={{
-            marginLeft: `-${CELL_BORDER_WIDTH}px`,
-            width: "345px",
-            "& .content": {
-              justifyContent: "center",
-              color: "rgba(0,0,0,0.5)",
-            },
-          }}
-        >
-          Sheet 1 (
-          <a
-            href="https://starksheet.notion.site/Product-backlog-dc2507431c7f40e393e0ed3315a4064b"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Coming Soon
-          </a>
-          )
-        </GreyCell>
-      )}
+      <GreyCell
+        sx={{
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={addSheet}
+      >
+        +
+      </GreyCell>
       <GreyCell
         sx={{
           flex: 1,

@@ -11,6 +11,7 @@ import { isDependency, RC_BOUND } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
 import { starknetRpcProvider } from "../provider";
 import { AbisContext } from "./AbisContext";
+import { CurrentSheetContext } from "./CurrentSheetContext";
 
 export type CellData = {
   contractAddress: BN;
@@ -56,9 +57,11 @@ const network = process.env.REACT_APP_NETWORK;
 
 export const CellValuesContext = React.createContext<{
   loading: boolean;
+  setLoading: (loading: boolean) => void;
   failed: boolean;
   hasLoaded: boolean;
   message: string;
+  setMessage: (message: string) => void;
   values: Cell[];
   updatedValues: UpdatedValues;
   setUpdatedValues: (values: UpdatedValues) => void;
@@ -73,9 +76,11 @@ export const CellValuesContext = React.createContext<{
   refresh: () => void;
 }>({
   loading: false,
+  setLoading: () => {},
   failed: false,
   hasLoaded: false,
   message: "Loading",
+  setMessage: () => {},
   values: [],
   updatedValues: {},
   setUpdatedValues: () => {},
@@ -93,6 +98,7 @@ export const CellValuesContextProvider = ({
   const [values, setValues] = React.useState<Cell[]>([]);
   const [updatedValues, setUpdatedValues] = React.useState<UpdatedValues>({});
   const previousGridData = useRef<any>(undefined);
+  const previousSheetAddress = useRef<any>(undefined);
   const [cellNames, setCellNames] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [failed, setFailed] = React.useState<boolean>(false);
@@ -100,10 +106,14 @@ export const CellValuesContextProvider = ({
   const [message, setMessage] = React.useState<string>("Loading");
   const { contract } = useSheetContract();
   const { getAbiForContract } = useContext(AbisContext);
+  const { currentSheetAddress } = useContext(CurrentSheetContext);
 
   const refreshAspect = useCallback(
     (cells: Cell[]) => {
-      if (previousGridData.current) {
+      if (
+        previousGridData.current &&
+        previousSheetAddress.current === currentSheetAddress
+      ) {
         cells.forEach((cell, index) => {
           if (
             previousGridData.current[index]?.value?.toString() !==
@@ -124,8 +134,9 @@ export const CellValuesContextProvider = ({
         });
       }
       previousGridData.current = cells;
+      previousSheetAddress.current = currentSheetAddress;
     },
-    [contract?.address]
+    [contract?.address, currentSheetAddress]
   );
 
   const load = useCallback(
@@ -228,8 +239,7 @@ export const CellValuesContextProvider = ({
           setValues(gridCells);
           setHasLoaded(true);
         })
-        .catch((error) => {
-          console.log("Failed loading grid", error);
+        .catch(() => {
           setFailed(true);
         })
         .finally(() => {
@@ -313,6 +323,7 @@ export const CellValuesContextProvider = ({
         setCellNames,
         values,
         message,
+        setMessage,
         updatedValues,
         setUpdatedValues,
         computeValue,
@@ -322,6 +333,7 @@ export const CellValuesContextProvider = ({
         failed,
         hasLoaded,
         refresh,
+        setLoading,
       }}
     >
       {children}

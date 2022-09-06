@@ -54,7 +54,7 @@ function FormulaField({
         )
       );
     }
-  }, [value, getAbiForContract]);
+  }, [value, getAbiForContract, values]);
 
   return (
     <>

@@ -115,9 +115,12 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       // 2. Update formula
       if (selectedCell) {
         setLoading(true);
-        getAbiForContract(
-          "0x" + values[selectedCell.id].contractAddress.toString(16)
-        )
+        let resolvedContractAddress = values[selectedCell.id].contractAddress;
+        if (resolvedContractAddress.lt(RC_BOUND)) {
+          resolvedContractAddress =
+            values[resolvedContractAddress.toNumber()].value;
+        }
+        getAbiForContract("0x" + resolvedContractAddress.toString(16))
           .then((abi) => {
             setUnsavedValue(
               toPlainTextFormula(

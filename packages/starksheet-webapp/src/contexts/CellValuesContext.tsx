@@ -262,15 +262,20 @@ export const CellValuesContextProvider = ({
   }, [contract, load]);
 
   const computeValue = (values: BN[]) => async (cell: CellData) => {
-    if (cell.contractAddress.toString(16) === RC_BOUND.toString(16)) {
+    if (cell.contractAddress.eq(RC_BOUND)) {
       return cell.selector;
     }
+
+    const resolvedContractAddress = cell.contractAddress.lt(RC_BOUND)
+      ? values[cell.contractAddress.toNumber()]
+      : cell.contractAddress;
+
     const calldata = cell.calldata.map((arg) => {
       return isDependency(arg)
         ? values[(arg.toNumber() - 1) / 2]
         : arg.div(toBN(2));
     });
-    const contractAddress = "0x" + cell.contractAddress.toString(16);
+    const contractAddress = "0x" + resolvedContractAddress.toString(16);
     const abi = await getAbiForContract(contractAddress);
     const call = {
       contractAddress,
@@ -284,11 +289,14 @@ export const CellValuesContextProvider = ({
   const buildChildren = useCallback(
     (children: CellChildren, depth?: number) => (id: number) => {
       const currentChildren = values
-        .filter((cell) =>
-          cell.calldata
-            .filter(isDependency)
-            .map((arg) => (arg.toNumber() - 1) / 2)
-            .includes(id)
+        .filter(
+          (cell) =>
+            cell.calldata
+              .filter(isDependency)
+              .map((arg) => (arg.toNumber() - 1) / 2)
+              .includes(id) ||
+            (cell.contractAddress.lt(RC_BOUND) &&
+              cell.contractAddress.toNumber() === id)
         )
         .map((cell) => cell.id.toNumber());
 

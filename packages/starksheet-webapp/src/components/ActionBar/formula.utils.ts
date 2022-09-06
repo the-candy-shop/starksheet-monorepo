@@ -8,8 +8,8 @@ import { ContractAbi } from "../../utils/abiUtils";
 export const RC_BOUND = toBN(2).pow(toBN(128));
 
 const contractCallRegex =
-  /(?<contractAddress>0x[a-f0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9; ]*)\)/i;
-const cellNameRegex = /^[a-z]\d+$/i;
+  /(?<contractAddress>(0x)?[a-z0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9; ]*)\)/i;
+export const cellNameRegex = /^[a-z]\d+$/i;
 
 export function toPlainTextFormula(
   { contractAddress, selector, calldata, abi }: CellData & { abi: ContractAbi },
@@ -21,7 +21,9 @@ export function toPlainTextFormula(
       : selector.toString();
   }
 
-  const contractHexString = "0x" + contractAddress.toString(16);
+  const contractHexString = contractAddress.lte(RC_BOUND)
+    ? cellNames[contractAddress.toNumber()]
+    : "0x" + contractAddress.toString(16);
   const selectorHexString = "0x" + selector.toString(16);
   const operator = abi[selectorHexString]?.name || selectorHexString;
 
@@ -46,11 +48,19 @@ export function parse(formula: string): CellData | null {
     if (!formula.match(/^(0x)?[a-f0-9]+$/i)) {
       return null;
     }
-    return {
-      contractAddress: RC_BOUND,
-      selector: toBN(formula),
-      calldata: [],
-    };
+    try {
+      return {
+        contractAddress: RC_BOUND,
+        selector: toBN(formula),
+        calldata: [],
+      };
+    } catch (e) {
+      return {
+        contractAddress: RC_BOUND,
+        selector: toBN(0),
+        calldata: [],
+      };
+    }
   }
   const args = formulaMatch.groups.args
     .toLowerCase()
@@ -58,18 +68,28 @@ export function parse(formula: string): CellData | null {
     .map(parseArg)
     .filter((arg) => arg !== undefined) as BN[];
 
+  const contractAddress = formulaMatch.groups.contractAddress.match(
+    cellNameRegex
+  )
+    ? cellNameToTokenId(formulaMatch.groups.contractAddress)
+    : formulaMatch.groups.contractAddress;
+
   return {
-    contractAddress: toBN(formulaMatch.groups.contractAddress),
+    contractAddress: toBN(contractAddress),
     selector: toBN(getSelectorFromName(formulaMatch.groups.selector)),
     calldata: args,
   };
 }
 
+export const cellNameToTokenId = (arg: string) => {
+  const col = arg.toLowerCase().charCodeAt(0) - "a".charCodeAt(0);
+  const row = parseInt(arg.slice(1)) - 1;
+  return col + row * 15;
+};
+
 const parseArg = (arg: string): BN | undefined => {
   if (arg.match(/^[a-z]\d+$/i)) {
-    const col = arg.charCodeAt(0) - "a".charCodeAt(0);
-    const row = parseInt(arg.slice(1)) - 1;
-    const tokenId = col + row * 15;
+    const tokenId = cellNameToTokenId(arg);
     return toBN(2 * tokenId + 1);
   }
   if (arg.match(/^\d+$/i)) return toBN(arg).mul(toBN(2));

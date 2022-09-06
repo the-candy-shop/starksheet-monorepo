@@ -5,7 +5,12 @@ import ContentEditable, {
 } from "react-contenteditable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
-import { buildFormulaDisplay } from "../ActionBar/formula.utils";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
+import {
+  buildFormulaDisplay,
+  cellNameRegex,
+  cellNameToTokenId,
+} from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
   inputRef: React.RefObject<ContentEditable>;
@@ -21,6 +26,7 @@ function FormulaField({
   setValue,
 }: FormulaFieldProps) {
   const { contractAbis, getAbiForContract } = useContext(AbisContext);
+  const { values } = useContext(CellValuesContext);
   const [abi, setAbi] = useState<string[]>([]);
   const [selectedContractAddress, setSelectedContractAddress] = useState("");
   const contractAddresses = Object.keys(contractAbis).filter(
@@ -30,6 +36,13 @@ function FormulaField({
     if (value.slice(-1) === ".") {
       let _selectedContractAddress = value.slice(0, -1);
       setSelectedContractAddress(_selectedContractAddress);
+      if (_selectedContractAddress.match(cellNameRegex)) {
+        _selectedContractAddress =
+          "0x" +
+          values[cellNameToTokenId(_selectedContractAddress)].value.toString(
+            16
+          );
+      }
       getAbiForContract(_selectedContractAddress).then((abi) =>
         setAbi(
           !!abi
@@ -41,7 +54,7 @@ function FormulaField({
         )
       );
     }
-  }, [value, getAbiForContract]);
+  }, [value, getAbiForContract, values]);
 
   return (
     <>

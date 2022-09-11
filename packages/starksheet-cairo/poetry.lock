@@ -523,6 +523,25 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "hdwallet"
+version = "2.1.1"
+description = "Python-based library for the implementation of a hierarchical deterministic wallet generator for more than 140+ multiple cryptocurrencies."
+category = "dev"
+optional = false
+python-versions = ">=3.6,<4"
+
+[package.dependencies]
+base58 = ">=2.0.1,<3"
+ecdsa = ">=0.13,<1"
+mnemonic = ">=0.19,<1"
+pysha3 = ">=1.0.2,<2"
+
+[package.extras]
+tests = ["pytest-cov (>=3.0.0,<4)", "pytest (>=6.2.5,<7)"]
+docs = ["sphinx-click (>=3.1.0,<4)", "furo (==2022.2.14.1)", "sphinx (>=4.4.0,<5)"]
+cli = ["tabulate (>=0.8.9,<1)", "click-aliases (>=1.0.1,<2)", "click (>=8.0.3,<9)"]
+
+[[package]]
 name = "hexbytes"
 version = "0.2.2"
 description = "hexbytes: Python `bytes` subclass that decodes hex, with a readable console output"
@@ -799,6 +818,14 @@ python-versions = "*"
 
 [package.dependencies]
 greenlet = ">=0.4.5,<0.5"
+
+[[package]]
+name = "mnemonic"
+version = "0.20"
+description = "Implementation of Bitcoin BIP-0039"
+category = "dev"
+optional = false
+python-versions = ">=3.5"
 
 [[package]]
 name = "mpmath"
@@ -1093,6 +1120,14 @@ description = "Persistent/Functional/Immutable data structures"
 category = "main"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "pysha3"
+version = "1.0.2"
+description = "SHA-3 (Keccak) for Python 2.7 - 3.5"
+category = "dev"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "pytest"
@@ -1481,7 +1516,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.9"
-content-hash = "fa633449cb3da6c6e652a5b60a94e7ea418318adabc9979999319721a0d8641d"
+content-hash = "d193758690125b8c41b85c9656be0004f2a407abbeb8b07b9a92a20f5fb80c0a"
 
 [metadata.files]
 aiohttp = []
@@ -1524,6 +1559,7 @@ flask-cors = []
 frozendict = []
 frozenlist = []
 greenlet = []
+hdwallet = []
 hexbytes = []
 idna = []
 importlib-metadata = []
@@ -1544,6 +1580,7 @@ marshmallow-enum = []
 marshmallow-oneofschema = []
 matplotlib-inline = []
 meinheld = []
+mnemonic = []
 mpmath = []
 multiaddr = []
 multidict = []
@@ -1572,6 +1609,7 @@ pycryptodome = []
 pygments = []
 pyparsing = []
 pyrsistent = []
+pysha3 = []
 pytest = []
 pytest-asyncio = []
 python-dateutil = []

@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import Tooltip from "../../Tooltip/Tooltip";
+import { RC_BOUND } from "../ActionBar/formula.utils";
 import Cell from "../Cell/Cell";
 
 const BLUE = "#0000FF";
@@ -12,6 +13,7 @@ const RED = "#FF4F0A";
 export type ComputedCellProps = {
   name: string;
   id: number;
+  contractAddress: string;
   value?: string;
   owner?: string;
   selected: boolean;
@@ -22,12 +24,16 @@ export type ComputedCellProps = {
 function buildBackground(
   cellOwner: string | undefined,
   account: string | undefined,
-  value: string | undefined
+  value: string | undefined,
+  contractAddess: string
 ): string {
-  if (!cellOwner && value === "0") return "white";
+  if (!cellOwner && value === "0" && contractAddess === RC_BOUND.toString())
+    return "white";
+  if (value === undefined) return "white";
   if (
     account === cellOwner ||
-    (cellOwner === undefined && !toBN(value || "0").eq(toBN(0)))
+    (cellOwner === undefined &&
+      (!toBN(value).eq(toBN(0)) || !toBN(contractAddess).eq(RC_BOUND)))
   )
     return BLUE;
   return GREY;
@@ -43,9 +49,20 @@ function buildColor(background: string): string {
   return "black";
 }
 
+function buildValue(
+  background: string,
+  error?: boolean,
+  value?: string
+): string {
+  if (error) return "ERROR";
+  if (background === "white") return "";
+  return value || "";
+}
+
 function ComputedCell({
   name,
   id,
+  contractAddress,
   value,
   owner,
   selected,
@@ -55,13 +72,18 @@ function ComputedCell({
   const { account } = useStarknet();
 
   const background = useMemo(
-    () => buildBackground(owner, account, value),
-    [owner, account, value]
+    () => buildBackground(owner, account, value, contractAddress),
+    [owner, account, value, contractAddress]
   );
 
   const borderColor = useMemo(
     () => buildSelectionBorderColor(background),
     [background]
+  );
+
+  const displayedValue = useMemo(
+    () => buildValue(background, error, value),
+    [background, error, value]
   );
 
   const color = useMemo(() => buildColor(background), [background]);
@@ -91,7 +113,7 @@ function ComputedCell({
             },
           }}
         >
-          {error ? "ERROR" : !!owner || value !== "0" ? value : ""}
+          {displayedValue}
         </Cell>
       </span>
     </Tooltip>

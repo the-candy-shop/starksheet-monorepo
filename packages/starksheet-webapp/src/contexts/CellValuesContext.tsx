@@ -9,7 +9,7 @@ import { Contract } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency, RC_BOUND } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
-import { starknetRpcProvider } from "../provider";
+import { starknetRpcProvider, starknetSequencerProvider } from "../provider";
 import { AbisContext } from "./AbisContext";
 import { CurrentSheetContext } from "./CurrentSheetContext";
 
@@ -145,14 +145,15 @@ export const CellValuesContextProvider = ({
       setFailed(false);
       contract.connect(starknetRpcProvider);
 
-      const timedoutRenderGrid = Promise.race([
-        contract
-          .call("renderGrid", [])
-          .then((result) => result.cells as CellRendered[]),
-        new Promise((resolve, reject) =>
-          setTimeout(() => reject(new Error("timeoutRenderGrid")), 80000)
-        ),
-      ]);
+      const timedoutRenderGrid = () =>
+        Promise.race([
+          contract
+            .call("renderGrid", [])
+            .then((result) => result.cells as CellRendered[]),
+          new Promise((resolve, reject) =>
+            setTimeout(() => reject(new Error("timeoutRenderGrid")), 80000)
+          ),
+        ]);
 
       const timedoutRenderCell = (tokenId: number) =>
         Promise.race([
@@ -167,9 +168,8 @@ export const CellValuesContextProvider = ({
           ),
         ]);
 
-      const tokenIdsPromise = contract
-        .call("totalSupply", [])
-        .then((response) => {
+      const tokenIdsPromise = () =>
+        contract.call("totalSupply", []).then((response) => {
           return Promise.all(
             Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
               (i) =>
@@ -180,31 +180,32 @@ export const CellValuesContextProvider = ({
           );
         });
 
-      const renderCells = tokenIdsPromise.then((tokenIds) => {
-        return Promise.all(
-          tokenIds.map((tokenId) =>
-            timedoutRenderCell(tokenId).catch((error) => {
-              return contract
-                .call("ownerOf", [[tokenId, "0"]])
-                .then((owner) => {
-                  return {
-                    ...defaultRenderedCell(tokenId),
-                    owner: owner.owner,
-                    error: true,
-                  } as CellRendered;
-                });
-            })
-          )
-        );
-      });
+      const renderCells = () =>
+        tokenIdsPromise().then((tokenIds) => {
+          return Promise.all(
+            tokenIds.map((tokenId) =>
+              timedoutRenderCell(tokenId).catch((error) => {
+                return contract
+                  .call("ownerOf", [[tokenId, "0"]])
+                  .then((owner) => {
+                    return {
+                      ...defaultRenderedCell(tokenId),
+                      owner: owner.owner,
+                      error: true,
+                    } as CellRendered;
+                  });
+              })
+            )
+          );
+        });
 
       setMessage("Calling renderGrid");
-      return timedoutRenderGrid
+      return timedoutRenderGrid()
         .catch(() => {
           setMessage(
             "Contract failed to render grid, falling back to render each cell individually"
           );
-          return renderCells;
+          return renderCells();
         })
         .then((renderedCells) => {
           setMessage("Fetching cells metadata");
@@ -270,11 +271,13 @@ export const CellValuesContextProvider = ({
       ? values[cell.contractAddress.toNumber()]
       : cell.contractAddress;
 
-    const calldata = cell.calldata.map((arg) => {
-      return isDependency(arg)
-        ? values[(arg.toNumber() - 1) / 2]
-        : arg.div(toBN(2));
-    });
+    const calldata = cell.calldata
+      .map((arg) => {
+        return isDependency(arg)
+          ? values[(arg.toNumber() - 1) / 2]
+          : arg.div(toBN(2));
+      })
+      .map((arg) => arg.toString());
     const contractAddress = "0x" + resolvedContractAddress.toString(16);
     const abi = await getAbiForContract(contractAddress);
     const call = {
@@ -282,7 +285,7 @@ export const CellValuesContextProvider = ({
       entrypoint: abi["0x" + cell.selector.toString(16)].name,
       calldata,
     };
-    const value = await starknetRpcProvider.callContract(call);
+    const value = await starknetSequencerProvider.callContract(call);
     return toBN(value.result[0]);
   };
 

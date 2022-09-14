@@ -43,7 +43,7 @@ function FormulaField({
             16
           );
       }
-      getAbiForContract(_selectedContractAddress).then((abi) =>
+      getAbiForContract(_selectedContractAddress).then((abi) => {
         setAbi(
           !!abi
             ? Object.values(abi)
@@ -51,8 +51,8 @@ function FormulaField({
                 .filter((func) => func.stateMutability === "view")
                 .map((func) => func.name)
             : []
-        )
-      );
+        );
+      });
     }
   }, [value, getAbiForContract, values]);
 

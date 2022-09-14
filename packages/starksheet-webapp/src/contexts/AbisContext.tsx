@@ -56,7 +56,7 @@ export const AbisContextProvider = ({
       setAbiForContract(_address, abi);
       return parseAbi(abi);
     }
-    return contractAbis[address];
+    return contractAbis[_address];
   };
 
   return (

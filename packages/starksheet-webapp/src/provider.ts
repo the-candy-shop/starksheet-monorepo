@@ -10,9 +10,6 @@ export const starknetSequencerProvider = new SequencerProvider({
 export const starknetRpcProvider = new RpcProvider({
   nodeUrl:
     process.env.REACT_APP_NETWORK === "alpha-mainnet"
-      ? process.env.REACT_APP_RPC_NODE_URI || ""
-      : (process.env.REACT_APP_RPC_NODE_URI || "")?.replace(
-          "mainnet",
-          "goerli"
-        ),
+      ? process.env.REACT_APP_RPC_NODE_URI_MAINNET || ""
+      : process.env.REACT_APP_RPC_NODE_URI_GOERLI || "",
 });

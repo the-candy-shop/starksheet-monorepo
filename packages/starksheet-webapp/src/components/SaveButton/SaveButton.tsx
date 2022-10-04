@@ -2,6 +2,7 @@ import { Box, BoxProps } from "@mui/material";
 import { useStarknet } from "@starknet-react/core";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext, useMemo, useState } from "react";
+import { toBN } from "starknet/utils/number";
 import { CellData, CellValuesContext } from "../../contexts/CellValuesContext";
 import starksheetContractData from "../../contract.json";
 import { useSheetContract } from "../../hooks/useSheetContract";
@@ -47,23 +48,27 @@ function SaveButton({
     }
     setLoading(true);
     Promise.all(
-      Object.entries(updatedValues).map(([tokenId, cell]) => {
-        if ("0x" + cell.owner.toString(16) !== account) {
-          return contract.invoke("mintAndSetPublic", [
-            [tokenId, "0"],
-            addressProof,
-            cell.contractAddress,
-            cell.selector,
-            cell.calldata,
-          ]);
-        }
-        return contract.invoke("setCell", [
-          tokenId,
-          cell.contractAddress,
-          cell.selector,
-          cell.calldata,
-        ]);
-      })
+      Object.entries(updatedValues)
+        .filter(
+          ([_, cell]) =>
+            cell.owner.eq(toBN(0)) || "0x" + cell.owner.toString(16) === account
+        )
+        .map(([tokenId, cell]) =>
+          cell.owner.eq(toBN(0))
+            ? contract.invoke("mintAndSetPublic", [
+                [tokenId, "0"],
+                addressProof,
+                cell.contractAddress,
+                cell.selector,
+                cell.calldata,
+              ])
+            : contract.invoke("setCell", [
+                tokenId,
+                cell.contractAddress,
+                cell.selector,
+                cell.calldata,
+              ])
+        )
     )
       .then((txs) => {
         return Promise.all(

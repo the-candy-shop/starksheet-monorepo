@@ -1,4 +1,5 @@
 import { Abi, FunctionAbi, hash } from "starknet";
+import { ContractAbi } from "../types";
 
 export const parseAbi = (abi: Abi): ContractAbi =>
   (!!abi.length ? abi : [])
@@ -11,15 +12,3 @@ export const parseAbi = (abi: Abi): ContractAbi =>
       }),
       {}
     );
-
-export type ContractAbi = {
-  [selector: string]: FunctionAbi;
-};
-
-export type InitialContractAbis = {
-  [contractAddress: string]: any;
-};
-
-export type ContractAbis = {
-  [contractAddress: string]: ContractAbi | undefined;
-};

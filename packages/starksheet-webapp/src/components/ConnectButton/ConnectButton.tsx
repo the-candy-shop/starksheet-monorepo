@@ -1,66 +1,34 @@
-import React, { useCallback, useState } from "react";
+import { BoxProps } from "@mui/material";
+import { disconnect, getStarknet } from "get-starknet";
+import { useContext } from "react";
+import { AccountContext } from "../../contexts/AccountContext";
 import Button from "../Button/Button";
-import { Box, BoxProps, Dialog } from "@mui/material";
-import GreyCell from "../GreyCell/GreyCell";
-import { useStarknet } from "@starknet-react/core";
-import { CELL_BORDER_WIDTH } from "../../config";
 
 export type ConnectButtonProps = {
   sx?: BoxProps["sx"];
 };
 
 function ConnectButton({ sx }: ConnectButtonProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const open = useCallback(() => setIsOpen(true), []);
-  const close = useCallback(() => setIsOpen(false), []);
-  const { connect, account, connectors } = useStarknet();
+  const { accountAddress, setAccountAddress } = useContext(AccountContext);
 
-  const displayedButton = account ? (
-    <GreyCell sx={{ ...sx, "& .content": { justifyContent: "center" } }}>
-      {account.substring(0, 8)}
-    </GreyCell>
-  ) : (
+  const onClick = async () => {
+    if (getStarknet().isConnected) {
+      disconnect();
+    }
+    const selected = await getStarknet().enable({ showModal: true });
+    setAccountAddress(selected[0]);
+  };
+
+  return (
     <Button
-      onClick={open}
+      onClick={onClick}
       sx={{
         color: "#0000FF",
-        textTransform: "uppercase",
         ...sx,
       }}
     >
-      Connect
+      {accountAddress ? accountAddress.substring(0, 8) : "Connect"}
     </Button>
-  );
-
-  return (
-    <>
-      {displayedButton}
-      <Dialog
-        open={isOpen && !account}
-        onClose={close}
-        sx={{
-          "& .MuiPaper-root": {
-            borderRadius: 0,
-            boxShadow: "none",
-            border: `${CELL_BORDER_WIDTH}px solid black`,
-          },
-        }}
-      >
-        <Box>
-          {connectors.map((connector) =>
-            connector.available() ? (
-              <Button
-                sx={{ margin: "16px" }}
-                key={connector.id()}
-                onClick={() => connect(connector)}
-              >
-                Connect {connector.name()}
-              </Button>
-            ) : null
-          )}
-        </Box>
-      </Dialog>
-    </>
   );
 }
 

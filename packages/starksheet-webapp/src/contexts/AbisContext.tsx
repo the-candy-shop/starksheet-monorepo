@@ -3,12 +3,8 @@ import { Abi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { RC_BOUND } from "../components/ActionBar/formula.utils";
 import { starknetSequencerProvider } from "../provider";
-import {
-  ContractAbi,
-  ContractAbis,
-  InitialContractAbis,
-  parseAbi,
-} from "../utils/abiUtils";
+import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
+import { parseAbi } from "../utils/abiUtils";
 
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;

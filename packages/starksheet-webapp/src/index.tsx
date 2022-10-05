@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { AbisContextProvider } from "./contexts/AbisContext";
+import { AccountContextProvider } from "./contexts/AccountContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
-import { CurrentSheetContextProvider } from "./contexts/CurrentSheetContext";
+import { StarksheetContextProvider } from "./contexts/StarksheetContext";
 import starksheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
@@ -19,15 +20,19 @@ root.render(
 
 function Root() {
   return (
-    <AbisContextProvider
-      initialContractAbis={starksheetContractData.contractAbis}
-    >
-      <CurrentSheetContextProvider>
-        <CellValuesContextProvider>
-          <App />
-        </CellValuesContextProvider>
-      </CurrentSheetContextProvider>
-    </AbisContextProvider>
+    <AccountContextProvider>
+      <AbisContextProvider
+        initialContractAbis={starksheetContractData.contractAbis}
+      >
+        <StarksheetContextProvider
+          starksheetAddress={starksheetContractData.address}
+        >
+          <CellValuesContextProvider>
+            <App />
+          </CellValuesContextProvider>
+        </StarksheetContextProvider>
+      </AbisContextProvider>
+    </AccountContextProvider>
   );
 }
 

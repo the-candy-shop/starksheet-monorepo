@@ -3,7 +3,7 @@ import { getStarknet } from "get-starknet";
 import { useContext, useMemo } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
-import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
 import starksheetContractData from "../../contract.json";
 import { useStarksheetContract } from "../../hooks/useStarksheetContract";
@@ -27,7 +27,7 @@ function Footer({ sx }: FooterProps) {
   const { accountAddress, proof } = useContext(AccountContext);
   const { starksheet, selectedSheet, setSelectedSheet, updateSheets } =
     useContext(StarksheetContext);
-  const { setLoading, setMessage } = useContext(CellValuesContext);
+  const { updateAppStatus } = useContext(AppStatusContext);
   const { contract } = useStarksheetContract();
   contract.connect(getStarknet().account);
 
@@ -38,8 +38,10 @@ function Footer({ sx }: FooterProps) {
 
   const addSheet = async () => {
     if (!accountAddress) return;
-    setMessage("Adding a new sheet");
-    setLoading(true);
+    updateAppStatus({
+      message: "Adding a new sheet",
+      loading: true,
+    });
     try {
       const tx = await contract.invoke("addSheet", [
         str2hex(`Sheet${starksheet.sheets.length}`),
@@ -51,8 +53,7 @@ function Footer({ sx }: FooterProps) {
     } catch (e) {
       console.log("addSheetError", e);
     } finally {
-      setMessage("");
-      setLoading(false);
+      updateAppStatus({ message: "", loading: false });
       setSelectedSheet(starksheet.sheets.length);
     }
   };

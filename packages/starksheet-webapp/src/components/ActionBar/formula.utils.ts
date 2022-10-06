@@ -2,8 +2,7 @@ import BN from "bn.js";
 import { constants } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { toBN } from "starknet/utils/number";
-import { CellData } from "../../contexts/CellValuesContext";
-import { ContractAbi } from "../../types";
+import { CellData, ContractAbi } from "../../types";
 
 export const RC_BOUND = toBN(2).pow(toBN(128));
 

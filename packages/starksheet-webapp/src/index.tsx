@@ -1,8 +1,10 @@
+import { SnackbarProvider } from "notistack";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { AbisContextProvider } from "./contexts/AbisContext";
 import { AccountContextProvider } from "./contexts/AccountContext";
+import { AppStatusContextProvider } from "./contexts/AppStatusContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
 import { StarksheetContextProvider } from "./contexts/StarksheetContext";
 import starksheetContractData from "./contract.json";
@@ -20,19 +22,23 @@ root.render(
 
 function Root() {
   return (
-    <AccountContextProvider>
-      <AbisContextProvider
-        initialContractAbis={starksheetContractData.contractAbis}
-      >
-        <StarksheetContextProvider
-          starksheetAddress={starksheetContractData.address}
-        >
-          <CellValuesContextProvider>
-            <App />
-          </CellValuesContextProvider>
-        </StarksheetContextProvider>
-      </AbisContextProvider>
-    </AccountContextProvider>
+    <SnackbarProvider maxSnack={3}>
+      <AppStatusContextProvider>
+        <AccountContextProvider>
+          <AbisContextProvider
+            initialContractAbis={starksheetContractData.contractAbis}
+          >
+            <StarksheetContextProvider
+              starksheetAddress={starksheetContractData.address}
+            >
+              <CellValuesContextProvider>
+                <App />
+              </CellValuesContextProvider>
+            </StarksheetContextProvider>
+          </AbisContextProvider>
+        </AccountContextProvider>
+      </AppStatusContextProvider>
+    </SnackbarProvider>
   );
 }
 

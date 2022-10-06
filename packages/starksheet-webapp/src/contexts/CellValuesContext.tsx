@@ -4,41 +4,23 @@ import React, {
   useCallback,
   useContext,
   useRef,
+  useState,
 } from "react";
 import { Contract } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency, RC_BOUND } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
 import { starknetRpcProvider, starknetSequencerProvider } from "../provider";
+import {
+  Cell,
+  CellChildren,
+  CellData,
+  CellRendered,
+  UpdatedValues,
+} from "../types";
 import { AbisContext } from "./AbisContext";
+import { AppStatusContext } from "./AppStatusContext";
 import { StarksheetContext } from "./StarksheetContext";
-
-export type CellData = {
-  contractAddress: BN;
-  selector: BN;
-  calldata: BN[];
-};
-
-export type CellRendered = {
-  id: BN;
-  owner: BN;
-  value: BN;
-  error?: boolean;
-};
-
-export type Cell = CellRendered & CellData;
-
-export type CellChildren = {
-  [key: number]: number;
-};
-
-export type UpdatedValues = {
-  [key: number]: Cell;
-};
-
-export type Sheet = {
-  [key: string]: Cell[];
-};
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
   id: toBN(tokenId),
@@ -56,12 +38,6 @@ const GRID_SIZE = 15 * 15;
 const network = process.env.REACT_APP_NETWORK;
 
 export const CellValuesContext = React.createContext<{
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
-  failed: boolean;
-  hasLoaded: boolean;
-  message: string;
-  setMessage: (message: string) => void;
   values: Cell[];
   updatedValues: UpdatedValues;
   setUpdatedValues: (values: UpdatedValues) => void;
@@ -73,14 +49,7 @@ export const CellValuesContext = React.createContext<{
   ) => (id: number) => void;
   cellNames: string[];
   setCellNames: (value: string[]) => void;
-  refresh: () => void;
 }>({
-  loading: false,
-  setLoading: () => {},
-  failed: false,
-  hasLoaded: false,
-  message: "",
-  setMessage: () => {},
   values: [],
   updatedValues: {},
   setUpdatedValues: () => {},
@@ -89,26 +58,24 @@ export const CellValuesContext = React.createContext<{
   buildChildren: () => () => {},
   cellNames: [],
   setCellNames: () => {},
-  refresh: () => {},
 });
 
 export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const [values, setValues] = React.useState<Cell[]>([]);
-  const [updatedValues, setUpdatedValues] = React.useState<UpdatedValues>({});
+  const [values, setValues] = useState<Cell[]>([]);
+  const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
   const previousGridData = useRef<any>(undefined);
   const previousSelectedSheet = useRef<any>(undefined);
-  const [cellNames, setCellNames] = React.useState<string[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [failed, setFailed] = React.useState<boolean>(false);
-  const [hasLoaded, setHasLoaded] = React.useState<boolean>(false);
-  const [message, setMessage] = React.useState<string>("");
-  const { contract } = useSheetContract();
+  const [cellNames, setCellNames] = useState<string[]>([]);
+
   const { getAbiForContract } = useContext(AbisContext);
   const { selectedSheet } = useContext(StarksheetContext);
+  const { updateAppStatus } = useContext(AppStatusContext);
 
-  const refreshAspect = useCallback(
+  const { contract } = useSheetContract();
+
+  const refreshMarketplaces = useCallback(
     (cells: Cell[]) => {
       if (
         previousGridData.current &&
@@ -141,9 +108,10 @@ export const CellValuesContextProvider = ({
 
   const load = useCallback(
     (contract: Contract) => {
-      setLoading(true);
-      setFailed(false);
+      updateAppStatus({ loading: true, error: false });
       contract.connect(starknetRpcProvider);
+      let error = false;
+      let finalMessage = "";
 
       const timedoutRenderGrid = () =>
         Promise.race([
@@ -199,16 +167,19 @@ export const CellValuesContextProvider = ({
           );
         });
 
-      setMessage("Calling renderGrid");
+      updateAppStatus({ message: "Calling renderGrid" });
       return timedoutRenderGrid()
         .catch(() => {
-          setMessage(
-            "Contract failed to render grid, falling back to render each cell individually"
-          );
+          updateAppStatus({
+            message:
+              "Contract failed to render grid, falling back to render each cell individually",
+          });
           return renderCells();
         })
         .then((renderedCells) => {
-          setMessage("Fetching cells metadata");
+          updateAppStatus({
+            message: "Fetching cells metadata",
+          });
           return Promise.all(
             (renderedCells as CellRendered[]).map(async (cell) => {
               const _cell = await contract.call("getCell", [cell.id]);
@@ -223,7 +194,9 @@ export const CellValuesContextProvider = ({
           );
         })
         .then((cells: Cell[]) => {
-          setMessage("Finalizing sheet data");
+          updateAppStatus({
+            message: "Finalizing sheet data",
+          });
           const _cells = cells.reduce(
             (prev, cell) => ({
               ...prev,
@@ -236,26 +209,28 @@ export const CellValuesContextProvider = ({
             (i) =>
               _cells[i] || { ...defaultRenderedCell(i), ...defaultCellData(i) }
           );
-          refreshAspect(gridCells);
+          refreshMarketplaces(gridCells);
           setValues(gridCells);
-          setHasLoaded(true);
-          setMessage("");
         })
         .catch(() => {
-          setFailed(true);
+          error = true;
+          finalMessage = `Error: Starksheet cannot render the sheet atm!
+              <br />
+              <br />
+              Team is working on it, we'll let you know on Twitter and Discord
+              when it's back.`;
         })
         .finally(() => {
-          setLoading(false);
+          updateAppStatus({
+            loading: false,
+            error,
+            message: finalMessage,
+          });
         });
     },
-    [refreshAspect]
+    // eslint-disable-next-line
+    [refreshMarketplaces]
   );
-
-  const refresh = useCallback(async () => {
-    if (contract) {
-      return load(contract);
-    }
-  }, [contract, load]);
 
   React.useEffect(() => {
     if (contract) {
@@ -334,18 +309,11 @@ export const CellValuesContextProvider = ({
         cellNames,
         setCellNames,
         values,
-        message,
-        setMessage,
         updatedValues,
         setUpdatedValues,
         computeValue,
         updateCells,
         buildChildren,
-        loading,
-        failed,
-        hasLoaded,
-        refresh,
-        setLoading,
       }}
     >
       {children}

@@ -6,13 +6,9 @@ import ContentEditable from "react-contenteditable";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
-import {
-  Cell as CellType,
-  CellChildren,
-  CellData,
-  CellValuesContext,
-} from "../../contexts/CellValuesContext";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { useSheetContract } from "../../hooks/useSheetContract";
+import { Cell as CellType, CellChildren, CellData } from "../../types";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import LoadingDots from "../LoadingDots/LoadingDots";

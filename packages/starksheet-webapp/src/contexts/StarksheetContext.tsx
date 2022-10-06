@@ -1,12 +1,14 @@
 import React, {
   PropsWithChildren,
   useCallback,
+  useContext,
   useEffect,
   useState,
 } from "react";
 import { starknetRpcProvider } from "../provider";
 import { Sheet, Starksheet } from "../types";
 import { hex2str } from "../utils/hexUtils";
+import { AppStatusContext } from "./AppStatusContext";
 
 export const StarksheetContext = React.createContext<{
   starksheet: Starksheet;
@@ -25,6 +27,7 @@ export const StarksheetContextProvider = ({
   starksheetAddress,
   children,
 }: PropsWithChildren<{ starksheetAddress: string }>) => {
+  const { updateAppStatus } = useContext(AppStatusContext);
   const [starksheet, setStarksheet] = useState<Starksheet>({
     address: starksheetAddress,
     sheets: [],
@@ -59,7 +62,9 @@ export const StarksheetContextProvider = ({
               } as Sheet)
           );
         })
-        .then((sheets) => setStarksheet({ address, sheets })),
+        .then((sheets) => {
+          setStarksheet({ address, sheets });
+        }),
     [address]
   );
 
@@ -68,7 +73,13 @@ export const StarksheetContextProvider = ({
   };
 
   useEffect(() => {
-    updateSheets();
+    updateSheets().then(() => {
+      updateAppStatus({
+        message: "Click on a tab to open a sheet",
+        loading: false,
+      });
+    });
+    // eslint-disable-next-line
   }, [updateSheets]);
 
   return (

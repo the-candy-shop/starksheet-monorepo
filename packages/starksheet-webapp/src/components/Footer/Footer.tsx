@@ -24,18 +24,12 @@ export type FooterProps = {
 const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
-  const { accountAddress } = useContext(AccountContext);
+  const { accountAddress, proof } = useContext(AccountContext);
   const { starksheet, selectedSheet, setSelectedSheet, updateSheets } =
     useContext(StarksheetContext);
   const { setLoading, setMessage } = useContext(CellValuesContext);
   const { contract } = useStarksheetContract();
   contract.connect(getStarknet().account);
-
-  const addressProof = useMemo(
-    // @ts-ignore
-    () => starksheetContractData.allowlist[accountAddress] || [],
-    [accountAddress]
-  );
 
   const currentSheetAddress = useMemo(
     () => (selectedSheet ? starksheet.sheets[selectedSheet].address : ""),
@@ -50,7 +44,7 @@ function Footer({ sx }: FooterProps) {
       const tx = await contract.invoke("addSheet", [
         str2hex(`Sheet${starksheet.sheets.length}`),
         str2hex(`SHT${starksheet.sheets.length}`),
-        addressProof,
+        proof,
       ]);
       await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
       await updateSheets();

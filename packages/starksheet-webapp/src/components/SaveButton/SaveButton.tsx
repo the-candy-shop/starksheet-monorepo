@@ -4,8 +4,8 @@ import { useSnackbar } from "notistack";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { stark } from "starknet";
 import { toBN } from "starknet/utils/number";
+import { AccountContext } from "../../contexts/AccountContext";
 import { CellData, CellValuesContext } from "../../contexts/CellValuesContext";
-import starksheetContractData from "../../contract.json";
 import { useSheetContract } from "../../hooks/useSheetContract";
 import { starknetRpcProvider } from "../../provider";
 import Tooltip from "../../Tooltip/Tooltip";
@@ -31,6 +31,7 @@ function SaveButton({
   disabled,
   sx,
 }: SaveButtonProps) {
+  const { accountAddress, proof } = useContext(AccountContext);
   const { contract } = useSheetContract();
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -46,7 +47,7 @@ function SaveButton({
       .filter(
         ([_, cell]) =>
           cell.owner.eq(toBN(0)) ||
-          "0x" + cell.owner.toString(16) === getStarknet().account.address
+          "0x" + cell.owner.toString(16) === accountAddress
       )
       .map(([tokenId, cell]) =>
         cell.owner.eq(toBN(0))
@@ -59,11 +60,7 @@ function SaveButton({
                   low: tokenId,
                   high: 0,
                 },
-                proof:
-                  // @ts-ignore
-                  starksheetContractData.allowlist[
-                    getStarknet().account.address
-                  ] || [],
+                proof,
                 contractAddress: cell.contractAddress.toString(),
                 value: cell.selector.toString(),
                 cellCalldata: cell.calldata.map((d) => d.toString()),
@@ -98,7 +95,14 @@ function SaveButton({
         enqueueSnackbar(error.toString(), { variant: "error" })
       )
       .finally(() => setLoading(false));
-  }, [contract, setUpdatedValues, updatedValues, enqueueSnackbar]);
+  }, [
+    contract,
+    setUpdatedValues,
+    updatedValues,
+    enqueueSnackbar,
+    accountAddress,
+    proof,
+  ]);
 
   const error = useMemo(
     () =>

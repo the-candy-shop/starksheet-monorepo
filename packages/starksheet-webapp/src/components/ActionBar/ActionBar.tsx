@@ -1,5 +1,5 @@
 import { Box, BoxProps } from "@mui/material";
-import { useStarknet } from "@starknet-react/core";
+import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
@@ -36,7 +36,6 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
     useContext(CellValuesContext);
   const { getAbiForContract } = useContext(AbisContext);
   const { enqueueSnackbar } = useSnackbar();
-  const { account } = useStarknet();
   const { contract } = useSheetContract();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [newDependencies, setNewDependencies] = React.useState<number[]>([]);
@@ -46,6 +45,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
   const previousSelectedCell = React.useRef<number | null>(
     selectedCell ? selectedCell.id : null
   );
+  const account = getStarknet().account.address;
 
   const getAllDependencies = useCallback(
     (_dependencies: number[]) => (tokenId: number) => {

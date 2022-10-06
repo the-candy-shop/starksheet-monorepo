@@ -1,7 +1,8 @@
 import { Box, BoxProps } from "@mui/material";
-import { useStarknet } from "@starknet-react/core";
+import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext, useMemo, useState } from "react";
+import { stark } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { CellData, CellValuesContext } from "../../contexts/CellValuesContext";
 import starksheetContractData from "../../contract.json";
@@ -30,81 +31,74 @@ function SaveButton({
   disabled,
   sx,
 }: SaveButtonProps) {
-  const { account } = useStarknet();
   const { contract } = useSheetContract();
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const addressProof = useMemo(
-    // @ts-ignore
-    () => starksheetContractData.allowlist[account] || [],
-    [account]
-  );
-
-  const onClick = useCallback(() => {
+  const onClick = useCallback(async () => {
     if (!contract) {
       return;
     }
     setLoading(true);
-    Promise.all(
-      Object.entries(updatedValues)
-        .filter(
-          ([_, cell]) =>
-            cell.owner.eq(toBN(0)) || "0x" + cell.owner.toString(16) === account
-        )
-        .map(([tokenId, cell]) =>
-          cell.owner.eq(toBN(0))
-            ? contract.invoke("mintAndSetPublic", [
-                [tokenId, "0"],
-                addressProof,
-                cell.contractAddress,
-                cell.selector,
-                cell.calldata,
-              ])
-            : contract.invoke("setCell", [
-                tokenId,
-                cell.contractAddress,
-                cell.selector,
-                cell.calldata,
-              ])
-        )
-    )
-      .then((txs) => {
-        return Promise.all(
-          txs.map(async (tx) => {
-            await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
-            return starknetRpcProvider.getTransactionReceipt(
-              tx.transaction_hash
-            );
-          })
+
+    const transactions = Object.entries(updatedValues)
+      .filter(
+        ([_, cell]) =>
+          cell.owner.eq(toBN(0)) ||
+          "0x" + cell.owner.toString(16) === getStarknet().account.address
+      )
+      .map(([tokenId, cell]) =>
+        cell.owner.eq(toBN(0))
+          ? {
+              contractAddress: contract.address,
+              entrypoint: "mintAndSetPublic",
+              calldata: stark.compileCalldata({
+                tokenId: {
+                  type: "struct",
+                  low: tokenId,
+                  high: 0,
+                },
+                proof:
+                  // @ts-ignore
+                  starksheetContractData.allowlist[
+                    getStarknet().account.address
+                  ] || [],
+                contractAddress: cell.contractAddress.toString(),
+                value: cell.selector.toString(),
+                cellCalldata: cell.calldata.map((d) => d.toString()),
+              }),
+            }
+          : {
+              contractAddress: contract.address,
+              entrypoint: "setCell",
+              calldata: stark.compileCalldata({
+                tokenId: tokenId,
+                contractAddress: cell.contractAddress.toString(),
+                value: cell.selector.toString(),
+                cellCalldata: cell.calldata.map((d) => d.toString()),
+              }),
+            }
+      );
+
+    getStarknet()
+      .account.execute(transactions)
+      .then(async (response) => {
+        await starknetRpcProvider.waitForTransaction(response.transaction_hash);
+        return starknetRpcProvider.getTransactionReceipt(
+          response.transaction_hash
         );
       })
-      .then((receipts) => {
-        const success = receipts
-          .map((receipt, index) => ({ ...receipt, index }))
-          .filter((receipt) => receipt.status !== "REJECTED")
-          .map((receipt) => receipt.index);
-        setUpdatedValues(
-          Object.fromEntries(
-            Object.entries(updatedValues).filter(
-              ([key]) => !success.includes(parseInt(key))
-            )
-          )
-        );
+      .then((receipt) => {
+        if (receipt.status !== "REJECTED") {
+          setUpdatedValues({});
+        }
       })
       .catch((error: any) =>
         enqueueSnackbar(error.toString(), { variant: "error" })
       )
       .finally(() => setLoading(false));
-  }, [
-    account,
-    addressProof,
-    contract,
-    setUpdatedValues,
-    updatedValues,
-    enqueueSnackbar,
-  ]);
+  }, [contract, setUpdatedValues, updatedValues, enqueueSnackbar]);
 
   const error = useMemo(
     () =>
@@ -113,12 +107,11 @@ function SaveButton({
         : null,
     [selectedCell, cellData, newDependencies]
   );
-  const noAccount = useMemo(() => !account, [account]);
 
   if (
     selectedCell &&
     currentCellOwnerAddress &&
-    currentCellOwnerAddress !== account &&
+    currentCellOwnerAddress !== getStarknet().account.address &&
     currentCellOwnerAddress !== "0x0"
   ) {
     return (
@@ -143,19 +136,21 @@ function SaveButton({
           sx={{
             width: "221px",
             "& .content": {
-              backgroundColor: !noAccount ? "#FF4F0A" : undefined,
-              boxShadow: !noAccount
+              backgroundColor: !!getStarknet().account.address
+                ? "#FF4F0A"
+                : undefined,
+              boxShadow: !!getStarknet().account.address
                 ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
                 : undefined,
               justifyContent: "center",
               textAlign: "center",
-              color: noAccount ? "#8C95A3" : undefined,
+              color: !getStarknet().account.address ? "#8C95A3" : undefined,
             },
             ...sx,
           }}
           onClick={onClick}
           disabled={
-            noAccount ||
+            !getStarknet().account.address ||
             loading ||
             !!error ||
             disabled ||

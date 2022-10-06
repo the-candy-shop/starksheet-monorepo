@@ -1,7 +1,7 @@
-import { useStarknet } from "@starknet-react/core";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
+import { AccountContext } from "../../contexts/AccountContext";
 import Tooltip from "../../Tooltip/Tooltip";
 import { RC_BOUND } from "../ActionBar/formula.utils";
 import Cell from "../Cell/Cell";
@@ -23,17 +23,17 @@ export type ComputedCellProps = {
 
 function buildBackground(
   cellOwner: string | undefined,
-  account: string | undefined,
+  accountAddress: string | undefined,
   value: string | undefined,
-  contractAddess: string
+  contractAddress: string
 ): string {
-  if (!cellOwner && value === "0" && contractAddess === RC_BOUND.toString())
+  if (!cellOwner && value === "0" && contractAddress === RC_BOUND.toString())
     return "white";
   if (value === undefined) return "white";
   if (
-    account === cellOwner ||
+    accountAddress === cellOwner ||
     (cellOwner === undefined &&
-      (!toBN(value).eq(toBN(0)) || !toBN(contractAddess).eq(RC_BOUND)))
+      (!toBN(value).eq(toBN(0)) || !toBN(contractAddress).eq(RC_BOUND)))
   )
     return BLUE;
   return GREY;
@@ -69,11 +69,11 @@ function ComputedCell({
   setSelectedCell,
   error,
 }: ComputedCellProps) {
-  const { account } = useStarknet();
+  const { accountAddress } = useContext(AccountContext);
 
   const background = useMemo(
-    () => buildBackground(owner, account, value, contractAddress),
-    [owner, account, value, contractAddress]
+    () => buildBackground(owner, accountAddress, value, contractAddress),
+    [owner, accountAddress, value, contractAddress]
   );
 
   const borderColor = useMemo(

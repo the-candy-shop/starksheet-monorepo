@@ -1,8 +1,4 @@
 import { Box } from "@mui/material";
-import {
-  getInstalledInjectedConnectors,
-  StarknetProvider,
-} from "@starknet-react/core";
 import { SnackbarProvider } from "notistack";
 import React, { useContext, useMemo } from "react";
 import ContentEditable from "react-contenteditable";
@@ -14,7 +10,7 @@ import LoadingDots from "./components/LoadingDots/LoadingDots";
 import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
 import { CellValuesContext } from "./contexts/CellValuesContext";
-import { starknetSequencerProvider } from "./provider";
+import { StarksheetContext } from "./contexts/StarksheetContext";
 import {
   getBottomCellName,
   getLeftCellName,
@@ -35,7 +31,6 @@ const keyMap = {
 };
 
 function App() {
-  const connectors = getInstalledInjectedConnectors();
   const [selectedCell, setSelectedCell] = React.useState<{
     name: string;
     id: number;
@@ -43,6 +38,7 @@ function App() {
 
   const { loading, message, failed, hasLoaded, cellNames } =
     useContext(CellValuesContext);
+  const { selectedSheet } = useContext(StarksheetContext);
 
   const inputRef = React.useRef<ContentEditable>(null);
 
@@ -105,89 +101,97 @@ function App() {
 
   return (
     <SnackbarProvider maxSnack={3}>
-      <StarknetProvider
-        connectors={connectors}
-        defaultProvider={starknetSequencerProvider}
-      >
-        <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
-          <Box
-            className="App"
-            sx={{ display: "flex", flexDirection: "column", height: "100vh" }}
-          >
-            <Header />
-            <ActionBar
-              inputRef={inputRef}
+      <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
+        <Box
+          className="App"
+          sx={{ display: "flex", flexDirection: "column", height: "100vh" }}
+        >
+          <Header />
+          <ActionBar
+            inputRef={inputRef}
+            selectedCell={selectedCell}
+            sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
+          />
+          {selectedSheet === undefined && !!!message && (
+            <Box
+              sx={{
+                display: "flex",
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "'Press Start 2P', cursive",
+              }}
+            >
+              Click on the tab bar to open a sheet.
+            </Box>
+          )}
+          {loading && (
+            <Box
+              sx={{
+                display: "flex",
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "'Press Start 2P', cursive",
+              }}
+            >
+              {message}
+              <LoadingDots />
+            </Box>
+          )}
+          {!loading && failed && (
+            <Box
+              sx={{
+                display: "flex",
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "'Press Start 2P', cursive",
+              }}
+            >
+              Error: Starksheet cannot render the sheet atm!
+              <br />
+              <br />
+              Team is working on it, we'll let you know on Twitter and Discord
+              when it's back.
+            </Box>
+          )}
+          {!loading && hasLoaded && !failed && selectedSheet !== undefined && (
+            <SheetTable
               selectedCell={selectedCell}
-              sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
+              setSelectedCell={setSelectedCell}
+              columns={MAX_COLUMNS}
+              rows={MAX_ROWS}
+              sx={{
+                zIndex: 0,
+                marginTop: `-${CELL_BORDER_WIDTH}px`,
+                marginBottom: `-${CELL_BORDER_WIDTH}px`,
+                overflow: "auto",
+                flex: 1,
+                "&::-webkit-scrollbar": {
+                  width: `${CELL_HEIGHT}px`,
+                  height: `${CELL_HEIGHT}px`,
+                  backgroundColor: "#C6D2E4",
+                  border: `${CELL_BORDER_WIDTH}px solid black`,
+                  boxShadow: `inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC`,
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#C6D2E4",
+                  border: `${CELL_BORDER_WIDTH}px solid black`,
+                  boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
+                  cursor: "pointer",
+                },
+                "&::-webkit-scrollbar-corner": {
+                  backgroundColor: "#C6D2E4",
+                  border: `${CELL_BORDER_WIDTH}px solid black`,
+                  boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
+                },
+              }}
             />
-            {loading && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontFamily: "'Press Start 2P', cursive",
-                }}
-              >
-                {message}
-                <LoadingDots />
-              </Box>
-            )}
-            {!loading && failed && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontFamily: "'Press Start 2P', cursive",
-                }}
-              >
-                Error: Starksheet cannot render the sheet atm!
-                <br />
-                <br />
-                Team is working on it, we'll let you know on Twitter and Discord
-                when it's back.
-              </Box>
-            )}
-            {!loading && hasLoaded && !failed && (
-              <SheetTable
-                selectedCell={selectedCell}
-                setSelectedCell={setSelectedCell}
-                columns={MAX_COLUMNS}
-                rows={MAX_ROWS}
-                sx={{
-                  zIndex: 0,
-                  marginTop: `-${CELL_BORDER_WIDTH}px`,
-                  marginBottom: `-${CELL_BORDER_WIDTH}px`,
-                  overflow: "auto",
-                  flex: 1,
-                  "&::-webkit-scrollbar": {
-                    width: `${CELL_HEIGHT}px`,
-                    height: `${CELL_HEIGHT}px`,
-                    backgroundColor: "#C6D2E4",
-                    border: `${CELL_BORDER_WIDTH}px solid black`,
-                    boxShadow: `inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC`,
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: "#C6D2E4",
-                    border: `${CELL_BORDER_WIDTH}px solid black`,
-                    boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
-                    cursor: "pointer",
-                  },
-                  "&::-webkit-scrollbar-corner": {
-                    backgroundColor: "#C6D2E4",
-                    border: `${CELL_BORDER_WIDTH}px solid black`,
-                    boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
-                  },
-                }}
-              />
-            )}
-            <Footer sx={{ zIndex: 1 }} />
-          </Box>
-        </HotKeys>{" "}
-      </StarknetProvider>
+          )}
+          <Footer sx={{ zIndex: 1 }} />
+        </Box>
+      </HotKeys>{" "}
     </SnackbarProvider>
   );
 }

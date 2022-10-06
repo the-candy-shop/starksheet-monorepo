@@ -1,27 +1,25 @@
-import { useStarknet } from "@starknet-react/core";
 import { useContext, useMemo } from "react";
 import { Abi, Contract } from "starknet";
-import { CurrentSheetContext } from "../contexts/CurrentSheetContext";
+import { StarksheetContext } from "../contexts/StarksheetContext";
 import starksheetContractData from "../contract.json";
 import { starknetSequencerProvider } from "../provider";
 
-export function useSheetContract(address?: string) {
-  const { currentSheetAddress } = useContext(CurrentSheetContext);
-  const selectedAddress = address || currentSheetAddress;
-  const { library } = useStarknet();
+export function useSheetContract() {
+  const { starksheet, selectedSheet } = useContext(StarksheetContext);
 
-  const contract = useMemo(
-    () =>
-      selectedAddress
-        ? new Contract(
-            starksheetContractData.sheetAbi as Abi,
-            selectedAddress,
-            // @ts-ignore
-            library.address ? library : starknetSequencerProvider
-          )
-        : undefined,
-    [selectedAddress, library]
-  );
+  const contract = useMemo(() => {
+    const contractAddress =
+      selectedSheet !== undefined
+        ? starksheet.sheets[selectedSheet].address
+        : undefined;
+    return contractAddress
+      ? new Contract(
+          starksheetContractData.sheetAbi as Abi,
+          contractAddress,
+          starknetSequencerProvider
+        )
+      : undefined;
+  }, [starksheet, selectedSheet]);
 
   return { contract };
 }

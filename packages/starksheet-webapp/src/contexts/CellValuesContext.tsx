@@ -11,7 +11,7 @@ import { isDependency, RC_BOUND } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
 import { starknetRpcProvider, starknetSequencerProvider } from "../provider";
 import { AbisContext } from "./AbisContext";
-import { CurrentSheetContext } from "./CurrentSheetContext";
+import { StarksheetContext } from "./StarksheetContext";
 
 export type CellData = {
   contractAddress: BN;
@@ -79,7 +79,7 @@ export const CellValuesContext = React.createContext<{
   setLoading: () => {},
   failed: false,
   hasLoaded: false,
-  message: "Loading",
+  message: "",
   setMessage: () => {},
   values: [],
   updatedValues: {},
@@ -98,21 +98,21 @@ export const CellValuesContextProvider = ({
   const [values, setValues] = React.useState<Cell[]>([]);
   const [updatedValues, setUpdatedValues] = React.useState<UpdatedValues>({});
   const previousGridData = useRef<any>(undefined);
-  const previousSheetAddress = useRef<any>(undefined);
+  const previousSelectedSheet = useRef<any>(undefined);
   const [cellNames, setCellNames] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [failed, setFailed] = React.useState<boolean>(false);
   const [hasLoaded, setHasLoaded] = React.useState<boolean>(false);
-  const [message, setMessage] = React.useState<string>("Loading");
+  const [message, setMessage] = React.useState<string>("");
   const { contract } = useSheetContract();
   const { getAbiForContract } = useContext(AbisContext);
-  const { currentSheetAddress } = useContext(CurrentSheetContext);
+  const { selectedSheet } = useContext(StarksheetContext);
 
   const refreshAspect = useCallback(
     (cells: Cell[]) => {
       if (
         previousGridData.current &&
-        previousSheetAddress.current === currentSheetAddress
+        previousSelectedSheet.current === selectedSheet
       ) {
         cells.forEach((cell, index) => {
           if (
@@ -134,9 +134,9 @@ export const CellValuesContextProvider = ({
         });
       }
       previousGridData.current = cells;
-      previousSheetAddress.current = currentSheetAddress;
+      previousSelectedSheet.current = selectedSheet;
     },
-    [contract?.address, currentSheetAddress]
+    [contract?.address, selectedSheet]
   );
 
   const load = useCallback(
@@ -239,6 +239,7 @@ export const CellValuesContextProvider = ({
           refreshAspect(gridCells);
           setValues(gridCells);
           setHasLoaded(true);
+          setMessage("");
         })
         .catch(() => {
           setFailed(true);

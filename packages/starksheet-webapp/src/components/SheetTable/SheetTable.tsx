@@ -95,7 +95,7 @@ function SheetTable({
           </GreyCell>
           {columnNames.map((columnName, columnIndex) => {
             const id = columnIndex + columnNames.length * rowIndex;
-            const contractAddess = values[id].contractAddress.toString();
+            const contractAddress = values[id].contractAddress.toString();
             const value = values[id]
               ? getValue(values[id].value as BN).toString()
               : undefined;
@@ -110,7 +110,7 @@ function SheetTable({
                 key={`${columnName}${rowName}`}
                 name={`${columnName}${rowName}`}
                 id={id}
-                contractAddress={contractAddess}
+                contractAddress={contractAddress}
                 value={value}
                 owner={owner}
                 error={error}

@@ -1,13 +1,14 @@
 import { Box, BoxProps } from "@mui/material";
-import { useStarknet } from "@starknet-react/core";
+import { getStarknet } from "get-starknet";
 import { useContext, useMemo } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
+import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { CurrentSheetContext } from "../../contexts/CurrentSheetContext";
+import { StarksheetContext } from "../../contexts/StarksheetContext";
 import starksheetContractData from "../../contract.json";
-import { useSheetList } from "../../hooks/useSheetList";
 import { useStarksheetContract } from "../../hooks/useStarksheetContract";
 import { starknetRpcProvider } from "../../provider";
+import { str2hex } from "../../utils/hexUtils";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
@@ -21,49 +22,56 @@ export type FooterProps = {
 };
 
 const network = process.env.REACT_APP_NETWORK;
-const str2hex = (s: string) =>
-  "0x" +
-  Array.from(Array(s.length).keys())
-    .map((i) => s.charCodeAt(i).toString(16))
-    .join("");
+
 function Footer({ sx }: FooterProps) {
-  const { addresses, updateAddresses } = useSheetList();
-  const { account } = useStarknet();
-  const { currentSheetAddress, setCurrentSheetAddress } =
-    useContext(CurrentSheetContext);
+  const { accountAddress } = useContext(AccountContext);
+  const { starksheet, selectedSheet, setSelectedSheet, updateSheets } =
+    useContext(StarksheetContext);
   const { setLoading, setMessage } = useContext(CellValuesContext);
   const { contract } = useStarksheetContract();
+  contract.connect(getStarknet().account);
 
   const addressProof = useMemo(
     // @ts-ignore
-    () => starksheetContractData.allowlist[account] || [],
-    [account]
+    () => starksheetContractData.allowlist[accountAddress] || [],
+    [accountAddress]
+  );
+
+  const currentSheetAddress = useMemo(
+    () => (selectedSheet ? starksheet.sheets[selectedSheet].address : ""),
+    [starksheet, selectedSheet]
   );
 
   const addSheet = async () => {
-    if (!account) return;
+    if (!accountAddress) return;
     setMessage("Adding a new sheet");
     setLoading(true);
-    const tx = await contract.invoke("addSheet", [
-      str2hex(`Sheet${addresses.length}`),
-      str2hex(`SHT${addresses.length}`),
-      addressProof,
-    ]);
-    await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
-    const newAddresses = await updateAddresses();
-    setMessage("");
-    setLoading(false);
-    setCurrentSheetAddress(newAddresses.slice(-1)[0]);
+    try {
+      const tx = await contract.invoke("addSheet", [
+        str2hex(`Sheet${starksheet.sheets.length}`),
+        str2hex(`SHT${starksheet.sheets.length}`),
+        addressProof,
+      ]);
+      await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
+      await updateSheets();
+    } catch (e) {
+      console.log("addSheetError", e);
+    } finally {
+      setMessage("");
+      setLoading(false);
+      setSelectedSheet(starksheet.sheets.length);
+    }
   };
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
       <Box sx={{ display: "flex", overflow: "auto" }}>
-        {addresses &&
-          addresses.map((address, index) => (
+        {starksheet.sheets &&
+          starksheet.sheets.map((sheet, index) => (
             <SheetButton
-              key={address}
-              address={address}
+              sheet={sheet}
+              index={index}
+              key={sheet.address}
               sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
             />
           ))}
@@ -96,8 +104,8 @@ function Footer({ sx }: FooterProps) {
           onClick={() =>
             window.open(
               network === "alpha-mainnet"
-                ? `https://voyager.online/contract/${starksheetContractData.address}`
-                : `https://goerli.voyager.online/contract/${starksheetContractData.address}`,
+                ? `https://starkscan.co/contract/${starksheetContractData.address}`
+                : `https://testnet.starkscan.co/contract/${starksheetContractData.address}`,
               "_blank"
             )
           }

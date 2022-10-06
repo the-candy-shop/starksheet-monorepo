@@ -19,16 +19,19 @@ function ConnectButton({ sx }: ConnectButtonProps) {
       disconnect();
     }
     const selected = await getStarknet().enable({ showModal: true });
-    const chainId = hex2str(getStarknet().account.chainId);
-    if (
-      !process.env.REACT_APP_NETWORK?.includes(chainId.slice(3).toLowerCase())
-    ) {
+    const chainId = getStarknet().account.chainId;
+    const appNetwork = process.env.REACT_APP_NETWORK || "";
+    console.log("chainId", hex2str(chainId));
+    console.log("appNetwork", appNetwork);
+    if (appNetwork !== hex2str(chainId)) {
+      getStarknet().request({
+        type: "wallet_switchStarknetChain",
+        params: { chainId: appNetwork },
+      });
       enqueueSnackbar(
-        `Wrong network detected: "${chainId
-          .slice(3)
-          .toLowerCase()}" instead of "${
-          process.env.REACT_APP_NETWORK?.split("-")[1]
-        }"`,
+        `Wrong network detected: "${hex2str(
+          chainId
+        )}" instead of "${appNetwork}"`,
         { variant: "warning" }
       );
     }

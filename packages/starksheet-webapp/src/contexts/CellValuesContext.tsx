@@ -87,12 +87,12 @@ export const CellValuesContextProvider = ({
             cell?.value?.toString()
           ) {
             fetch(
-              network === "alpha-mainnet"
+              network === "SN_MAIN"
                 ? `https://api.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
                 : `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
             );
             fetch(
-              network === "alpha-mainnet"
+              network === "SN_MAIN"
                 ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${contract?.address}/${index}/`
                 : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${contract?.address}/${index}/`,
               { method: "POST" }

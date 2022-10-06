@@ -98,7 +98,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "alpha-mainnet"
+              network === "SN_MAIN"
                 ? `https://starkscan.co/contract/${starksheetContractData.address}`
                 : `https://testnet.starkscan.co/contract/${starksheetContractData.address}`,
               "_blank"
@@ -140,7 +140,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "alpha-mainnet"
+              network === "SN_MAIN"
                 ? `https://aspect.co/collection/${currentSheetAddress}`
                 : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
               "_blank"
@@ -158,7 +158,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "alpha-mainnet"
+              network === "SN_MAIN"
                 ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
                 : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
               "_blank"

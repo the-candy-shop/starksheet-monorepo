@@ -1,6 +1,6 @@
 import { Box, BoxProps } from "@mui/material";
 import { getStarknet } from "get-starknet";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
@@ -25,16 +25,11 @@ const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
   const { accountAddress, proof } = useContext(AccountContext);
-  const { starksheet, selectedSheet, setSelectedSheet, updateSheets } =
+  const { starksheet, selectedSheetAddress, setSelectedSheet, updateSheets } =
     useContext(StarksheetContext);
   const { updateAppStatus } = useContext(AppStatusContext);
   const { contract } = useStarksheetContract();
   contract.connect(getStarknet().account);
-
-  const currentSheetAddress = useMemo(
-    () => (selectedSheet ? starksheet.sheets[selectedSheet].address : ""),
-    [starksheet, selectedSheet]
-  );
 
   const addSheet = async () => {
     if (!accountAddress) return;
@@ -141,8 +136,8 @@ function Footer({ sx }: FooterProps) {
           onClick={() =>
             window.open(
               network === "SN_MAIN"
-                ? `https://aspect.co/collection/${currentSheetAddress}`
-                : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
+                ? `https://aspect.co/collection/${selectedSheetAddress}`
+                : `https://testnet.aspect.co/collection/${selectedSheetAddress}`,
               "_blank"
             )
           }
@@ -159,8 +154,8 @@ function Footer({ sx }: FooterProps) {
           onClick={() =>
             window.open(
               network === "SN_MAIN"
-                ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
-                : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
+                ? `https://mintsquare.io/collection/starknet/${selectedSheetAddress}/nfts`
+                : `https://mintsquare.io/collection/starknet-testnet/${selectedSheetAddress}/nfts`,
               "_blank"
             )
           }

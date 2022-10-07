@@ -21,8 +21,6 @@ function ConnectButton({ sx }: ConnectButtonProps) {
     const selected = await getStarknet().enable({ showModal: true });
     const chainId = getStarknet().account.chainId;
     const appNetwork = process.env.REACT_APP_NETWORK || "";
-    console.log("chainId", hex2str(chainId));
-    console.log("appNetwork", appNetwork);
     if (appNetwork !== hex2str(chainId)) {
       getStarknet().request({
         type: "wallet_switchStarknetChain",

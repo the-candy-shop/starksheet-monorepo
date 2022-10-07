@@ -47,10 +47,14 @@ export type CellRendered = {
 
 export type Cell = CellRendered & CellData;
 
+export type CellValues = {
+  [address: string]: Cell[];
+};
+
 export type CellChildren = {
   [key: number]: number;
 };
 
 export type UpdatedValues = {
-  [key: number]: Cell;
+  [address: string]: { [key: number]: Cell };
 };

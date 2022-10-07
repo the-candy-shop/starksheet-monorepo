@@ -26,7 +26,7 @@ function FormulaField({
   setValue,
 }: FormulaFieldProps) {
   const { contractAbis, getAbiForContract } = useContext(AbisContext);
-  const { values } = useContext(CellValuesContext);
+  const { currentCells } = useContext(CellValuesContext);
   const [abi, setAbi] = useState<string[]>([]);
   const [selectedContractAddress, setSelectedContractAddress] = useState("");
   const contractAddresses = Object.keys(contractAbis).filter(
@@ -39,9 +39,9 @@ function FormulaField({
       if (_selectedContractAddress.match(cellNameRegex)) {
         _selectedContractAddress =
           "0x" +
-          values[cellNameToTokenId(_selectedContractAddress)].value.toString(
-            16
-          );
+          currentCells[
+            cellNameToTokenId(_selectedContractAddress)
+          ].value.toString(16);
       }
       getAbiForContract(_selectedContractAddress).then((abi) => {
         setAbi(
@@ -54,7 +54,7 @@ function FormulaField({
         );
       });
     }
-  }, [value, getAbiForContract, values]);
+  }, [value, getAbiForContract, currentCells]);
 
   return (
     <>

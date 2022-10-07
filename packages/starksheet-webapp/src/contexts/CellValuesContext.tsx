@@ -3,6 +3,7 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,6 +17,7 @@ import {
   CellChildren,
   CellData,
   CellRendered,
+  CellValues,
   UpdatedValues,
 } from "../types";
 import { AbisContext } from "./AbisContext";
@@ -38,9 +40,12 @@ const GRID_SIZE = 15 * 15;
 const network = process.env.REACT_APP_NETWORK;
 
 export const CellValuesContext = React.createContext<{
-  values: Cell[];
+  values: CellValues;
   updatedValues: UpdatedValues;
+  currentCells: Cell[];
+  currentUpdatedCells: { [key: number]: Cell };
   setUpdatedValues: (values: UpdatedValues) => void;
+  setCurrentUpdatedCells: (cells: { [key: number]: Cell }) => void;
   computeValue: (values: BN[]) => (cell: CellData) => Promise<BN>;
   updateCells: (cells: Cell[]) => void;
   buildChildren: (
@@ -50,9 +55,12 @@ export const CellValuesContext = React.createContext<{
   cellNames: string[];
   setCellNames: (value: string[]) => void;
 }>({
-  values: [],
+  values: {},
   updatedValues: {},
+  currentCells: [],
+  currentUpdatedCells: {},
   setUpdatedValues: () => {},
+  setCurrentUpdatedCells: () => {},
   computeValue: () => async () => toBN(0),
   updateCells: () => {},
   buildChildren: () => () => {},
@@ -63,15 +71,37 @@ export const CellValuesContext = React.createContext<{
 export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const [values, setValues] = useState<Cell[]>([]);
+  const { getAbiForContract } = useContext(AbisContext);
+  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { updateAppStatus } = useContext(AppStatusContext);
+
+  const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
   const previousGridData = useRef<any>(undefined);
   const previousSelectedSheet = useRef<any>(undefined);
   const [cellNames, setCellNames] = useState<string[]>([]);
 
-  const { getAbiForContract } = useContext(AbisContext);
-  const { selectedSheet } = useContext(StarksheetContext);
-  const { updateAppStatus } = useContext(AppStatusContext);
+  const currentCells = useMemo(
+    () => (selectedSheetAddress ? values[selectedSheetAddress] || [] : []),
+    [selectedSheetAddress, values]
+  );
+
+  const currentUpdatedCells = useMemo(
+    () =>
+      selectedSheetAddress ? updatedValues[selectedSheetAddress] || {} : {},
+    [selectedSheetAddress, updatedValues]
+  );
+
+  const setCurrentUpdatedCells = useCallback(
+    (cells: { [key: number]: Cell }) => {
+      if (!selectedSheetAddress) return;
+      setUpdatedValues((prevUpdatedValues) => ({
+        ...prevUpdatedValues,
+        [selectedSheetAddress]: cells,
+      }));
+    },
+    [selectedSheetAddress, setUpdatedValues]
+  );
 
   const { contract } = useSheetContract();
 
@@ -79,7 +109,7 @@ export const CellValuesContextProvider = ({
     (cells: Cell[]) => {
       if (
         previousGridData.current &&
-        previousSelectedSheet.current === selectedSheet
+        previousSelectedSheet.current === selectedSheetAddress
       ) {
         cells.forEach((cell, index) => {
           if (
@@ -88,27 +118,32 @@ export const CellValuesContextProvider = ({
           ) {
             fetch(
               network === "SN_MAIN"
-                ? `https://api.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
-                : `https://api-testnet.aspect.co/api/v0/asset/${contract?.address}/${index}/refresh`
+                ? `https://api.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
+                : `https://api-testnet.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
             );
             fetch(
               network === "SN_MAIN"
-                ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${contract?.address}/${index}/`
-                : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${contract?.address}/${index}/`,
+                ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${selectedSheetAddress}/${index}/`
+                : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${selectedSheetAddress}/${index}/`,
               { method: "POST" }
             );
           }
         });
       }
       previousGridData.current = cells;
-      previousSelectedSheet.current = selectedSheet;
+      previousSelectedSheet.current = selectedSheetAddress;
     },
-    [contract?.address, selectedSheet]
+    [selectedSheetAddress]
   );
 
   const load = useCallback(
     (contract: Contract) => {
       updateAppStatus({ loading: true, error: false });
+      if (!selectedSheetAddress || selectedSheetAddress in values) {
+        updateAppStatus({ loading: false });
+        return;
+      }
+
       contract.connect(starknetRpcProvider);
       let error = false;
       let finalMessage = "";
@@ -210,7 +245,7 @@ export const CellValuesContextProvider = ({
               _cells[i] || { ...defaultRenderedCell(i), ...defaultCellData(i) }
           );
           refreshMarketplaces(gridCells);
-          setValues(gridCells);
+          setValues({ ...values, [selectedSheetAddress]: gridCells });
         })
         .catch(() => {
           error = true;
@@ -229,7 +264,7 @@ export const CellValuesContextProvider = ({
         });
     },
     // eslint-disable-next-line
-    [refreshMarketplaces]
+    [refreshMarketplaces, selectedSheetAddress]
   );
 
   React.useEffect(() => {
@@ -267,7 +302,8 @@ export const CellValuesContextProvider = ({
 
   const buildChildren = useCallback(
     (children: CellChildren, depth?: number) => (id: number) => {
-      const currentChildren = values
+      if (!selectedSheetAddress) return;
+      const currentChildren = values[selectedSheetAddress]
         .filter(
           (cell) =>
             cell.calldata
@@ -285,32 +321,42 @@ export const CellValuesContextProvider = ({
 
       currentChildren.map(buildChildren(children, (depth || 1) + 1));
     },
-    [values]
+    [values, selectedSheetAddress]
   );
 
   const updateCells = (cells: Cell[]) => {
-    const newValues = [...values];
-    const newUpdatedValues = { ...updatedValues };
+    if (!selectedSheetAddress) return;
+    const newCells = [...currentCells];
+    const newUpdatedCells = { ...currentUpdatedCells };
     for (const cell of cells) {
       const id = cell.id.toNumber();
-      newValues[id] = {
-        ...newValues[id],
+      newCells[id] = {
+        ...newCells[id],
         ...cell,
       };
-      newUpdatedValues[id] = newValues[id];
+      newUpdatedCells[id] = newCells[id];
     }
-    setUpdatedValues(newUpdatedValues);
-    setValues(newValues);
+    setUpdatedValues((prevUpdatedValues) => ({
+      ...prevUpdatedValues,
+      [selectedSheetAddress]: newUpdatedCells,
+    }));
+    setValues((prevValues) => ({
+      ...prevValues,
+      [selectedSheetAddress]: newCells,
+    }));
   };
 
   return (
     <CellValuesContext.Provider
       value={{
-        cellNames,
-        setCellNames,
         values,
         updatedValues,
+        currentCells,
+        currentUpdatedCells,
+        cellNames,
+        setCellNames,
         setUpdatedValues,
+        setCurrentUpdatedCells,
         computeValue,
         updateCells,
         buildChildren,

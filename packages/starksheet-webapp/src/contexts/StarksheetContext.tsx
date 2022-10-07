@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { starknetRpcProvider } from "../provider";
@@ -13,6 +14,7 @@ import { AppStatusContext } from "./AppStatusContext";
 export const StarksheetContext = React.createContext<{
   starksheet: Starksheet;
   selectedSheet?: number;
+  selectedSheetAddress?: string;
   setSelectedSheet: (index: number) => void;
   updateSheets: () => Promise<void>;
   addSheet: (sheet: Sheet) => void;
@@ -33,7 +35,13 @@ export const StarksheetContextProvider = ({
     sheets: [],
   });
   const [selectedSheet, setSelectedSheet] = useState<number>();
-  const { address } = starksheet;
+  const { address, sheets } = starksheet;
+
+  const selectedSheetAddress = useMemo(
+    () =>
+      selectedSheet !== undefined ? sheets[selectedSheet].address : undefined,
+    [sheets, selectedSheet]
+  );
 
   const updateSheets = useCallback(
     () =>
@@ -87,6 +95,7 @@ export const StarksheetContextProvider = ({
       value={{
         starksheet,
         selectedSheet,
+        selectedSheetAddress,
         setSelectedSheet,
         updateSheets,
         addSheet,

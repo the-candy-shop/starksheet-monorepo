@@ -1,64 +1,55 @@
 import { Box, BoxProps } from "@mui/material";
 import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { stark } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { useSheetContract } from "../../hooks/useSheetContract";
 import { starknetRpcProvider } from "../../provider";
 import Tooltip from "../../Tooltip/Tooltip";
-import { CellData } from "../../types";
-import { getError } from "../ActionBar/formula.utils";
 import Button from "../Button/Button";
 import Cell from "../Cell/Cell";
 import LoadingDots from "../LoadingDots/LoadingDots";
 
 export type SaveButtonProps = {
-  cellData: CellData | null;
-  newDependencies: number[];
-  selectedCell: { name: string; id: number } | null;
   currentCellOwnerAddress?: string;
-  disabled?: boolean;
+  error?: string;
   sx?: BoxProps["sx"];
 };
 
-function SaveButton({
-  cellData,
-  newDependencies,
-  selectedCell,
-  currentCellOwnerAddress,
-  disabled,
-  sx,
-}: SaveButtonProps) {
+function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
   const { accountAddress, proof } = useContext(AccountContext);
-  const { contract } = useSheetContract();
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState<boolean>(false);
 
   const onClick = useCallback(async () => {
-    if (!contract) {
-      return;
-    }
     setLoading(true);
 
     const transactions = Object.entries(updatedValues)
+      .map(([sheetAddress, sheetUpdatedValues]) => {
+        return Object.entries(sheetUpdatedValues).map(([tokenId, cell]) => ({
+          ...cell,
+          tokenId,
+          sheetAddress,
+        }));
+      })
+      .reduce((prev, cur) => [...prev, ...cur], [])
       .filter(
-        ([_, cell]) =>
+        (cell) =>
           cell.owner.eq(toBN(0)) ||
           "0x" + cell.owner.toString(16) === accountAddress
       )
-      .map(([tokenId, cell]) =>
+      .map((cell) =>
         cell.owner.eq(toBN(0))
           ? {
-              contractAddress: contract.address,
+              contractAddress: cell.sheetAddress,
               entrypoint: "mintAndSetPublic",
               calldata: stark.compileCalldata({
                 tokenId: {
                   type: "struct",
-                  low: tokenId,
+                  low: cell.tokenId,
                   high: 0,
                 },
                 proof,
@@ -68,10 +59,10 @@ function SaveButton({
               }),
             }
           : {
-              contractAddress: contract.address,
+              contractAddress: cell.sheetAddress,
               entrypoint: "setCell",
               calldata: stark.compileCalldata({
-                tokenId: tokenId,
+                tokenId: cell.tokenId,
                 contractAddress: cell.contractAddress.toString(),
                 value: cell.selector.toString(),
                 cellCalldata: cell.calldata.map((d) => d.toString()),
@@ -96,27 +87,11 @@ function SaveButton({
         enqueueSnackbar(error.toString(), { variant: "error" })
       )
       .finally(() => setLoading(false));
-  }, [
-    contract,
-    setUpdatedValues,
-    updatedValues,
-    enqueueSnackbar,
-    accountAddress,
-    proof,
-  ]);
-
-  const error = useMemo(
-    () =>
-      selectedCell
-        ? getError(selectedCell.id, cellData, newDependencies)
-        : null,
-    [selectedCell, cellData, newDependencies]
-  );
+  }, [setUpdatedValues, updatedValues, enqueueSnackbar, accountAddress, proof]);
 
   if (
-    selectedCell &&
     currentCellOwnerAddress &&
-    currentCellOwnerAddress !== getStarknet().account.address &&
+    currentCellOwnerAddress !== accountAddress &&
     currentCellOwnerAddress !== "0x0"
   ) {
     return (
@@ -158,17 +133,17 @@ function SaveButton({
             !getStarknet().account.address ||
             loading ||
             !!error ||
-            disabled ||
             Object.keys(updatedValues).length === 0
           }
         >
-          {loading && (
+          {loading ? (
             <Box>
               Saving
               <LoadingDots />
             </Box>
+          ) : (
+            `Save`
           )}
-          {!loading && `Save`}
         </Button>
       </span>
     </Tooltip>

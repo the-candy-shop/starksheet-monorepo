@@ -1,25 +1,20 @@
 import { Box, BoxProps } from "@mui/material";
-import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
-import {
-  Cell as CellType,
-  CellChildren,
-  CellData,
-  CellValuesContext,
-} from "../../contexts/CellValuesContext";
-import { useSheetContract } from "../../hooks/useSheetContract";
+import { AccountContext } from "../../contexts/AccountContext";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { Cell as CellType, CellChildren, CellData } from "../../types";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import LoadingDots from "../LoadingDots/LoadingDots";
 import SaveButton from "../SaveButton/SaveButton";
 import {
   buildFormulaDisplay,
-  getDependencies,
   parse,
   RC_BOUND,
   toPlainTextFormula,
@@ -32,51 +27,39 @@ export type ActionBarProps = {
 };
 
 function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
-  const { cellNames, values, computeValue, updateCells, buildChildren } =
-    useContext(CellValuesContext);
   const { getAbiForContract } = useContext(AbisContext);
+  const { accountAddress } = useContext(AccountContext);
+  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { cellNames, currentCells, computeValue, updateCells, buildChildren } =
+    useContext(CellValuesContext);
   const { enqueueSnackbar } = useSnackbar();
-  const { contract } = useSheetContract();
+
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [newDependencies, setNewDependencies] = React.useState<number[]>([]);
-  const [disabled, setDisabled] = React.useState<boolean>(false);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const [cellData, setCellData] = React.useState<CellData | null>(null);
   const previousSelectedCell = React.useRef<number | null>(
     selectedCell ? selectedCell.id : null
   );
-  const account = getStarknet().account.address;
-
-  const getAllDependencies = useCallback(
-    (_dependencies: number[]) => (tokenId: number) => {
-      const deps = getDependencies(values[tokenId].calldata);
-      deps.forEach((d) => _dependencies.push(d));
-      if (deps.includes(tokenId)) {
-        // We break here because it's enough to conclude about a circular dep
-        return;
-      }
-      deps.map((d) => getAllDependencies(_dependencies)(d));
-    },
-    [values]
-  );
 
   useEffect(() => {
-    if (
-      contract &&
-      selectedCell &&
-      previousSelectedCell.current !== selectedCell.id
-    ) {
+    if (selectedCell && previousSelectedCell.current !== selectedCell.id) {
+      // Focus on FormulaField
       inputRef?.current?.el?.current?.focus();
+
       // 1. Save value
       const currentCell = previousSelectedCell.current;
       const updatedCells: CellType[] = [];
-      if (currentCell !== null && cellData !== null && account !== undefined) {
-        const _values = values.map((value) => value.value);
+      if (
+        currentCell !== null &&
+        cellData !== null &&
+        accountAddress !== undefined
+      ) {
+        const _values = currentCells.map((value) => value.value);
         computeValue(_values)(cellData)
           .then(async (value) => {
             if (!(value.eq(toBN(0)) && cellData.contractAddress.eq(RC_BOUND))) {
               updatedCells.push({
-                ...values[currentCell],
+                ...currentCells[currentCell],
                 ...cellData,
                 value,
               });
@@ -87,7 +70,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
               const indexes = Object.entries(children)
                 .sort((a, b) => a[1] - b[1])
                 .map((entry) => parseInt(entry[0]))
-                .map((id) => values[id]);
+                .map((id) => currentCells[id]);
 
               for (const cell of indexes) {
                 const value = await computeValue(_values)(cell);
@@ -102,7 +85,8 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
           })
           .catch((error) => {
             enqueueSnackbar(
-              `Cannot compute value of cell ${cellNames[currentCell]}, check ABI?`,
+              `Cannot compute value of cell ${cellNames[currentCell]}, error:
+              ${error}`,
               {
                 variant: "error",
               }
@@ -115,10 +99,11 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       // 2. Update formula
       if (selectedCell) {
         setLoading(true);
-        let resolvedContractAddress = values[selectedCell.id].contractAddress;
+        let resolvedContractAddress =
+          currentCells[selectedCell.id].contractAddress;
         if (resolvedContractAddress.lt(RC_BOUND)) {
           resolvedContractAddress =
-            values[resolvedContractAddress.toNumber()].value;
+            currentCells[resolvedContractAddress.toNumber()].value;
         }
         getAbiForContract("0x" + resolvedContractAddress.toString(16))
           .then((abi) => {
@@ -126,7 +111,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
               toPlainTextFormula(
                 {
                   abi,
-                  ...values[selectedCell.id],
+                  ...currentCells[selectedCell.id],
                 },
                 cellNames
               )
@@ -140,15 +125,14 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
     }
   }, [
     cellNames,
-    contract,
     enqueueSnackbar,
     getAbiForContract,
-    values,
+    currentCells,
     cellData,
     updateCells,
     computeValue,
     selectedCell,
-    account,
+    accountAddress,
     inputRef,
     buildChildren,
   ]);
@@ -160,13 +144,6 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       setCellData(_cellData);
       return;
     }
-
-    setDisabled(true);
-
-    let _deps = getDependencies(_cellData.calldata);
-    _deps.map(getAllDependencies(_deps));
-    setNewDependencies(Array.from(new Set(_deps)));
-    setDisabled(false);
 
     getAbiForContract("0x" + _cellData.contractAddress.toString(16))
       .then((abi) => {
@@ -184,10 +161,14 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         }
         setCellData(_cellData);
       });
-  }, [enqueueSnackbar, getAllDependencies, getAbiForContract, unSavedValue]);
+  }, [enqueueSnackbar, getAbiForContract, unSavedValue]);
+
+  useEffect(() => {
+    setUnsavedValue("0");
+  }, [selectedSheetAddress]);
 
   const owner = selectedCell
-    ? "0x" + values[selectedCell?.id].owner.toString(16)
+    ? "0x" + currentCells[selectedCell?.id]?.owner?.toString(16)
     : undefined;
 
   return (
@@ -215,7 +196,8 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
             {
               <>
                 <Box sx={{ padding: "0 15px" }}>=</Box>
-                {(!account || (account !== owner && owner !== "0x0")) && (
+                {(!accountAddress ||
+                  (accountAddress !== owner && owner !== "0x0")) && (
                   <Box
                     dangerouslySetInnerHTML={{
                       __html: buildFormulaDisplay(unSavedValue),
@@ -225,31 +207,28 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
                     }}
                   />
                 )}
-                {!!account && (account === owner || owner === "0x0") && (
-                  <FormulaField
-                    inputRef={inputRef}
-                    setValue={setUnsavedValue}
-                    onChange={() => {
-                      setUnsavedValue(
-                        inputRef?.current?.el.current.innerText
-                          .trim()
-                          .replaceAll("\n", "")
-                          .replaceAll("\r", "")
-                      );
-                    }}
-                    value={unSavedValue}
-                  />
-                )}
+                {!!accountAddress &&
+                  (accountAddress === owner || owner === "0x0") && (
+                    <FormulaField
+                      inputRef={inputRef}
+                      setValue={setUnsavedValue}
+                      onChange={() => {
+                        setUnsavedValue(
+                          inputRef?.current?.el.current.innerText
+                            .trim()
+                            .replaceAll("\n", "")
+                            .replaceAll("\r", "")
+                        );
+                      }}
+                      value={unSavedValue}
+                    />
+                  )}
               </>
             }
           </Box>
         )}
       </Cell>
       <SaveButton
-        cellData={cellData}
-        newDependencies={newDependencies}
-        selectedCell={selectedCell}
-        disabled={disabled}
         currentCellOwnerAddress={owner}
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
       />

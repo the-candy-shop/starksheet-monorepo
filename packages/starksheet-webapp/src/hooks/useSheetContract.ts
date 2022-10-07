@@ -5,21 +5,17 @@ import starksheetContractData from "../contract.json";
 import { starknetSequencerProvider } from "../provider";
 
 export function useSheetContract() {
-  const { starksheet, selectedSheet } = useContext(StarksheetContext);
+  const { selectedSheetAddress } = useContext(StarksheetContext);
 
   const contract = useMemo(() => {
-    const contractAddress =
-      selectedSheet !== undefined
-        ? starksheet.sheets[selectedSheet].address
-        : undefined;
-    return contractAddress
+    return selectedSheetAddress
       ? new Contract(
           starksheetContractData.sheetAbi as Abi,
-          contractAddress,
+          selectedSheetAddress,
           starknetSequencerProvider
         )
       : undefined;
-  }, [starksheet, selectedSheet]);
+  }, [selectedSheetAddress]);
 
   return { contract };
 }

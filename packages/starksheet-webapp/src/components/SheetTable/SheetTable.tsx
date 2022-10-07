@@ -29,7 +29,7 @@ function SheetTable({
     [columns]
   );
   const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
-  const { setCellNames, values } = useContext(CellValuesContext);
+  const { setCellNames, currentCells } = useContext(CellValuesContext);
 
   React.useEffect(() => {
     const result: string[] = [];
@@ -95,15 +95,15 @@ function SheetTable({
           </GreyCell>
           {columnNames.map((columnName, columnIndex) => {
             const id = columnIndex + columnNames.length * rowIndex;
-            const contractAddress = values[id].contractAddress.toString();
-            const value = values[id]
-              ? getValue(values[id].value as BN).toString()
+            const contractAddress = currentCells[id].contractAddress.toString();
+            const value = currentCells[id]
+              ? getValue(currentCells[id].value as BN).toString()
               : undefined;
             const owner =
-              values[id] && values[id].owner.toString() !== "0"
-                ? toHex(values[id].owner as BN)
+              currentCells[id] && currentCells[id].owner.toString() !== "0"
+                ? toHex(currentCells[id].owner as BN)
                 : undefined;
-            const error = values[id] ? values[id].error : undefined;
+            const error = currentCells[id] ? currentCells[id].error : undefined;
 
             return (
               <ComputedCell

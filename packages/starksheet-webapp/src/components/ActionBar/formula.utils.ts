@@ -2,8 +2,7 @@ import BN from "bn.js";
 import { constants } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { toBN } from "starknet/utils/number";
-import { CellData } from "../../contexts/CellValuesContext";
-import { ContractAbi } from "../../types";
+import { Cell, CellData, ContractAbi } from "../../types";
 
 export const RC_BOUND = toBN(2).pow(toBN(128));
 
@@ -102,6 +101,17 @@ export const isDependency = (arg: BN): boolean =>
 export function getDependencies(calldata: BN[]): number[] {
   return calldata.filter(isDependency).map((data) => (data.toNumber() - 1) / 2);
 }
+
+export const getAllDependencies =
+  (cells: Cell[], _dependencies: number[]) => (tokenId: number) => {
+    const deps = getDependencies(cells[tokenId].calldata);
+    deps.forEach((d) => _dependencies.push(d));
+    if (deps.includes(tokenId)) {
+      // We break here because it's enough to conclude about a circular dep
+      return;
+    }
+    deps.map(getAllDependencies(cells, _dependencies));
+  };
 
 export function getError(
   cellId: number,

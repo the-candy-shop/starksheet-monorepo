@@ -1,3 +1,4 @@
+import BN from "bn.js";
 import { FunctionAbi } from "starknet";
 
 // Starksheet contracts types
@@ -22,4 +23,38 @@ export type InitialContractAbis = {
 
 export type ContractAbis = {
   [contractAddress: string]: ContractAbi | undefined;
+};
+
+// Starksheet dapp types
+export type AppStatus = {
+  loading: boolean;
+  error: boolean;
+  message: string;
+};
+
+export type CellData = {
+  contractAddress: BN;
+  selector: BN;
+  calldata: BN[];
+};
+
+export type CellRendered = {
+  id: BN;
+  owner: BN;
+  value: BN;
+  error?: boolean;
+};
+
+export type Cell = CellRendered & CellData;
+
+export type CellValues = {
+  [address: string]: Cell[];
+};
+
+export type CellChildren = {
+  [key: number]: number;
+};
+
+export type UpdatedValues = {
+  [address: string]: { [key: number]: Cell };
 };

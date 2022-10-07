@@ -1,7 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const network = process.env.REACT_APP_NETWORK;
+const network =
+  process.env.REACT_APP_NETWORK === "SN_MAIN"
+    ? "alpha-mainnet"
+    : "alpha-goerli";
 
 async function run() {
   const contractDeployData = require(`../starksheet-cairo/${network}.deployments.json`);

@@ -1,16 +1,20 @@
 import React, {
   PropsWithChildren,
   useCallback,
+  useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { starknetRpcProvider } from "../provider";
 import { Sheet, Starksheet } from "../types";
 import { hex2str } from "../utils/hexUtils";
+import { AppStatusContext } from "./AppStatusContext";
 
 export const StarksheetContext = React.createContext<{
   starksheet: Starksheet;
   selectedSheet?: number;
+  selectedSheetAddress?: string;
   setSelectedSheet: (index: number) => void;
   updateSheets: () => Promise<void>;
   addSheet: (sheet: Sheet) => void;
@@ -25,12 +29,19 @@ export const StarksheetContextProvider = ({
   starksheetAddress,
   children,
 }: PropsWithChildren<{ starksheetAddress: string }>) => {
+  const { updateAppStatus } = useContext(AppStatusContext);
   const [starksheet, setStarksheet] = useState<Starksheet>({
     address: starksheetAddress,
     sheets: [],
   });
   const [selectedSheet, setSelectedSheet] = useState<number>();
-  const { address } = starksheet;
+  const { address, sheets } = starksheet;
+
+  const selectedSheetAddress = useMemo(
+    () =>
+      selectedSheet !== undefined ? sheets[selectedSheet].address : undefined,
+    [sheets, selectedSheet]
+  );
 
   const updateSheets = useCallback(
     () =>
@@ -59,7 +70,9 @@ export const StarksheetContextProvider = ({
               } as Sheet)
           );
         })
-        .then((sheets) => setStarksheet({ address, sheets })),
+        .then((sheets) => {
+          setStarksheet({ address, sheets });
+        }),
     [address]
   );
 
@@ -68,7 +81,13 @@ export const StarksheetContextProvider = ({
   };
 
   useEffect(() => {
-    updateSheets();
+    updateSheets().then(() => {
+      updateAppStatus({
+        message: "Click on a tab to open a sheet",
+        loading: false,
+      });
+    });
+    // eslint-disable-next-line
   }, [updateSheets]);
 
   return (
@@ -76,6 +95,7 @@ export const StarksheetContextProvider = ({
       value={{
         starksheet,
         selectedSheet,
+        selectedSheetAddress,
         setSelectedSheet,
         updateSheets,
         addSheet,

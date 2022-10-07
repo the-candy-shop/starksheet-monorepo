@@ -1,9 +1,9 @@
 import { Box, BoxProps } from "@mui/material";
 import { getStarknet } from "get-starknet";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
-import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
 import starksheetContractData from "../../contract.json";
 import { useStarksheetContract } from "../../hooks/useStarksheetContract";
@@ -24,41 +24,31 @@ export type FooterProps = {
 const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
-  const { accountAddress } = useContext(AccountContext);
-  const { starksheet, selectedSheet, setSelectedSheet, updateSheets } =
+  const { accountAddress, proof } = useContext(AccountContext);
+  const { starksheet, selectedSheetAddress, setSelectedSheet, updateSheets } =
     useContext(StarksheetContext);
-  const { setLoading, setMessage } = useContext(CellValuesContext);
+  const { updateAppStatus } = useContext(AppStatusContext);
   const { contract } = useStarksheetContract();
   contract.connect(getStarknet().account);
 
-  const addressProof = useMemo(
-    // @ts-ignore
-    () => starksheetContractData.allowlist[accountAddress] || [],
-    [accountAddress]
-  );
-
-  const currentSheetAddress = useMemo(
-    () => (selectedSheet ? starksheet.sheets[selectedSheet].address : ""),
-    [starksheet, selectedSheet]
-  );
-
   const addSheet = async () => {
     if (!accountAddress) return;
-    setMessage("Adding a new sheet");
-    setLoading(true);
+    updateAppStatus({
+      message: "Adding a new sheet",
+      loading: true,
+    });
     try {
       const tx = await contract.invoke("addSheet", [
         str2hex(`Sheet${starksheet.sheets.length}`),
         str2hex(`SHT${starksheet.sheets.length}`),
-        addressProof,
+        proof,
       ]);
       await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
       await updateSheets();
     } catch (e) {
       console.log("addSheetError", e);
     } finally {
-      setMessage("");
-      setLoading(false);
+      updateAppStatus({ message: "", loading: false });
       setSelectedSheet(starksheet.sheets.length);
     }
   };
@@ -103,7 +93,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "alpha-mainnet"
+              network === "SN_MAIN"
                 ? `https://starkscan.co/contract/${starksheetContractData.address}`
                 : `https://testnet.starkscan.co/contract/${starksheetContractData.address}`,
               "_blank"
@@ -145,9 +135,9 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "alpha-mainnet"
-                ? `https://aspect.co/collection/${currentSheetAddress}`
-                : `https://testnet.aspect.co/collection/${currentSheetAddress}`,
+              network === "SN_MAIN"
+                ? `https://aspect.co/collection/${selectedSheetAddress}`
+                : `https://testnet.aspect.co/collection/${selectedSheetAddress}`,
               "_blank"
             )
           }
@@ -163,9 +153,9 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "alpha-mainnet"
-                ? `https://mintsquare.io/collection/starknet/${currentSheetAddress}/nfts`
-                : `https://mintsquare.io/collection/starknet-testnet/${currentSheetAddress}/nfts`,
+              network === "SN_MAIN"
+                ? `https://mintsquare.io/collection/starknet/${selectedSheetAddress}/nfts`
+                : `https://mintsquare.io/collection/starknet-testnet/${selectedSheetAddress}/nfts`,
               "_blank"
             )
           }

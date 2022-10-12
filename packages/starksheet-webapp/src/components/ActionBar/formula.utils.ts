@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import { constants } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { toBN } from "starknet/utils/number";
 import { Cell, CellData, ContractAbi } from "../../types";
@@ -152,11 +151,4 @@ export function buildFormulaDisplay(formula: string): string {
   }
 
   return result;
-}
-
-export function getValue(value: BN): BN {
-  return value
-    .add(toBN(constants.FIELD_PRIME).div(toBN(2)).abs())
-    .mod(toBN(constants.FIELD_PRIME))
-    .sub(toBN(constants.FIELD_PRIME).div(toBN(2)).abs());
 }

@@ -29,11 +29,11 @@ function buildBackground(
 ): string {
   if (!cellOwner && value === "0" && contractAddress === RC_BOUND.toString())
     return "white";
-  if (value === undefined) return "white";
+  if (value === undefined || value === "") return "white";
   if (
     accountAddress === cellOwner ||
     (cellOwner === undefined &&
-      (!toBN(value).eq(toBN(0)) || !toBN(contractAddress).eq(RC_BOUND)))
+      (value !== "0x0" || !toBN(contractAddress).eq(RC_BOUND)))
   )
     return BLUE;
   return GREY;

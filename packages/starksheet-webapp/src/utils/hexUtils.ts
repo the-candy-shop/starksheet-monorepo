@@ -9,3 +9,7 @@ export const str2hex = (s: string) =>
   Array.from(Array(s.length).keys())
     .map((i) => s.charCodeAt(i).toString(16))
     .join("");
+
+export function isASCII(s: string) {
+  return /^[\x20-\x7e]*$/.test(s);
+}

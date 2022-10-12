@@ -1,11 +1,14 @@
 import { Box, BoxProps } from "@mui/material";
 import BN from "bn.js";
 import React, { useContext } from "react";
-import { toHex } from "starknet/utils/number";
+import { constants } from "starknet";
+import { getSelectorFromName } from "starknet/dist/utils/hash";
+import { toBN, toHex } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { Cell } from "../../types";
+import { hex2str } from "../../utils/hexUtils";
 import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
-import { getValue } from "../ActionBar/formula.utils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
 
@@ -42,6 +45,22 @@ function SheetTable({
 
     setCellNames(result);
   }, [columnNames, rowNames, setCellNames]);
+
+  function getValue(cell: Cell): string {
+    const value = cell.value;
+    if (
+      ["name", "symbol"]
+        .map(getSelectorFromName)
+        .includes("0x" + cell.selector.toString(16))
+    ) {
+      return hex2str(value.toString(16));
+    }
+    return value
+      .add(toBN(constants.FIELD_PRIME).div(toBN(2)).abs())
+      .mod(toBN(constants.FIELD_PRIME))
+      .sub(toBN(constants.FIELD_PRIME).div(toBN(2)).abs())
+      .toString();
+  }
 
   return (
     <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>
@@ -94,10 +113,10 @@ function SheetTable({
             {rowName}
           </GreyCell>
           {columnNames.map((columnName, columnIndex) => {
-            const id = columnIndex + columnNames.length * rowIndex;
+            const id: number = columnIndex + columnNames.length * rowIndex;
             const contractAddress = currentCells[id].contractAddress.toString();
             const value = currentCells[id]
-              ? getValue(currentCells[id].value as BN).toString()
+              ? getValue(currentCells[id])
               : undefined;
             const owner =
               currentCells[id] && currentCells[id].owner.toString() !== "0"

@@ -31,28 +31,56 @@ export const AbisContextProvider = ({
     useState<ContractAbis>(_initialContractAbis);
 
   const setAbiForContract = (address: string, abi: Abi) => {
-    setContractAbis({
-      ...contractAbis,
+    setContractAbis((prevContractAbis) => ({
+      ...prevContractAbis,
       ["0x" + toBN(address).toString(16)]: parseAbi(abi),
-    });
+    }));
   };
 
   const getAbiForContract = async (address: string) => {
     const _address = "0x" + toBN(address).toString(16);
-    if (!(_address in contractAbis)) {
-      let abi: Abi = [];
-      if (!toBN(_address).eq(RC_BOUND)) {
-        try {
-          const response = await starknetSequencerProvider.getClassAt(_address);
-          abi = response.abi || abi;
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      setAbiForContract(_address, abi);
-      return parseAbi(abi);
+    if (_address in contractAbis) {
+      return contractAbis[_address];
     }
-    return contractAbis[_address];
+
+    let abi: Abi = [];
+    if (!toBN(_address).eq(RC_BOUND)) {
+      try {
+        const response = await starknetSequencerProvider.getClassAt(_address);
+        abi = response.abi || abi;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    abi = [
+      ...abi,
+      ...(
+        await Promise.all(
+          abi
+            .filter(
+              (f) =>
+                f.name.includes("impl") &&
+                f.type === "function" &&
+                f.stateMutability === "view" &&
+                f.inputs.length === 0
+            )
+            .map(async (f) => {
+              console.log("f", f);
+              const implementationAddress =
+                await starknetSequencerProvider.callContract({
+                  contractAddress: address,
+                  entrypoint: f.name,
+                });
+              console.log("implementationAddress", implementationAddress);
+              return Object.values(
+                (await getAbiForContract(implementationAddress.result[0])) || {}
+              );
+            })
+        )
+      ).flat(),
+    ];
+    setAbiForContract(_address, abi);
+    return parseAbi(abi);
   };
 
   return (

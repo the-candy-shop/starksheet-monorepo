@@ -65,13 +65,11 @@ export const AbisContextProvider = ({
                 f.inputs.length === 0
             )
             .map(async (f) => {
-              console.log("f", f);
               const implementationAddress =
                 await starknetSequencerProvider.callContract({
                   contractAddress: address,
                   entrypoint: f.name,
                 });
-              console.log("implementationAddress", implementationAddress);
               return Object.values(
                 (await getAbiForContract(implementationAddress.result[0])) || {}
               );

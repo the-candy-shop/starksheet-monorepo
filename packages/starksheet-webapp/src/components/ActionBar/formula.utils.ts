@@ -90,8 +90,11 @@ const parseArg = (arg: string): BN | undefined => {
     const tokenId = cellNameToTokenId(arg);
     return toBN(2 * tokenId + 1);
   }
-  if (arg.match(/^\d+$/i)) return toBN(arg).mul(toBN(2));
-  return undefined;
+  try {
+    return toBN(arg).mul(toBN(2));
+  } catch (e) {
+    return undefined;
+  }
 };
 
 export const isDependency = (arg: BN): boolean =>

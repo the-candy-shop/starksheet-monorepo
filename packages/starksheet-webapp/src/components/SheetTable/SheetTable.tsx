@@ -1,11 +1,8 @@
 import { Box, BoxProps } from "@mui/material";
-import BN from "bn.js";
 import React, { useContext } from "react";
-import { toHex } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
-import { getValue } from "../ActionBar/formula.utils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
 
@@ -94,26 +91,14 @@ function SheetTable({
             {rowName}
           </GreyCell>
           {columnNames.map((columnName, columnIndex) => {
-            const id = columnIndex + columnNames.length * rowIndex;
-            const contractAddress = currentCells[id].contractAddress.toString();
-            const value = currentCells[id]
-              ? getValue(currentCells[id].value as BN).toString()
-              : undefined;
-            const owner =
-              currentCells[id] && currentCells[id].owner.toString() !== "0"
-                ? toHex(currentCells[id].owner as BN)
-                : undefined;
-            const error = currentCells[id] ? currentCells[id].error : undefined;
+            const id: number = columnIndex + columnNames.length * rowIndex;
 
             return (
               <ComputedCell
                 key={`${columnName}${rowName}`}
                 name={`${columnName}${rowName}`}
                 id={id}
-                contractAddress={contractAddress}
-                value={value}
-                owner={owner}
-                error={error}
+                cell={currentCells[id]}
                 selected={`${columnName}${rowName}` === selectedCell?.name}
                 setSelectedCell={setSelectedCell}
               />

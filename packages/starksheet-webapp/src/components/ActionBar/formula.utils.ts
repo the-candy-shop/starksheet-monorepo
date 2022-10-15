@@ -1,36 +1,34 @@
 import BN from "bn.js";
-import { constants } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { toBN } from "starknet/utils/number";
-import { Cell, CellData, ContractAbi } from "../../types";
-
-export const RC_BOUND = toBN(2).pow(toBN(128));
+import { Cell, CellData } from "../../types";
+import { RC_BOUND } from "../../utils/constants";
+import { bn2hex } from "../../utils/hexUtils";
 
 const contractCallRegex =
   /(?<contractAddress>(0x)?[a-z0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9; ]*)\)/i;
 export const cellNameRegex = /^[a-z]\d+$/i;
+const hexStringRegex = /^(0x)?[a-f0-9]+$/i;
 
 export function toPlainTextFormula(
-  { contractAddress, selector, calldata, abi }: CellData & { abi: ContractAbi },
+  { contractAddress, selector, calldata, abi }: CellData,
   cellNames: string[]
 ): string {
   if (contractAddress.toString() === RC_BOUND.toString()) {
-    return selector.gte(RC_BOUND)
-      ? "0x" + selector.toString(16)
-      : selector.toString();
+    return selector.gte(RC_BOUND) ? bn2hex(selector) : selector.toString();
   }
 
-  const contractHexString = contractAddress.lte(RC_BOUND)
+  const contractName = contractAddress.lte(RC_BOUND)
     ? cellNames[contractAddress.toNumber()]
-    : "0x" + contractAddress.toString(16);
-  const selectorHexString = "0x" + selector.toString(16);
-  const operator = abi[selectorHexString]?.name || selectorHexString;
+    : bn2hex(contractAddress);
+  const selectorHexString = bn2hex(selector);
+  const operator = abi?.name || selectorHexString;
 
-  const args = abi[selectorHexString]?.inputs[0]?.name?.endsWith("_len")
+  const args = abi?.inputs[0]?.name?.endsWith("_len")
     ? calldata.slice(1)
     : calldata;
 
-  return `${contractHexString}.${operator}(${args
+  return `${contractName}.${operator}(${args
     .map((arg) =>
       arg.mod(toBN(2)).toNumber() === 0
         ? arg.gte(RC_BOUND)
@@ -44,7 +42,7 @@ export function toPlainTextFormula(
 export function parse(formula: string): CellData | null {
   const formulaMatch = formula.match(contractCallRegex);
   if (!formulaMatch?.groups) {
-    if (!formula.match(/^(0x)?[a-f0-9]+$/i)) {
+    if (!formula.match(hexStringRegex)) {
       return null;
     }
     try {
@@ -61,9 +59,13 @@ export function parse(formula: string): CellData | null {
       };
     }
   }
+  if (!formulaMatch.groups.contractAddress.match(hexStringRegex)) {
+    return null;
+  }
   const args = formulaMatch.groups.args
     .toLowerCase()
     .split(";")
+    .filter((arg) => arg !== "")
     .map(parseArg)
     .filter((arg) => arg !== undefined) as BN[];
 
@@ -91,8 +93,11 @@ const parseArg = (arg: string): BN | undefined => {
     const tokenId = cellNameToTokenId(arg);
     return toBN(2 * tokenId + 1);
   }
-  if (arg.match(/^\d+$/i)) return toBN(arg).mul(toBN(2));
-  return undefined;
+  try {
+    return toBN(arg).mul(toBN(2));
+  } catch (e) {
+    return undefined;
+  }
 };
 
 export const isDependency = (arg: BN): boolean =>
@@ -152,11 +157,4 @@ export function buildFormulaDisplay(formula: string): string {
   }
 
   return result;
-}
-
-export function getValue(value: BN): BN {
-  return value
-    .add(toBN(constants.FIELD_PRIME).div(toBN(2)).abs())
-    .mod(toBN(constants.FIELD_PRIME))
-    .sub(toBN(constants.FIELD_PRIME).div(toBN(2)).abs());
 }

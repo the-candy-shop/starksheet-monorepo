@@ -1,10 +1,9 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
-import { toBN } from "starknet/utils/number";
-import { RC_BOUND } from "../components/ActionBar/formula.utils";
 import { starknetSequencerProvider } from "../provider";
 import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
 import { parseAbi } from "../utils/abiUtils";
+import { normalizeHexString } from "../utils/hexUtils";
 
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;
@@ -31,28 +30,50 @@ export const AbisContextProvider = ({
     useState<ContractAbis>(_initialContractAbis);
 
   const setAbiForContract = (address: string, abi: Abi) => {
-    setContractAbis({
-      ...contractAbis,
-      ["0x" + toBN(address).toString(16)]: parseAbi(abi),
-    });
+    setContractAbis((prevContractAbis) => ({
+      ...prevContractAbis,
+      [normalizeHexString(address)]: parseAbi(abi),
+    }));
   };
 
   const getAbiForContract = async (address: string) => {
-    const _address = "0x" + toBN(address).toString(16);
-    if (!(_address in contractAbis)) {
-      let abi: Abi = [];
-      if (!toBN(_address).eq(RC_BOUND)) {
-        try {
-          const response = await starknetSequencerProvider.getClassAt(_address);
-          abi = response.abi || abi;
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      setAbiForContract(_address, abi);
-      return parseAbi(abi);
+    const _address = normalizeHexString(address);
+    if (_address in contractAbis) {
+      return contractAbis[_address];
     }
-    return contractAbis[_address];
+
+    let abi: Abi = [];
+    try {
+      const response = await starknetSequencerProvider.getClassAt(_address);
+      abi = response.abi || abi;
+    } catch (error) {}
+    abi = [
+      ...abi,
+      ...(
+        await Promise.all(
+          abi
+            .filter(
+              (f) =>
+                f.name.includes("impl") &&
+                f.type === "function" &&
+                f.stateMutability === "view" &&
+                f.inputs.length === 0
+            )
+            .map(async (f) => {
+              const implementationAddress =
+                await starknetSequencerProvider.callContract({
+                  contractAddress: address,
+                  entrypoint: f.name,
+                });
+              return Object.values(
+                (await getAbiForContract(implementationAddress.result[0])) || {}
+              );
+            })
+        )
+      ).flat(),
+    ];
+    setAbiForContract(_address, abi);
+    return parseAbi(abi);
   };
 
   return (

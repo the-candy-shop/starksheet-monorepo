@@ -1,92 +1,85 @@
 import { useContext, useMemo } from "react";
+import { constants } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import Tooltip from "../../Tooltip/Tooltip";
-import { RC_BOUND } from "../ActionBar/formula.utils";
+import { Cell as CellType } from "../../types";
+import { RC_BOUND, starksheetContractData } from "../../utils/constants";
+import { bn2hex, hex2str } from "../../utils/hexUtils";
 import Cell from "../Cell/Cell";
 
 const BLUE = "#0000FF";
 const GREY = "#DEE5F0";
 const RED = "#FF4F0A";
+const BLACK = "black";
+const WHITE = "white";
+const GREEN = "#00FF00";
 
 export type ComputedCellProps = {
   name: string;
   id: number;
-  contractAddress: string;
-  value?: string;
-  owner?: string;
   selected: boolean;
-  error?: boolean;
+  cell: CellType;
   setSelectedCell: (value: { name: string; id: number } | null) => void;
 };
-
-function buildBackground(
-  cellOwner: string | undefined,
-  accountAddress: string | undefined,
-  value: string | undefined,
-  contractAddress: string
-): string {
-  if (!cellOwner && value === "0" && contractAddress === RC_BOUND.toString())
-    return "white";
-  if (value === undefined) return "white";
-  if (
-    accountAddress === cellOwner ||
-    (cellOwner === undefined &&
-      (!toBN(value).eq(toBN(0)) || !toBN(contractAddress).eq(RC_BOUND)))
-  )
-    return BLUE;
-  return GREY;
-}
-
-function buildSelectionBorderColor(background: string): string {
-  if (background === BLUE) return RED;
-  return BLUE;
-}
-
-function buildColor(background: string): string {
-  if (background === BLUE) return "white";
-  return "black";
-}
-
-function buildValue(
-  background: string,
-  error?: boolean,
-  value?: string
-): string {
-  if (error) return "ERROR";
-  if (background === "white") return "";
-  return value || "";
-}
 
 function ComputedCell({
   name,
   id,
-  contractAddress,
-  value,
-  owner,
   selected,
   setSelectedCell,
-  error,
+  cell,
 }: ComputedCellProps) {
   const { accountAddress } = useContext(AccountContext);
 
-  const background = useMemo(
-    () => buildBackground(owner, accountAddress, value, contractAddress),
-    [owner, accountAddress, value, contractAddress]
-  );
+  const { background, borderColor, color } = useMemo(() => {
+    const background =
+      cell.owner.eq(toBN(0)) &&
+      cell.contractAddress.eq(RC_BOUND) &&
+      cell.selector.eq(toBN(0))
+        ? WHITE
+        : accountAddress === bn2hex(cell.owner) ||
+          (cell.owner.eq(toBN(0)) &&
+            !(cell.contractAddress.eq(RC_BOUND) && cell.selector.eq(toBN(0))))
+        ? cell.abi && cell.abi?.stateMutability !== "view"
+          ? GREEN
+          : BLUE
+        : GREY;
 
-  const borderColor = useMemo(
-    () => buildSelectionBorderColor(background),
-    [background]
-  );
+    const borderColor =
+      background === BLUE || background === GREEN ? RED : BLUE;
+    const color = background === BLUE ? WHITE : BLACK;
+    return { background, borderColor, color };
+  }, [cell, accountAddress]);
 
-  const displayedValue = useMemo(
-    () => buildValue(background, error, value),
-    [background, error, value]
-  );
+  const value = useMemo(() => {
+    if (cell.error) return "ERROR";
+    if (background === WHITE) return "";
+    if (background === GREEN) return cell.abi?.name;
 
-  const color = useMemo(() => buildColor(background), [background]);
+    const value = cell.value;
+    if (cell.abi?.name === "name" || cell.abi?.name === "symbol") {
+      return hex2str(bn2hex(value));
+    }
+    if (cell.contractAddress.eq(toBN(starksheetContractData.mathAddress))) {
+      return value
+        .add(
+          toBN("0x" + constants.FIELD_PRIME)
+            .div(toBN(2))
+            .abs()
+        )
+        .mod(toBN("0x" + constants.FIELD_PRIME))
+        .sub(
+          toBN("0x" + constants.FIELD_PRIME)
+            .div(toBN(2))
+            .abs()
+        )
+        .toString();
+    }
+    if (value.gte(RC_BOUND)) return bn2hex(value);
+    return value.toString();
+  }, [cell, background]);
 
   return (
     <Tooltip title={value && value.length > 4 ? value : false} followCursor>
@@ -113,7 +106,7 @@ function ComputedCell({
             },
           }}
         >
-          {displayedValue}
+          {value}
         </Cell>
       </span>
     </Tooltip>

@@ -3,7 +3,7 @@ import { RpcProvider, SequencerProvider } from "starknet";
 export const starknetSequencerProvider = new SequencerProvider({
   baseUrl:
     process.env.REACT_APP_NETWORK === "SN_MAIN"
-      ? "https://SN_MAIN.starknet.io"
+      ? "https://alpha-mainnet.starknet.io"
       : "https://alpha4.starknet.io",
 });
 

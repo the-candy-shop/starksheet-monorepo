@@ -6,6 +6,7 @@ import ContentEditable, {
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { bn2hex } from "../../utils/hexUtils";
 import {
   buildFormulaDisplay,
   cellNameRegex,
@@ -27,7 +28,7 @@ function FormulaField({
 }: FormulaFieldProps) {
   const { contractAbis, getAbiForContract } = useContext(AbisContext);
   const { currentCells } = useContext(CellValuesContext);
-  const [abi, setAbi] = useState<string[]>([]);
+  const [abi, setAbi] = useState<{ [name: string]: string }>({});
   const [selectedContractAddress, setSelectedContractAddress] = useState("");
   const contractAddresses = Object.keys(contractAbis).filter(
     (address) => Object.keys(contractAbis[address] || {}).length > 0
@@ -37,21 +38,24 @@ function FormulaField({
       let _selectedContractAddress = value.slice(0, -1);
       setSelectedContractAddress(_selectedContractAddress);
       if (_selectedContractAddress.match(cellNameRegex)) {
-        _selectedContractAddress =
-          "0x" +
-          currentCells[
-            cellNameToTokenId(_selectedContractAddress)
-          ].value.toString(16);
+        _selectedContractAddress = bn2hex(
+          currentCells[cellNameToTokenId(_selectedContractAddress)].value
+        );
       }
       getAbiForContract(_selectedContractAddress).then((abi) => {
-        setAbi(
-          !!abi
-            ? Object.values(abi)
-                .filter((func) => func.type === "function")
-                .filter((func) => func.stateMutability === "view")
-                .map((func) => func.name)
-            : []
-        );
+        const parsedAbi = !!abi
+          ? Object.values(abi).reduce(
+              (prev, cur) => ({
+                ...prev,
+                [cur.name]: cur.inputs
+                  .map((i) => i.name)
+                  .filter((n) => !n.endsWith("_len"))
+                  .join("; "),
+              }),
+              {}
+            )
+          : {};
+        setAbi(parsedAbi);
       });
     }
   }, [value, getAbiForContract, currentCells]);
@@ -107,7 +111,7 @@ function FormulaField({
               </Box>
             ))}
         {!!abi &&
-          abi
+          Object.keys(abi)
             .filter(
               (op) =>
                 op.startsWith(value.split(".")[1]) &&
@@ -117,7 +121,7 @@ function FormulaField({
               <Box
                 key={op}
                 onClick={() => {
-                  setValue(`${selectedContractAddress}.${op}(`);
+                  setValue(`${selectedContractAddress}.${op}(${abi[op]}`);
                   // @ts-ignore
                   inputRef?.current?.el.current.focus();
                 }}

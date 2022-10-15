@@ -62,7 +62,6 @@ function ComputedCell({
     if (cell.abi?.name === "name" || cell.abi?.name === "symbol") {
       return hex2str(bn2hex(value));
     }
-    console.log("cell.abi?.name", cell.abi?.name);
     if (cell.contractAddress.eq(toBN(starksheetContractData.mathAddress))) {
       return value
         .add(

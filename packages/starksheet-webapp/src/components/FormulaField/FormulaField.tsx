@@ -6,6 +6,7 @@ import ContentEditable, {
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { bn2hex } from "../../utils/hexUtils";
 import {
   buildFormulaDisplay,
   cellNameRegex,
@@ -37,27 +38,22 @@ function FormulaField({
       let _selectedContractAddress = value.slice(0, -1);
       setSelectedContractAddress(_selectedContractAddress);
       if (_selectedContractAddress.match(cellNameRegex)) {
-        _selectedContractAddress =
-          "0x" +
-          currentCells[
-            cellNameToTokenId(_selectedContractAddress)
-          ].value.toString(16);
+        _selectedContractAddress = bn2hex(
+          currentCells[cellNameToTokenId(_selectedContractAddress)].value
+        );
       }
       getAbiForContract(_selectedContractAddress).then((abi) => {
         const parsedAbi = !!abi
-          ? Object.values(abi)
-              .filter((func) => func.type === "function")
-              .filter((func) => func.stateMutability === "view")
-              .reduce(
-                (prev, cur) => ({
-                  ...prev,
-                  [cur.name]: cur.inputs
-                    .map((i) => i.name)
-                    .filter((n) => !n.endsWith("_len"))
-                    .join("; "),
-                }),
-                {}
-              )
+          ? Object.values(abi).reduce(
+              (prev, cur) => ({
+                ...prev,
+                [cur.name]: cur.inputs
+                  .map((i) => i.name)
+                  .filter((n) => !n.endsWith("_len"))
+                  .join("; "),
+              }),
+              {}
+            )
           : {};
         setAbi(parsedAbi);
       });
@@ -125,7 +121,7 @@ function FormulaField({
               <Box
                 key={op}
                 onClick={() => {
-                  setValue(`${selectedContractAddress}.${op}(${abi[op]})`);
+                  setValue(`${selectedContractAddress}.${op}(${abi[op]}`);
                   // @ts-ignore
                   inputRef?.current?.el.current.focus();
                 }}

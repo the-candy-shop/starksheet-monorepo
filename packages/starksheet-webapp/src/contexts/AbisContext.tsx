@@ -1,10 +1,9 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
-import { toBN } from "starknet/utils/number";
-import { RC_BOUND } from "../components/ActionBar/formula.utils";
 import { starknetSequencerProvider } from "../provider";
 import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
 import { parseAbi } from "../utils/abiUtils";
+import { normalizeHexString } from "../utils/hexUtils";
 
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;
@@ -33,25 +32,21 @@ export const AbisContextProvider = ({
   const setAbiForContract = (address: string, abi: Abi) => {
     setContractAbis((prevContractAbis) => ({
       ...prevContractAbis,
-      ["0x" + toBN(address).toString(16)]: parseAbi(abi),
+      [normalizeHexString(address)]: parseAbi(abi),
     }));
   };
 
   const getAbiForContract = async (address: string) => {
-    const _address = "0x" + toBN(address).toString(16);
+    const _address = normalizeHexString(address);
     if (_address in contractAbis) {
       return contractAbis[_address];
     }
 
     let abi: Abi = [];
-    if (!toBN(_address).eq(RC_BOUND)) {
-      try {
-        const response = await starknetSequencerProvider.getClassAt(_address);
-        abi = response.abi || abi;
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    try {
+      const response = await starknetSequencerProvider.getClassAt(_address);
+      abi = response.abi || abi;
+    } catch (error) {}
     abi = [
       ...abi,
       ...(

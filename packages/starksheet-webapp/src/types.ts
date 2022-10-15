@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { FunctionAbi } from "starknet";
+import { Abi, FunctionAbi } from "starknet";
 
 // Starksheet contracts types
 export type Sheet = {
@@ -36,6 +36,7 @@ export type CellData = {
   contractAddress: BN;
   selector: BN;
   calldata: BN[];
+  abi?: FunctionAbi;
 };
 
 export type CellRendered = {
@@ -57,4 +58,13 @@ export type CellChildren = {
 
 export type UpdatedValues = {
   [address: string]: { [key: number]: Cell };
+};
+
+export type StarksheetContractData = {
+  address: string;
+  mathAddress: string;
+  starkSheetAbi: Abi;
+  sheetAbi: Abi;
+  allowlist: { [address: string]: string[] };
+  contractAbis: { [address: string]: Abi };
 };

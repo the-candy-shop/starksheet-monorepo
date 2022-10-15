@@ -1,4 +1,5 @@
 import BN from "bn.js";
+import { getStarknet } from "get-starknet";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -9,7 +10,7 @@ import React, {
 } from "react";
 import { Contract } from "starknet";
 import { toBN } from "starknet/utils/number";
-import { isDependency, RC_BOUND } from "../components/ActionBar/formula.utils";
+import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
 import { starknetRpcProvider, starknetSequencerProvider } from "../provider";
 import {
@@ -20,6 +21,9 @@ import {
   CellValues,
   UpdatedValues,
 } from "../types";
+import { RC_BOUND } from "../utils/constants";
+import { bn2hex } from "../utils/hexUtils";
+import { resolveContractAddress } from "../utils/sheetUtils";
 import { AbisContext } from "./AbisContext";
 import { AppStatusContext } from "./AppStatusContext";
 import { StarksheetContext } from "./StarksheetContext";
@@ -240,12 +244,34 @@ export const CellValuesContextProvider = ({
             {} as { [id: number]: Cell }
           );
 
-          const gridCells = Array.from(Array(GRID_SIZE).keys()).map(
-            (i) =>
-              _cells[i] || { ...defaultRenderedCell(i), ...defaultCellData(i) }
+          return Promise.all(
+            Array.from(Array(GRID_SIZE).keys())
+              .map(
+                (i) =>
+                  _cells[i] || {
+                    ...defaultRenderedCell(i),
+                    ...defaultCellData(i),
+                  }
+              )
+              .map(async (cell, _, array) => {
+                const resolvedContractAddress = cell.contractAddress.lt(
+                  RC_BOUND
+                )
+                  ? array[cell.contractAddress.toNumber()].value
+                  : cell.contractAddress;
+                const abi = await getAbiForContract(
+                  bn2hex(resolvedContractAddress)
+                );
+                return {
+                  ...cell,
+                  abi: abi[bn2hex(cell.selector)],
+                };
+              })
           );
-          refreshMarketplaces(gridCells);
-          setValues({ ...values, [selectedSheetAddress]: gridCells });
+        })
+        .then((cells) => {
+          refreshMarketplaces(cells);
+          setValues({ ...values, [selectedSheetAddress]: cells });
         })
         .catch(() => {
           error = true;
@@ -274,13 +300,11 @@ export const CellValuesContextProvider = ({
   }, [contract, load]);
 
   const computeValue = (values: BN[]) => async (cell: CellData) => {
-    if (cell.contractAddress.eq(RC_BOUND)) {
+    if (cell.contractAddress.eq(RC_BOUND) || !cell.abi) {
       return cell.selector;
     }
 
-    const resolvedContractAddress = cell.contractAddress.lt(RC_BOUND)
-      ? values[cell.contractAddress.toNumber()]
-      : cell.contractAddress;
+    const resolvedContractAddress = resolveContractAddress(values, cell);
 
     const calldata = cell.calldata
       .map((arg) => {
@@ -289,15 +313,22 @@ export const CellValuesContextProvider = ({
           : arg.div(toBN(2));
       })
       .map((arg) => arg.toString());
-    const contractAddress = "0x" + resolvedContractAddress.toString(16);
-    const abi = await getAbiForContract(contractAddress);
+    const contractAddress = bn2hex(resolvedContractAddress);
+
     const call = {
       contractAddress,
-      entrypoint: abi["0x" + cell.selector.toString(16)].name,
+      entrypoint: cell.abi.name,
       calldata,
     };
-    const value = await starknetSequencerProvider.callContract(call);
-    return toBN(value.result[0]);
+
+    const value =
+      cell.abi.stateMutability === "view"
+        ? (await starknetSequencerProvider.callContract(call)).result[0]
+        : await getStarknet()
+            .account.execute(call)
+            .then((tx) => tx.transaction_hash)
+            .catch(() => "0");
+    return toBN(value);
   };
 
   const buildChildren = useCallback(

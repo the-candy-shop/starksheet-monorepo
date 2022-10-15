@@ -9,14 +9,15 @@ import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
 import { Cell as CellType, CellChildren, CellData } from "../../types";
+import { RC_BOUND } from "../../utils/constants";
+import { bn2hex } from "../../utils/hexUtils";
+import { resolveContractAddress } from "../../utils/sheetUtils";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
-import LoadingDots from "../LoadingDots/LoadingDots";
 import SaveButton from "../SaveButton/SaveButton";
 import {
   buildFormulaDisplay,
   parse,
-  RC_BOUND,
   toPlainTextFormula,
 } from "./formula.utils";
 
@@ -34,7 +35,6 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
     useContext(CellValuesContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  const [loading, setLoading] = React.useState<boolean>(false);
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const [cellData, setCellData] = React.useState<CellData | null>(null);
   const previousSelectedCell = React.useRef<number | null>(
@@ -47,14 +47,14 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       inputRef?.current?.el?.current?.focus();
 
       // 1. Save value
-      const currentCell = previousSelectedCell.current;
-      const updatedCells: CellType[] = [];
       if (
-        currentCell !== null &&
+        previousSelectedCell.current !== null &&
         cellData !== null &&
         accountAddress !== undefined
       ) {
         const _values = currentCells.map((value) => value.value);
+        const currentCell = previousSelectedCell.current;
+        const updatedCells: CellType[] = [];
         computeValue(_values)(cellData)
           .then(async (value) => {
             if (!(value.eq(toBN(0)) && cellData.contractAddress.eq(RC_BOUND))) {
@@ -98,29 +98,9 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
 
       // 2. Update formula
       if (selectedCell) {
-        setLoading(true);
-        let resolvedContractAddress =
-          currentCells[selectedCell.id].contractAddress;
-        if (resolvedContractAddress.lt(RC_BOUND)) {
-          resolvedContractAddress =
-            currentCells[resolvedContractAddress.toNumber()].value;
-        }
-        getAbiForContract("0x" + resolvedContractAddress.toString(16))
-          .then((abi) => {
-            setUnsavedValue(
-              toPlainTextFormula(
-                {
-                  abi,
-                  ...currentCells[selectedCell.id],
-                },
-                cellNames
-              )
-            );
-          })
-          .catch((error: any) =>
-            enqueueSnackbar(error.toString(), { variant: "error" })
-          )
-          .finally(() => setLoading(false));
+        setUnsavedValue(
+          toPlainTextFormula(currentCells[selectedCell.id], cellNames)
+        );
       }
     }
   }, [
@@ -145,23 +125,24 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       return;
     }
 
-    getAbiForContract("0x" + _cellData.contractAddress.toString(16))
-      .then((abi) => {
-        return Object.keys(abi).length > 0
-          ? abi["0x" + _cellData.selector.toString(16)].inputs
-          : [];
-      })
-      .then((inputs) => {
-        if (inputs.filter((i) => i.type === "felt*").length > 0) {
-          // TODO: this is a very naive way to handle arrays because atm the FE does not let the user pass list and felts
-          _cellData.calldata = [
-            toBN(_cellData.calldata.length * 2),
-            ..._cellData.calldata,
-          ];
-        }
-        setCellData(_cellData);
-      });
-  }, [enqueueSnackbar, getAbiForContract, unSavedValue]);
+    const resolvedContractAddress = resolveContractAddress(
+      currentCells.map((cell) => cell.value),
+      _cellData
+    );
+
+    getAbiForContract(bn2hex(resolvedContractAddress)).then((abi) => {
+      const _cellAbi = abi[bn2hex(_cellData.selector)];
+      _cellData.abi = _cellAbi;
+      // TODO: this is a very naive way to handle arrays because atm the FE does not let the user pass list and felts
+      if (_cellAbi?.inputs.filter((i) => i.type === "felt*").length > 0) {
+        _cellData.calldata = [
+          toBN(_cellData.calldata.length * 2),
+          ..._cellData.calldata,
+        ];
+      }
+      setCellData(_cellData);
+    });
+  }, [enqueueSnackbar, getAbiForContract, unSavedValue, currentCells]);
 
   useEffect(() => {
     setUnsavedValue("0");
@@ -184,8 +165,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
           overflow: "auto",
         }}
       >
-        {loading && <LoadingDots />}
-        {!loading && selectedCell && (
+        {selectedCell && (
           <Box
             sx={{
               display: "flex",

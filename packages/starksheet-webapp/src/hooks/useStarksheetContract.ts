@@ -3,6 +3,7 @@ import { Abi, Contract } from "starknet";
 import { StarksheetContext } from "../contexts/StarksheetContext";
 import starksheetContractData from "../contract.json";
 import { starknetSequencerProvider } from "../provider";
+import { StarksheetContract } from "../types";
 
 export function useStarksheetContract() {
   const {
@@ -14,7 +15,7 @@ export function useStarksheetContract() {
         starksheetContractData.starkSheetAbi as Abi,
         address,
         starknetSequencerProvider
-      ),
+      ) as StarksheetContract,
     [address]
   );
 

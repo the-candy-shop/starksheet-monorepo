@@ -1,7 +1,6 @@
 import BN from "bn.js";
 import { Abi, FunctionAbi } from "starknet";
 
-// Starksheet contracts types
 export type Sheet = {
   name: string;
   address: string;
@@ -25,7 +24,6 @@ export type ContractAbis = {
   [contractAddress: string]: ContractAbi | undefined;
 };
 
-// Starksheet dapp types
 export type AppStatus = {
   loading: boolean;
   error: boolean;

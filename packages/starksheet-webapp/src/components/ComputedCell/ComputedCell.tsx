@@ -39,12 +39,12 @@ function ComputedCell({
       cell.contractAddress.eq(RC_BOUND) &&
       cell.selector.eq(toBN(0))
         ? WHITE
+        : cell.abi && cell.abi?.stateMutability !== "view"
+        ? GREEN
         : accountAddress === bn2hex(cell.owner) ||
           (cell.owner.eq(toBN(0)) &&
             !(cell.contractAddress.eq(RC_BOUND) && cell.selector.eq(toBN(0))))
-        ? cell.abi && cell.abi?.stateMutability !== "view"
-          ? GREEN
-          : BLUE
+        ? BLUE
         : GREY;
 
     const borderColor =
@@ -54,9 +54,9 @@ function ComputedCell({
   }, [cell, accountAddress]);
 
   const value = useMemo(() => {
-    if (cell.error) return "ERROR";
-    if (background === WHITE) return "";
     if (background === GREEN) return cell.abi?.name;
+    if (background === WHITE) return "";
+    if (cell.error) return "ERROR";
 
     const value = cell.value;
     if (cell.abi?.name === "name" || cell.abi?.name === "symbol") {

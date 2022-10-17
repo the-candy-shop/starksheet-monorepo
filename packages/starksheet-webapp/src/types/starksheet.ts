@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { Abi, FunctionAbi } from "starknet";
+import { Abi, FunctionAbi, StructAbi } from "starknet";
 
 export type Sheet = {
   name: string;
@@ -13,7 +13,7 @@ export type Starksheet = {
 
 // Starknet types
 export type ContractAbi = {
-  [selector: string]: FunctionAbi;
+  [selector: string]: FunctionAbi | StructAbi;
 };
 
 export type InitialContractAbis = {

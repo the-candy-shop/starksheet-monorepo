@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Contract } from "starknet";
+import { Contract, FunctionAbi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
@@ -264,7 +264,7 @@ export const CellValuesContextProvider = ({
                 );
                 return {
                   ...cell,
-                  abi: abi[bn2hex(cell.selector)],
+                  abi: abi[bn2hex(cell.selector)] as FunctionAbi,
                 };
               })
           );
@@ -304,7 +304,12 @@ export const CellValuesContextProvider = ({
       return cell.selector;
     }
 
-    const resolvedContractAddress = resolveContractAddress(values, cell);
+    const resolvedContractAddress = resolveContractAddress(
+      values,
+      cell.contractAddress
+    );
+
+    const contractAddress = bn2hex(resolvedContractAddress);
 
     const calldata = cell.calldata
       .map((arg) => {
@@ -313,7 +318,6 @@ export const CellValuesContextProvider = ({
           : arg.div(toBN(2));
       })
       .map((arg) => arg.toString());
-    const contractAddress = bn2hex(resolvedContractAddress);
 
     const call = {
       contractAddress,
@@ -324,8 +328,10 @@ export const CellValuesContextProvider = ({
     const value =
       cell.abi.stateMutability === "view"
         ? (await starknetSequencerProvider.callContract(call)).result[0]
-        : await getStarknet()
-            .account.execute(call)
+        : await getAbiForContract(contractAddress)
+            .then((abi) =>
+              getStarknet().account.execute(call, [Object.values(abi)])
+            )
             .then((tx) => tx.transaction_hash)
             .catch(() => "0");
     return toBN(value);
@@ -365,7 +371,13 @@ export const CellValuesContextProvider = ({
         ...newCells[id],
         ...cell,
       };
-      newUpdatedCells[id] = newCells[id];
+      if (
+        !cell.contractAddress.eq(currentCells[id].contractAddress) ||
+        !cell.selector.eq(currentCells[id].selector) ||
+        cell.calldata !== currentCells[id].calldata
+      ) {
+        newUpdatedCells[id] = newCells[id];
+      }
     }
     setUpdatedValues((prevUpdatedValues) => ({
       ...prevUpdatedValues,

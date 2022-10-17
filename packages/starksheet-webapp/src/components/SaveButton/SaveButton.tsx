@@ -1,7 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
 import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { stark } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -24,10 +24,8 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onClick = useCallback(async () => {
-    setLoading(true);
-
-    const transactions = Object.entries(updatedValues)
+  const transactions = useMemo(() => {
+    return Object.entries(updatedValues)
       .map(([sheetAddress, sheetUpdatedValues]) => {
         return Object.entries(sheetUpdatedValues).map(([tokenId, cell]) => ({
           ...cell,
@@ -69,7 +67,13 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
               }),
             }
       );
+  }, [accountAddress, proof, updatedValues]);
 
+  const onClick = useCallback(async () => {
+    if (transactions.length === 0) {
+      return;
+    }
+    setLoading(true);
     getStarknet()
       .account.execute(transactions)
       .then(async (response) => {
@@ -87,7 +91,7 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
         enqueueSnackbar(error.toString(), { variant: "error" })
       )
       .finally(() => setLoading(false));
-  }, [setUpdatedValues, updatedValues, enqueueSnackbar, accountAddress, proof]);
+  }, [setUpdatedValues, enqueueSnackbar, transactions]);
 
   if (
     currentCellOwnerAddress &&
@@ -130,10 +134,8 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
           }}
           onClick={onClick}
           disabled={
-            !getStarknet().account.address ||
-            loading ||
-            !!error ||
-            Object.keys(updatedValues).length === 0
+            !getStarknet().account.address || loading || !!error
+            // transactions.length === 0
           }
         >
           {loading ? (

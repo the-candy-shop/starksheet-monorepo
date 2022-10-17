@@ -1,41 +1,56 @@
 import { Box } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import ContentEditable, {
-  Props as ContentEditableProps,
-} from "react-contenteditable";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import ContentEditable from "react-contenteditable";
+import { FunctionAbi } from "starknet";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { bn2hex } from "../../utils/hexUtils";
 import {
+  ARGS_SEP,
   buildFormulaDisplay,
   cellNameRegex,
   cellNameToTokenId,
+  CONTRACT_FUNCTION_SEP,
 } from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
   inputRef: React.RefObject<ContentEditable>;
-  onChange: ContentEditableProps["onChange"];
   setValue: (value: string) => void;
   value: string;
+  disabled: boolean;
 };
 
 function FormulaField({
   inputRef,
-  onChange,
   value,
   setValue,
+  disabled,
 }: FormulaFieldProps) {
   const { contractAbis, getAbiForContract } = useContext(AbisContext);
   const { currentCells } = useContext(CellValuesContext);
   const [abi, setAbi] = useState<{ [name: string]: string }>({});
   const [selectedContractAddress, setSelectedContractAddress] = useState("");
-  const contractAddresses = Object.keys(contractAbis).filter(
-    (address) => Object.keys(contractAbis[address] || {}).length > 0
+
+  const contractAddresses = useMemo(
+    () =>
+      Object.keys(contractAbis)
+        .filter(
+          (address) => Object.keys(contractAbis[address] || {}).length > 0
+        )
+        .filter((op) => op.startsWith(value) && !value.includes(op)),
+    [contractAbis, value]
   );
-  useEffect(() => {
-    if (value.slice(-1) === ".") {
-      let _selectedContractAddress = value.slice(0, -1);
+
+  const updateAbi = useCallback(
+    (value: string) => {
+      let _selectedContractAddress = value.split(CONTRACT_FUNCTION_SEP)[0];
       setSelectedContractAddress(_selectedContractAddress);
       if (_selectedContractAddress.match(cellNameRegex)) {
         _selectedContractAddress = bn2hex(
@@ -43,22 +58,39 @@ function FormulaField({
         );
       }
       getAbiForContract(_selectedContractAddress).then((abi) => {
-        const parsedAbi = !!abi
-          ? Object.values(abi).reduce(
-              (prev, cur) => ({
-                ...prev,
-                [cur.name]: cur.inputs
-                  .map((i) => i.name)
-                  .filter((n) => !n.endsWith("_len"))
-                  .join("; "),
-              }),
-              {}
-            )
-          : {};
+        const parsedAbi = Object.values(abi)
+          .filter((_abi) => _abi.type === "function")
+          .reduce(
+            (prev, cur) => ({
+              ...prev,
+              [cur.name]: (cur as FunctionAbi).inputs
+                .filter((i) => !i.name.endsWith("_len"))
+                .map((i) => ({
+                  ...i,
+                  displayedType: `${i.name}:${i.type
+                    .replace(/felt|Uint256/, "number")
+                    .replace("*", "")}`,
+                }))
+                .map((i) =>
+                  i.type.endsWith("*")
+                    ? `[${i.displayedType}]`
+                    : i.displayedType
+                )
+                .join(`${ARGS_SEP} `),
+            }),
+            {}
+          );
         setAbi(parsedAbi);
       });
+    },
+    [getAbiForContract, currentCells]
+  );
+
+  useEffect(() => {
+    if (value.slice(-1) === CONTRACT_FUNCTION_SEP) {
+      updateAbi(value);
     }
-  }, [value, getAbiForContract, currentCells]);
+  }, [value, updateAbi]);
 
   return (
     <>
@@ -74,8 +106,17 @@ function FormulaField({
         }}
         // @ts-ignore
         ref={inputRef}
-        onChange={onChange}
+        onChange={() =>
+          setValue(
+            inputRef?.current?.el.current.innerText
+              .trim()
+              .replaceAll("\n", "")
+              .replaceAll("\r", "")
+              .replaceAll(" ", "")
+          )
+        }
         html={buildFormulaDisplay(value)}
+        disabled={disabled}
       />
       <Box
         sx={{
@@ -90,32 +131,30 @@ function FormulaField({
         }}
       >
         {value !== "0" &&
-          contractAddresses
-            .filter((op) => op.startsWith(value) && !value.includes(op))
-            .map((op) => (
-              <Box
-                key={op}
-                onClick={() => {
-                  setValue(`${op}.`);
-                  // @ts-ignore
-                  inputRef?.current?.el.current.focus();
-                }}
-                sx={{
-                  cursor: "pointer",
-                  border: "2px solid black",
-                  padding: "8px",
-                  "&:hover": { background: "#e2e2e2" },
-                }}
-              >
-                {op}
-              </Box>
-            ))}
+          contractAddresses.map((_address) => (
+            <Box
+              key={_address}
+              onClick={() => {
+                setValue(`${_address}${CONTRACT_FUNCTION_SEP}`);
+                // @ts-ignore
+                inputRef?.current?.el.current.focus();
+              }}
+              sx={{
+                cursor: "pointer",
+                border: "2px solid black",
+                padding: "8px",
+                "&:hover": { background: "#e2e2e2" },
+              }}
+            >
+              {_address}
+            </Box>
+          ))}
         {!!abi &&
           Object.keys(abi)
             .filter(
               (op) =>
-                op.startsWith(value.split(".")[1]) &&
-                !value.split(".")[1].includes(op)
+                op.startsWith(value.split(CONTRACT_FUNCTION_SEP)[1]) &&
+                !value.split(CONTRACT_FUNCTION_SEP)[1].includes(op)
             )
             .map((op) => (
               <Box

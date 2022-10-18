@@ -46,14 +46,14 @@ class TestStarksheet:
         ):
             name = int("MySheet".encode().hex(), 16)
             symbol = int("MS".encode().hex(), 16)
-            tx = await starksheet.addSheet(name, symbol, []).invoke(
+            tx = await starksheet.addSheet(name, symbol, []).execute(
                 caller_address=OTHER
             )
             sheet = StarknetContract(
                 state=starknet.state,
                 abi=sheet_class_hash.abi,
                 contract_address=tx.result.address,
-                deploy_execution_info=tx,
+                deploy_call_info=tx,
             )
             sheet_name = await sheet.name().call()
             assert name == sheet_name.result.name
@@ -68,12 +68,12 @@ class TestStarksheet:
         async def test_should_deploy_sheet_with_caller_as_owner_and_default_names(
             starknet, starksheet, sheet_class_hash
         ):
-            tx = await starksheet.addSheet(0, 0, []).invoke(caller_address=OTHER)
+            tx = await starksheet.addSheet(0, 0, []).execute(caller_address=OTHER)
             sheet = StarknetContract(
                 state=starknet.state,
                 abi=sheet_class_hash.abi,
                 contract_address=tx.result.address,
-                deploy_execution_info=tx,
+                deploy_call_info=tx,
             )
             sheet_name = await sheet.name().call()
             sheet_symbol = await sheet.symbol().call()

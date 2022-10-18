@@ -127,13 +127,13 @@ async def sheet(starknet: Starknet, renderer, cells) -> StarknetContract:
         ],
     )
     for cell in cells:
-        await _sheet.mintOwner(OWNER, (cell.id, 0)).invoke(caller_address=OWNER)
+        await _sheet.mintOwner(OWNER, (cell.id, 0)).execute(caller_address=OWNER)
         await _sheet.setCell(
             cell.id,
             cell.contract_address,
             cell.value,
             cell.calldata,
-        ).invoke(caller_address=OWNER)
+        ).execute(caller_address=OWNER)
     return _sheet
 
 
@@ -162,7 +162,7 @@ class TestSheet:
         @staticmethod
         async def test_should_revert_when_token_does_not_exist(sheet, cells):
             with pytest.raises(Exception) as e:
-                await sheet.setCell(len(cells), 0, 0, []).invoke(caller_address=OWNER)
+                await sheet.setCell(len(cells), 0, 0, []).execute(caller_address=OWNER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"setCell: tokenId does not exist"
 
@@ -174,14 +174,14 @@ class TestSheet:
                     cells[0].id,
                     cells[0].value,
                     cells[0].calldata,
-                ).invoke(caller_address=OTHER)
+                ).execute(caller_address=OTHER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "setCell: caller is not owner"
 
         @staticmethod
         async def test_should_set_value_and_dependencies(sheet, cells):
             """
-            Testing getter and setter by writing and retreiving the value leads to duplicated tests.
+            Testing getter and setter by writing and retrieving the value leads to duplicated tests.
             However, we keep it here as well to clarify what is tested for the both.
             """
             for cell in cells:
@@ -243,7 +243,7 @@ class TestSheet:
         @staticmethod
         async def test_should_revert_when_caller_is_not_owner(sheet):
             with pytest.raises(Exception) as e:
-                await sheet.setMerkleRoot(0).invoke(caller_address=OTHER)
+                await sheet.setMerkleRoot(0).execute(caller_address=OTHER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == "Ownable: caller is not the owner"
 
@@ -252,7 +252,7 @@ class TestSheet:
         async def test_should_revert_when_caller_is_not_in_allow_list(sheet):
             other = sorted(ALLOW_LIST)[-1] + 1
             with pytest.raises(Exception) as e:
-                await sheet.mintPublic((0, 0), []).invoke(caller_address=other)
+                await sheet.mintPublic((0, 0), []).execute(caller_address=other)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"mint: {other - FIELD_PRIME} is not allowed"
 
@@ -261,33 +261,33 @@ class TestSheet:
             token_id = (len(cells) + 1, 0)
             caller = [address for address in ALLOW_LIST if address != OWNER][0]
             proof = merkle_proof(caller, ALLOW_LIST)
-            await sheet.mintPublic(token_id, proof).invoke(caller_address=caller)
+            await sheet.mintPublic(token_id, proof).execute(caller_address=caller)
             owner = await sheet.ownerOf(token_id).call()
             assert caller == owner.result.owner
             max_per_wallet = 1
-            await sheet.setMaxPerWallet(max_per_wallet).invoke(caller_address=OWNER)
+            await sheet.setMaxPerWallet(max_per_wallet).execute(caller_address=OWNER)
             with pytest.raises(Exception) as e:
-                await sheet.mintPublic(token_id, proof).invoke(caller_address=caller)
+                await sheet.mintPublic(token_id, proof).execute(caller_address=caller)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
             assert message == f"mint: user {caller} exceeds allocation {max_per_wallet}"
-            await sheet.setMaxPerWallet(MAX_PER_WALLET).invoke(caller_address=OWNER)
+            await sheet.setMaxPerWallet(MAX_PER_WALLET).execute(caller_address=OWNER)
 
         @staticmethod
         async def test_should_mint_public_token_when_no_wl(sheet, cells):
             token_id = (len(cells) + 2, 0)
-            await sheet.setMerkleRoot(0).invoke(caller_address=OWNER)
-            await sheet.mintPublic(token_id, []).invoke(caller_address=OTHER + 1)
+            await sheet.setMerkleRoot(0).execute(caller_address=OWNER)
+            await sheet.mintPublic(token_id, []).execute(caller_address=OTHER + 1)
             owner = await sheet.ownerOf(token_id).call()
             assert OTHER + 1 == owner.result.owner
-            await sheet.setMerkleRoot(MERKLE_ROOT).invoke(caller_address=OWNER)
+            await sheet.setMerkleRoot(MERKLE_ROOT).execute(caller_address=OWNER)
 
         @staticmethod
         async def test_should_mint_with_default_contract_address_and_value(
             sheet, cells
         ):
             token_id = (len(cells) + 3, 0)
-            await sheet.setMerkleRoot(0).invoke(caller_address=OWNER)
-            await sheet.mintPublic(token_id, []).invoke(caller_address=OTHER + 1)
+            await sheet.setMerkleRoot(0).execute(caller_address=OWNER)
+            await sheet.mintPublic(token_id, []).execute(caller_address=OTHER + 1)
             cell = (await sheet.getCell(token_id[0]).call()).result
             assert cell.value == 0
             assert cell.contractAddress == 2**128

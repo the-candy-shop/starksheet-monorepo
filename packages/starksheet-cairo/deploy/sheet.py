@@ -1,7 +1,6 @@
 import json
 import logging
-
-import typer
+from asyncio import run
 
 from constants import ALLOW_LIST
 from deploy.cli import call, invoke, wait_for_transaction
@@ -12,8 +11,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def main():
-    typer.echo("Computing Merkle proofs...")
+async def main():
+    logger.info("Computing Merkle proofs...")
     json.dump(
         {
             hex(address): [str(p) for p in proof]
@@ -23,17 +22,17 @@ def main():
         indent=2,
     )
 
-    typer.echo("Computing Merkle root...")
+    logger.info("Computing Merkle root...")
     leafs = [address_to_leaf(address) for address in ALLOW_LIST]
     root = merkle_root(leafs)
-    typer.echo(f"Merkle root: {root}")
+    logger.info(f"Merkle root: {root}")
 
-    sheet = call("Starksheet", "getSheet", 0)[0]
+    (sheet,) = await call("Starksheet", "getSheet", 0)
     set_root_tx = invoke("Sheet", "setMerkleRoot", root, address=sheet)
-    max_per_wallet = int(call("Sheet", "getMaxPerWallet", address=sheet)[0])
-    typer.echo(f"Current max per wallet: {max_per_wallet}")
+    (max_per_wallet,) = await call("Sheet", "getMaxPerWallet", address=sheet)
+    logger.info(f"Current max per wallet: {max_per_wallet}")
     if max_per_wallet != 10:
-        typer.echo(f"Setting max per wallet to 10")
+        logger.info(f"Setting max per wallet to 10")
         set_max_wallet_tx = invoke("Sheet", "setMaxPerWallet", 10, address=sheet)
         wait_for_transaction(set_max_wallet_tx)
     wait_for_transaction(set_root_tx)
@@ -41,4 +40,4 @@ def main():
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    run(main())

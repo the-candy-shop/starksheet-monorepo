@@ -10,14 +10,11 @@ load_dotenv()
 NETWORK = os.getenv("STARKNET_NETWORK", "alpha-goerli")
 CONTRACTS = {p.stem: p for p in list(Path("contracts").glob("**/*.cairo"))}
 
-accounts = {
-    key: value["address"]
-    for key, value in json.load(
-        open(list(Path(DEFAULT_ACCOUNT_DIR).expanduser().glob("*.json"))[0])
-    )[NETWORK].items()
-}
+ACCOUNTS = json.load(
+    open(list(Path(DEFAULT_ACCOUNT_DIR).expanduser().glob("*.json"))[0])
+)[NETWORK]
 
-OWNER = int(accounts["starksheet"], 16)
+OWNER = int(ACCOUNTS["starksheet"]["address"], 16)
 N_COLS = 15
 N_ROWS = 15
 

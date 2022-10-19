@@ -5,12 +5,43 @@ import re
 import subprocess
 
 from caseconverter import snakecase
+from starknet_py.contract import Contract
+from starknet_py.net import AccountClient, networks
+from starknet_py.net.gateway_client import GatewayClient
+from starknet_py.net.models import StarknetChainId
+from starknet_py.net.signer.stark_curve_signer import KeyPair
 
-from constants import NETWORK
+from constants import ACCOUNTS, NETWORK
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+network = (
+    "TESTNET" if re.match(r".*(testnet|goerli).*", NETWORK, flags=re.I) else "MAINNET"
+)
+
+client = AccountClient(
+    address=ACCOUNTS["starksheet"]["address"],
+    client=GatewayClient(net=getattr(networks, network)),
+    chain=getattr(StarknetChainId, network),
+    key_pair=KeyPair(
+        private_key=int(ACCOUNTS["starksheet"]["private_key"], 16),
+        public_key=int(ACCOUNTS["starksheet"]["public_key"], 16),
+    ),
+)
+
+
+def dump_declarations(declarations):
+    json.dump(declarations, open(f"{client.net}.declarations.json", "w"), indent=2)
+
+
+def get_declarations(network):
+    return json.load(open(f"{network}.declarations.json"))
+
+
+def dump_deployments(deployments):
+    json.dump(deployments, open(f"{client.net}.deployments.json", "w"), indent=2)
 
 
 def get_deployments(network):
@@ -18,7 +49,7 @@ def get_deployments(network):
 
 
 def get_artifact(contract_name):
-    return f"artifacts/{contract_name}.json"
+    return f"build/{contract_name}.json"
 
 
 def get_alias(contract_name):
@@ -26,74 +57,70 @@ def get_alias(contract_name):
 
 
 def get_abis(contract_name):
-    return f"artifacts/abis/{contract_name}.json"
+    return f"build/{contract_name}_abi.json"
 
 
-def declare(contract_name, network=NETWORK):
+def declare(contract_name):
     logger.info(f"Declaring {contract_name}")
+    env = os.environ.copy()
+    env["ACCOUNT_PRIVATE_KEY"] = ACCOUNTS["starksheet"]["private_key"]
     output = subprocess.run(
         [
-            "starknet",
+            "protostar",
             "declare",
-            "--contract",
             get_artifact(contract_name),
             "--network",
-            f"{network}",
+            f"{client.net}",
+            "--account-address",
+            ACCOUNTS["starksheet"]["address"],
         ]
         + (
-            ["--token", os.environ["STARKNET_TOKEN"]]
-            if NETWORK == "alpha-mainnet"
-            else []
+            ["--token", os.environ["STARKNET_TOKEN"]] if client.net == "mainnet" else []
         ),
         capture_output=True,
+        env=env,
     )
     if output.returncode != 0:
         raise Exception(output.stderr.decode())
     class_hash = re.search(
-        r"contract class hash: (.*)", output.stdout.decode().lower()  # type: ignore
+        r"class hash: (.*)", (output.stdout.decode() + output.stderr.decode()).lower()  # type: ignore
     )[1]
     logger.info(f"{contract_name} declared with class hash: %s", class_hash)
     return class_hash
 
 
-def deploy(contract_name, *args, network=NETWORK):
+def deploy(contract_name, *args):
     logger.info(f"Deploying {contract_name}")
     cmd = (
         [
-            "starknet",
+            "protostar",
             "deploy",
-            "--contract",
             get_artifact(contract_name),
             "--network",
-            f"{network}",
-            "--no_wallet",
+            f"{client.net}",
         ]
         + ((["--inputs"] + list(args)) if args else [])
-        + (
-            ["--token", os.environ["STARKNET_TOKEN"]]
-            if NETWORK == "alpha-mainnet"
-            else []
-        )
+        + (["--token", os.environ["STARKNET_TOKEN"]] if NETWORK == "mainnet" else [])
     )
     output = subprocess.run(cmd, capture_output=True)
     if output.returncode != 0:
         raise Exception(output.stderr.decode())
     address = re.search(
-        r"contract address: (.*)", output.stdout.decode().lower()  # type: ignore
+        r"contract address: (.*)", (output.stdout.decode() + output.stderr.decode()).lower()  # type: ignore
     )[1]
     transaction_hash = re.search(
-        r"transaction hash: (.*)", output.stdout.decode().lower()  # type: ignore
+        r"transaction hash: (.*)", (output.stdout.decode() + output.stderr.decode()).lower()  # type: ignore
     )[1]
     logger.info(f"{contract_name} deployed at: %s", address)
     return address, transaction_hash
 
 
-def wait_for_transaction(transaction_hash, network=NETWORK):
+def wait_for_transaction(transaction_hash):
     cmd = [
         "starknet",
         "tx_status",
         "--network",
-        f"{network}",
+        f"{client.net}",
         "--hash",
         transaction_hash,
     ]
@@ -113,57 +140,29 @@ def wait_for_transaction(transaction_hash, network=NETWORK):
         logger.warning(f"Transaction {transaction_hash} rejected")
 
 
-def invoke(contract_name, function_name, *inputs, address=None, network=NETWORK):
-    inputs_str = [str(i) for i in inputs]
-    logger.info(f"Invoking {contract_name}.{function_name}({','.join(inputs_str)})")
-    deployments = get_deployments(network)
-    address = deployments[contract_name]["address"] if address is None else address
-    cmd = [
-        "starknet",
-        "invoke",
-        "--abi",
-        get_abis(contract_name),
-        "--network",
-        f"{network}",
-        "--address",
-        f"{address}",
-        "--function",
-        function_name,
-        "--account",
-        "starksheet",
-        "--wallet",
-        "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount",
-    ] + ((["--inputs"] + inputs_str) if inputs else [])
-    output = subprocess.run(cmd, capture_output=True)
-    if output.returncode != 0:
-        raise Exception(output.stderr.decode())
-    transaction_hash = re.search(
-        r"transaction hash: (.*)", output.stdout.decode().lower()  # type: ignore
-    )[1]
-    logger.info(f"{contract_name}.{function_name} invoked at tx: %s", transaction_hash)
-    return transaction_hash
+async def invoke(contract_name, function_name, *inputs, address=None):
+    deployments = get_deployments(client.net)
+    contract = Contract(
+        deployments[contract_name]["address"] if address is None else address,
+        json.load(open(get_abis(contract_name))),
+        client,
+    )
+    call = contract.functions[function_name].prepare(*inputs, max_fee=int(1e16))
+    logger.info(f"Invoking {contract_name}.{function_name}({call.arguments})")
+    response = await client.execute(call, max_fee=int(1e16))
+    logger.info(
+        f"{contract_name}.{function_name} invoked at tx: %s",
+        hex(response.transaction_hash),
+    )
+    await client.wait_for_tx(response.transaction_hash)
+    return response.transaction_hash
 
 
-def call(contract_name, function_name, *inputs, address=None, network=NETWORK):
-    inputs_str = [str(i) for i in inputs]
-    logger.info(f"Calling {contract_name}.{function_name}({','.join(inputs_str)})")
-    deployments = get_deployments(network)
-    address = deployments[contract_name]["address"] if address is None else address
-    cmd = [
-        "starknet",
-        "call",
-        "--abi",
-        get_abis(contract_name),
-        "--network",
-        f"{network}",
-        "--address",
-        f"{address}",
-        "--function",
-        function_name,
-        "--no_wallet",
-    ] + ((["--inputs"] + inputs_str) if inputs else [])
-    output = subprocess.run(cmd, capture_output=True)
-    if output.returncode != 0:
-        raise Exception(output.stderr.decode())
-
-    return output.stdout.decode().splitlines()  # type: ignore
+async def call(contract_name, function_name, *inputs, address=None):
+    deployments = get_deployments(client.net)
+    contract = Contract(
+        deployments[contract_name]["address"] if address is None else address,
+        json.load(open(get_abis(contract_name))),
+        client,
+    )
+    return await contract.functions[function_name].call(*inputs)

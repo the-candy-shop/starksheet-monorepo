@@ -1,5 +1,6 @@
 import { Box, BoxProps } from "@mui/material";
 import { getStarknet } from "get-starknet";
+import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -29,10 +30,18 @@ function Footer({ sx }: FooterProps) {
     useContext(StarksheetContext);
   const { updateAppStatus } = useContext(AppStatusContext);
   const { contract } = useStarksheetContract();
+  const { enqueueSnackbar } = useSnackbar();
+
   contract.connect(getStarknet().account);
 
   const addSheet = async () => {
-    if (!accountAddress) return;
+    if (!accountAddress) {
+      enqueueSnackbar(`Connect your wallet to use Starksheet`, {
+        variant: "info",
+      });
+      return;
+    }
+
     updateAppStatus({
       message: "Adding a new sheet",
       loading: true,
@@ -45,11 +54,11 @@ function Footer({ sx }: FooterProps) {
       ]);
       await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
       await updateSheets();
+      setSelectedSheet(starksheet.sheets.length);
     } catch (e) {
       console.log("addSheetError", e);
     } finally {
       updateAppStatus({ message: "", loading: false });
-      setSelectedSheet(starksheet.sheets.length);
     }
   };
 

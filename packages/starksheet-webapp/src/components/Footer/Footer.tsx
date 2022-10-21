@@ -6,7 +6,6 @@ import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
-import starksheetContractData from "../../contract.json";
 import { useStarksheetContract } from "../../hooks/useStarksheetContract";
 import { starknetRpcProvider } from "../../provider";
 import { str2hex } from "../../utils/hexUtils";
@@ -103,8 +102,8 @@ function Footer({ sx }: FooterProps) {
           onClick={() =>
             window.open(
               network === "SN_MAIN"
-                ? `https://starkscan.co/contract/${starksheetContractData.address}`
-                : `https://testnet.starkscan.co/contract/${starksheetContractData.address}`,
+                ? `https://starkscan.co/contract/${selectedSheetAddress}`
+                : `https://testnet.starkscan.co/contract/${selectedSheetAddress}`,
               "_blank"
             )
           }

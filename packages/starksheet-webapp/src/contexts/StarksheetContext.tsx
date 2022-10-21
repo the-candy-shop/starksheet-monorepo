@@ -16,12 +16,12 @@ export const StarksheetContext = React.createContext<{
   selectedSheet?: number;
   selectedSheetAddress?: string;
   setSelectedSheet: (index: number) => void;
-  updateSheets: () => Promise<void>;
+  updateSheets: () => Promise<Sheet[]>;
   addSheet: (sheet: Sheet) => void;
 }>({
   starksheet: { address: "", sheets: [] },
   setSelectedSheet: () => {},
-  updateSheets: async () => {},
+  updateSheets: async () => [],
   addSheet: () => {},
 });
 
@@ -72,6 +72,7 @@ export const StarksheetContextProvider = ({
         })
         .then((sheets) => {
           setStarksheet({ address, sheets });
+          return sheets;
         }),
     [address]
   );
@@ -81,12 +82,20 @@ export const StarksheetContextProvider = ({
   };
 
   useEffect(() => {
-    updateSheets().then(() => {
+    updateSheets().then((sheets) => {
       updateAppStatus({
         message: "Click on a tab to open a sheet",
         loading: false,
+        sheets: sheets.reduce(
+          (prev, cur) => ({
+            ...prev,
+            [cur.address]: { loading: false },
+          }),
+          {}
+        ),
       });
     });
+    // Disable missing updateAppStatus
     // eslint-disable-next-line
   }, [updateSheets]);
 

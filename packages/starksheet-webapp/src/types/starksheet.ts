@@ -24,10 +24,17 @@ export type ContractAbis = {
   [contractAddress: string]: ContractAbi | undefined;
 };
 
+export type Status = {
+  loading: boolean;
+  error: boolean;
+  message: string;
+};
+
 export type AppStatus = {
   loading: boolean;
   error: boolean;
   message: string;
+  sheets: { [address: string]: Status };
 };
 
 export type CellData = {

@@ -77,7 +77,7 @@ export const CellValuesContextProvider = ({
 }: PropsWithChildren<{}>) => {
   const { getAbiForContract } = useContext(AbisContext);
   const { selectedSheetAddress } = useContext(StarksheetContext);
-  const { updateAppStatus } = useContext(AppStatusContext);
+  const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
@@ -142,25 +142,26 @@ export const CellValuesContextProvider = ({
 
   const load = useCallback(
     (contract: Contract) => {
-      updateAppStatus({ loading: true, error: false });
-      if (!selectedSheetAddress || selectedSheetAddress in values) {
-        updateAppStatus({ loading: false });
+      // Copy current sheet address to prevent storing the async call results into the wrong key
+      const _selectedSheetAddress = selectedSheetAddress;
+      if (!_selectedSheetAddress) {
+        return;
+      }
+
+      if (appStatus.sheets[_selectedSheetAddress].loading) return;
+
+      updateSheetStatus(_selectedSheetAddress, { loading: true, error: false });
+      if (
+        _selectedSheetAddress in values &&
+        values[_selectedSheetAddress].length !== 0
+      ) {
+        updateSheetStatus(_selectedSheetAddress, { loading: false });
         return;
       }
 
       contract.connect(starknetRpcProvider);
       let error = false;
       let finalMessage = "";
-
-      const timedoutRenderGrid = () =>
-        Promise.race([
-          contract
-            .call("renderGrid", [])
-            .then((result) => result.cells as CellRendered[]),
-          new Promise((resolve, reject) =>
-            setTimeout(() => reject(new Error("timeoutRenderGrid")), 80000)
-          ),
-        ]);
 
       const timedoutRenderCell = (tokenId: number) =>
         Promise.race([
@@ -206,17 +207,12 @@ export const CellValuesContextProvider = ({
           );
         });
 
-      updateAppStatus({ message: "Calling renderGrid" });
-      return timedoutRenderGrid()
-        .catch(() => {
-          updateAppStatus({
-            message:
-              "Contract failed to render grid, falling back to render each cell individually",
-          });
-          return renderCells();
-        })
+      updateSheetStatus(_selectedSheetAddress, {
+        message: "Rendering grid values",
+      });
+      return renderCells()
         .then((renderedCells) => {
-          updateAppStatus({
+          updateSheetStatus(_selectedSheetAddress, {
             message: "Fetching cells metadata",
           });
           return Promise.all(
@@ -233,7 +229,7 @@ export const CellValuesContextProvider = ({
           );
         })
         .then((cells: Cell[]) => {
-          updateAppStatus({
+          updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
           });
           const _cells = cells.reduce(
@@ -271,7 +267,10 @@ export const CellValuesContextProvider = ({
         })
         .then((cells) => {
           refreshMarketplaces(cells);
-          setValues({ ...values, [selectedSheetAddress]: cells });
+          setValues((prevValues) => ({
+            ...prevValues,
+            [_selectedSheetAddress]: cells,
+          }));
         })
         .catch(() => {
           error = true;
@@ -282,7 +281,7 @@ export const CellValuesContextProvider = ({
               when it's back.`;
         })
         .finally(() => {
-          updateAppStatus({
+          updateSheetStatus(_selectedSheetAddress, {
             loading: false,
             error,
             message: finalMessage,

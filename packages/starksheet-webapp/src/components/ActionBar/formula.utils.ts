@@ -17,9 +17,12 @@ export const cellNameRegex = /^[a-z]\d+$/i;
 export const hexStringRegex = /^(0x)?[a-f0-9]+$/i;
 
 export function toPlainTextFormula(
-  { contractAddress, selector, calldata, abi }: CellData,
+  cellData: CellData,
   cellNames: string[]
 ): string {
+  if (!cellData) return "0";
+
+  const { contractAddress, selector, calldata, abi } = cellData;
   if (contractAddress.eq(RC_BOUND)) {
     return selector.gte(RC_BOUND) ? bn2hex(selector) : selector.toString();
   }

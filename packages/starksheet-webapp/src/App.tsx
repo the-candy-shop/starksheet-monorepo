@@ -10,6 +10,7 @@ import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
 import { AppStatusContext } from "./contexts/AppStatusContext";
 import { CellValuesContext } from "./contexts/CellValuesContext";
+import { StarksheetContext } from "./contexts/StarksheetContext";
 import {
   getBottomCellName,
   getLeftCellName,
@@ -36,7 +37,8 @@ function App() {
   } | null>(null);
 
   const { appStatus } = useContext(AppStatusContext);
-  const { cellNames } = useContext(CellValuesContext);
+  const { cellNames, currentCells } = useContext(CellValuesContext);
+  const { selectedSheetAddress } = useContext(StarksheetContext);
 
   const inputRef = React.useRef<ContentEditable>(null);
 
@@ -97,6 +99,35 @@ function App() {
     [cellNames, selectedCell]
   );
 
+  const message = useMemo(
+    () =>
+      selectedSheetAddress
+        ? appStatus.sheets[selectedSheetAddress].message
+        : appStatus.message,
+    [appStatus, selectedSheetAddress]
+  );
+
+  const loading = useMemo(
+    () =>
+      selectedSheetAddress
+        ? appStatus.sheets[selectedSheetAddress].loading
+        : appStatus.loading,
+    [appStatus, selectedSheetAddress]
+  );
+
+  const error = useMemo(
+    () =>
+      selectedSheetAddress
+        ? appStatus.sheets[selectedSheetAddress].error
+        : appStatus.error,
+    [appStatus, selectedSheetAddress]
+  );
+
+  const hideSheet = useMemo(
+    () => loading || error || message || currentCells.length === 0,
+    [loading, error, message, currentCells]
+  );
+
   return (
     <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
       <Box
@@ -109,7 +140,7 @@ function App() {
           selectedCell={selectedCell}
           sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
         />
-        {!!appStatus.message || appStatus.loading ? (
+        {hideSheet ? (
           <Box
             sx={{
               display: "flex",
@@ -119,8 +150,8 @@ function App() {
               fontFamily: "'Press Start 2P', cursive",
             }}
           >
-            {appStatus.message}
-            {appStatus.loading && <LoadingDots />}
+            {message}
+            {loading && <LoadingDots />}
           </Box>
         ) : (
           <SheetTable

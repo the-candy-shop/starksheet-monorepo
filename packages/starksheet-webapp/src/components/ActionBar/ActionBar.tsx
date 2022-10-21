@@ -39,7 +39,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
 
   useEffect(() => {
     if (selectedCell && previousSelectedCell.current !== selectedCell.id) {
-      inputRef?.current?.el?.current?.focus();
+      if (!!selectedCell.id) inputRef?.current?.el?.current?.focus();
       const currentCellId = previousSelectedCell.current;
       previousSelectedCell.current = selectedCell ? selectedCell.id : null;
 
@@ -65,33 +65,40 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       const updatedCells: CellType[] = [];
       computeValue(_values)(cellData)
         .then(async (value) => {
-          if (!(value.eq(toBN(0)) && cellData.contractAddress.eq(RC_BOUND))) {
-            updatedCells.push({
-              ...currentCells[currentCellId],
-              ...cellData,
-              value,
-            });
-            _values[currentCellId] = value;
+          let error = false;
+          updatedCells.push({
+            ...currentCells[currentCellId],
+            ...cellData,
+            value,
+            error,
+          });
+          _values[currentCellId] = value;
 
-            const children: CellChildren = {};
-            buildChildren(children)(currentCellId);
-            const indexes = Object.entries(children)
-              .sort((a, b) => a[1] - b[1])
-              .map((entry) => parseInt(entry[0]))
-              .map((id) => currentCells[id]);
+          const children: CellChildren = {};
+          buildChildren(children)(currentCellId);
+          const indexes = Object.entries(children)
+            .sort((a, b) => a[1] - b[1])
+            .map((entry) => parseInt(entry[0]))
+            .map((id) => currentCells[id]);
 
-            for (const cell of indexes) {
-              if (cell.abi?.stateMutability === "view") {
-                const value = await computeValue(_values)(cell);
-                _values[cell.id.toNumber()] = value;
-                updatedCells.push({
-                  ...cell,
-                  value,
-                });
+          for (const cell of indexes) {
+            if (cell.abi?.stateMutability === "view") {
+              let value = cell.value;
+              if (!error) {
+                try {
+                  value = await computeValue(_values)(cell);
+                  _values[cell.id.toNumber()] = value;
+                } catch (e) {
+                  error = true;
+                }
               }
+              updatedCells.push({
+                ...cell,
+                value,
+                error,
+              });
             }
           }
-          updateCells(updatedCells);
         })
         .catch((error) => {
           enqueueSnackbar(
@@ -101,6 +108,14 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
               variant: "error",
             }
           );
+          updatedCells.push({
+            ...currentCells[currentCellId],
+            ...cellData,
+            error: true,
+          });
+        })
+        .finally(() => {
+          updateCells(updatedCells);
         });
     }
   }, [
@@ -134,9 +149,16 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         return;
       }
 
+      let contractAddress;
+      try {
+        contractAddress = toBN(_contractCall.contractAddress);
+      } catch (e) {
+        return;
+      }
+
       const resolvedContractAddress = resolveContractAddress(
         currentCells.map((cell) => cell.value),
-        toBN(_contractCall.contractAddress)
+        contractAddress
       );
 
       getAbiForContract(bn2hex(resolvedContractAddress)).then((abi) => {

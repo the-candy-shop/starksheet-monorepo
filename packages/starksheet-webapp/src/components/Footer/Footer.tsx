@@ -63,6 +63,17 @@ function Footer({ sx }: FooterProps) {
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
+      <GreyCell
+        sx={{
+          // marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          width: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+        }}
+        onClick={addSheet}
+      >
+        +
+      </GreyCell>
       <Box sx={{ display: "flex", overflow: "auto" }}>
         {starksheet.sheets &&
           starksheet.sheets.map((sheet, index) => (
@@ -70,20 +81,9 @@ function Footer({ sx }: FooterProps) {
               sheet={sheet}
               index={index}
               key={sheet.address}
-              sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
+              sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
             />
           ))}
-        <GreyCell
-          sx={{
-            marginLeft: `-${CELL_BORDER_WIDTH}px`,
-            width: `${CELL_HEIGHT}px`,
-            cursor: "pointer",
-            "& .content": { justifyContent: "center" },
-          }}
-          onClick={addSheet}
-        >
-          +
-        </GreyCell>
       </Box>
       <GreyCell
         sx={{

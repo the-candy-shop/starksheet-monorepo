@@ -62,36 +62,45 @@ function Footer({ sx }: FooterProps) {
   };
 
   return (
-    <Box sx={{ display: "flex", ...sx }}>
+    <GreyCell sx={{ display: "flex", ...sx }}>
       <GreyCell
         sx={{
-          // marginLeft: `-${CELL_BORDER_WIDTH}px`,
           width: `${CELL_HEIGHT}px`,
           cursor: "pointer",
           "& .content": { justifyContent: "center" },
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          marginTop: `-${CELL_BORDER_WIDTH}px`,
         }}
         onClick={addSheet}
       >
         +
       </GreyCell>
-      <Box sx={{ display: "flex", overflow: "auto" }}>
+      <Box
+        sx={{
+          display: "flex",
+          overflow: "auto",
+          marginTop: `-${CELL_BORDER_WIDTH}px`,
+        }}
+      >
         {starksheet.sheets &&
           starksheet.sheets.map((sheet, index) => (
             <SheetButton
               sheet={sheet}
               index={index}
               key={sheet.address}
-              sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
+              sx={{
+                marginLeft: `-${CELL_BORDER_WIDTH}px`,
+              }}
             />
           ))}
       </Box>
-      <GreyCell
+      <Box
         sx={{
-          flex: 1,
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          display: "flex",
+          marginLeft: "auto",
+          marginTop: `-${CELL_BORDER_WIDTH}px`,
         }}
-      />
-      <Box sx={{ display: "flex", justifyContent: "right" }}>
+      >
         <GreyCell
           sx={{
             marginLeft: `-${CELL_BORDER_WIDTH}px`,
@@ -171,7 +180,7 @@ function Footer({ sx }: FooterProps) {
           <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
         </GreyCell>
       </Box>
-    </Box>
+    </GreyCell>
   );
 }
 

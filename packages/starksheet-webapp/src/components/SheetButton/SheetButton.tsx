@@ -26,7 +26,7 @@ export function SheetButton({ sheet, index, sx }: SheetButtonProps) {
         cursor: "pointer",
         color: index === selectedSheet ? "black" : "rgba(0,0,0,0.5)",
         width: `${appStatus.sheets[sheet.address].loading ? 166 : 146}px`,
-        "& .content": { justifyContent: "center" },
+        "& .content": { justifyContent: "center", paddingX: "10px" },
         ...sx,
       }}
     >

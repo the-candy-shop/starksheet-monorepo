@@ -99,6 +99,7 @@ function Footer({ sx }: FooterProps) {
           display: "flex",
           marginLeft: "auto",
           marginTop: `-${CELL_BORDER_WIDTH}px`,
+          marginRight: `-${CELL_BORDER_WIDTH}px`,
         }}
       >
         <GreyCell

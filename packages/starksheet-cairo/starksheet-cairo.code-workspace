@@ -15,6 +15,9 @@
   ],
   "settings": {
     "makefile.extensionOutputFolder": "./.vscode",
-    "cSpell.words": ["Numberish"]
+    "cSpell.words": ["Numberish"],
+    "cairols.nileUseVenv": false,
+    "cairols.nileVenvCommand": "",
+    "cairols.venvCommand": ". ~/.pyenv/versions/starksheet/bin/activate"
   }
 }

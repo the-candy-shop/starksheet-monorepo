@@ -3,6 +3,7 @@ import { constants } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
+import { CellValuesContext } from "../../contexts/CellValuesContext";
 import Tooltip from "../../Tooltip/Tooltip";
 import { Cell as CellType } from "../../types";
 import { RC_BOUND, starksheetContractData } from "../../utils/constants";
@@ -32,6 +33,7 @@ function ComputedCell({
   cell,
 }: ComputedCellProps) {
   const { accountAddress } = useContext(AccountContext);
+  const { computeValue, currentCells } = useContext(CellValuesContext);
 
   const { background, borderColor, color } = useMemo(() => {
     const background =
@@ -39,12 +41,12 @@ function ComputedCell({
       cell.contractAddress.eq(RC_BOUND) &&
       cell.selector.eq(toBN(0))
         ? WHITE
+        : cell.abi && cell.abi?.stateMutability !== "view"
+        ? GREEN
         : accountAddress === bn2hex(cell.owner) ||
           (cell.owner.eq(toBN(0)) &&
             !(cell.contractAddress.eq(RC_BOUND) && cell.selector.eq(toBN(0))))
-        ? cell.abi && cell.abi?.stateMutability !== "view"
-          ? GREEN
-          : BLUE
+        ? BLUE
         : GREY;
 
     const borderColor =
@@ -54,9 +56,9 @@ function ComputedCell({
   }, [cell, accountAddress]);
 
   const value = useMemo(() => {
-    if (cell.error) return "ERROR";
-    if (background === WHITE) return "";
     if (background === GREEN) return cell.abi?.name;
+    if (background === WHITE) return "";
+    if (cell.error) return "ERROR";
 
     const value = cell.value;
     if (cell.abi?.name === "name" || cell.abi?.name === "symbol") {
@@ -81,19 +83,33 @@ function ComputedCell({
     return value.toString();
   }, [cell, background]);
 
+  const isInvokeCell = useMemo(
+    () => !!cell.abi && cell.abi.stateMutability === undefined,
+    [cell]
+  );
+
+  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    setSelectedCell({ name, id });
+    if (e.detail > 1 && isInvokeCell) {
+      const _values = currentCells.map((value) => value.value);
+      computeValue(_values)(cell);
+    }
+  };
+
   return (
     <Tooltip title={value && value.length > 4 ? value : false} followCursor>
       <span>
         <Cell
           key={name}
           selected={selected}
-          onClick={() => setSelectedCell({ name, id })}
+          onClick={onClick}
           sx={{
             width: `${CELL_WIDTH}px`,
             minWidth: `${CELL_WIDTH}px`,
             maxWidth: `${CELL_WIDTH}px`,
             marginLeft: `-${CELL_BORDER_WIDTH}px`,
             textAlign: "center",
+            cursor: isInvokeCell ? "pointer" : undefined,
             background,
             color,
 

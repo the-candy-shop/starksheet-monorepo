@@ -1,14 +1,9 @@
 import { Box, BoxProps } from "@mui/material";
-import { getStarknet } from "get-starknet";
+import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
-import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
-import starksheetContractData from "../../contract.json";
-import { useStarksheetContract } from "../../hooks/useStarksheetContract";
-import { starknetRpcProvider } from "../../provider";
-import { str2hex } from "../../utils/hexUtils";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
@@ -24,66 +19,68 @@ export type FooterProps = {
 const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
-  const { accountAddress, proof } = useContext(AccountContext);
-  const { starksheet, selectedSheetAddress, setSelectedSheet, updateSheets } =
+  const { accountAddress } = useContext(AccountContext);
+  const { starksheet, selectedSheetAddress, addSheet } =
     useContext(StarksheetContext);
-  const { updateAppStatus } = useContext(AppStatusContext);
-  const { contract } = useStarksheetContract();
-  contract.connect(getStarknet().account);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const addSheet = async () => {
-    if (!accountAddress) return;
-    updateAppStatus({
-      message: "Adding a new sheet",
-      loading: true,
-    });
-    try {
-      const tx = await contract.invoke("addSheet", [
-        str2hex(`Sheet${starksheet.sheets.length}`),
-        str2hex(`SHT${starksheet.sheets.length}`),
-        proof,
-      ]);
-      await starknetRpcProvider.waitForTransaction(tx.transaction_hash);
-      await updateSheets();
-    } catch (e) {
-      console.log("addSheetError", e);
-    } finally {
-      updateAppStatus({ message: "", loading: false });
-      setSelectedSheet(starksheet.sheets.length);
+  const addSheetOnClick = async () => {
+    if (!accountAddress) {
+      enqueueSnackbar(`Connect your wallet to use Starksheet`, {
+        variant: "info",
+      });
+      return;
     }
+    addSheet(
+      {
+        name: `Sheet${starksheet.sheets.length}`,
+        symbol: `SHT${starksheet.sheets.length}`,
+      },
+      accountAddress
+    );
   };
 
   return (
-    <Box sx={{ display: "flex", ...sx }}>
-      <Box sx={{ display: "flex", overflow: "auto" }}>
+    <GreyCell sx={{ display: "flex", ...sx }}>
+      <GreyCell
+        sx={{
+          minWidth: `${CELL_HEIGHT}px`,
+          cursor: "pointer",
+          "& .content": { justifyContent: "center" },
+          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          marginTop: `-${CELL_BORDER_WIDTH}px`,
+        }}
+        onClick={addSheetOnClick}
+      >
+        +
+      </GreyCell>
+      <Box
+        sx={{
+          display: "flex",
+          overflow: "auto",
+          marginTop: `-${CELL_BORDER_WIDTH}px`,
+        }}
+      >
         {starksheet.sheets &&
           starksheet.sheets.map((sheet, index) => (
             <SheetButton
               sheet={sheet}
               index={index}
               key={sheet.address}
-              sx={{ marginLeft: index !== 0 ? `-${CELL_BORDER_WIDTH}px` : 0 }}
+              sx={{
+                marginLeft: `-${CELL_BORDER_WIDTH}px`,
+              }}
             />
           ))}
-        <GreyCell
-          sx={{
-            marginLeft: `-${CELL_BORDER_WIDTH}px`,
-            width: `${CELL_HEIGHT}px`,
-            cursor: "pointer",
-            "& .content": { justifyContent: "center" },
-          }}
-          onClick={addSheet}
-        >
-          +
-        </GreyCell>
       </Box>
-      <GreyCell
+      <Box
         sx={{
-          flex: 1,
-          marginLeft: `-${CELL_BORDER_WIDTH}px`,
+          display: "flex",
+          marginLeft: "auto",
+          marginTop: `-${CELL_BORDER_WIDTH}px`,
+          marginRight: `-${CELL_BORDER_WIDTH}px`,
         }}
-      />
-      <Box sx={{ display: "flex", justifyContent: "right" }}>
+      >
         <GreyCell
           sx={{
             marginLeft: `-${CELL_BORDER_WIDTH}px`,
@@ -94,8 +91,8 @@ function Footer({ sx }: FooterProps) {
           onClick={() =>
             window.open(
               network === "SN_MAIN"
-                ? `https://starkscan.co/contract/${starksheetContractData.address}`
-                : `https://testnet.starkscan.co/contract/${starksheetContractData.address}`,
+                ? `https://starkscan.co/contract/${selectedSheetAddress}`
+                : `https://testnet.starkscan.co/contract/${selectedSheetAddress}`,
               "_blank"
             )
           }
@@ -163,7 +160,7 @@ function Footer({ sx }: FooterProps) {
           <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
         </GreyCell>
       </Box>
-    </Box>
+    </GreyCell>
   );
 }
 

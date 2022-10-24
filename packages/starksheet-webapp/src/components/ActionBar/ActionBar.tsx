@@ -1,6 +1,6 @@
 import { Box, BoxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
 import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH } from "../../config";
@@ -15,11 +15,7 @@ import { resolveContractAddress } from "../../utils/sheetUtils";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import SaveButton from "../SaveButton/SaveButton";
-import {
-  buildFormulaDisplay,
-  parse,
-  toPlainTextFormula,
-} from "./formula.utils";
+import { parse, parseContractCall, toPlainTextFormula } from "./formula.utils";
 
 export type ActionBarProps = {
   inputRef: React.RefObject<ContentEditable>;
@@ -43,65 +39,85 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
 
   useEffect(() => {
     if (selectedCell && previousSelectedCell.current !== selectedCell.id) {
-      // Focus on FormulaField
-      inputRef?.current?.el?.current?.focus();
-
-      // 1. Save value
-      if (
-        previousSelectedCell.current !== null &&
-        cellData !== null &&
-        accountAddress !== undefined
-      ) {
-        const _values = currentCells.map((value) => value.value);
-        const currentCell = previousSelectedCell.current;
-        const updatedCells: CellType[] = [];
-        computeValue(_values)(cellData)
-          .then(async (value) => {
-            if (!(value.eq(toBN(0)) && cellData.contractAddress.eq(RC_BOUND))) {
-              updatedCells.push({
-                ...currentCells[currentCell],
-                ...cellData,
-                value,
-              });
-              _values[currentCell] = value;
-
-              const children: CellChildren = {};
-              buildChildren(children)(currentCell);
-              const indexes = Object.entries(children)
-                .sort((a, b) => a[1] - b[1])
-                .map((entry) => parseInt(entry[0]))
-                .map((id) => currentCells[id]);
-
-              for (const cell of indexes) {
-                const value = await computeValue(_values)(cell);
-                _values[cell.id.toNumber()] = value;
-                updatedCells.push({
-                  ...cell,
-                  value,
-                });
-              }
-            }
-            updateCells(updatedCells);
-          })
-          .catch((error) => {
-            enqueueSnackbar(
-              `Cannot compute value of cell ${cellNames[currentCell]}, error:
-              ${error}`,
-              {
-                variant: "error",
-              }
-            );
-          });
-      }
-
+      if (!!selectedCell.id) inputRef?.current?.el?.current?.focus();
+      const currentCellId = previousSelectedCell.current;
       previousSelectedCell.current = selectedCell ? selectedCell.id : null;
 
-      // 2. Update formula
-      if (selectedCell) {
-        setUnsavedValue(
-          toPlainTextFormula(currentCells[selectedCell.id], cellNames)
-        );
+      if (
+        currentCellId === null ||
+        cellData === null ||
+        accountAddress === undefined
+      ) {
+        return;
       }
+
+      const currentCell = currentCells[currentCellId];
+
+      if (
+        currentCell.contractAddress.eq(cellData.contractAddress) &&
+        currentCell.selector.eq(cellData.selector) &&
+        currentCell.calldata.length === cellData.calldata.length &&
+        currentCell.calldata.every((c, i) => c.eq(cellData.calldata[i]))
+      ) {
+        return;
+      }
+
+      const _values = currentCells.map((value) => value.value);
+      const updatedCells: CellType[] = [];
+      computeValue(_values)(cellData)
+        .then(async (value) => {
+          let error = false;
+          updatedCells.push({
+            ...currentCells[currentCellId],
+            ...cellData,
+            value,
+            error,
+          });
+          _values[currentCellId] = value;
+
+          const children: CellChildren = {};
+          buildChildren(children)(currentCellId);
+          const indexes = Object.entries(children)
+            .sort((a, b) => a[1] - b[1])
+            .map((entry) => parseInt(entry[0]))
+            .map((id) => currentCells[id]);
+
+          for (const cell of indexes) {
+            if (cell.abi?.stateMutability === "view") {
+              let value = cell.value;
+              if (!error) {
+                try {
+                  value = await computeValue(_values)(cell);
+                  _values[cell.id.toNumber()] = value;
+                } catch (e) {
+                  error = true;
+                }
+              }
+              updatedCells.push({
+                ...cell,
+                value,
+                error,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          enqueueSnackbar(
+            `Cannot compute value of cell ${cellNames[currentCellId]}, error:
+              ${error}`,
+            {
+              variant: "error",
+            }
+          );
+          updatedCells.push({
+            ...currentCells[currentCellId],
+            ...cellData,
+            error: true,
+          });
+        })
+        .finally(() => {
+          updateCells(updatedCells);
+        });
     }
   }, [
     cellNames,
@@ -117,36 +133,62 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
     buildChildren,
   ]);
 
-  useEffect(() => {
-    const _cellData = parse(unSavedValue);
+  const updateCellData = useCallback(
+    (_value: string) => {
+      const _contractCall = parseContractCall(_value);
 
-    if (!_cellData) {
-      setCellData(_cellData);
-      return;
-    }
-
-    const resolvedContractAddress = resolveContractAddress(
-      currentCells.map((cell) => cell.value),
-      _cellData
-    );
-
-    getAbiForContract(bn2hex(resolvedContractAddress)).then((abi) => {
-      const _cellAbi = abi[bn2hex(_cellData.selector)];
-      _cellData.abi = _cellAbi;
-      // TODO: this is a very naive way to handle arrays because atm the FE does not let the user pass list and felts
-      if (_cellAbi?.inputs.filter((i) => i.type === "felt*").length > 0) {
-        _cellData.calldata = [
-          toBN(_cellData.calldata.length * 2),
-          ..._cellData.calldata,
-        ];
+      if (!_contractCall) {
+        let selector = toBN(0);
+        try {
+          selector = toBN(_value);
+        } catch (e) {}
+        setCellData({
+          contractAddress: RC_BOUND,
+          selector,
+          calldata: [],
+        });
+        return;
       }
-      setCellData(_cellData);
-    });
-  }, [enqueueSnackbar, getAbiForContract, unSavedValue, currentCells]);
+
+      let contractAddress;
+      try {
+        contractAddress = toBN(_contractCall.contractAddress);
+      } catch (e) {
+        return;
+      }
+
+      const resolvedContractAddress = resolveContractAddress(
+        currentCells.map((cell) => cell.value),
+        contractAddress
+      );
+
+      getAbiForContract(bn2hex(resolvedContractAddress)).then((abi) => {
+        const _cellData = parse(_contractCall, abi);
+        setCellData(_cellData);
+      });
+    },
+    [getAbiForContract, currentCells]
+  );
+
+  const clearBar = useCallback(() => {
+    setUnsavedValue("0");
+  }, []);
 
   useEffect(() => {
-    setUnsavedValue("0");
-  }, [selectedSheetAddress]);
+    updateCellData(unSavedValue);
+  }, [unSavedValue, updateCellData]);
+
+  useEffect(() => {
+    clearBar();
+  }, [selectedSheetAddress, clearBar]);
+
+  useEffect(() => {
+    if (selectedCell) {
+      setUnsavedValue(
+        toPlainTextFormula(currentCells[selectedCell.id], cellNames)
+      );
+    }
+  }, [selectedCell, currentCells, cellNames]);
 
   const owner = selectedCell
     ? "0x" + currentCells[selectedCell?.id]?.owner?.toString(16)
@@ -173,38 +215,18 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
               "& .operator": { color: "#0000FF" },
             }}
           >
-            {
-              <>
-                <Box sx={{ padding: "0 15px" }}>=</Box>
-                {(!accountAddress ||
-                  (accountAddress !== owner && owner !== "0x0")) && (
-                  <Box
-                    dangerouslySetInnerHTML={{
-                      __html: buildFormulaDisplay(unSavedValue),
-                    }}
-                    sx={{
-                      overflow: "auto",
-                    }}
-                  />
-                )}
-                {!!accountAddress &&
-                  (accountAddress === owner || owner === "0x0") && (
-                    <FormulaField
-                      inputRef={inputRef}
-                      setValue={setUnsavedValue}
-                      onChange={() => {
-                        setUnsavedValue(
-                          inputRef?.current?.el.current.innerText
-                            .trim()
-                            .replaceAll("\n", "")
-                            .replaceAll("\r", "")
-                        );
-                      }}
-                      value={unSavedValue}
-                    />
-                  )}
-              </>
-            }
+            <>
+              <Box sx={{ padding: "0 15px" }}>=</Box>
+              <FormulaField
+                inputRef={inputRef}
+                setValue={setUnsavedValue}
+                value={unSavedValue}
+                disabled={
+                  !accountAddress ||
+                  (accountAddress !== owner && owner !== "0x0")
+                }
+              />
+            </>
           </Box>
         )}
       </Cell>

@@ -15,80 +15,80 @@ from contracts.utils.merkle_tree import (
 )
 
 @storage_var
-func Starksheet_sheet_class_hash() -> (hash : felt):
-end
+func Starksheet_sheet_class_hash() -> (hash: felt) {
+}
 
 @storage_var
-func Starksheet_sheet_default_renderer_address() -> (address : felt):
-end
+func Starksheet_sheet_default_renderer_address() -> (address: felt) {
+}
 
 @storage_var
-func Starksheet_sheets(id : felt) -> (address : felt):
-end
+func Starksheet_sheets(id: felt) -> (address: felt) {
+}
 
 @storage_var
-func Starksheet_sheets_count() -> (count : felt):
-end
+func Starksheet_sheets_count() -> (count: felt) {
+}
 
 @storage_var
-func Starksheet_merkle_root() -> (hash : felt):
-end
+func Starksheet_merkle_root() -> (hash: felt) {
+}
 
-namespace Starksheet:
-    func get_sheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        id : felt
-    ) -> (address : felt):
-        return Starksheet_sheets.read(id)
-    end
+namespace Starksheet {
+    func get_sheet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(id: felt) -> (
+        address: felt
+    ) {
+        return Starksheet_sheets.read(id);
+    }
 
-    func get_sheets{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        addresses_len : felt, addresses : felt*
-    ):
-        alloc_locals
-        let (stop) = Starksheet_sheets_count.read()
-        let (local addresses : felt*) = alloc()
-        _get_sheets_loop{stop=stop, addresses=addresses}(0)
-        return (addresses_len=stop, addresses=addresses)
-    end
+    func get_sheets{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        addresses_len: felt, addresses: felt*
+    ) {
+        alloc_locals;
+        let (stop) = Starksheet_sheets_count.read();
+        let (local addresses: felt*) = alloc();
+        _get_sheets_loop{stop=stop, addresses=addresses}(0);
+        return (addresses_len=stop, addresses=addresses);
+    }
 
-    func add_sheet{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        name : felt, symbol : felt, proof_len : felt, proof : felt*
-    ) -> (address : felt):
-        alloc_locals
-        let (class_hash) = Starksheet_sheet_class_hash.read()
-        let (local sheets_count) = Starksheet_sheets_count.read()
-        let (owner) = get_caller_address()
+    func add_sheet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        name: felt, symbol: felt, proof_len: felt, proof: felt*
+    ) -> (address: felt) {
+        alloc_locals;
+        let (class_hash) = Starksheet_sheet_class_hash.read();
+        let (local sheets_count) = Starksheet_sheets_count.read();
+        let (owner) = get_caller_address();
 
-        let (root) = Starksheet_merkle_root.read()
-        let (allow_list_enabled) = is_not_zero(root)
-        let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(owner, owner)
-        let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof)
-        with_attr error_message("addSheet: proof is not valid"):
-            assert is_allow_list = allow_list_enabled
-        end
+        let (root) = Starksheet_merkle_root.read();
+        let allow_list_enabled = is_not_zero(root);
+        let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(owner, owner);
+        let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof);
+        with_attr error_message("addSheet: proof is not valid") {
+            assert is_allow_list = allow_list_enabled;
+        }
 
-        let (local constructor_calldata : felt*) = alloc()
-        if name == 0:
-            let (count_str) = str(sheets_count)
-            tempvar sheet_name = 'Sheet' * 256 * 256 + count_str
-            tempvar sheet_symbol = 'SHT' * 256 * 256 + count_str
-            tempvar syscall_ptr = syscall_ptr
-            tempvar pedersen_ptr = pedersen_ptr
-            tempvar range_check_ptr = range_check_ptr
-        else:
-            tempvar sheet_name = name
-            tempvar sheet_symbol = symbol
-            tempvar syscall_ptr = syscall_ptr
-            tempvar pedersen_ptr = pedersen_ptr
-            tempvar range_check_ptr = range_check_ptr
-        end
-        let (renderer) = Starksheet_sheet_default_renderer_address.read()
-        assert constructor_calldata[0] = sheet_name
-        assert constructor_calldata[1] = sheet_symbol
-        assert constructor_calldata[2] = owner
-        assert constructor_calldata[3] = 0
-        assert constructor_calldata[4] = 0
-        assert constructor_calldata[5] = renderer
+        let (local constructor_calldata: felt*) = alloc();
+        if (name == 0) {
+            let (count_str) = str(sheets_count);
+            tempvar sheet_name = 'Sheet' * 256 * 256 + count_str;
+            tempvar sheet_symbol = 'SHT' * 256 * 256 + count_str;
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+        } else {
+            tempvar sheet_name = name;
+            tempvar sheet_symbol = symbol;
+            tempvar syscall_ptr = syscall_ptr;
+            tempvar pedersen_ptr = pedersen_ptr;
+            tempvar range_check_ptr = range_check_ptr;
+        }
+        let (renderer) = Starksheet_sheet_default_renderer_address.read();
+        assert constructor_calldata[0] = sheet_name;
+        assert constructor_calldata[1] = sheet_symbol;
+        assert constructor_calldata[2] = owner;
+        assert constructor_calldata[3] = 0;
+        assert constructor_calldata[4] = 0;
+        assert constructor_calldata[5] = renderer;
 
         let (address) = deploy(
             class_hash=class_hash,
@@ -96,65 +96,61 @@ namespace Starksheet:
             constructor_calldata_size=6,
             constructor_calldata=constructor_calldata,
             deploy_from_zero=0,
-        )
+        );
 
-        Starksheet_sheets.write(sheets_count, address)
-        Starksheet_sheets_count.write(sheets_count + 1)
-        return (address)
-    end
+        Starksheet_sheets.write(sheets_count, address);
+        Starksheet_sheets_count.write(sheets_count + 1);
+        return (address,);
+    }
 
-    func get_sheet_class_hash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        ) -> (hash : felt):
-        return Starksheet_sheet_class_hash.read()
-    end
+    func get_sheet_class_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (hash: felt) {
+        return Starksheet_sheet_class_hash.read();
+    }
 
-    func set_sheet_class_hash{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        hash : felt
-    ):
-        Starksheet_sheet_class_hash.write(hash)
-        return ()
-    end
+    func set_sheet_class_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        hash: felt
+    ) {
+        Starksheet_sheet_class_hash.write(hash);
+        return ();
+    }
 
     func get_sheet_default_renderer_address{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }() -> (address : felt):
-        return Starksheet_sheet_default_renderer_address.read()
-    end
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }() -> (address: felt) {
+        return Starksheet_sheet_default_renderer_address.read();
+    }
 
     func set_sheet_default_renderer_address{
-        syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr
-    }(address : felt):
-        Starksheet_sheet_default_renderer_address.write(address)
-        return ()
-    end
+        syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
+    }(address: felt) {
+        Starksheet_sheet_default_renderer_address.write(address);
+        return ();
+    }
 
-    func get_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        hash : felt
-    ):
-        return Starksheet_merkle_root.read()
-    end
+    func get_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        hash: felt
+    ) {
+        return Starksheet_merkle_root.read();
+    }
 
-    func set_merkle_root{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        hash : felt
-    ):
-        Starksheet_merkle_root.write(hash)
-        return ()
-    end
-end
+    func set_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        hash: felt
+    ) {
+        Starksheet_merkle_root.write(hash);
+        return ();
+    }
+}
 
-# Internal
+// Internal
 
 func _get_sheets_loop{
-    syscall_ptr : felt*,
-    pedersen_ptr : HashBuiltin*,
-    range_check_ptr,
-    stop : felt,
-    addresses : felt*,
-}(index : felt):
-    if index == stop:
-        return ()
-    end
-    let (address) = Starksheet_sheets.read(index)
-    assert [addresses + index] = address
-    return _get_sheets_loop(index + 1)
-end
+    syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, stop: felt, addresses: felt*
+}(index: felt) {
+    if (index == stop) {
+        return ();
+    }
+    let (address) = Starksheet_sheets.read(index);
+    assert [addresses + index] = address;
+    return _get_sheets_loop(index + 1);
+}

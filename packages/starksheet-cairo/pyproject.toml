@@ -3,21 +3,18 @@ name = "starksheet"
 version = "0.1.0"
 description = ""
 authors = ["Clément Walter <clement0walter@gmail.com>"]
-packages = [
-    { include = "*.py" },
-]
+packages = [{ include = "*.py" }]
 
 [tool.poetry.dependencies]
 python = "~3.9"
-cairo-lang = "^0.9.1"
-starknet-devnet = "^0.2.4"
+cairo-lang = "^0.10"
 pytest = "^7.1.2"
 pytest-asyncio = "^0.18.3"
-openzeppelin-cairo-contracts = "^0.2.0"
+openzeppelin-cairo-contracts = "^0.4.0"
 pandas = "^1.4.3"
 case-converter = "^1.1.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^22.6.0"
 isort = "^5.10.1"
 ipython = "^8.4.0"
@@ -26,16 +23,20 @@ typer = "^0.6.1"
 hdwallet = "^2.1.1"
 joblib = "^1.1.0"
 matplotlib = "^3.5.3"
+python-dotenv = "^0.21.0"
+starknet-py = "^0.7.0a0"
 
 [tool.pytest.ini_options]
-pythonpath = [
-  "."
-]
-asyncio_mode="auto"
+pythonpath = ["."]
+asyncio_mode = "auto"
 filterwarnings = [
-  'ignore:Using or importing the ABCs:DeprecationWarning',  # from frozendict
+  'ignore:Using or importing the ABCs:DeprecationWarning',                                # from frozendict
+  'ignore:lexer_state will be removed in subsequent releases. Use lexer_thread instead.', # from lark
 ]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"

@@ -18,6 +18,6 @@ export function isASCII(s: string) {
 }
 
 export const normalizeHexString = (address: string) =>
-  "0x" + toBN(address).toString(16);
+  !!address ? "0x" + toBN(address).toString(16) : "";
 
 export const bn2hex = (hex: BN): string => "0x" + hex.toString(16);

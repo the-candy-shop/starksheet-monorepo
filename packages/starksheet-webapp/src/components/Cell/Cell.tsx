@@ -1,5 +1,5 @@
-import React from "react";
 import { Box, BoxProps } from "@mui/material";
+import React from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 
 export type GreyCellProps = React.PropsWithChildren & {
@@ -18,7 +18,6 @@ function Cell({ selected = false, children, sx, onClick }: GreyCellProps) {
         height: `${CELL_HEIGHT}px`,
         display: "flex",
         flexDirection: "column",
-        cursor: onClick ? "pointer" : undefined,
         ...sx,
       }}
     >

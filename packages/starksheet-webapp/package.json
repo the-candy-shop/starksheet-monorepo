@@ -53,8 +53,10 @@
     ]
   },
   "devDependencies": {
+    "@typechain/starknet": "^0.2.3",
     "@types/bn.js": "^5.1.0",
     "prettier": "2.7.1",
+    "typechain": "^8.1.0",
     "typescript": "^4.8.2"
   }
 }

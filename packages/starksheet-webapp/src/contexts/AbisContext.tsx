@@ -1,8 +1,10 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
+import { toBN } from "starknet/utils/number";
 import { starknetSequencerProvider } from "../provider";
 import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
 import { parseAbi } from "../utils/abiUtils";
+import { RC_BOUND } from "../utils/constants";
 import { normalizeHexString } from "../utils/hexUtils";
 
 export const AbisContext = React.createContext<{
@@ -38,15 +40,16 @@ export const AbisContextProvider = ({
 
   const getAbiForContract = async (address: string) => {
     const _address = normalizeHexString(address);
-    if (_address in contractAbis) {
-      return contractAbis[_address];
-    }
+
+    if (_address in contractAbis) return contractAbis[_address];
 
     let abi: Abi = [];
-    try {
-      const response = await starknetSequencerProvider.getClassAt(_address);
-      abi = response.abi || abi;
-    } catch (error) {}
+    if (!toBN(_address).eq(RC_BOUND)) {
+      try {
+        const response = await starknetSequencerProvider.getClassAt(_address);
+        abi = response.abi || abi;
+      } catch (error) {}
+    }
     abi = [
       ...abi,
       ...(

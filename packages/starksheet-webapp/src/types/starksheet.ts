@@ -1,20 +1,35 @@
 import BN from "bn.js";
-import { Abi, FunctionAbi } from "starknet";
+import { Abi, FunctionAbi, StructAbi } from "starknet";
+import { BigNumberish } from "starknet/utils/number";
 
-// Starksheet contracts types
+type SheetConstructorArgs = {
+  name: BigNumberish;
+  symbol: BigNumberish;
+  owner: BigNumberish;
+  merkleRoot: BigNumberish;
+  maxPerWallet: BigNumberish;
+  rendererAddress: BigNumberish;
+};
+
 export type Sheet = {
   name: string;
+  symbol: string;
   address: string;
+  calldata?: SheetConstructorArgs;
 };
+
+export type NewSheet = Required<Sheet>;
 
 export type Starksheet = {
   sheets: Sheet[];
   address: string;
+  defaultRenderer: string;
+  sheetClassHash: string;
 };
 
 // Starknet types
 export type ContractAbi = {
-  [selector: string]: FunctionAbi;
+  [selector: string]: FunctionAbi | StructAbi;
 };
 
 export type InitialContractAbis = {
@@ -25,11 +40,17 @@ export type ContractAbis = {
   [contractAddress: string]: ContractAbi | undefined;
 };
 
-// Starksheet dapp types
+export type Status = {
+  loading: boolean;
+  error: boolean;
+  message: string;
+};
+
 export type AppStatus = {
   loading: boolean;
   error: boolean;
   message: string;
+  sheets: { [address: string]: Status };
 };
 
 export type CellData = {

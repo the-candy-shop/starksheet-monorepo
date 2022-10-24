@@ -1,13 +1,15 @@
 import { Box, BoxProps } from "@mui/material";
 import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { stark } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { StarksheetContext } from "../../contexts/StarksheetContext";
 import { starknetRpcProvider } from "../../provider";
 import Tooltip from "../../Tooltip/Tooltip";
+import { NewSheet } from "../../types";
 import Button from "../Button/Button";
 import Cell from "../Cell/Cell";
 import LoadingDots from "../LoadingDots/LoadingDots";
@@ -21,13 +23,26 @@ export type SaveButtonProps = {
 function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
   const { accountAddress, proof } = useContext(AccountContext);
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
+  const { starksheet, validateNewSheets } = useContext(StarksheetContext);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onClick = useCallback(async () => {
-    setLoading(true);
+  const newSheetsTransactions = useMemo(() => {
+    return starksheet.sheets
+      .filter((sheet): sheet is NewSheet => sheet.calldata !== undefined)
+      .map((sheet) => ({
+        contractAddress: starksheet.address,
+        entrypoint: "addSheet",
+        calldata: stark.compileCalldata({
+          name: sheet.calldata.name.toString(),
+          symbol: sheet.calldata.symbol.toString(),
+          proof,
+        }),
+      }));
+  }, [starksheet, proof]);
 
-    const transactions = Object.entries(updatedValues)
+  const cellsTransactions = useMemo(() => {
+    return Object.entries(updatedValues)
       .map(([sheetAddress, sheetUpdatedValues]) => {
         return Object.entries(sheetUpdatedValues).map(([tokenId, cell]) => ({
           ...cell,
@@ -38,7 +53,7 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
       .reduce((prev, cur) => [...prev, ...cur], [])
       .filter(
         (cell) =>
-          cell.owner.eq(toBN(0)) ||
+          (cell.owner.eq(toBN(0)) && !cell.selector.eq(toBN(0))) ||
           "0x" + cell.owner.toString(16) === accountAddress
       )
       .map((cell) =>
@@ -69,7 +84,18 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
               }),
             }
       );
+  }, [accountAddress, proof, updatedValues]);
 
+  const transactions = useMemo(
+    () => [...newSheetsTransactions, ...cellsTransactions],
+    [newSheetsTransactions, cellsTransactions]
+  );
+
+  const onClick = useCallback(async () => {
+    if (transactions.length === 0) {
+      return;
+    }
+    setLoading(true);
     getStarknet()
       .account.execute(transactions)
       .then(async (response) => {
@@ -78,16 +104,17 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
           response.transaction_hash
         );
       })
-      .then((receipt) => {
+      .then(async (receipt) => {
         if (receipt.status !== "REJECTED") {
           setUpdatedValues({});
+          validateNewSheets();
         }
       })
       .catch((error: any) =>
         enqueueSnackbar(error.toString(), { variant: "error" })
       )
       .finally(() => setLoading(false));
-  }, [setUpdatedValues, updatedValues, enqueueSnackbar, accountAddress, proof]);
+  }, [setUpdatedValues, validateNewSheets, enqueueSnackbar, transactions]);
 
   if (
     currentCellOwnerAddress &&
@@ -129,12 +156,7 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
             ...sx,
           }}
           onClick={onClick}
-          disabled={
-            !getStarknet().account.address ||
-            loading ||
-            !!error ||
-            Object.keys(updatedValues).length === 0
-          }
+          disabled={!getStarknet().account.address || loading || !!error}
         >
           {loading ? (
             <Box>

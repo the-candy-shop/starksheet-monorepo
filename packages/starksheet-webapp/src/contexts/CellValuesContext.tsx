@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Contract } from "starknet";
+import { Contract, FunctionAbi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
@@ -76,8 +76,9 @@ export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { getAbiForContract } = useContext(AbisContext);
-  const { selectedSheetAddress } = useContext(StarksheetContext);
-  const { updateAppStatus } = useContext(AppStatusContext);
+  const { selectedSheetAddress, starksheet, selectedSheet } =
+    useContext(StarksheetContext);
+  const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
@@ -142,25 +143,31 @@ export const CellValuesContextProvider = ({
 
   const load = useCallback(
     (contract: Contract) => {
-      updateAppStatus({ loading: true, error: false });
-      if (!selectedSheetAddress || selectedSheetAddress in values) {
-        updateAppStatus({ loading: false });
+      // Copy current sheet address to prevent storing the async call results into the wrong key
+
+      if (selectedSheet === undefined) {
+        return;
+      }
+
+      const _selectedSheetAddress = starksheet.sheets[selectedSheet].address;
+      if (!_selectedSheetAddress) {
+        return;
+      }
+
+      if (appStatus.sheets[_selectedSheetAddress].loading) return;
+
+      updateSheetStatus(_selectedSheetAddress, { loading: true, error: false });
+      if (
+        _selectedSheetAddress in values &&
+        values[_selectedSheetAddress].length !== 0
+      ) {
+        updateSheetStatus(_selectedSheetAddress, { loading: false });
         return;
       }
 
       contract.connect(starknetRpcProvider);
       let error = false;
       let finalMessage = "";
-
-      const timedoutRenderGrid = () =>
-        Promise.race([
-          contract
-            .call("renderGrid", [])
-            .then((result) => result.cells as CellRendered[]),
-          new Promise((resolve, reject) =>
-            setTimeout(() => reject(new Error("timeoutRenderGrid")), 80000)
-          ),
-        ]);
 
       const timedoutRenderCell = (tokenId: number) =>
         Promise.race([
@@ -206,34 +213,33 @@ export const CellValuesContextProvider = ({
           );
         });
 
-      updateAppStatus({ message: "Calling renderGrid" });
-      return timedoutRenderGrid()
-        .catch(() => {
-          updateAppStatus({
-            message:
-              "Contract failed to render grid, falling back to render each cell individually",
-          });
-          return renderCells();
-        })
-        .then((renderedCells) => {
-          updateAppStatus({
-            message: "Fetching cells metadata",
-          });
-          return Promise.all(
-            (renderedCells as CellRendered[]).map(async (cell) => {
-              const _cell = await contract.call("getCell", [cell.id]);
-              return {
-                ...cell,
-                contractAddress: _cell.contractAddress,
-                selector: _cell.value,
-                calldata: _cell.cell_calldata,
-                error: cell.error,
-              };
-            })
-          );
-        })
+      const fetchCells = renderCells().then((renderedCells) => {
+        updateSheetStatus(_selectedSheetAddress, {
+          message: "Fetching cells metadata",
+        });
+        return Promise.all(
+          (renderedCells as CellRendered[]).map(async (cell) => {
+            const _cell = await contract.call("getCell", [cell.id]);
+            return {
+              ...cell,
+              contractAddress: _cell.contractAddress,
+              selector: _cell.value,
+              calldata: _cell.cell_calldata,
+              error: cell.error,
+            };
+          })
+        );
+      });
+      const newGridCells = new Promise<Cell[]>((resolve, reject) =>
+        resolve([])
+      );
+
+      updateSheetStatus(_selectedSheetAddress, {
+        message: "Rendering grid values",
+      });
+      (!!starksheet.sheets[selectedSheet].calldata ? newGridCells : fetchCells)
         .then((cells: Cell[]) => {
-          updateAppStatus({
+          updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
           });
           const _cells = cells.reduce(
@@ -264,14 +270,17 @@ export const CellValuesContextProvider = ({
                 );
                 return {
                   ...cell,
-                  abi: abi[bn2hex(cell.selector)],
+                  abi: abi[bn2hex(cell.selector)] as FunctionAbi,
                 };
               })
           );
         })
         .then((cells) => {
           refreshMarketplaces(cells);
-          setValues({ ...values, [selectedSheetAddress]: cells });
+          setValues((prevValues) => ({
+            ...prevValues,
+            [_selectedSheetAddress]: cells,
+          }));
         })
         .catch(() => {
           error = true;
@@ -282,7 +291,7 @@ export const CellValuesContextProvider = ({
               when it's back.`;
         })
         .finally(() => {
-          updateAppStatus({
+          updateSheetStatus(_selectedSheetAddress, {
             loading: false,
             error,
             message: finalMessage,
@@ -290,7 +299,7 @@ export const CellValuesContextProvider = ({
         });
     },
     // eslint-disable-next-line
-    [refreshMarketplaces, selectedSheetAddress]
+    [refreshMarketplaces, starksheet, selectedSheet]
   );
 
   React.useEffect(() => {
@@ -304,7 +313,12 @@ export const CellValuesContextProvider = ({
       return cell.selector;
     }
 
-    const resolvedContractAddress = resolveContractAddress(values, cell);
+    const resolvedContractAddress = resolveContractAddress(
+      values,
+      cell.contractAddress
+    );
+
+    const contractAddress = bn2hex(resolvedContractAddress);
 
     const calldata = cell.calldata
       .map((arg) => {
@@ -313,7 +327,6 @@ export const CellValuesContextProvider = ({
           : arg.div(toBN(2));
       })
       .map((arg) => arg.toString());
-    const contractAddress = bn2hex(resolvedContractAddress);
 
     const call = {
       contractAddress,
@@ -324,8 +337,10 @@ export const CellValuesContextProvider = ({
     const value =
       cell.abi.stateMutability === "view"
         ? (await starknetSequencerProvider.callContract(call)).result[0]
-        : await getStarknet()
-            .account.execute(call)
+        : await getAbiForContract(contractAddress)
+            .then((abi) =>
+              getStarknet().account.execute(call, [Object.values(abi)])
+            )
             .then((tx) => tx.transaction_hash)
             .catch(() => "0");
     return toBN(value);
@@ -365,7 +380,13 @@ export const CellValuesContextProvider = ({
         ...newCells[id],
         ...cell,
       };
-      newUpdatedCells[id] = newCells[id];
+      if (
+        !cell.contractAddress.eq(currentCells[id].contractAddress) ||
+        !cell.selector.eq(currentCells[id].selector) ||
+        cell.calldata !== currentCells[id].calldata
+      ) {
+        newUpdatedCells[id] = newCells[id];
+      }
     }
     setUpdatedValues((prevUpdatedValues) => ({
       ...prevUpdatedValues,

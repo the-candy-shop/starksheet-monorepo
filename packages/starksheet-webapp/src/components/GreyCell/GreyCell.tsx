@@ -1,5 +1,5 @@
-import React from "react";
 import { Box, BoxProps } from "@mui/material";
+import React from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 
 export type GreyCellProps = React.PropsWithChildren & {
@@ -27,7 +27,6 @@ function GreyCell({ variant = "1", children, sx, onClick }: GreyCellProps) {
             variant === "1"
               ? "inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC"
               : "inset -5px -5px 3px #F4F4F4, inset 5px 5px 3px #B7B7B8",
-          padding: "0 10px",
           background: variant === "1" ? "#C6D2E4" : "#E1E1E1",
           fontFamily: "'Press Start 2P', cursive",
           fontSize: "14px",

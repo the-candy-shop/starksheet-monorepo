@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import { CellData } from "../types";
 import { RC_BOUND } from "./constants";
 
 export const getColumnIndexFromName = (columnName: string): number => {
@@ -116,8 +115,8 @@ export const getBottomCellName = (
   }
 };
 
-export const resolveContractAddress = (values: BN[], cell: CellData) => {
-  return cell.contractAddress.lt(RC_BOUND)
-    ? values[cell.contractAddress.toNumber()]
-    : cell.contractAddress;
+export const resolveContractAddress = (values: BN[], contractAddress: BN) => {
+  return contractAddress.lt(RC_BOUND)
+    ? values[contractAddress.toNumber()]
+    : contractAddress;
 };

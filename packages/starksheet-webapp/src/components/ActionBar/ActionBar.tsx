@@ -56,7 +56,8 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
       if (
         currentCell.contractAddress.eq(cellData.contractAddress) &&
         currentCell.selector.eq(cellData.selector) &&
-        currentCell.calldata === cellData.calldata
+        currentCell.calldata.length === cellData.calldata.length &&
+        currentCell.calldata.every((c, i) => c.eq(cellData.calldata[i]))
       ) {
         return;
       }

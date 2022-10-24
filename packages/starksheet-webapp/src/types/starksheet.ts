@@ -1,14 +1,30 @@
 import BN from "bn.js";
 import { Abi, FunctionAbi, StructAbi } from "starknet";
+import { BigNumberish } from "starknet/utils/number";
+
+type SheetConstructorArgs = {
+  name: BigNumberish;
+  symbol: BigNumberish;
+  owner: BigNumberish;
+  merkleRoot: BigNumberish;
+  maxPerWallet: BigNumberish;
+  rendererAddress: BigNumberish;
+};
 
 export type Sheet = {
   name: string;
+  symbol: string;
   address: string;
+  calldata?: SheetConstructorArgs;
 };
+
+export type NewSheet = Required<Sheet>;
 
 export type Starksheet = {
   sheets: Sheet[];
   address: string;
+  defaultRenderer: string;
+  sheetClassHash: string;
 };
 
 // Starknet types

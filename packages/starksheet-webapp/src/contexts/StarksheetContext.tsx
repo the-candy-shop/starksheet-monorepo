@@ -6,9 +6,11 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
+import { useStarksheetContract } from "../hooks/useStarksheetContract";
 import { starknetRpcProvider } from "../provider";
 import { Sheet, Starksheet } from "../types";
-import { hex2str } from "../utils/hexUtils";
+import { bn2hex, hex2str, str2hex } from "../utils/hexUtils";
 import { AppStatusContext } from "./AppStatusContext";
 
 export const StarksheetContext = React.createContext<{
@@ -16,26 +18,36 @@ export const StarksheetContext = React.createContext<{
   selectedSheet?: number;
   selectedSheetAddress?: string;
   setSelectedSheet: (index: number) => void;
-  updateSheets: () => Promise<Sheet[]>;
-  addSheet: (sheet: Sheet) => void;
+  load: () => Promise<Sheet[]>;
+  addSheet: (sheet: Omit<Sheet, "address">, owner: string) => void;
+  validateNewSheets: () => void;
 }>({
-  starksheet: { address: "", sheets: [] },
+  starksheet: {
+    address: "",
+    sheets: [],
+    defaultRenderer: "",
+    sheetClassHash: "",
+  },
   setSelectedSheet: () => {},
-  updateSheets: async () => [],
+  load: async () => [],
   addSheet: () => {},
+  validateNewSheets: () => {},
 });
 
 export const StarksheetContextProvider = ({
   starksheetAddress,
   children,
 }: PropsWithChildren<{ starksheetAddress: string }>) => {
-  const { updateAppStatus } = useContext(AppStatusContext);
+  const { updateAppStatus, updateSheetStatus } = useContext(AppStatusContext);
   const [starksheet, setStarksheet] = useState<Starksheet>({
     address: starksheetAddress,
     sheets: [],
+    defaultRenderer: "",
+    sheetClassHash: "",
   });
   const [selectedSheet, setSelectedSheet] = useState<number>();
   const { address, sheets } = starksheet;
+  const { contract } = useStarksheetContract();
 
   const selectedSheetAddress = useMemo(
     () =>
@@ -43,46 +55,91 @@ export const StarksheetContextProvider = ({
     [sheets, selectedSheet]
   );
 
-  const updateSheets = useCallback(
+  const load = useCallback(
     () =>
-      starknetRpcProvider
-        .callContract({
-          contractAddress: address,
-          entrypoint: "getSheets",
-        })
+      Promise.all([
+        contract.functions["getSheetDefaultRendererAddress"](),
+        contract.functions["getSheetClassHash"](),
+        contract.functions["getSheets"](),
+      ])
         .then(async (response) => {
-          const sheets = response.result.slice(1);
+          const [renderer, classHash, { addresses }] = response;
           const names = await Promise.all(
-            sheets.map((sheet) =>
+            addresses.map((sheet) =>
               starknetRpcProvider
                 .callContract({
-                  contractAddress: sheet,
+                  contractAddress: bn2hex(sheet),
                   entrypoint: "name",
                 })
                 .then((response) => response.result[0])
             )
           );
-          return names.map(
-            (name, index) =>
-              ({
-                address: sheets[index],
-                name: hex2str(name),
-              } as Sheet)
+          const symbols = await Promise.all(
+            addresses.map((sheet) =>
+              starknetRpcProvider
+                .callContract({
+                  contractAddress: bn2hex(sheet),
+                  entrypoint: "symbol",
+                })
+                .then((response) => response.result[0])
+            )
           );
+          return {
+            address,
+            defaultRenderer: bn2hex(renderer.address),
+            sheetClassHash: bn2hex(classHash.hash),
+            sheets: names.map(
+              (name, index) =>
+                ({
+                  address: bn2hex(addresses[index]),
+                  name: hex2str(name),
+                  symbol: hex2str(symbols[index]),
+                } as Sheet)
+            ),
+          };
         })
-        .then((sheets) => {
-          setStarksheet({ address, sheets });
-          return sheets;
+        .then((_starksheet) => {
+          setStarksheet(_starksheet);
+          return _starksheet.sheets;
         }),
-    [address]
+    [address, contract]
   );
 
-  const addSheet = (sheet: Sheet) => {
-    setStarksheet({ address, sheets: [...starksheet.sheets, sheet] });
+  const addSheet = (sheet: Omit<Sheet, "address">, owner: string) => {
+    const calldata = {
+      name: str2hex(sheet.name),
+      symbol: str2hex(sheet.symbol),
+      owner,
+      merkleRoot: 0,
+      maxPerWallet: 0,
+      rendererAddress: starksheet.defaultRenderer,
+    };
+    const address = calculateContractAddressFromHash(
+      sheets.length,
+      starksheet.sheetClassHash,
+      Object.values(calldata),
+      starksheet.address
+    );
+    setStarksheet((prevStarksheet) => ({
+      ...prevStarksheet,
+      sheets: [...prevStarksheet.sheets, { ...sheet, address, calldata }],
+    }));
+    updateSheetStatus(address, { loading: false, message: "", error: false });
+    setSelectedSheet(starksheet.sheets.length);
+  };
+
+  const validateNewSheets = () => {
+    setStarksheet((prevStarksheet) => ({
+      ...prevStarksheet,
+      sheets: prevStarksheet.sheets.map((sheet) => {
+        delete sheet.calldata;
+        return sheet;
+      }),
+    }));
   };
 
   useEffect(() => {
-    updateSheets().then((sheets) => {
+    load().then((sheets) => {
       updateAppStatus({
         message: "Click on a tab to open a sheet",
         loading: false,
@@ -97,7 +154,7 @@ export const StarksheetContextProvider = ({
     });
     // Disable missing updateAppStatus
     // eslint-disable-next-line
-  }, [updateSheets]);
+  }, [load]);
 
   return (
     <StarksheetContext.Provider
@@ -106,8 +163,9 @@ export const StarksheetContextProvider = ({
         selectedSheet,
         selectedSheetAddress,
         setSelectedSheet,
-        updateSheets,
+        load,
         addSheet,
+        validateNewSheets,
       }}
     >
       {children}

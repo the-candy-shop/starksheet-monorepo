@@ -150,7 +150,7 @@ function App() {
               fontFamily: "'Press Start 2P', cursive",
             }}
           >
-            {message}
+            <p dangerouslySetInnerHTML={{ __html: message }} />
             {loading && <LoadingDots />}
           </Box>
         ) : (

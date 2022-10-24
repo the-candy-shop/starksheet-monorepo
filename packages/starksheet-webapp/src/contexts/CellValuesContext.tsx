@@ -76,7 +76,8 @@ export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { getAbiForContract } = useContext(AbisContext);
-  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { selectedSheetAddress, starksheet, selectedSheet } =
+    useContext(StarksheetContext);
   const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
 
   const [values, setValues] = useState<CellValues>({});
@@ -143,7 +144,11 @@ export const CellValuesContextProvider = ({
   const load = useCallback(
     (contract: Contract) => {
       // Copy current sheet address to prevent storing the async call results into the wrong key
-      const _selectedSheetAddress = selectedSheetAddress;
+      if (!selectedSheet) {
+        return;
+      }
+
+      const _selectedSheetAddress = starksheet.sheets[selectedSheet].address;
       if (!_selectedSheetAddress) {
         return;
       }
@@ -207,27 +212,31 @@ export const CellValuesContextProvider = ({
           );
         });
 
+      const fetchCells = renderCells().then((renderedCells) => {
+        updateSheetStatus(_selectedSheetAddress, {
+          message: "Fetching cells metadata",
+        });
+        return Promise.all(
+          (renderedCells as CellRendered[]).map(async (cell) => {
+            const _cell = await contract.call("getCell", [cell.id]);
+            return {
+              ...cell,
+              contractAddress: _cell.contractAddress,
+              selector: _cell.value,
+              calldata: _cell.cell_calldata,
+              error: cell.error,
+            };
+          })
+        );
+      });
+      const newGridCells = new Promise<Cell[]>((resolve, reject) =>
+        resolve([])
+      );
+
       updateSheetStatus(_selectedSheetAddress, {
         message: "Rendering grid values",
       });
-      return renderCells()
-        .then((renderedCells) => {
-          updateSheetStatus(_selectedSheetAddress, {
-            message: "Fetching cells metadata",
-          });
-          return Promise.all(
-            (renderedCells as CellRendered[]).map(async (cell) => {
-              const _cell = await contract.call("getCell", [cell.id]);
-              return {
-                ...cell,
-                contractAddress: _cell.contractAddress,
-                selector: _cell.value,
-                calldata: _cell.cell_calldata,
-                error: cell.error,
-              };
-            })
-          );
-        })
+      (!!starksheet.sheets[selectedSheet].calldata ? newGridCells : fetchCells)
         .then((cells: Cell[]) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
@@ -289,7 +298,7 @@ export const CellValuesContextProvider = ({
         });
     },
     // eslint-disable-next-line
-    [refreshMarketplaces, selectedSheetAddress]
+    [refreshMarketplaces, starksheet, selectedSheet]
   );
 
   React.useEffect(() => {

@@ -144,7 +144,8 @@ export const CellValuesContextProvider = ({
   const load = useCallback(
     (contract: Contract) => {
       // Copy current sheet address to prevent storing the async call results into the wrong key
-      if (!selectedSheet) {
+
+      if (selectedSheet === undefined) {
         return;
       }
 

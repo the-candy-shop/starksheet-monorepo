@@ -139,19 +139,33 @@ export const StarksheetContextProvider = ({
   };
 
   useEffect(() => {
-    load().then((sheets) => {
-      updateAppStatus({
-        message: "Click on a tab to open a sheet",
-        loading: false,
-        sheets: sheets.reduce(
-          (prev, cur) => ({
-            ...prev,
-            [cur.address]: { loading: false },
-          }),
-          {}
-        ),
+    load()
+      .then((sheets) => {
+        updateAppStatus({
+          message: "Click on a tab to open a sheet",
+          loading: false,
+          sheets: sheets.reduce(
+            (prev, cur) => ({
+              ...prev,
+              [cur.address]: { loading: false },
+            }),
+            {}
+          ),
+        });
+      })
+      .catch((e) => {
+        updateAppStatus({
+          message: `Error loading sheets<br /><br />${e}`,
+          loading: false,
+          sheets: sheets.reduce(
+            (prev, cur) => ({
+              ...prev,
+              [cur.address]: { loading: false },
+            }),
+            {}
+          ),
+        });
       });
-    });
     // Disable missing updateAppStatus
     // eslint-disable-next-line
   }, [load]);

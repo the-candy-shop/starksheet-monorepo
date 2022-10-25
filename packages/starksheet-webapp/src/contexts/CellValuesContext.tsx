@@ -177,7 +177,7 @@ export const CellValuesContextProvider = ({
           new Promise((resolve, reject) =>
             setTimeout(
               () => reject(new Error(`timeoutRenderCell(${tokenId})`)),
-              20000
+              30_000
             )
           ),
         ]);

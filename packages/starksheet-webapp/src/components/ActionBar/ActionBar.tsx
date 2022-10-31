@@ -10,7 +10,7 @@ import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
 import { Cell as CellType, CellChildren, CellData } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bn2hex, str2hex } from "../../utils/hexUtils";
 import { resolveContractAddress } from "../../utils/sheetUtils";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
@@ -36,6 +36,13 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
   const previousSelectedCell = React.useRef<number | null>(
     selectedCell ? selectedCell.id : null
   );
+
+  const getStorageSettings = () => {
+    return JSON.parse(
+      localStorage.getItem(`${selectedSheetAddress}.${selectedCell?.id}`) ||
+        "{}"
+    );
+  };
 
   useEffect(() => {
     if (selectedCell && previousSelectedCell.current !== selectedCell.id) {
@@ -141,7 +148,15 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         let selector = toBN(0);
         try {
           selector = toBN(_value);
-        } catch (e) {}
+        } catch (e) {
+          try {
+            selector = toBN(str2hex(_value));
+            const key = `${selectedSheetAddress}.${selectedCell?.id}`;
+            localStorage.setItem(key, JSON.stringify({ text: true }));
+          } catch (e) {
+            selector = toBN(0);
+          }
+        }
         setCellData({
           contractAddress: RC_BOUND,
           selector,
@@ -167,7 +182,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         setCellData(_cellData);
       });
     },
-    [getAbiForContract, currentCells]
+    [getAbiForContract, currentCells, selectedCell, selectedSheetAddress]
   );
 
   const clearBar = useCallback(() => {
@@ -221,6 +236,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
                 inputRef={inputRef}
                 setValue={setUnsavedValue}
                 value={unSavedValue}
+                cellSettings={getStorageSettings()}
                 disabled={
                   !accountAddress ||
                   (accountAddress !== owner && owner !== "0x0")

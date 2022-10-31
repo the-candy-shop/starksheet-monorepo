@@ -4,6 +4,7 @@ import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { StarksheetContext } from "../../contexts/StarksheetContext";
 import Tooltip from "../../Tooltip/Tooltip";
 import { Cell as CellType } from "../../types";
 import { RC_BOUND, starksheetContractData } from "../../utils/constants";
@@ -34,6 +35,7 @@ function ComputedCell({
 }: ComputedCellProps) {
   const { accountAddress } = useContext(AccountContext);
   const { computeValue, currentCells } = useContext(CellValuesContext);
+  const { selectedSheetAddress } = useContext(StarksheetContext);
 
   const { background, borderColor, color } = useMemo(() => {
     const background =
@@ -61,9 +63,14 @@ function ComputedCell({
     if (cell.error) return "ERROR";
 
     const value = cell.value;
-    if (cell.abi?.name === "name" || cell.abi?.name === "symbol") {
-      return hex2str(bn2hex(value));
-    }
+    const storage =
+      localStorage.getItem(`${selectedSheetAddress}.${cell.id}`) || "{}";
+    const settings = JSON.parse(storage);
+    const renderString =
+      cell.abi?.name === "name" ||
+      cell.abi?.name === "symbol" ||
+      settings?.text;
+    if (renderString) return hex2str(bn2hex(value));
     if (cell.contractAddress.eq(toBN(starksheetContractData.mathAddress))) {
       return value
         .add(
@@ -81,7 +88,7 @@ function ComputedCell({
     }
     if (value.gte(RC_BOUND)) return bn2hex(value);
     return value.toString();
-  }, [cell, background]);
+  }, [selectedSheetAddress, cell, background]);
 
   const isInvokeCell = useMemo(
     () => !!cell.abi && cell.abi.stateMutability === undefined,

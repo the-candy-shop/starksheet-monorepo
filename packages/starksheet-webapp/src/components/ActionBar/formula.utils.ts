@@ -5,7 +5,7 @@ import { uint256ToBN } from "starknet/dist/utils/uint256";
 import { BigNumberish, toBN } from "starknet/utils/number";
 import { Cell, CellData, ContractAbi } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bn2hex, hex2str } from "../../utils/hexUtils";
 
 export const CONTRACT_FUNCTION_SEP = ".";
 export const ARGS_SEP = ";";
@@ -96,8 +96,7 @@ export function parseContractCall(
     .trim()
     .replaceAll("\n", "")
     .replaceAll("\r", "")
-    .replaceAll("&nbsp;", "")
-    .replaceAll(" ", "");
+    .replaceAll("&nbsp;", "");
 
   const formulaMatch = _formula.match(contractCallRegex);
 
@@ -245,11 +244,21 @@ export function getError(
   return "Invalid formula format";
 }
 
-export function buildFormulaDisplay(formula: string): string {
+export function buildFormulaDisplay(
+  formula: string,
+  settings?: { text: boolean }
+): string {
   const operator = formula.match(contractCallRegex);
 
   let result = formula;
 
+  if (settings?.text) {
+    try {
+      return hex2str(bn2hex(toBN(formula)));
+    } catch (e) {
+      return formula;
+    }
+  }
   if (operator?.groups) {
     result = result.replace(
       operator.groups.contractAddress,

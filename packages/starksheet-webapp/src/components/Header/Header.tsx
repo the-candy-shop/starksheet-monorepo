@@ -7,7 +7,7 @@ import GreyCell from "../GreyCell/GreyCell";
 function Header() {
   return (
     <Box sx={{ display: "flex" }}>
-      <GreyCell sx={{ flex: 1 }}>Starksheet</GreyCell>
+      <GreyCell sx={{ textIndent: "20px", flex: 1 }}>Starksheet</GreyCell>
       <Button
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px`, width: "191px" }}
         onClick={() =>

@@ -5,6 +5,7 @@ import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 import Tooltip from "../../Tooltip/Tooltip";
 import { Cell as CellType } from "../../types";
 import { RC_BOUND, starksheetContractData } from "../../utils/constants";
@@ -37,6 +38,11 @@ function ComputedCell({
   const { computeValue, currentCells } = useContext(CellValuesContext);
   const { selectedSheetAddress } = useContext(StarksheetContext);
 
+  const [cellSettings, setCellSettings] = useLocalStorage(
+    `${selectedSheetAddress}.${id}`,
+    {}
+  );
+
   const { background, borderColor, color } = useMemo(() => {
     const background =
       cell.owner.eq(toBN(0)) &&
@@ -63,13 +69,10 @@ function ComputedCell({
     if (cell.error) return "ERROR";
 
     const value = cell.value;
-    const storage =
-      localStorage.getItem(`${selectedSheetAddress}.${cell.id}`) || "{}";
-    const settings = JSON.parse(storage);
     const renderString =
       cell.abi?.name === "name" ||
       cell.abi?.name === "symbol" ||
-      settings?.text;
+      cellSettings.text;
     if (renderString) return hex2str(bn2hex(value));
     if (cell.contractAddress.eq(toBN(starksheetContractData.mathAddress))) {
       return value
@@ -88,7 +91,7 @@ function ComputedCell({
     }
     if (value.gte(RC_BOUND)) return bn2hex(value);
     return value.toString();
-  }, [selectedSheetAddress, cell, background]);
+  }, [cell, background, cellSettings.text]);
 
   const isInvokeCell = useMemo(
     () => !!cell.abi && cell.abi.stateMutability === undefined,
@@ -100,6 +103,9 @@ function ComputedCell({
     if (e.detail > 1 && isInvokeCell) {
       const _values = currentCells.map((value) => value.value);
       computeValue(_values)(cell);
+    }
+    if (e.detail > 1 && !isInvokeCell) {
+      setCellSettings({ text: !cellSettings.text });
     }
   };
 

@@ -33,16 +33,10 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
 
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const [cellData, setCellData] = React.useState<CellData | null>(null);
+
   const previousSelectedCell = React.useRef<number | null>(
     selectedCell ? selectedCell.id : null
   );
-
-  const getStorageSettings = () => {
-    return JSON.parse(
-      localStorage.getItem(`${selectedSheetAddress}.${selectedCell?.id}`) ||
-        "{}"
-    );
-  };
 
   useEffect(() => {
     if (selectedCell && previousSelectedCell.current !== selectedCell.id) {
@@ -151,8 +145,6 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         } catch (e) {
           try {
             selector = toBN(str2hex(_value));
-            const key = `${selectedSheetAddress}.${selectedCell?.id}`;
-            localStorage.setItem(key, JSON.stringify({ text: true }));
           } catch (e) {
             selector = toBN(0);
           }
@@ -182,7 +174,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         setCellData(_cellData);
       });
     },
-    [getAbiForContract, currentCells, selectedCell, selectedSheetAddress]
+    [getAbiForContract, currentCells]
   );
 
   const clearBar = useCallback(() => {
@@ -236,7 +228,6 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
                 inputRef={inputRef}
                 setValue={setUnsavedValue}
                 value={unSavedValue}
-                cellSettings={getStorageSettings()}
                 disabled={
                   !accountAddress ||
                   (accountAddress !== owner && owner !== "0x0")

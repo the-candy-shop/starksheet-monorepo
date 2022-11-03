@@ -71,7 +71,9 @@ async def create_account():
     )[1]
     input(f"Send ETH to {account_address} and press enter to continue")
     output = subprocess.run(
-        ["starknet", "deploy_account", "--account", "starksheet"], env=env
+        ["starknet", "deploy_account", "--account", "starksheet"],
+        env=env,
+        capture_output=True,
     )
     if output.returncode != 0:
         raise Exception(output.stderr.decode())

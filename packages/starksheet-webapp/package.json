@@ -29,7 +29,7 @@
   "scripts": {
     "prestart": "npm run prebuild",
     "start": "react-scripts start",
-    "devnet": "starknet-devnet --lite-mode  --dump-on exit --dump-path devnet --seed 0",
+    "devnet": "starknet-devnet --lite-mode --load-path devnet --dump-on exit --dump-path devnet --seed 0",
     "prebuild": "node scripts/generate-contract-data.js",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -12,7 +12,11 @@ import { Contract, FunctionAbi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
-import { starknetRpcProvider, starknetSequencerProvider } from "../provider";
+import {
+  network,
+  starknetRpcProvider,
+  starknetSequencerProvider,
+} from "../provider";
 import {
   Cell,
   CellChildren,
@@ -41,7 +45,6 @@ const defaultCellData = (tokenId: number): CellData => ({
 });
 
 const GRID_SIZE = 15 * 15;
-const network = process.env.REACT_APP_NETWORK;
 
 export const CellValuesContext = React.createContext<{
   values: CellValues;
@@ -122,12 +125,12 @@ export const CellValuesContextProvider = ({
             cell?.value?.toString()
           ) {
             fetch(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://api.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
                 : `https://api-testnet.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
             );
             fetch(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${selectedSheetAddress}/${index}/`
                 : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${selectedSheetAddress}/${index}/`,
               { method: "POST" }

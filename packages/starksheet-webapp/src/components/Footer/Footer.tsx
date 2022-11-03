@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { network } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
@@ -15,8 +16,6 @@ import twitterLogo from "./twitter.svg";
 export type FooterProps = {
   sx?: BoxProps["sx"];
 };
-
-const network = process.env.REACT_APP_NETWORK;
 
 function Footer({ sx }: FooterProps) {
   const { accountAddress } = useContext(AccountContext);
@@ -90,7 +89,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://starkscan.co/contract/${selectedSheetAddress}`
                 : `https://testnet.starkscan.co/contract/${selectedSheetAddress}`,
               "_blank"
@@ -132,7 +131,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://aspect.co/collection/${selectedSheetAddress}`
                 : `https://testnet.aspect.co/collection/${selectedSheetAddress}`,
               "_blank"
@@ -150,7 +149,7 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://mintsquare.io/collection/starknet/${selectedSheetAddress}/nfts`
                 : `https://mintsquare.io/collection/starknet-testnet/${selectedSheetAddress}/nfts`,
               "_blank"

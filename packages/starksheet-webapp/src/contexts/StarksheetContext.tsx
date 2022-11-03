@@ -10,7 +10,12 @@ import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
 import { useStarksheetContract } from "../hooks/useStarksheetContract";
 import { starknetRpcProvider } from "../provider";
 import { Sheet, Starksheet } from "../types";
-import { bn2hex, hex2str, str2hex } from "../utils/hexUtils";
+import {
+  bn2hex,
+  hex2str,
+  normalizeHexString,
+  str2hex,
+} from "../utils/hexUtils";
 import { AppStatusContext } from "./AppStatusContext";
 
 export const StarksheetContext = React.createContext<{
@@ -71,7 +76,7 @@ export const StarksheetContextProvider = ({
                   contractAddress: bn2hex(sheet),
                   entrypoint: "name",
                 })
-                .then((response) => response.result[0])
+                .then((response) => normalizeHexString(response.result[0]))
             )
           );
           const symbols = await Promise.all(
@@ -81,7 +86,7 @@ export const StarksheetContextProvider = ({
                   contractAddress: bn2hex(sheet),
                   entrypoint: "symbol",
                 })
-                .then((response) => response.result[0])
+                .then((response) => normalizeHexString(response.result[0]))
             )
           );
           return {

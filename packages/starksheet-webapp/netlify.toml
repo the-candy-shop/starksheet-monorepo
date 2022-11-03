@@ -1,16 +1,16 @@
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/*"
+to = "/index.html"
+status = 200
 
 [build]
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . ../starksheet-cairo"
+ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . ../starksheet-cairo"
 
 [context.production]
-  environment = { REACT_APP_NETWORK = "SN_MAIN" }
+environment = { REACT_APP_NETWORK = "mainnet" }
 
 [context.testnet]
-  environment = { REACT_APP_NETWORK = "SN_GOERLI" }
+environment = { REACT_APP_NETWORK = "testnet" }
 
 [context.deploy-preview]
-  environment = { REACT_APP_NETWORK = "SN_GOERLI" }
+environment = { REACT_APP_NETWORK = "testnet" }

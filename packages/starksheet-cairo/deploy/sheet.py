@@ -28,14 +28,12 @@ async def main():
     logger.info(f"Merkle root: {root}")
 
     (sheet,) = await call("Starksheet", "getSheet", 0)
-    set_root_tx = invoke("Sheet", "setMerkleRoot", root, address=sheet)
+    await invoke("Sheet", "setMerkleRoot", root, address=sheet)
     (max_per_wallet,) = await call("Sheet", "getMaxPerWallet", address=sheet)
     logger.info(f"Current max per wallet: {max_per_wallet}")
     if max_per_wallet != 10:
         logger.info(f"Setting max per wallet to 10")
-        set_max_wallet_tx = invoke("Sheet", "setMaxPerWallet", 10, address=sheet)
-        wait_for_transaction(set_max_wallet_tx)
-    wait_for_transaction(set_root_tx)
+        await invoke("Sheet", "setMaxPerWallet", 10, address=sheet)
     logger.info(f"Sheet {sheet} ready to be used!")
 
 

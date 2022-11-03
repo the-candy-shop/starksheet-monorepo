@@ -1,11 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const network =
-  process.env.REACT_APP_NETWORK === "SN_MAIN" ? "mainnet" : "testnet";
+const network = process.env.REACT_APP_NETWORK || "devnet";
 
 async function run() {
-  const contractDeployData = require(`./../../starksheet-cairo/${network}.deployments.json`);
+  const contractDeployData = require(`./../../starksheet-cairo/deployments/${network}/deployments.json`);
 
   const address = contractDeployData["Starksheet"]["address"];
   const mathAddress = contractDeployData["math"]["address"];

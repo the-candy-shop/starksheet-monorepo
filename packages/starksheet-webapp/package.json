@@ -27,8 +27,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "prestart": "REACT_APP_NETWORK=devnet npm run prebuild",
-    "start": "REACT_APP_NETWORK=devnet react-scripts start",
+    "prestart": "npm run prebuild",
+    "start": "react-scripts start",
     "devnet": "starknet-devnet --lite-mode  --dump-on exit --dump-path devnet --seed 0",
     "prebuild": "node scripts/generate-contract-data.js",
     "build": "react-scripts build",

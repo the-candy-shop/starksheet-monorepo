@@ -16,7 +16,7 @@ import {
   normalizeHexString,
   str2hex,
 } from "../utils/hexUtils";
-import { AppStatusContext } from "./AppStatusContext";
+import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
 export const StarksheetContext = React.createContext<{
   starksheet: Starksheet;
@@ -129,7 +129,7 @@ export const StarksheetContextProvider = ({
       ...prevStarksheet,
       sheets: [...prevStarksheet.sheets, { ...sheet, address, calldata }],
     }));
-    updateSheetStatus(address, { loading: false, message: "", error: false });
+    updateSheetStatus(address, defaultSheetStatus);
     setSelectedSheet(starksheet.sheets.length);
   };
 
@@ -152,7 +152,7 @@ export const StarksheetContextProvider = ({
           sheets: sheets.reduce(
             (prev, cur) => ({
               ...prev,
-              [cur.address]: { loading: false },
+              [cur.address]: defaultSheetStatus,
             }),
             {}
           ),
@@ -165,7 +165,7 @@ export const StarksheetContextProvider = ({
           sheets: sheets.reduce(
             (prev, cur) => ({
               ...prev,
-              [cur.address]: { loading: false },
+              [cur.address]: defaultSheetStatus,
             }),
             {}
           ),

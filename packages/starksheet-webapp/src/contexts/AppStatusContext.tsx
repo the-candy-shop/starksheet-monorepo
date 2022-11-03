@@ -8,6 +8,8 @@ const defaultStatus = {
   sheets: {},
 };
 
+export const defaultSheetStatus = { loading: false, message: "", error: false };
+
 export const AppStatusContext = React.createContext<{
   appStatus: AppStatus;
   setAppStatus: (status: AppStatus) => void;

@@ -12,7 +12,7 @@ async function run() {
     require(`../../starksheet-cairo/${contractDeployData["Starksheet"]["artifact"]}`)[
       "abi"
     ];
-  const sheetAbi = require("./../../starksheet-cairo/artifacts/abis/Sheet.json");
+  const sheetAbi = require(`../../starksheet-cairo/build/Sheet.json`)["abi"];
   const allowlist = require("./../../starksheet-cairo/allow_list.json");
 
   const contractAbis = Object.values(contractDeployData).reduce(

@@ -3,6 +3,7 @@ import { AbiEntry, FunctionAbi, StructAbi } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { uint256ToBN } from "starknet/dist/utils/uint256";
 import { BigNumberish, toBN } from "starknet/utils/number";
+import { N_COL } from "../../config";
 import { Cell, CellData, ContractAbi } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, hex2str, str2hex } from "../../utils/hexUtils";
@@ -16,10 +17,7 @@ export const contractCallRegex =
 export const cellNameRegex = /^[a-z]\d+$/i;
 export const hexStringRegex = /^(0x)?[a-f0-9]+$/i;
 
-export function toPlainTextFormula(
-  cellData: CellData,
-  cellNames: string[]
-): string {
+export function toPlainTextFormula(cellData: CellData): string {
   if (!cellData) return "0";
 
   const { contractAddress, selector, calldata, abi } = cellData;
@@ -28,14 +26,14 @@ export function toPlainTextFormula(
   }
 
   const contractName = contractAddress.lt(RC_BOUND)
-    ? cellNames[contractAddress.toNumber()]
+    ? tokenIdToCellName(contractAddress.toNumber())
     : bn2hex(contractAddress);
   const selectorHexString = bn2hex(selector);
   const operator = abi?.name || selectorHexString;
 
   const args = calldata.map((arg) =>
     isDependency(arg)
-      ? cellNames[arg.sub(toBN(1)).div(toBN(2)).toNumber()]
+      ? tokenIdToCellName(arg.sub(toBN(1)).div(toBN(2)).toNumber())
       : arg.gte(RC_BOUND)
       ? "0x" + arg.div(toBN(2)).toString(16)
       : arg.div(toBN(2)).toString()
@@ -161,6 +159,12 @@ export const cellNameToTokenId = (arg: string) => {
   const col = arg.toLowerCase().charCodeAt(0) - "a".charCodeAt(0);
   const row = parseInt(arg.slice(1)) - 1;
   return col + row * 15;
+};
+
+export const tokenIdToCellName = (id: number) => {
+  const col = ((id % N_COL) + 1 + 9).toString(36).toUpperCase();
+  const row = Math.floor(id / N_COL) + 1;
+  return `${col}${row}`;
 };
 
 export const encodeConst = (_arg: BigNumberish): BN => {

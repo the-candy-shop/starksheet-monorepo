@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import { getStarknet } from "get-starknet";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -19,8 +18,8 @@ import {
 } from "../provider";
 import {
   Cell,
-  CellChildren,
   CellData,
+  CellGraph,
   CellRendered,
   CellValues,
   UpdatedValues,
@@ -55,12 +54,10 @@ export const CellValuesContext = React.createContext<{
   setCurrentUpdatedCells: (cells: { [key: number]: Cell }) => void;
   computeValue: (values: BN[]) => (cell: CellData) => Promise<BN>;
   updateCells: (cells: Cell[]) => void;
-  buildChildren: (
-    children: CellChildren,
-    depth?: number
-  ) => (id: number) => void;
-  cellNames: string[];
-  setCellNames: (value: string[]) => void;
+  buildChildren: (children: CellGraph, depth?: number) => (id: number) => void;
+  buildParents: (children: CellGraph, depth?: number) => (id: number) => void;
+  selectedCell: number;
+  setSelectedCell: (i: number) => void;
 }>({
   values: {},
   updatedValues: {},
@@ -71,8 +68,9 @@ export const CellValuesContext = React.createContext<{
   computeValue: () => async () => toBN(0),
   updateCells: () => {},
   buildChildren: () => () => {},
-  cellNames: [],
-  setCellNames: () => {},
+  buildParents: () => () => {},
+  selectedCell: 0,
+  setSelectedCell: () => {},
 });
 
 export const CellValuesContextProvider = ({
@@ -85,9 +83,9 @@ export const CellValuesContextProvider = ({
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
+  const [selectedCell, setSelectedCell] = React.useState<number>(0);
   const previousGridData = useRef<any>(undefined);
   const previousSelectedSheet = useRef<any>(undefined);
-  const [cellNames, setCellNames] = useState<string[]>([]);
 
   const currentCells = useMemo(
     () => (selectedSheetAddress ? values[selectedSheetAddress] || [] : []),
@@ -340,17 +338,12 @@ export const CellValuesContextProvider = ({
     const value =
       cell.abi.stateMutability === "view"
         ? (await starknetSequencerProvider.callContract(call)).result[0]
-        : await getAbiForContract(contractAddress)
-            .then((abi) =>
-              getStarknet().account.execute(call, [Object.values(abi)])
-            )
-            .then((tx) => tx.transaction_hash)
-            .catch(() => "0");
+        : NaN;
     return toBN(value);
   };
 
   const buildChildren = useCallback(
-    (children: CellChildren, depth?: number) => (id: number) => {
+    (children: CellGraph, depth?: number) => (id: number) => {
       if (!selectedSheetAddress) return;
       const currentChildren = values[selectedSheetAddress]
         .filter(
@@ -369,6 +362,26 @@ export const CellValuesContextProvider = ({
       });
 
       currentChildren.map(buildChildren(children, (depth || 1) + 1));
+    },
+    [values, selectedSheetAddress]
+  );
+
+  const buildParents = useCallback(
+    (parents: CellGraph, depth?: number) => (id: number) => {
+      if (!selectedSheetAddress) return;
+      const cell = values[selectedSheetAddress][id];
+      const currentParents = cell.calldata
+        .filter(isDependency)
+        .map((arg) => (arg.toNumber() - 1) / 2);
+      if (cell.contractAddress.lt(RC_BOUND)) {
+        currentParents.push(cell.contractAddress.toNumber());
+      }
+
+      currentParents.forEach((_id) => {
+        parents[_id] = depth || 1;
+      });
+
+      currentParents.map(buildParents(parents, (depth || 1) + 1));
     },
     [values, selectedSheetAddress]
   );
@@ -408,13 +421,14 @@ export const CellValuesContextProvider = ({
         updatedValues,
         currentCells,
         currentUpdatedCells,
-        cellNames,
-        setCellNames,
         setUpdatedValues,
         setCurrentUpdatedCells,
         computeValue,
         updateCells,
         buildChildren,
+        buildParents,
+        selectedCell,
+        setSelectedCell,
       }}
     >
       {children}

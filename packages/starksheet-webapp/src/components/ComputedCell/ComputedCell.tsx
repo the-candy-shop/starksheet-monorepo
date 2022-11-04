@@ -1,3 +1,5 @@
+import { getStarknet } from "get-starknet";
+import { useSnackbar } from "notistack";
 import { useContext, useMemo } from "react";
 import { constants } from "starknet";
 import { toBN } from "starknet/utils/number";
@@ -7,7 +9,7 @@ import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import Tooltip from "../../Tooltip/Tooltip";
-import { Cell as CellType } from "../../types";
+import { Cell as CellType, CellGraph } from "../../types";
 import { RC_BOUND, starksheetContractData } from "../../utils/constants";
 import { bn2hex, hex2str } from "../../utils/hexUtils";
 import Cell from "../Cell/Cell";
@@ -20,28 +22,37 @@ const WHITE = "white";
 const GREEN = "#00FF00";
 
 export type ComputedCellProps = {
-  name: string;
-  id: number;
-  selected: boolean;
   cell: CellType;
-  setSelectedCell: (value: { name: string; id: number } | null) => void;
 };
 
-function ComputedCell({
-  name,
-  id,
-  selected,
-  setSelectedCell,
-  cell,
-}: ComputedCellProps) {
+function ComputedCell({ cell }: ComputedCellProps) {
   const { accountAddress } = useContext(AccountContext);
-  const { computeValue, currentCells } = useContext(CellValuesContext);
+  const {
+    updatedValues,
+    currentCells,
+    selectedCell,
+    setSelectedCell,
+    buildParents,
+  } = useContext(CellValuesContext);
   const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { enqueueSnackbar } = useSnackbar();
 
+  const id = useMemo(() => cell.id.toNumber(), [cell]);
   const [cellSettings, setCellSettings] = useLocalStorage(
     `${selectedSheetAddress}.${id}`,
     {}
   );
+  const selected = useMemo(() => id === selectedCell, [selectedCell, id]);
+  const isInvoke = useMemo(() => {
+    if (!!cell.abi && cell.abi.stateMutability === undefined) {
+      return true;
+    }
+    const parents: CellGraph = {};
+    buildParents(parents)(id);
+    return Object.keys(parents)
+      .map((cellId) => currentCells[parseInt(cellId)])
+      .some((_cell) => !!_cell.abi && _cell.abi.stateMutability === undefined);
+  }, [cell, currentCells, id, buildParents]);
 
   const { background, borderColor, color } = useMemo(() => {
     const background =
@@ -49,7 +60,7 @@ function ComputedCell({
       cell.contractAddress.eq(RC_BOUND) &&
       cell.selector.eq(toBN(0))
         ? WHITE
-        : cell.abi && cell.abi?.stateMutability !== "view"
+        : isInvoke
         ? GREEN
         : accountAddress === bn2hex(cell.owner) ||
           (cell.owner.eq(toBN(0)) &&
@@ -61,7 +72,7 @@ function ComputedCell({
       background === BLUE || background === GREEN ? RED : BLUE;
     const color = background === BLUE ? WHITE : BLACK;
     return { background, borderColor, color };
-  }, [cell, accountAddress]);
+  }, [cell, accountAddress, isInvoke]);
 
   const value = useMemo(() => {
     if (background === GREEN) return cell.abi?.name;
@@ -93,19 +104,49 @@ function ComputedCell({
     return value.toString();
   }, [cell, background, cellSettings.text]);
 
-  const isInvokeCell = useMemo(
-    () => !!cell.abi && cell.abi.stateMutability === undefined,
-    [cell]
-  );
-
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
-    setSelectedCell({ name, id });
-    if (e.detail > 1 && isInvokeCell) {
-      const _values = currentCells.map((value) => value.value);
-      computeValue(_values)(cell);
-    }
-    if (e.detail > 1 && !isInvokeCell) {
+    setSelectedCell(id);
+    if (e.detail === 2 && !isInvoke) {
       setCellSettings({ text: !cellSettings.text });
+      return;
+    }
+    if (e.detail === 2 && isInvoke) {
+      if (selectedSheetAddress === undefined) {
+        return;
+      }
+      if (
+        updatedValues[selectedSheetAddress] &&
+        Object.values(updatedValues[selectedSheetAddress]).length > 0
+      ) {
+        enqueueSnackbar(`You must save before executing transactions`, {
+          variant: "error",
+        });
+        return;
+      }
+      if (!getStarknet().isConnected) {
+        enqueueSnackbar(`Connect your wallet to make a transaction`, {
+          variant: "error",
+        });
+        return;
+      }
+      getStarknet()
+        .account.execute({
+          contractAddress: selectedSheetAddress,
+          entrypoint: "renderCell",
+          calldata: [id],
+        })
+        .then((result) => {
+          getStarknet().account.waitForTransaction(result.transaction_hash);
+          return getStarknet().account.getTransactionReceipt(
+            result.transaction_hash
+          );
+        })
+        .then((receipt) => {
+          enqueueSnackbar(
+            `Transaction ${receipt.transaction_hash} finalized with status ${receipt.status}`,
+            { variant: "info" }
+          );
+        });
     }
   };
 
@@ -113,7 +154,7 @@ function ComputedCell({
     <Tooltip title={value && value.length > 4 ? value : false} followCursor>
       <span>
         <Cell
-          key={name}
+          key={id}
           selected={selected}
           onClick={onClick}
           sx={{
@@ -122,7 +163,7 @@ function ComputedCell({
             maxWidth: `${CELL_WIDTH}px`,
             marginLeft: `-${CELL_BORDER_WIDTH}px`,
             textAlign: "center",
-            cursor: isInvokeCell ? "pointer" : undefined,
+            cursor: isInvoke ? "pointer" : undefined,
             background,
             color,
 

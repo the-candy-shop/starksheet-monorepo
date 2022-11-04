@@ -192,6 +192,7 @@ def compile_contract(contract_name):
             contract_file,
             "--output",
             build_dir / f"{contract_name}.json",
+            *(["--disable_hint_validation"] if network == "devnet" else []),
         ],
         capture_output=True,
     )

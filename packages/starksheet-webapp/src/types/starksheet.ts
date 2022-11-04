@@ -65,6 +65,7 @@ export type CellRendered = {
   owner: BN;
   value: BN;
   error?: boolean;
+  parents?: BN[];
 };
 
 export type Cell = CellRendered & CellData;
@@ -73,7 +74,7 @@ export type CellValues = {
   [address: string]: Cell[];
 };
 
-export type CellChildren = {
+export type CellGraph = {
   [key: number]: number;
 };
 

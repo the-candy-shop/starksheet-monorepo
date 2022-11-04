@@ -26,7 +26,13 @@ logger.setLevel(logging.INFO)
 
 async def main():
     class_hash = {}
-    for contract_name in ["Sheet", "Starksheet", "BasicCellRenderer", "math"]:
+    for contract_name in [
+        "Sheet",
+        "Starksheet",
+        "BasicCellRenderer",
+        "math",
+        "execute",
+    ]:
         compile_contract(contract_name)
         class_hash[contract_name] = await declare(contract_name)
     dump_declarations(class_hash)
@@ -37,7 +43,7 @@ async def main():
             "artifact": get_artifact(contract_name),
             "alias": get_alias(contract_name),
         }
-        for contract_name in ["BasicCellRenderer", "math"]
+        for contract_name in ["BasicCellRenderer", "math", "execute"]
     }
     deployments["Starksheet"] = {
         **dict(

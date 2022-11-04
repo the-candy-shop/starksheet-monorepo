@@ -39,8 +39,3 @@ func sub(arr_len: felt, arr: felt*) -> (res: felt) {
     }
     return (arr[0] - arr[1],);
 }
-
-@view
-func identity(arr_len: felt, arr: felt*) -> (arr_len: felt, arr: felt*) {
-    return (arr_len, arr);
-}

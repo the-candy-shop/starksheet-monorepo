@@ -1,25 +1,25 @@
 {
   "BasicCellRenderer": {
-    "address": "0x4e6572db48d680cf417cd755f728b0f6c566412f8e029bea9970610e6e1f43b",
-    "tx": "0x1d",
+    "address": "0x6375fb2aea2ccd1462068a990112bd36494c05c0c12e2a6d7c37ca808e42fb1",
+    "tx": "0x2b",
     "artifact": "build/BasicCellRenderer.json",
     "alias": "basic_cell_renderer"
   },
   "math": {
-    "address": "0x3032f2687ebdfe1b9f57f7c24d8bb4983d013804590a290cbae13fc14538e41",
-    "tx": "0x1e",
+    "address": "0x632dcae52f5a75918891d8de549c5920e35592ffd22dd133ddad51333cd13e2",
+    "tx": "0x2c",
     "artifact": "build/math.json",
     "alias": "math"
   },
   "execute": {
-    "address": "0x291342aadcaad62c099806585659890be794a6b02630b6039da658bf769e0e5",
-    "tx": "0x1f",
+    "address": "0x4a3ceb6e4a3138894367fab226fcbcccf792454974064f4e95718964c8efdf9",
+    "tx": "0x2d",
     "artifact": "build/execute.json",
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x4cc41b00664df9c0314c7520a1ed9af0f71fdc6cca2dc9001d2edeb048099d8",
-    "tx": "0x20",
+    "address": "0x1adb7ce6fa0b13f0dda1a369ebb4ddf9a5d49fc504072cc33e40a8eac2e9373",
+    "tx": "0x2e",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   }

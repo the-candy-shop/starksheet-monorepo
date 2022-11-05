@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import subprocess
+from enum import Enum
 from pathlib import Path
 from typing import Union
 
@@ -11,7 +12,6 @@ from caseconverter import snakecase
 from starknet_py.contract import Contract
 from starknet_py.net import AccountClient
 from starknet_py.net.gateway_client import GatewayClient
-from starknet_py.net.models import StarknetChainId
 from starknet_py.net.signer.stark_curve_signer import KeyPair
 from starkware.starknet.wallets.account import DEFAULT_ACCOUNT_DIR
 
@@ -41,13 +41,16 @@ addresses = {
 gateway_client = GatewayClient(net=addresses[network])
 
 starknet_network = "alpha-mainnet" if network == "mainnet" else "alpha-goerli"
-chain_ids = {
-    "mainnet": "SN_MAIN",
-    "testnet": "SN_GOERLI",
-    "testnet2": "SN_GOERLI2",
-    "devnet": "SN_GOERLI",
-}
-chain_id = int(chain_ids[network].encode().hex(), 16)
+
+
+class ChainId(Enum):
+    mainnet = int("SN_MAIN".encode().hex(), 16)
+    testnet = int("SN_GOERLI".encode().hex(), 16)
+    testnet2 = int("SN_GOERLI".encode().hex(), 16)
+    devnet = int("SN_GOERLI".encode().hex(), 16)
+
+
+chain_id = getattr(ChainId, network)
 
 deployments_dir = Path("deployments") / network
 deployments_dir.mkdir(exist_ok=True, parents=True)
@@ -109,6 +112,7 @@ def get_account() -> AccountClient:
             address="0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a",
             client=gateway_client,
             supported_tx_version=1,
+            chain=chain_id,  # type: ignore
             key_pair=KeyPair(
                 private_key=int("0xe3e70682c2094cac629f6fbed82c07cd", 16),
                 public_key=int(
@@ -128,11 +132,12 @@ def get_account() -> AccountClient:
     return AccountClient(
         address=account["address"],
         client=gateway_client,
+        supported_tx_version=1,
+        chain=chain_id,  # type: ignore
         key_pair=KeyPair(
             private_key=int(account["private_key"], 16),
             public_key=int(account["public_key"], 16),
         ),
-        supported_tx_version=1,
     )
 
 

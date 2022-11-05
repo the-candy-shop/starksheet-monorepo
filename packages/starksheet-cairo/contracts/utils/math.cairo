@@ -2,6 +2,7 @@
 
 from starkware.cairo.common.math import signed_div_rem
 from starkware.cairo.common.math_cmp import RC_BOUND
+from starkware.cairo.common.pow import pow as pow_
 
 @view
 func sum(arr_len: felt, arr: felt*) -> (res: felt) {
@@ -38,4 +39,9 @@ func sub(arr_len: felt, arr: felt*) -> (res: felt) {
         assert arr_len = 2;
     }
     return (arr[0] - arr[1],);
+}
+
+@view
+func pow{range_check_ptr}(base, exp) -> (res: felt) {
+    return pow_(base, exp);
 }

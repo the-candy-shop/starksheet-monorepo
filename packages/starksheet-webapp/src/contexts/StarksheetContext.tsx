@@ -72,20 +72,26 @@ export const StarksheetContextProvider = ({
           const names = await Promise.all(
             addresses.map((sheet) =>
               starknetRpcProvider
-                .callContract({
-                  contractAddress: bn2hex(sheet),
-                  entrypoint: "name",
-                })
+                .callContract(
+                  {
+                    contractAddress: bn2hex(sheet),
+                    entrypoint: "name",
+                  },
+                  "latest"
+                )
                 .then((response) => normalizeHexString(response.result[0]))
             )
           );
           const symbols = await Promise.all(
             addresses.map((sheet) =>
               starknetRpcProvider
-                .callContract({
-                  contractAddress: bn2hex(sheet),
-                  entrypoint: "symbol",
-                })
+                .callContract(
+                  {
+                    contractAddress: bn2hex(sheet),
+                    entrypoint: "symbol",
+                  },
+                  "latest"
+                )
                 .then((response) => normalizeHexString(response.result[0]))
             )
           );

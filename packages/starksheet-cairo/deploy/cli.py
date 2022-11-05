@@ -9,7 +9,7 @@ from typing import Union
 
 from caseconverter import snakecase
 from starknet_py.contract import Contract
-from starknet_py.net import AccountClient, networks
+from starknet_py.net import AccountClient
 from starknet_py.net.gateway_client import GatewayClient
 from starknet_py.net.models import StarknetChainId
 from starknet_py.net.signer.stark_curve_signer import KeyPair
@@ -23,21 +23,31 @@ logger.setLevel(logging.INFO)
 
 network = (
     "testnet"
-    if re.match(r".*(testnet|goerli).*", NETWORK, flags=re.I)
+    if re.match(r".*(testnet|goerli)$", NETWORK, flags=re.I)
+    else "testnet2"
+    if re.match(r".*(testnet-2|goerli-2)$", NETWORK, flags=re.I)
     else "devnet"
     if re.match(r".*(devnet|local).*", NETWORK, flags=re.I)
     else "mainnet"
 )
 
-gateway_client = GatewayClient(
-    net=(
-        "http://127.0.0.1:5050"
-        if network == "devnet"
-        else getattr(networks, network.upper())
-    )
-)
+addresses = {
+    "testnet": "https://alpha4.starknet.io",
+    "mainnet": "https://alpha-mainnet.starknet.io",
+    "devnet": "http://127.0.0.1:5050",
+    "testnet2": "https://alpha4-2.starknet.io",
+}
 
-chain_id = StarknetChainId.MAINNET if network == "mainnet" else StarknetChainId.TESTNET
+gateway_client = GatewayClient(net=addresses[network])
+
+starknet_network = "alpha-mainnet" if network == "mainnet" else "alpha-goerli"
+chain_ids = {
+    "mainnet": "SN_MAIN",
+    "testnet": "SN_GOERLI",
+    "testnet2": "SN_GOERLI2",
+    "devnet": "SN_GOERLI",
+}
+chain_id = int(chain_ids[network].encode().hex(), 16)
 
 deployments_dir = Path("deployments") / network
 deployments_dir.mkdir(exist_ok=True, parents=True)
@@ -58,7 +68,7 @@ async def create_account():
     env[
         "STARKNET_WALLET"
     ] = "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount"
-    env["STARKNET_NETWORK"] = NETWORK
+    env["STARKNET_NETWORK"] = starknet_network
     output = subprocess.run(
         ["starknet", "new_account", "--account", "starksheet"],
         env=env,
@@ -71,7 +81,16 @@ async def create_account():
     )[1]
     input(f"Send ETH to {account_address} and press enter to continue")
     output = subprocess.run(
-        ["starknet", "deploy_account", "--account", "starksheet"],
+        [
+            "starknet",
+            "deploy_account",
+            "--account",
+            "starksheet",
+            "--gateway_url",
+            f"{gateway_client.net}/gateway",
+            "--feeder_gateway_url",
+            f"{gateway_client.net}/feeder_gateway",
+        ],
         env=env,
         capture_output=True,
     )
@@ -89,7 +108,6 @@ def get_account() -> AccountClient:
         return AccountClient(
             address="0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a",
             client=gateway_client,
-            chain=StarknetChainId.TESTNET,
             supported_tx_version=1,
             key_pair=KeyPair(
                 private_key=int("0xe3e70682c2094cac629f6fbed82c07cd", 16),
@@ -103,16 +121,13 @@ def get_account() -> AccountClient:
     accounts = json.load(
         open(list(Path(DEFAULT_ACCOUNT_DIR).expanduser().glob("*.json"))[0])
     )
-    account = accounts.get(NETWORK, {}).get("starksheet")
+    account = accounts.get(starknet_network, {}).get("starksheet")
     if account is None:
         raise ValueError("No account found for this network")
 
     return AccountClient(
         address=account["address"],
         client=gateway_client,
-        chain=getattr(
-            StarknetChainId, "mainnet" if network == "mainnet" else "testnet"
-        ),
         key_pair=KeyPair(
             private_key=int(account["private_key"], 16),
             public_key=int(account["public_key"], 16),

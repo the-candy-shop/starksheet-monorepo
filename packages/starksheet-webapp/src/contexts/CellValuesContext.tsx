@@ -173,7 +173,7 @@ export const CellValuesContextProvider = ({
       const timedoutRenderCell = (tokenId: number) =>
         Promise.race([
           contract
-            .call("renderCell", [tokenId])
+            .call("renderCell", [tokenId], { blockIdentifier: "latest" })
             .then((result) => result.cell as CellRendered),
           new Promise((resolve, reject) =>
             setTimeout(
@@ -184,16 +184,22 @@ export const CellValuesContextProvider = ({
         ]);
 
       const tokenIdsPromise = () =>
-        contract.call("totalSupply", []).then((response) => {
-          return Promise.all(
-            Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
-              (i) =>
-                contract.call("tokenByIndex", [[i, "0"]]).then((result) => {
-                  return result.tokenId.low.toNumber();
-                })
-            )
-          );
-        });
+        contract
+          .call("totalSupply", [], { blockIdentifier: "latest" })
+          .then((response) => {
+            return Promise.all(
+              Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
+                (i) =>
+                  contract
+                    .call("tokenByIndex", [[i, "0"]], {
+                      blockIdentifier: "latest",
+                    })
+                    .then((result) => {
+                      return result.tokenId.low.toNumber();
+                    })
+              )
+            );
+          });
 
       const renderCells = () =>
         tokenIdsPromise().then((tokenIds) => {
@@ -201,7 +207,9 @@ export const CellValuesContextProvider = ({
             tokenIds.map((tokenId) =>
               timedoutRenderCell(tokenId).catch((error) => {
                 return contract
-                  .call("ownerOf", [[tokenId, "0"]])
+                  .call("ownerOf", [[tokenId, "0"]], {
+                    blockIdentifier: "latest",
+                  })
                   .then((owner) => {
                     return {
                       ...defaultRenderedCell(tokenId),
@@ -220,7 +228,9 @@ export const CellValuesContextProvider = ({
         });
         return Promise.all(
           (renderedCells as CellRendered[]).map(async (cell) => {
-            const _cell = await contract.call("getCell", [cell.id]);
+            const _cell = await contract.call("getCell", [cell.id], {
+              blockIdentifier: "latest",
+            });
             return {
               ...cell,
               contractAddress: _cell.contractAddress,

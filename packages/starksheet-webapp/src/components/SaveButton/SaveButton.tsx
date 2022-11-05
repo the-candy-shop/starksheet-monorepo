@@ -143,20 +143,20 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
           sx={{
             width: "221px",
             "& .content": {
-              backgroundColor: !!getStarknet().account.address
+              backgroundColor: !!getStarknet().account?.address
                 ? "#FF4F0A"
                 : undefined,
-              boxShadow: !!getStarknet().account.address
+              boxShadow: !!getStarknet().account?.address
                 ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
                 : undefined,
               justifyContent: "center",
               textAlign: "center",
-              color: !getStarknet().account.address ? "#8C95A3" : undefined,
+              color: !getStarknet().account?.address ? "#8C95A3" : undefined,
             },
             ...sx,
           }}
           onClick={onClick}
-          disabled={!getStarknet().account.address || loading || !!error}
+          disabled={!getStarknet().account?.address || loading || !!error}
         >
           {loading ? (
             <Box>

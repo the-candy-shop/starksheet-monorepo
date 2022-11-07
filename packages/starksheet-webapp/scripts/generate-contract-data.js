@@ -1,11 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const network =
-  process.env.REACT_APP_NETWORK === "SN_MAIN" ? "mainnet" : "testnet";
+const network = process.env.REACT_APP_NETWORK || "devnet";
 
 async function run() {
-  const contractDeployData = require(`./../../starksheet-cairo/${network}.deployments.json`);
+  const contractDeployData = require(`./../../starksheet-cairo/deployments/${network}/deployments.json`);
 
   const address = contractDeployData["Starksheet"]["address"];
   const mathAddress = contractDeployData["math"]["address"];
@@ -13,7 +12,7 @@ async function run() {
     require(`../../starksheet-cairo/${contractDeployData["Starksheet"]["artifact"]}`)[
       "abi"
     ];
-  const sheetAbi = require("./../../starksheet-cairo/artifacts/abis/Sheet.json");
+  const sheetAbi = require(`../../starksheet-cairo/build/Sheet.json`)["abi"];
   const allowlist = require("./../../starksheet-cairo/allow_list.json");
 
   const contractAbis = Object.values(contractDeployData).reduce(

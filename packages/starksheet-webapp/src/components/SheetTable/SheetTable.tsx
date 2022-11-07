@@ -1,44 +1,24 @@
 import { Box, BoxProps } from "@mui/material";
-import React, { useContext } from "react";
-import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
+import React, { useContext, useMemo } from "react";
+import { CELL_BORDER_WIDTH, CELL_WIDTH, N_COL, N_ROW } from "../../config";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { generateColumnNames, generateRowNames } from "../../utils/sheetUtils";
+import { Cell } from "../../types";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
 
 export type SheetTableProps = {
-  selectedCell: { name: string; id: number } | null;
-  setSelectedCell: (value: { name: string; id: number } | null) => void;
-  rows?: number;
-  columns?: number;
+  currentCells: Cell[];
   sx?: BoxProps["sx"];
 };
 
-function SheetTable({
-  selectedCell,
-  setSelectedCell,
-  rows = 15,
-  columns = 15,
-  sx,
-}: SheetTableProps) {
-  const columnNames = React.useMemo(
-    () => generateColumnNames(columns),
-    [columns]
+const SheetTable = ({ currentCells, sx }: SheetTableProps) => {
+  const colNames = useMemo(
+    () =>
+      Array.from(Array(N_COL + 1).keys())
+        .map((i) => (i + 9).toString(36).toUpperCase())
+        .slice(1),
+    []
   );
-  const rowNames = React.useMemo(() => generateRowNames(rows), [rows]);
-  const { setCellNames, currentCells } = useContext(CellValuesContext);
-
-  React.useEffect(() => {
-    const result: string[] = [];
-    rowNames.forEach((rowName, rowIndex) => {
-      columnNames.forEach((columnName, columnIndex) => {
-        const id = columnIndex + columnNames.length * rowIndex;
-        result[id] = `${columnName}${rowName}`;
-      });
-    });
-
-    setCellNames(result);
-  }, [columnNames, rowNames, setCellNames]);
 
   return (
     <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>
@@ -55,7 +35,7 @@ function SheetTable({
             zIndex: 2,
           }}
         />
-        {columnNames.map((name) => (
+        {colNames.map((name) => (
           <GreyCell
             key={name}
             variant="2"
@@ -71,9 +51,9 @@ function SheetTable({
           </GreyCell>
         ))}
       </Box>
-      {rowNames.map((rowName, rowIndex) => (
+      {Array.from(Array(N_ROW).keys()).map((rowIndex) => (
         <Box
-          key={rowName}
+          key={rowIndex}
           sx={{ display: "flex", marginTop: `-${CELL_BORDER_WIDTH}px` }}
         >
           <GreyCell
@@ -88,26 +68,27 @@ function SheetTable({
               "& .content": { justifyContent: "center" },
             }}
           >
-            {rowName}
+            {rowIndex + 1}
           </GreyCell>
-          {columnNames.map((columnName, columnIndex) => {
-            const id: number = columnIndex + columnNames.length * rowIndex;
-
-            return (
-              <ComputedCell
-                key={`${columnName}${rowName}`}
-                name={`${columnName}${rowName}`}
-                id={id}
-                cell={currentCells[id]}
-                selected={`${columnName}${rowName}` === selectedCell?.name}
-                setSelectedCell={setSelectedCell}
-              />
-            );
+          {colNames.map((name, colIndex) => {
+            const cell = currentCells[colIndex + N_COL * rowIndex];
+            return <ComputedCell key={`${name}${rowIndex + 1}`} cell={cell} />;
           })}
         </Box>
       ))}
     </Box>
   );
-}
+};
 
-export default SheetTable;
+const withStaticValueFromContext = (
+  Component: ({ currentCells, sx }: SheetTableProps) => JSX.Element
+) => {
+  const ComponentMemo = React.memo(Component);
+
+  return (props: Omit<SheetTableProps, "currentCells">) => {
+    const { currentCells } = useContext(CellValuesContext);
+    return <ComponentMemo currentCells={currentCells} {...props} />;
+  };
+};
+
+export default withStaticValueFromContext(SheetTable);

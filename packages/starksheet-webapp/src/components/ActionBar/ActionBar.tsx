@@ -8,40 +8,47 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
-import { Cell as CellType, CellChildren, CellData } from "../../types";
+import { Cell as CellType, CellData, CellGraph } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bn2hex, str2hex } from "../../utils/hexUtils";
 import { resolveContractAddress } from "../../utils/sheetUtils";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import SaveButton from "../SaveButton/SaveButton";
-import { parse, parseContractCall, toPlainTextFormula } from "./formula.utils";
+import {
+  parse,
+  parseContractCall,
+  tokenIdToCellName,
+  toPlainTextFormula,
+} from "./formula.utils";
 
 export type ActionBarProps = {
   inputRef: React.RefObject<ContentEditable>;
-  selectedCell: { name: string; id: number } | null;
   sx?: BoxProps["sx"];
 };
 
-function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
+function ActionBar({ inputRef, sx }: ActionBarProps) {
   const { getAbiForContract } = useContext(AbisContext);
   const { accountAddress } = useContext(AccountContext);
   const { selectedSheetAddress } = useContext(StarksheetContext);
-  const { cellNames, currentCells, computeValue, updateCells, buildChildren } =
-    useContext(CellValuesContext);
+  const {
+    currentCells,
+    computeValue,
+    updateCells,
+    buildChildren,
+    selectedCell,
+  } = useContext(CellValuesContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const [cellData, setCellData] = React.useState<CellData | null>(null);
-  const previousSelectedCell = React.useRef<number | null>(
-    selectedCell ? selectedCell.id : null
-  );
+
+  const previousSelectedCell = React.useRef<number>(selectedCell);
 
   useEffect(() => {
-    if (selectedCell && previousSelectedCell.current !== selectedCell.id) {
-      if (!!selectedCell.id) inputRef?.current?.el?.current?.focus();
+    if (previousSelectedCell.current !== selectedCell) {
       const currentCellId = previousSelectedCell.current;
-      previousSelectedCell.current = selectedCell ? selectedCell.id : null;
+      previousSelectedCell.current = selectedCell;
 
       if (
         currentCellId === null ||
@@ -75,35 +82,36 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
           });
           _values[currentCellId] = value;
 
-          const children: CellChildren = {};
+          const children: CellGraph = {};
           buildChildren(children)(currentCellId);
           const indexes = Object.entries(children)
             .sort((a, b) => a[1] - b[1])
             .map((entry) => parseInt(entry[0]))
-            .map((id) => currentCells[id]);
+            .map((id) => currentCells[id])
+            .filter((cell) => cell.abi?.stateMutability === "view");
 
           for (const cell of indexes) {
-            if (cell.abi?.stateMutability === "view") {
-              let value = cell.value;
-              if (!error) {
-                try {
-                  value = await computeValue(_values)(cell);
-                  _values[cell.id.toNumber()] = value;
-                } catch (e) {
-                  error = true;
-                }
+            let value = cell.value;
+            if (!error) {
+              try {
+                value = await computeValue(_values)(cell);
+                _values[cell.id.toNumber()] = value;
+              } catch (e) {
+                error = true;
               }
-              updatedCells.push({
-                ...cell,
-                value,
-                error,
-              });
             }
+            updatedCells.push({
+              ...cell,
+              value,
+              error,
+            });
           }
         })
         .catch((error) => {
           enqueueSnackbar(
-            `Cannot compute value of cell ${cellNames[currentCellId]}, error:
+            `Cannot compute value of cell ${tokenIdToCellName(
+              currentCellId
+            )}, error:
               ${error}`,
             {
               variant: "error",
@@ -120,7 +128,6 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         });
     }
   }, [
-    cellNames,
     enqueueSnackbar,
     getAbiForContract,
     currentCells,
@@ -141,7 +148,13 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
         let selector = toBN(0);
         try {
           selector = toBN(_value);
-        } catch (e) {}
+        } catch (e) {
+          try {
+            selector = toBN(str2hex(_value));
+          } catch (e) {
+            selector = toBN(0);
+          }
+        }
         setCellData({
           contractAddress: RC_BOUND,
           selector,
@@ -183,21 +196,15 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
   }, [selectedSheetAddress, clearBar]);
 
   useEffect(() => {
-    if (selectedCell) {
-      setUnsavedValue(
-        toPlainTextFormula(currentCells[selectedCell.id], cellNames)
-      );
-    }
-  }, [selectedCell, currentCells, cellNames]);
+    setUnsavedValue(toPlainTextFormula(currentCells[selectedCell]));
+  }, [selectedCell, currentCells]);
 
-  const owner = selectedCell
-    ? "0x" + currentCells[selectedCell?.id]?.owner?.toString(16)
-    : undefined;
+  const owner = currentCells[selectedCell]?.owner?.toString(16);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
       <Cell sx={{ width: "134px", "& .content": { textAlign: "center" } }}>
-        {selectedCell?.name}
+        {!!selectedSheetAddress && tokenIdToCellName(selectedCell)}
       </Cell>
       <Cell
         sx={{
@@ -207,7 +214,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
           overflow: "auto",
         }}
       >
-        {selectedCell && (
+        {!!selectedSheetAddress && (
           <Box
             sx={{
               display: "flex",
@@ -223,7 +230,7 @@ function ActionBar({ inputRef, selectedCell, sx }: ActionBarProps) {
                 value={unSavedValue}
                 disabled={
                   !accountAddress ||
-                  (accountAddress !== owner && owner !== "0x0")
+                  (accountAddress !== "0x" + owner && owner !== "0")
                 }
               />
             </>

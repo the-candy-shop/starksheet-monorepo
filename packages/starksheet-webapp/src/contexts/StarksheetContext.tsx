@@ -10,8 +10,13 @@ import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
 import { useStarksheetContract } from "../hooks/useStarksheetContract";
 import { starknetRpcProvider } from "../provider";
 import { Sheet, Starksheet } from "../types";
-import { bn2hex, hex2str, str2hex } from "../utils/hexUtils";
-import { AppStatusContext } from "./AppStatusContext";
+import {
+  bn2hex,
+  hex2str,
+  normalizeHexString,
+  str2hex,
+} from "../utils/hexUtils";
+import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
 export const StarksheetContext = React.createContext<{
   starksheet: Starksheet;
@@ -67,21 +72,27 @@ export const StarksheetContextProvider = ({
           const names = await Promise.all(
             addresses.map((sheet) =>
               starknetRpcProvider
-                .callContract({
-                  contractAddress: bn2hex(sheet),
-                  entrypoint: "name",
-                })
-                .then((response) => response.result[0])
+                .callContract(
+                  {
+                    contractAddress: bn2hex(sheet),
+                    entrypoint: "name",
+                  },
+                  "latest"
+                )
+                .then((response) => normalizeHexString(response.result[0]))
             )
           );
           const symbols = await Promise.all(
             addresses.map((sheet) =>
               starknetRpcProvider
-                .callContract({
-                  contractAddress: bn2hex(sheet),
-                  entrypoint: "symbol",
-                })
-                .then((response) => response.result[0])
+                .callContract(
+                  {
+                    contractAddress: bn2hex(sheet),
+                    entrypoint: "symbol",
+                  },
+                  "latest"
+                )
+                .then((response) => normalizeHexString(response.result[0]))
             )
           );
           return {
@@ -124,7 +135,7 @@ export const StarksheetContextProvider = ({
       ...prevStarksheet,
       sheets: [...prevStarksheet.sheets, { ...sheet, address, calldata }],
     }));
-    updateSheetStatus(address, { loading: false, message: "", error: false });
+    updateSheetStatus(address, defaultSheetStatus);
     setSelectedSheet(starksheet.sheets.length);
   };
 
@@ -147,7 +158,7 @@ export const StarksheetContextProvider = ({
           sheets: sheets.reduce(
             (prev, cur) => ({
               ...prev,
-              [cur.address]: { loading: false },
+              [cur.address]: defaultSheetStatus,
             }),
             {}
           ),
@@ -160,7 +171,7 @@ export const StarksheetContextProvider = ({
           sheets: sheets.reduce(
             (prev, cur) => ({
               ...prev,
-              [cur.address]: { loading: false },
+              [cur.address]: defaultSheetStatus,
             }),
             {}
           ),

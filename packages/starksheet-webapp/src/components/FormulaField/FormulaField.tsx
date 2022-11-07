@@ -24,6 +24,7 @@ export type FormulaFieldProps = {
   inputRef: React.RefObject<ContentEditable>;
   setValue: (value: string) => void;
   value: string;
+  cellSettings?: { text: boolean };
   disabled: boolean;
 };
 
@@ -31,6 +32,7 @@ function FormulaField({
   inputRef,
   value,
   setValue,
+  cellSettings,
   disabled,
 }: FormulaFieldProps) {
   const { contractAbis, getAbiForContract } = useContext(AbisContext);
@@ -112,10 +114,9 @@ function FormulaField({
               .trim()
               .replaceAll("\n", "")
               .replaceAll("\r", "")
-              .replaceAll(" ", "")
           )
         }
-        html={buildFormulaDisplay(value)}
+        html={buildFormulaDisplay(value, cellSettings)}
         disabled={disabled}
       />
       <Box

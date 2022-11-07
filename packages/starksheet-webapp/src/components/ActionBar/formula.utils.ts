@@ -3,9 +3,10 @@ import { AbiEntry, FunctionAbi, StructAbi } from "starknet";
 import { getSelectorFromName } from "starknet/dist/utils/hash";
 import { uint256ToBN } from "starknet/dist/utils/uint256";
 import { BigNumberish, toBN } from "starknet/utils/number";
+import { N_COL } from "../../config";
 import { Cell, CellData, ContractAbi } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bn2hex, hex2str, str2hex } from "../../utils/hexUtils";
 
 export const CONTRACT_FUNCTION_SEP = ".";
 export const ARGS_SEP = ";";
@@ -16,10 +17,7 @@ export const contractCallRegex =
 export const cellNameRegex = /^[a-z]\d+$/i;
 export const hexStringRegex = /^(0x)?[a-f0-9]+$/i;
 
-export function toPlainTextFormula(
-  cellData: CellData,
-  cellNames: string[]
-): string {
+export function toPlainTextFormula(cellData: CellData): string {
   if (!cellData) return "0";
 
   const { contractAddress, selector, calldata, abi } = cellData;
@@ -28,14 +26,14 @@ export function toPlainTextFormula(
   }
 
   const contractName = contractAddress.lt(RC_BOUND)
-    ? cellNames[contractAddress.toNumber()]
+    ? tokenIdToCellName(contractAddress.toNumber())
     : bn2hex(contractAddress);
   const selectorHexString = bn2hex(selector);
   const operator = abi?.name || selectorHexString;
 
   const args = calldata.map((arg) =>
     isDependency(arg)
-      ? cellNames[arg.sub(toBN(1)).div(toBN(2)).toNumber()]
+      ? tokenIdToCellName(arg.sub(toBN(1)).div(toBN(2)).toNumber())
       : arg.gte(RC_BOUND)
       ? "0x" + arg.div(toBN(2)).toString(16)
       : arg.div(toBN(2)).toString()
@@ -96,8 +94,7 @@ export function parseContractCall(
     .trim()
     .replaceAll("\n", "")
     .replaceAll("\r", "")
-    .replaceAll("&nbsp;", "")
-    .replaceAll(" ", "");
+    .replaceAll("&nbsp;", "");
 
   const formulaMatch = _formula.match(contractCallRegex);
 
@@ -164,7 +161,20 @@ export const cellNameToTokenId = (arg: string) => {
   return col + row * 15;
 };
 
-export const encodeConst = (_arg: BigNumberish): BN => toBN(_arg).mul(toBN(2));
+export const tokenIdToCellName = (id: number) => {
+  const col = ((id % N_COL) + 1 + 9).toString(36).toUpperCase();
+  const row = Math.floor(id / N_COL) + 1;
+  return `${col}${row}`;
+};
+
+export const encodeConst = (_arg: BigNumberish): BN => {
+  try {
+    return toBN(_arg).mul(toBN(2));
+  } catch (e) {
+    return toBN(str2hex(_arg.toString(16))).mul(toBN(2));
+  }
+};
+
 export const encodeTokenId = (_arg: BigNumberish): BN =>
   toBN(_arg).mul(toBN(2)).add(toBN(1));
 export const decode = (_arg: BN) =>
@@ -176,16 +186,21 @@ const parseArg = (
   contractAbi: ContractAbi
 ): BN[] | undefined => {
   let len;
+  const _arg = arg.trim();
   let _args;
 
-  if (arg.startsWith("[")) {
-    if (!arg.endsWith("]")) return undefined;
+  if (_arg.startsWith("[")) {
+    if (!_arg.endsWith("]")) return undefined;
     if (!inputAbi.type.endsWith("*")) return undefined;
 
-    _args = arg.replace("[", "").replace("]", "").split(ARG_LIST_SEP);
+    _args = _arg
+      .replace("[", "")
+      .replace("]", "")
+      .split(ARG_LIST_SEP)
+      .filter((_a) => !!_a);
     len = _args.length;
   } else {
-    _args = [arg];
+    _args = [_arg];
   }
   const type = inputAbi.type.replace("*", "");
 
@@ -209,7 +224,7 @@ const parseArg = (
     })
     .flat();
 
-  return len ? [encodeConst(len), ...parsedArg] : parsedArg;
+  return len !== undefined ? [encodeConst(len), ...parsedArg] : parsedArg;
 };
 
 export const isDependency = (arg: BN): boolean =>
@@ -245,11 +260,21 @@ export function getError(
   return "Invalid formula format";
 }
 
-export function buildFormulaDisplay(formula: string): string {
+export function buildFormulaDisplay(
+  formula: string,
+  settings?: { text: boolean }
+): string {
   const operator = formula.match(contractCallRegex);
 
   let result = formula;
 
+  if (settings?.text) {
+    try {
+      return hex2str(bn2hex(toBN(formula)));
+    } catch (e) {
+      return formula;
+    }
+  }
   if (operator?.groups) {
     result = result.replace(
       operator.groups.contractAddress,

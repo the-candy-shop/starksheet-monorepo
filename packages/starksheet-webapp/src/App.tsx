@@ -7,19 +7,10 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import LoadingDots from "./components/LoadingDots/LoadingDots";
 import SheetTable from "./components/SheetTable/SheetTable";
-import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "./config";
+import { CELL_BORDER_WIDTH, CELL_HEIGHT, N_COL, N_ROW } from "./config";
 import { AppStatusContext } from "./contexts/AppStatusContext";
 import { CellValuesContext } from "./contexts/CellValuesContext";
 import { StarksheetContext } from "./contexts/StarksheetContext";
-import {
-  getBottomCellName,
-  getLeftCellName,
-  getRightCellName,
-  getTopCellName,
-} from "./utils/sheetUtils";
-
-const MAX_ROWS = 15;
-const MAX_COLUMNS = 15;
 
 const keyMap = {
   RIGHT: "ArrowRight",
@@ -31,13 +22,9 @@ const keyMap = {
 };
 
 function App() {
-  const [selectedCell, setSelectedCell] = React.useState<{
-    name: string;
-    id: number;
-  } | null>(null);
-
   const { appStatus } = useContext(AppStatusContext);
-  const { cellNames, currentCells } = useContext(CellValuesContext);
+  const { currentCells, selectedCell, setSelectedCell } =
+    useContext(CellValuesContext);
   const { selectedSheetAddress } = useContext(StarksheetContext);
 
   const inputRef = React.useRef<ContentEditable>(null);
@@ -45,58 +32,37 @@ function App() {
   const handlers = useMemo(
     () => ({
       RIGHT: () => {
-        if (selectedCell) {
-          const newName = getRightCellName(selectedCell.name, MAX_COLUMNS);
-          setSelectedCell({
-            name: newName,
-            id: cellNames.indexOf(newName),
-          });
-        }
+        setSelectedCell(
+          selectedCell + 1 < N_ROW * N_COL ? selectedCell + 1 : selectedCell
+        );
       },
       LEFT: () => {
-        if (selectedCell) {
-          const newName = getLeftCellName(selectedCell.name);
-          setSelectedCell({
-            name: newName,
-            id: cellNames.indexOf(newName),
-          });
-        }
+        setSelectedCell(
+          selectedCell - 1 >= 0 ? selectedCell - 1 : selectedCell
+        );
       },
       TOP: () => {
-        if (selectedCell) {
-          const newName = getTopCellName(selectedCell.name);
-          setSelectedCell({
-            name: newName,
-            id: cellNames.indexOf(newName),
-          });
-        }
+        setSelectedCell(
+          selectedCell - N_COL >= 0 ? selectedCell - N_COL : selectedCell
+        );
       },
       BOTTOM: () => {
-        if (selectedCell) {
-          const newName = getBottomCellName(selectedCell.name, MAX_ROWS);
-          setSelectedCell({
-            name: newName,
-            id: cellNames.indexOf(newName),
-          });
-        }
+        setSelectedCell(
+          selectedCell + N_COL < N_COL * N_ROW
+            ? selectedCell + N_COL
+            : selectedCell
+        );
       },
       ESC: () => {
-        if (selectedCell) {
-          setSelectedCell(null);
-          inputRef?.current?.el.current.blur();
-        }
+        inputRef?.current?.el.current.blur();
       },
       TAB: () => {
-        if (selectedCell) {
-          const newName = getRightCellName(selectedCell.name, MAX_COLUMNS);
-          setSelectedCell({
-            name: newName,
-            id: cellNames.indexOf(newName),
-          });
-        }
+        setSelectedCell(
+          selectedCell + 1 < N_ROW * N_COL ? selectedCell + 1 : selectedCell
+        );
       },
     }),
-    [cellNames, selectedCell]
+    [selectedCell, setSelectedCell]
   );
 
   const message = useMemo(
@@ -137,7 +103,6 @@ function App() {
         <Header />
         <ActionBar
           inputRef={inputRef}
-          selectedCell={selectedCell}
           sx={{ marginTop: `-${CELL_BORDER_WIDTH}px`, zIndex: 1 }}
         />
         {hideSheet ? (
@@ -155,10 +120,6 @@ function App() {
           </Box>
         ) : (
           <SheetTable
-            selectedCell={selectedCell}
-            setSelectedCell={setSelectedCell}
-            columns={MAX_COLUMNS}
-            rows={MAX_ROWS}
             sx={{
               zIndex: 0,
               marginTop: `-${CELL_BORDER_WIDTH}px`,

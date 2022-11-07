@@ -3,6 +3,7 @@ import { disconnect, getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { AccountContext } from "../../contexts/AccountContext";
+import { chainId } from "../../provider";
 import { hex2str, normalizeHexString } from "../../utils/hexUtils";
 import Button from "../Button/Button";
 
@@ -19,17 +20,13 @@ function ConnectButton({ sx }: ConnectButtonProps) {
       disconnect();
     }
     const selected = await getStarknet().enable({ showModal: true });
-    const chainId = getStarknet().account.chainId;
-    const appNetwork = process.env.REACT_APP_NETWORK || "";
-    if (appNetwork !== hex2str(chainId)) {
+    if (chainId !== hex2str(getStarknet().account.chainId)) {
       getStarknet().request({
         type: "wallet_switchStarknetChain",
-        params: { chainId: appNetwork },
+        params: { chainId },
       });
       enqueueSnackbar(
-        `Wrong network detected: "${hex2str(
-          chainId
-        )}" instead of "${appNetwork}"`,
+        `Wrong network detected: "${hex2str(chainId)}" instead of "${chainId}"`,
         { variant: "warning" }
       );
     }

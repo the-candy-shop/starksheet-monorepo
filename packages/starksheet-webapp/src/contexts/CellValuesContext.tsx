@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import { getStarknet } from "get-starknet";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -12,11 +11,15 @@ import { Contract, FunctionAbi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
-import { starknetRpcProvider, starknetSequencerProvider } from "../provider";
+import {
+  network,
+  starknetRpcProvider,
+  starknetSequencerProvider,
+} from "../provider";
 import {
   Cell,
-  CellChildren,
   CellData,
+  CellGraph,
   CellRendered,
   CellValues,
   UpdatedValues,
@@ -41,7 +44,6 @@ const defaultCellData = (tokenId: number): CellData => ({
 });
 
 const GRID_SIZE = 15 * 15;
-const network = process.env.REACT_APP_NETWORK;
 
 export const CellValuesContext = React.createContext<{
   values: CellValues;
@@ -52,12 +54,10 @@ export const CellValuesContext = React.createContext<{
   setCurrentUpdatedCells: (cells: { [key: number]: Cell }) => void;
   computeValue: (values: BN[]) => (cell: CellData) => Promise<BN>;
   updateCells: (cells: Cell[]) => void;
-  buildChildren: (
-    children: CellChildren,
-    depth?: number
-  ) => (id: number) => void;
-  cellNames: string[];
-  setCellNames: (value: string[]) => void;
+  buildChildren: (children: CellGraph, depth?: number) => (id: number) => void;
+  buildParents: (children: CellGraph, depth?: number) => (id: number) => void;
+  selectedCell: number;
+  setSelectedCell: (i: number) => void;
 }>({
   values: {},
   updatedValues: {},
@@ -68,8 +68,9 @@ export const CellValuesContext = React.createContext<{
   computeValue: () => async () => toBN(0),
   updateCells: () => {},
   buildChildren: () => () => {},
-  cellNames: [],
-  setCellNames: () => {},
+  buildParents: () => () => {},
+  selectedCell: 0,
+  setSelectedCell: () => {},
 });
 
 export const CellValuesContextProvider = ({
@@ -82,9 +83,9 @@ export const CellValuesContextProvider = ({
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
+  const [selectedCell, setSelectedCell] = React.useState<number>(0);
   const previousGridData = useRef<any>(undefined);
   const previousSelectedSheet = useRef<any>(undefined);
-  const [cellNames, setCellNames] = useState<string[]>([]);
 
   const currentCells = useMemo(
     () => (selectedSheetAddress ? values[selectedSheetAddress] || [] : []),
@@ -122,12 +123,12 @@ export const CellValuesContextProvider = ({
             cell?.value?.toString()
           ) {
             fetch(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://api.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
                 : `https://api-testnet.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
             );
             fetch(
-              network === "SN_MAIN"
+              network === "mainnet"
                 ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${selectedSheetAddress}/${index}/`
                 : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${selectedSheetAddress}/${index}/`,
               { method: "POST" }
@@ -172,7 +173,7 @@ export const CellValuesContextProvider = ({
       const timedoutRenderCell = (tokenId: number) =>
         Promise.race([
           contract
-            .call("renderCell", [tokenId])
+            .call("renderCell", [tokenId], { blockIdentifier: "latest" })
             .then((result) => result.cell as CellRendered),
           new Promise((resolve, reject) =>
             setTimeout(
@@ -183,16 +184,22 @@ export const CellValuesContextProvider = ({
         ]);
 
       const tokenIdsPromise = () =>
-        contract.call("totalSupply", []).then((response) => {
-          return Promise.all(
-            Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
-              (i) =>
-                contract.call("tokenByIndex", [[i, "0"]]).then((result) => {
-                  return result.tokenId.low.toNumber();
-                })
-            )
-          );
-        });
+        contract
+          .call("totalSupply", [], { blockIdentifier: "latest" })
+          .then((response) => {
+            return Promise.all(
+              Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
+                (i) =>
+                  contract
+                    .call("tokenByIndex", [[i, "0"]], {
+                      blockIdentifier: "latest",
+                    })
+                    .then((result) => {
+                      return result.tokenId.low.toNumber();
+                    })
+              )
+            );
+          });
 
       const renderCells = () =>
         tokenIdsPromise().then((tokenIds) => {
@@ -200,7 +207,9 @@ export const CellValuesContextProvider = ({
             tokenIds.map((tokenId) =>
               timedoutRenderCell(tokenId).catch((error) => {
                 return contract
-                  .call("ownerOf", [[tokenId, "0"]])
+                  .call("ownerOf", [[tokenId, "0"]], {
+                    blockIdentifier: "latest",
+                  })
                   .then((owner) => {
                     return {
                       ...defaultRenderedCell(tokenId),
@@ -219,7 +228,9 @@ export const CellValuesContextProvider = ({
         });
         return Promise.all(
           (renderedCells as CellRendered[]).map(async (cell) => {
-            const _cell = await contract.call("getCell", [cell.id]);
+            const _cell = await contract.call("getCell", [cell.id], {
+              blockIdentifier: "latest",
+            });
             return {
               ...cell,
               contractAddress: _cell.contractAddress,
@@ -337,17 +348,12 @@ export const CellValuesContextProvider = ({
     const value =
       cell.abi.stateMutability === "view"
         ? (await starknetSequencerProvider.callContract(call)).result[0]
-        : await getAbiForContract(contractAddress)
-            .then((abi) =>
-              getStarknet().account.execute(call, [Object.values(abi)])
-            )
-            .then((tx) => tx.transaction_hash)
-            .catch(() => "0");
+        : NaN;
     return toBN(value);
   };
 
   const buildChildren = useCallback(
-    (children: CellChildren, depth?: number) => (id: number) => {
+    (children: CellGraph, depth?: number) => (id: number) => {
       if (!selectedSheetAddress) return;
       const currentChildren = values[selectedSheetAddress]
         .filter(
@@ -366,6 +372,26 @@ export const CellValuesContextProvider = ({
       });
 
       currentChildren.map(buildChildren(children, (depth || 1) + 1));
+    },
+    [values, selectedSheetAddress]
+  );
+
+  const buildParents = useCallback(
+    (parents: CellGraph, depth?: number) => (id: number) => {
+      if (!selectedSheetAddress) return;
+      const cell = values[selectedSheetAddress][id];
+      const currentParents = cell.calldata
+        .filter(isDependency)
+        .map((arg) => (arg.toNumber() - 1) / 2);
+      if (cell.contractAddress.lt(RC_BOUND)) {
+        currentParents.push(cell.contractAddress.toNumber());
+      }
+
+      currentParents.forEach((_id) => {
+        parents[_id] = depth || 1;
+      });
+
+      currentParents.map(buildParents(parents, (depth || 1) + 1));
     },
     [values, selectedSheetAddress]
   );
@@ -405,13 +431,14 @@ export const CellValuesContextProvider = ({
         updatedValues,
         currentCells,
         currentUpdatedCells,
-        cellNames,
-        setCellNames,
         setUpdatedValues,
         setCurrentUpdatedCells,
         computeValue,
         updateCells,
         buildChildren,
+        buildParents,
+        selectedCell,
+        setSelectedCell,
       }}
     >
       {children}

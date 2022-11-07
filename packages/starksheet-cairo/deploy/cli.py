@@ -150,7 +150,7 @@ async def fund_address(address: Union[int, str], amount: int):
         "0x62230ea046a9a5fbc261ac77d03c8d41e5d442db2284587570ab46455fd2488",
         account,
     )
-    balance = (await eth_contract.functions["balanceOf"].call(account.address)).balance
+    balance = (await eth_contract.functions["balanceOf"].call(account.address)).balance  # type: ignore
     if balance / 1e18 < amount:
         raise ValueError(
             f"Cannot send {amount} ETH from default account with current balance {balance / 1e18} ETH"

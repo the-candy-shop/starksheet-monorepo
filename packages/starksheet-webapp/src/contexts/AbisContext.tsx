@@ -44,12 +44,24 @@ export const AbisContextProvider = ({
     if (_address in contractAbis) return contractAbis[_address];
 
     let abi: Abi = [];
+    let response;
     if (!toBN(_address).eq(RC_BOUND)) {
       try {
-        const response = await starknetSequencerProvider.getClassAt(_address);
+        response = await starknetSequencerProvider.getClassAt(_address);
         abi = response.abi || abi;
-      } catch (error) {}
+      } catch (error) {
+        try {
+          // @ts-ignore
+          response = await starknetSequencerProvider.fetchEndpoint(
+            "get_class_by_hash",
+            {
+              classHash: _address,
+            }
+          );
+        } catch (error) {}
+      }
     }
+    abi = response?.abi || abi;
     abi = [
       ...abi,
       ...(
@@ -65,7 +77,7 @@ export const AbisContextProvider = ({
             .map(async (f) => {
               const implementationAddress =
                 await starknetSequencerProvider.callContract({
-                  contractAddress: address,
+                  contractAddress: _address,
                   entrypoint: f.name,
                 });
               return Object.values(

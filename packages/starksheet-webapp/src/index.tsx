@@ -7,6 +7,8 @@ import { AccountContextProvider } from "./contexts/AccountContext";
 import { AppStatusContextProvider } from "./contexts/AppStatusContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
 import { StarksheetContextProvider } from "./contexts/StarksheetContext";
+import { TransactionsContextProvider } from "./contexts/TransactionsContext";
+
 import starksheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
@@ -32,7 +34,9 @@ function Root() {
               starksheetAddress={starksheetContractData.address}
             >
               <CellValuesContextProvider>
-                <App />
+                <TransactionsContextProvider>
+                  <App />
+                </TransactionsContextProvider>
               </CellValuesContextProvider>
             </StarksheetContextProvider>
           </AbisContextProvider>

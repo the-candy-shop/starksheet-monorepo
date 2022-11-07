@@ -10,7 +10,7 @@ ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . ../starksheet-cairo"
 environment = { REACT_APP_NETWORK = "mainnet" }
 
 [context.testnet]
-environment = { REACT_APP_NETWORK = "testnet" }
+environment = { REACT_APP_NETWORK = "testnet2" }
 
 [context.deploy-preview]
-environment = { REACT_APP_NETWORK = "testnet" }
+environment = { REACT_APP_NETWORK = "testnet2" }

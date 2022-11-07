@@ -25,7 +25,7 @@ network = (
     "testnet"
     if re.match(r".*(testnet|goerli)$", NETWORK, flags=re.I)
     else "testnet2"
-    if re.match(r".*(testnet-2|goerli-2)$", NETWORK, flags=re.I)
+    if re.match(r".*(testnet|goerli)-?2$", NETWORK, flags=re.I)
     else "devnet"
     if re.match(r".*(devnet|local).*", NETWORK, flags=re.I)
     else "mainnet"
@@ -127,7 +127,9 @@ def get_account() -> AccountClient:
     )
     account = accounts.get(starknet_network, {}).get("starksheet")
     if account is None:
-        raise ValueError("No account found for this network")
+        raise ValueError(
+            f"No account found for network {network} (KeyError: {starknet_network})"
+        )
 
     return AccountClient(
         address=account["address"],

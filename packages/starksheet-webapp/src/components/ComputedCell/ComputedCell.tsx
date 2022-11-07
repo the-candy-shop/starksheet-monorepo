@@ -7,6 +7,7 @@ import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import Tooltip from "../../Tooltip/Tooltip";
 import { Cell as CellType, CellGraph } from "../../types";
@@ -27,14 +28,10 @@ export type ComputedCellProps = {
 
 function ComputedCell({ cell }: ComputedCellProps) {
   const { accountAddress } = useContext(AccountContext);
-  const {
-    updatedValues,
-    currentCells,
-    selectedCell,
-    setSelectedCell,
-    buildParents,
-  } = useContext(CellValuesContext);
+  const { currentCells, selectedCell, setSelectedCell, buildParents } =
+    useContext(CellValuesContext);
   const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { settleTransactions } = useContext(TransactionsContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const id = useMemo(() => cell.id.toNumber(), [cell]);
@@ -114,39 +111,19 @@ function ComputedCell({ cell }: ComputedCellProps) {
       if (selectedSheetAddress === undefined) {
         return;
       }
-      if (
-        updatedValues[selectedSheetAddress] &&
-        Object.values(updatedValues[selectedSheetAddress]).length > 0
-      ) {
-        enqueueSnackbar(`You must save before executing transactions`, {
-          variant: "error",
-        });
-        return;
-      }
       if (!getStarknet().isConnected) {
         enqueueSnackbar(`Connect your wallet to make a transaction`, {
           variant: "error",
         });
         return;
       }
-      getStarknet()
-        .account.execute({
+      settleTransactions([
+        {
           contractAddress: selectedSheetAddress,
           entrypoint: "renderCell",
           calldata: [id],
-        })
-        .then((result) => {
-          getStarknet().account.waitForTransaction(result.transaction_hash);
-          return getStarknet().account.getTransactionReceipt(
-            result.transaction_hash
-          );
-        })
-        .then((receipt) => {
-          enqueueSnackbar(
-            `Transaction ${receipt.transaction_hash} finalized with status ${receipt.status}`,
-            { variant: "info" }
-          );
-        });
+        },
+      ]);
     }
   };
 

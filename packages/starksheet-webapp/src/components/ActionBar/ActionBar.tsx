@@ -46,8 +46,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
   const previousSelectedCell = React.useRef<number>(selectedCell);
 
   useEffect(() => {
-    if (selectedCell && previousSelectedCell.current !== selectedCell) {
-      if (!!selectedCell) inputRef?.current?.el?.current?.focus();
+    if (previousSelectedCell.current !== selectedCell) {
       const currentCellId = previousSelectedCell.current;
       previousSelectedCell.current = selectedCell;
 
@@ -197,14 +196,10 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
   }, [selectedSheetAddress, clearBar]);
 
   useEffect(() => {
-    if (selectedCell) {
-      setUnsavedValue(toPlainTextFormula(currentCells[selectedCell]));
-    }
+    setUnsavedValue(toPlainTextFormula(currentCells[selectedCell]));
   }, [selectedCell, currentCells]);
 
-  const owner = selectedCell
-    ? "0x" + currentCells[selectedCell]?.owner?.toString(16)
-    : undefined;
+  const owner = currentCells[selectedCell]?.owner?.toString(16);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -235,7 +230,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
                 value={unSavedValue}
                 disabled={
                   !accountAddress ||
-                  (accountAddress !== owner && owner !== "0x0")
+                  (accountAddress !== "0x" + owner && owner !== "0")
                 }
               />
             </>

@@ -8,6 +8,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Union
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from caseconverter import snakecase
 from starknet_py.contract import Contract
 from starknet_py.net import AccountClient
@@ -143,13 +147,27 @@ def get_account() -> AccountClient:
     )
 
 
-async def fund_address(address: Union[int, str], amount: int):
-    address = int(address, 16) if isinstance(address, str) else address
-    account = get_account()
-    eth_contract = await Contract.from_address(
+def get_argent_account() -> AccountClient:
+    return AccountClient(
+        address="0x01C8d2Bb17cdDf22728553c9700ADfBBD42D1999194b409B1188b17191Cc2Efd",
+        client=gateway_client,
+        supported_tx_version=0,
+        chain=chain_id,  # type: ignore
+        key_pair=KeyPair.from_private_key(int(os.environ["ARGENT_X_PRIVATE_KEY"])),
+    )
+
+
+async def get_eth_contract(account) -> Contract:
+    return await Contract.from_address(
         "0x62230ea046a9a5fbc261ac77d03c8d41e5d442db2284587570ab46455fd2488",
         account,
     )
+
+
+async def fund_address(address: Union[int, str], amount: int):
+    address = int(address, 16) if isinstance(address, str) else address
+    account = get_account()
+    eth_contract = await get_eth_contract(account)
     balance = (await eth_contract.functions["balanceOf"].call(account.address)).balance  # type: ignore
     if balance / 1e18 < amount:
         raise ValueError(
@@ -171,7 +189,12 @@ def dump_declarations(declarations):
 
 
 def get_declarations():
-    return json.load(open(deployments_dir / "declarations.json"))
+    return {
+        name: int(class_hash, 16)
+        for name, class_hash in json.load(
+            open(deployments_dir / "declarations.json")
+        ).items()
+    }
 
 
 def dump_deployments(deployments):

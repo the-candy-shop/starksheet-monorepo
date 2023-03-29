@@ -1,3 +1,7 @@
 [submodule "packages/starksheet-solidity/lib/solmate"]
 	path = packages/starksheet-solidity/lib/solmate
 	url = https://github.com/transmissions11/solmate
+[submodule "packages/starksheet-solidity/lib/openzeppelin-contracts"]
+	path = packages/starksheet-solidity/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+	branch = v4.8.2

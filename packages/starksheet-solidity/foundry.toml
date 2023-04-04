@@ -5,6 +5,7 @@ libs = ['lib']
 
 [rpc_endpoints]
 goerli = "${GOERLI_RPC_URL}"
+devnet = "http://127.0.0.1:8545"
 
 [etherscan]
 goerli = { key = "${ETHERSCAN_API_KEY}" }

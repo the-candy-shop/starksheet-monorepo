@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Abi, Contract } from "starknet";
 import starksheetContractData from "../contract.json";
-import { starknetSequencerProvider } from "../provider";
+import { starknetRpcProvider } from "../provider";
 import { StarksheetContract } from "../types";
 
 export function useStarksheetContract() {
@@ -10,7 +10,7 @@ export function useStarksheetContract() {
       new Contract(
         starksheetContractData.starkSheetAbi as Abi,
         starksheetContractData.address,
-        starknetSequencerProvider
+        starknetRpcProvider
       ) as StarksheetContract,
     []
   );

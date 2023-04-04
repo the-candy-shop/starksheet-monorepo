@@ -2,7 +2,7 @@ import { useContext, useMemo } from "react";
 import { Abi, Contract } from "starknet";
 import { StarksheetContext } from "../contexts/StarksheetContext";
 import starksheetContractData from "../contract.json";
-import { starknetSequencerProvider } from "../provider";
+import { starknetRpcProvider } from "../provider";
 import { SheetContract } from "../types";
 
 export function useSheetContract() {
@@ -13,7 +13,7 @@ export function useSheetContract() {
       ? (new Contract(
           starksheetContractData.sheetAbi as Abi,
           selectedSheetAddress,
-          starknetSequencerProvider
+          starknetRpcProvider
         ) as SheetContract)
       : undefined;
   }, [selectedSheetAddress]);

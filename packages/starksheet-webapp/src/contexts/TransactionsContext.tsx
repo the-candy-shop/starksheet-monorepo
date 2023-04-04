@@ -12,7 +12,7 @@ import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
-import { StarksheetContext } from "./StarksheetContext";
+import { OnsheetContext } from "./OnsheetContext";
 
 export const TransactionsContext = React.createContext<{
   transactions: Call[];
@@ -27,14 +27,14 @@ export const TransactionsContextProvider = ({
 }: PropsWithChildren<{}>) => {
   const { accountAddress, proof } = useContext(AccountContext);
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
-  const { starksheet, validateNewSheets } = useContext(StarksheetContext);
+  const { onsheet, validateNewSheets } = useContext(OnsheetContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const newSheetsTransactions = useMemo(() => {
-    return starksheet.sheets
+    return onsheet.sheets
       .filter((sheet): sheet is NewSheet => sheet.calldata !== undefined)
       .map((sheet) => ({
-        contractAddress: starksheet.address,
+        contractAddress: onsheet.address,
         entrypoint: "addSheet",
         calldata: stark.compileCalldata({
           name: sheet.calldata.name.toString(),
@@ -42,7 +42,7 @@ export const TransactionsContextProvider = ({
           proof,
         }),
       }));
-  }, [starksheet, proof]);
+  }, [onsheet, proof]);
 
   const cellsTransactions = useMemo(() => {
     return Object.entries(updatedValues)

@@ -6,10 +6,10 @@ import { AbisContextProvider } from "./contexts/AbisContext";
 import { AccountContextProvider } from "./contexts/AccountContext";
 import { AppStatusContextProvider } from "./contexts/AppStatusContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
-import { StarksheetContextProvider } from "./contexts/StarksheetContext";
+import { OnsheetContextProvider } from "./contexts/OnsheetContext";
 import { TransactionsContextProvider } from "./contexts/TransactionsContext";
 
-import starksheetContractData from "./contract.json";
+import onsheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -28,17 +28,17 @@ function Root() {
       <AppStatusContextProvider>
         <AccountContextProvider>
           <AbisContextProvider
-            initialContractAbis={starksheetContractData.contractAbis}
+            initialContractAbis={onsheetContractData.contractAbis}
           >
-            <StarksheetContextProvider
-              starksheetAddress={starksheetContractData.address}
+            <OnsheetContextProvider
+              onsheetAddress={onsheetContractData.address}
             >
               <CellValuesContextProvider>
                 <TransactionsContextProvider>
                   <App />
                 </TransactionsContextProvider>
               </CellValuesContextProvider>
-            </StarksheetContextProvider>
+            </OnsheetContextProvider>
           </AbisContextProvider>
         </AccountContextProvider>
       </AppStatusContextProvider>

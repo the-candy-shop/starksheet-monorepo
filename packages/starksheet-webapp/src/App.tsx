@@ -10,7 +10,7 @@ import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, N_COL, N_ROW } from "./config";
 import { AppStatusContext } from "./contexts/AppStatusContext";
 import { CellValuesContext } from "./contexts/CellValuesContext";
-import { StarksheetContext } from "./contexts/StarksheetContext";
+import { OnsheetContext } from "./contexts/OnsheetContext";
 
 const keyMap = {
   RIGHT: "ArrowRight",
@@ -25,7 +25,7 @@ function App() {
   const { appStatus } = useContext(AppStatusContext);
   const { currentCells, selectedCell, setSelectedCell } =
     useContext(CellValuesContext);
-  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { selectedSheetAddress } = useContext(OnsheetContext);
 
   const inputRef = React.useRef<ContentEditable>(null);
 

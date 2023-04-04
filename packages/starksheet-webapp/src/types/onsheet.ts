@@ -20,7 +20,7 @@ export type Sheet = {
 
 export type NewSheet = Required<Sheet>;
 
-export type Starksheet = {
+export type Onsheet = {
   sheets: Sheet[];
   address: string;
   defaultRenderer: string;
@@ -82,10 +82,10 @@ export type UpdatedValues = {
   [address: string]: { [key: number]: Cell };
 };
 
-export type StarksheetContractData = {
+export type OnsheetContractData = {
   address: string;
   mathAddress: string;
-  starkSheetAbi: Abi;
+  onsheetAbi: Abi;
   sheetAbi: Abi;
   allowlist: { [address: string]: string[] };
   contractAbis: { [address: string]: Abi };

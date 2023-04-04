@@ -3,7 +3,7 @@ import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
-import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { network } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
@@ -19,8 +19,8 @@ export type FooterProps = {
 
 function Footer({ sx }: FooterProps) {
   const { accountAddress } = useContext(AccountContext);
-  const { starksheet, selectedSheetAddress, addSheet } =
-    useContext(StarksheetContext);
+  const { onsheet, selectedSheetAddress, addSheet } =
+    useContext(OnsheetContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const addSheetOnClick = async () => {
@@ -32,8 +32,8 @@ function Footer({ sx }: FooterProps) {
     }
     addSheet(
       {
-        name: `Sheet${starksheet.sheets.length}`,
-        symbol: `SHT${starksheet.sheets.length}`,
+        name: `Sheet${onsheet.sheets.length}`,
+        symbol: `SHT${onsheet.sheets.length}`,
       },
       accountAddress
     );
@@ -60,8 +60,8 @@ function Footer({ sx }: FooterProps) {
           marginTop: `-${CELL_BORDER_WIDTH}px`,
         }}
       >
-        {starksheet.sheets &&
-          starksheet.sheets.map((sheet, index) => (
+        {onsheet.sheets &&
+          onsheet.sheets.map((sheet, index) => (
             <SheetButton
               sheet={sheet}
               index={index}

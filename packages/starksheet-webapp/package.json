@@ -1,6 +1,6 @@
 {
-  "name": "starksheet-webapp",
-  "version": "0.1.0",
+  "name": "onsheet-webapp",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",

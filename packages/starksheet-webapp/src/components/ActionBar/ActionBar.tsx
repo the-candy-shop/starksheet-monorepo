@@ -7,7 +7,7 @@ import { CELL_BORDER_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { Cell as CellType, CellData, CellGraph } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, str2hex } from "../../utils/hexUtils";
@@ -30,7 +30,7 @@ export type ActionBarProps = {
 function ActionBar({ inputRef, sx }: ActionBarProps) {
   const { getAbiForContract } = useContext(AbisContext);
   const { accountAddress } = useContext(AccountContext);
-  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { selectedSheetAddress } = useContext(OnsheetContext);
   const {
     currentCells,
     computeValue,

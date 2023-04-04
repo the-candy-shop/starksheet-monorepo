@@ -6,12 +6,12 @@ import { toBN } from "starknet/utils/number";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import Tooltip from "../../Tooltip/Tooltip";
 import { Cell as CellType, CellGraph } from "../../types";
-import { RC_BOUND, starksheetContractData } from "../../utils/constants";
+import { onsheetContractData, RC_BOUND } from "../../utils/constants";
 import { bn2hex, hex2str } from "../../utils/hexUtils";
 import Cell from "../Cell/Cell";
 
@@ -30,7 +30,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
   const { accountAddress } = useContext(AccountContext);
   const { currentCells, selectedCell, setSelectedCell, buildParents } =
     useContext(CellValuesContext);
-  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { selectedSheetAddress } = useContext(OnsheetContext);
   const { settleTransactions } = useContext(TransactionsContext);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -82,7 +82,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
       cell.abi?.name === "symbol" ||
       cellSettings.text;
     if (renderString) return hex2str(bn2hex(value));
-    if (cell.contractAddress.eq(toBN(starksheetContractData.mathAddress))) {
+    if (cell.contractAddress.eq(toBN(onsheetContractData.mathAddress))) {
       return value
         .add(
           toBN("0x" + constants.FIELD_PRIME)

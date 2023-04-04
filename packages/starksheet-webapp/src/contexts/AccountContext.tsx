@@ -1,6 +1,6 @@
 import { getStarknet } from "get-starknet";
 import React, { PropsWithChildren, useMemo, useState } from "react";
-import starksheetContractData from "../contract.json";
+import onsheetContractData from "../contract.json";
 
 export const AccountContext = React.createContext<{
   accountAddress: string;
@@ -19,7 +19,7 @@ export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const proof = useMemo(
     () =>
-      (starksheetContractData.allowlist as { [address: string]: string[] })[
+      (onsheetContractData.allowlist as { [address: string]: string[] })[
         accountAddress
       ] || [],
     [accountAddress]

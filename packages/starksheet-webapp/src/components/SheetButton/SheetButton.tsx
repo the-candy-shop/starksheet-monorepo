@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
-import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { Sheet } from "../../types";
 import GreyCell, { GreyCellProps } from "../GreyCell/GreyCell";
 import LoadingDots from "../LoadingDots/LoadingDots";
@@ -12,7 +12,7 @@ export type SheetButtonProps = {
 };
 
 export function SheetButton({ sheet, index, sx }: SheetButtonProps) {
-  const { selectedSheet, setSelectedSheet } = useContext(StarksheetContext);
+  const { selectedSheet, setSelectedSheet } = useContext(OnsheetContext);
   const { appStatus } = useContext(AppStatusContext);
 
   const onClick = () => {

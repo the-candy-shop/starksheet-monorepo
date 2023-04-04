@@ -11,10 +11,7 @@ import { Contract, FunctionAbi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
-import {
-  network,
-  chainProvider,
-} from "../provider";
+import { chainProvider, network } from "../provider";
 import {
   Cell,
   CellData,
@@ -28,7 +25,7 @@ import { bn2hex } from "../utils/hexUtils";
 import { resolveContractAddress } from "../utils/sheetUtils";
 import { AbisContext } from "./AbisContext";
 import { AppStatusContext } from "./AppStatusContext";
-import { StarksheetContext } from "./StarksheetContext";
+import { OnsheetContext } from "./OnsheetContext";
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
   id: toBN(tokenId),
@@ -76,8 +73,8 @@ export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { getAbiForContract } = useContext(AbisContext);
-  const { selectedSheetAddress, starksheet, selectedSheet } =
-    useContext(StarksheetContext);
+  const { selectedSheetAddress, onsheet, selectedSheet } =
+    useContext(OnsheetContext);
   const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
 
   const [values, setValues] = useState<CellValues>({});
@@ -149,7 +146,7 @@ export const CellValuesContextProvider = ({
         return;
       }
 
-      const _selectedSheetAddress = starksheet.sheets[selectedSheet].address;
+      const _selectedSheetAddress = onsheet.sheets[selectedSheet].address;
       if (!_selectedSheetAddress) {
         return;
       }
@@ -246,7 +243,7 @@ export const CellValuesContextProvider = ({
       updateSheetStatus(_selectedSheetAddress, {
         message: "Rendering grid values",
       });
-      (!!starksheet.sheets[selectedSheet].calldata ? newGridCells : fetchCells)
+      (!!onsheet.sheets[selectedSheet].calldata ? newGridCells : fetchCells)
         .then((cells: Cell[]) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
@@ -308,7 +305,7 @@ export const CellValuesContextProvider = ({
         });
     },
     // eslint-disable-next-line
-    [refreshMarketplaces, starksheet, selectedSheet]
+    [refreshMarketplaces, onsheet, selectedSheet]
   );
 
   React.useEffect(() => {

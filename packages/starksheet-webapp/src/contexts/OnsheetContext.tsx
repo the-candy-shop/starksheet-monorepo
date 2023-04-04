@@ -7,19 +7,14 @@ import React, {
   useState,
 } from "react";
 import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
-import { useStarksheetContract } from "../hooks/useStarksheetContract";
+import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { chainProvider } from "../provider";
-import { Sheet, Starksheet } from "../types";
-import {
-  bn2hex,
-  hex2str,
-  normalizeHexString,
-  str2hex,
-} from "../utils/hexUtils";
+import { Onsheet, Sheet } from "../types";
+import { hex2str, normalizeHexString, str2hex } from "../utils/hexUtils";
 import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
-export const StarksheetContext = React.createContext<{
-  starksheet: Starksheet;
+export const OnsheetContext = React.createContext<{
+  onsheet: Onsheet;
   selectedSheet?: number;
   selectedSheetAddress?: string;
   setSelectedSheet: (index: number) => void;
@@ -27,7 +22,7 @@ export const StarksheetContext = React.createContext<{
   addSheet: (sheet: Omit<Sheet, "address">, owner: string) => void;
   validateNewSheets: () => void;
 }>({
-  starksheet: {
+  onsheet: {
     address: "",
     sheets: [],
     defaultRenderer: "",
@@ -39,20 +34,20 @@ export const StarksheetContext = React.createContext<{
   validateNewSheets: () => {},
 });
 
-export const StarksheetContextProvider = ({
-  starksheetAddress,
+export const OnsheetContextProvider = ({
+  onsheetAddress,
   children,
-}: PropsWithChildren<{ starksheetAddress: string }>) => {
+}: PropsWithChildren<{ onsheetAddress: string }>) => {
   const { updateAppStatus, updateSheetStatus } = useContext(AppStatusContext);
-  const [starksheet, setStarksheet] = useState<Starksheet>({
-    address: starksheetAddress,
+  const [onsheet, setOnsheet] = useState<Onsheet>({
+    address: onsheetAddress,
     sheets: [],
     defaultRenderer: "",
     sheetClassHash: "",
   });
   const [selectedSheet, setSelectedSheet] = useState<number>();
-  const { address, sheets } = starksheet;
-  const { contract } = useStarksheetContract();
+  const { address, sheets } = onsheet;
+  const { contract } = useOnsheetContract();
 
   const selectedSheetAddress = useMemo(
     () =>
@@ -63,17 +58,17 @@ export const StarksheetContextProvider = ({
   const load = useCallback(
     () =>
       Promise.all([
-        contract.functions["getSheetDefaultRendererAddress"](),
-        contract.functions["getSheetClassHash"](),
-        contract.functions["getSheets"](),
+        contract.getSheetDefaultRendererAddress(),
+        contract.getSheetClassHash(),
+        contract.getSheets(),
       ])
         .then(async (response) => {
-          const [renderer, classHash, { addresses }] = response;
+          const [renderer, classHash, addresses] = response;
           const names = await Promise.all(
             addresses.map((sheet) =>
               chainProvider
                 .callContract({
-                  contractAddress: bn2hex(sheet),
+                  contractAddress: sheet,
                   entrypoint: "name",
                 })
                 .then((response) => normalizeHexString(response.result[0]))
@@ -83,7 +78,7 @@ export const StarksheetContextProvider = ({
             addresses.map((sheet) =>
               chainProvider
                 .callContract({
-                  contractAddress: bn2hex(sheet),
+                  contractAddress: sheet,
                   entrypoint: "symbol",
                 })
                 .then((response) => normalizeHexString(response.result[0]))
@@ -91,21 +86,21 @@ export const StarksheetContextProvider = ({
           );
           return {
             address,
-            defaultRenderer: bn2hex(renderer.address),
-            sheetClassHash: bn2hex(classHash.hash),
+            defaultRenderer: renderer,
+            sheetClassHash: classHash,
             sheets: names.map(
               (name, index) =>
                 ({
-                  address: bn2hex(addresses[index]),
+                  address: addresses[index],
                   name: hex2str(name),
                   symbol: hex2str(symbols[index]),
                 } as Sheet)
             ),
           };
         })
-        .then((_starksheet) => {
-          setStarksheet(_starksheet);
-          return _starksheet.sheets;
+        .then((_onsheet) => {
+          setOnsheet(_onsheet);
+          return _onsheet.sheets;
         }),
     [address, contract]
   );
@@ -117,26 +112,26 @@ export const StarksheetContextProvider = ({
       owner,
       merkleRoot: 0,
       maxPerWallet: 0,
-      rendererAddress: starksheet.defaultRenderer,
+      rendererAddress: onsheet.defaultRenderer,
     };
     const address = calculateContractAddressFromHash(
       sheets.length,
-      starksheet.sheetClassHash,
+      onsheet.sheetClassHash,
       Object.values(calldata),
-      starksheet.address
+      onsheet.address
     );
-    setStarksheet((prevStarksheet) => ({
-      ...prevStarksheet,
-      sheets: [...prevStarksheet.sheets, { ...sheet, address, calldata }],
+    setOnsheet((prevOnsheet) => ({
+      ...prevOnsheet,
+      sheets: [...prevOnsheet.sheets, { ...sheet, address, calldata }],
     }));
     updateSheetStatus(address, defaultSheetStatus);
-    setSelectedSheet(starksheet.sheets.length);
+    setSelectedSheet(onsheet.sheets.length);
   };
 
   const validateNewSheets = () => {
-    setStarksheet((prevStarksheet) => ({
-      ...prevStarksheet,
-      sheets: prevStarksheet.sheets.map((sheet) => {
+    setOnsheet((prevOnsheet) => ({
+      ...prevOnsheet,
+      sheets: prevOnsheet.sheets.map((sheet) => {
         delete sheet.calldata;
         return sheet;
       }),
@@ -176,9 +171,9 @@ export const StarksheetContextProvider = ({
   }, [load]);
 
   return (
-    <StarksheetContext.Provider
+    <OnsheetContext.Provider
       value={{
-        starksheet,
+        onsheet,
         selectedSheet,
         selectedSheetAddress,
         setSelectedSheet,
@@ -188,6 +183,6 @@ export const StarksheetContextProvider = ({
       }}
     >
       {children}
-    </StarksheetContext.Provider>
+    </OnsheetContext.Provider>
   );
 };

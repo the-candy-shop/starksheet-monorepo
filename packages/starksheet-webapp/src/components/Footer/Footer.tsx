@@ -8,9 +8,9 @@ import { network } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
-import discordLogo from "./discord.svg";
 import mintSquareLogo from "./mintsquare.svg";
 import starknetLogo from "./starknet.svg";
+import telegramLogo from "./telegram.svg";
 import twitterLogo from "./twitter.svg";
 
 export type FooterProps = {
@@ -105,9 +105,9 @@ function Footer({ sx }: FooterProps) {
             cursor: "pointer",
             "& .content": { justifyContent: "center" },
           }}
-          onClick={() => window.open("https://discord.gg/Aab6qdWb5k", "_blank")}
+          onClick={() => window.open("https://t.me/starksheet", "_blank")}
         >
-          <img src={discordLogo} alt="" />
+          <img src={telegramLogo} alt="" />
         </GreyCell>
         <GreyCell
           sx={{

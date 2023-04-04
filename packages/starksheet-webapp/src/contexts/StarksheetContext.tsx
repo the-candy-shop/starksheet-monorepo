@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
 import { useStarksheetContract } from "../hooks/useStarksheetContract";
-import { starknetRpcProvider } from "../provider";
+import { chainProvider } from "../provider";
 import { Sheet, Starksheet } from "../types";
 import {
   bn2hex,
@@ -71,27 +71,21 @@ export const StarksheetContextProvider = ({
           const [renderer, classHash, { addresses }] = response;
           const names = await Promise.all(
             addresses.map((sheet) =>
-              starknetRpcProvider
-                .callContract(
-                  {
-                    contractAddress: bn2hex(sheet),
-                    entrypoint: "name",
-                  },
-                  "latest"
-                )
+              chainProvider
+                .callContract({
+                  contractAddress: bn2hex(sheet),
+                  entrypoint: "name",
+                })
                 .then((response) => normalizeHexString(response.result[0]))
             )
           );
           const symbols = await Promise.all(
             addresses.map((sheet) =>
-              starknetRpcProvider
-                .callContract(
-                  {
-                    contractAddress: bn2hex(sheet),
-                    entrypoint: "symbol",
-                  },
-                  "latest"
-                )
+              chainProvider
+                .callContract({
+                  contractAddress: bn2hex(sheet),
+                  entrypoint: "symbol",
+                })
                 .then((response) => normalizeHexString(response.result[0]))
             )
           );

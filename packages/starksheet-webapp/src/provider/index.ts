@@ -1,4 +1,5 @@
-import { RpcProvider, SequencerProvider } from "starknet";
+import { RpcProvider } from "starknet";
+import { StarknetProvider } from "./starknetProvider";
 
 export type Network = "mainnet" | "testnet" | "testnet2" | "devnet";
 
@@ -25,9 +26,10 @@ const chainIds = {
 
 export const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
-export const starknetSequencerProvider = new SequencerProvider({
-  baseUrl: sequencerUrls[network],
-});
+export const chainProvider = new StarknetProvider(
+  rpcUrls[network],
+  sequencerUrls[network]
+);
 
 export const starknetRpcProvider = new RpcProvider({
   nodeUrl: rpcUrls[network],

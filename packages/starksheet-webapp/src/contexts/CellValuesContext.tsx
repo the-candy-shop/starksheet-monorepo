@@ -13,8 +13,7 @@ import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
 import {
   network,
-  starknetRpcProvider,
-  starknetSequencerProvider,
+  chainProvider,
 } from "../provider";
 import {
   Cell,
@@ -166,7 +165,6 @@ export const CellValuesContextProvider = ({
         return;
       }
 
-      contract.connect(starknetRpcProvider);
       let error = false;
       let finalMessage = "";
 
@@ -347,7 +345,7 @@ export const CellValuesContextProvider = ({
 
     const value =
       cell.abi.stateMutability === "view"
-        ? (await starknetSequencerProvider.callContract(call)).result[0]
+        ? (await chainProvider.callContract(call)).result[0]
         : NaN;
     return toBN(value);
   };

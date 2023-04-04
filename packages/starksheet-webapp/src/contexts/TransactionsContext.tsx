@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Call, stark } from "starknet";
 import { toBN } from "starknet/utils/number";
-import { starknetRpcProvider } from "../provider";
+import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
@@ -101,12 +101,8 @@ export const TransactionsContextProvider = ({
       return await getStarknet()
         .account.execute([...transactions, ..._otherTxs])
         .then(async (response) => {
-          await starknetRpcProvider.waitForTransaction(
-            response.transaction_hash
-          );
-          return starknetRpcProvider.getTransactionReceipt(
-            response.transaction_hash
-          );
+          await chainProvider.waitForTransaction(response.transaction_hash);
+          return chainProvider.getTransactionReceipt(response.transaction_hash);
         })
         .then(async (receipt) => {
           if (receipt.status !== "REJECTED") {

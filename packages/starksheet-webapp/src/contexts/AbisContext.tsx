@@ -1,10 +1,8 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
-import { toBN } from "starknet/utils/number";
-import { starknetSequencerProvider } from "../provider";
+import { chainProvider } from "../provider";
 import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
 import { parseAbi } from "../utils/abiUtils";
-import { RC_BOUND } from "../utils/constants";
 import { normalizeHexString } from "../utils/hexUtils";
 
 export const AbisContext = React.createContext<{
@@ -43,50 +41,7 @@ export const AbisContextProvider = ({
 
     if (_address in contractAbis) return contractAbis[_address];
 
-    let abi: Abi = [];
-    let response;
-    if (!toBN(_address).eq(RC_BOUND)) {
-      try {
-        response = await starknetSequencerProvider.getClassAt(_address);
-        abi = response.abi || abi;
-      } catch (error) {
-        try {
-          // @ts-ignore
-          response = await starknetSequencerProvider.fetchEndpoint(
-            "get_class_by_hash",
-            {
-              classHash: _address,
-            }
-          );
-        } catch (error) {}
-      }
-    }
-    abi = response?.abi || abi;
-    abi = [
-      ...abi,
-      ...(
-        await Promise.all(
-          abi
-            .filter(
-              (f) =>
-                f.name.includes("impl") &&
-                f.type === "function" &&
-                f.stateMutability === "view" &&
-                f.inputs.length === 0
-            )
-            .map(async (f) => {
-              const implementationAddress =
-                await starknetSequencerProvider.callContract({
-                  contractAddress: _address,
-                  entrypoint: f.name,
-                });
-              return Object.values(
-                (await getAbiForContract(implementationAddress.result[0])) || {}
-              );
-            })
-        )
-      ).flat(),
-    ];
+    const abi = await chainProvider.getAbi(address);
     setAbiForContract(_address, abi);
     return parseAbi(abi);
   };

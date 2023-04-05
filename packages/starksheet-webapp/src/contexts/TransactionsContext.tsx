@@ -6,8 +6,9 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { Call, stark } from "starknet";
+import { Call } from "starknet";
 import { toBN } from "starknet/utils/number";
+import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
@@ -25,31 +26,29 @@ export const TransactionsContext = React.createContext<{
 export const TransactionsContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const { accountAddress, proof } = useContext(AccountContext);
+  const { accountAddress } = useContext(AccountContext);
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
   const { onsheet, validateNewSheets } = useContext(OnsheetContext);
+  const { contract } = useOnsheetContract();
   const { enqueueSnackbar } = useSnackbar();
 
   const newSheetsTransactions = useMemo(() => {
     return onsheet.sheets
       .filter((sheet): sheet is NewSheet => sheet.calldata !== undefined)
-      .map((sheet) => ({
-        contractAddress: onsheet.address,
-        entrypoint: "addSheet",
-        calldata: stark.compileCalldata({
-          name: sheet.calldata.name.toString(),
-          symbol: sheet.calldata.symbol.toString(),
-          proof,
-        }),
-      }));
-  }, [onsheet, proof]);
+      .map((sheet) =>
+        contract.addSheetTxBuilder(
+          sheet.calldata.name.toString(),
+          sheet.calldata.symbol.toString()
+        )
+      );
+  }, [onsheet, contract]);
 
   const cellsTransactions = useMemo(() => {
     return Object.entries(updatedValues)
       .map(([sheetAddress, sheetUpdatedValues]) => {
         return Object.entries(sheetUpdatedValues).map(([tokenId, cell]) => ({
           ...cell,
-          tokenId,
+          tokenId: parseInt(tokenId),
           sheetAddress,
         }));
       })
@@ -59,35 +58,8 @@ export const TransactionsContextProvider = ({
           (cell.owner.eq(toBN(0)) && !cell.selector.eq(toBN(0))) ||
           "0x" + cell.owner.toString(16) === accountAddress
       )
-      .map((cell) =>
-        cell.owner.eq(toBN(0))
-          ? {
-              contractAddress: cell.sheetAddress,
-              entrypoint: "mintAndSetPublic",
-              calldata: stark.compileCalldata({
-                tokenId: {
-                  type: "struct",
-                  low: cell.tokenId,
-                  high: 0,
-                },
-                proof,
-                contractAddress: cell.contractAddress.toString(),
-                value: cell.selector.toString(),
-                cellCalldata: cell.calldata.map((d) => d.toString()),
-              }),
-            }
-          : {
-              contractAddress: cell.sheetAddress,
-              entrypoint: "setCell",
-              calldata: stark.compileCalldata({
-                tokenId: cell.tokenId,
-                contractAddress: cell.contractAddress.toString(),
-                value: cell.selector.toString(),
-                cellCalldata: cell.calldata.map((d) => d.toString()),
-              }),
-            }
-      );
-  }, [accountAddress, proof, updatedValues]);
+      .map((cell) => contract.setCellTxBuilder(cell));
+  }, [accountAddress, updatedValues, contract]);
 
   const transactions = useMemo(
     () => [...newSheetsTransactions, ...cellsTransactions],

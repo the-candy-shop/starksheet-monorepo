@@ -3,15 +3,15 @@ import { useSnackbar } from "notistack";
 import { useContext, useMemo } from "react";
 import { constants } from "starknet";
 import { toBN } from "starknet/utils/number";
+import Tooltip from "../../Tooltip/Tooltip";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import Tooltip from "../../Tooltip/Tooltip";
-import { Cell as CellType, CellGraph } from "../../types";
-import { onsheetContractData, RC_BOUND } from "../../utils/constants";
+import { CellGraph, Cell as CellType } from "../../types";
+import { RC_BOUND, onsheetContractData } from "../../utils/constants";
 import { bn2hex, hex2str } from "../../utils/hexUtils";
 import Cell from "../Cell/Cell";
 
@@ -34,7 +34,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
   const { settleTransactions } = useContext(TransactionsContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  const id = useMemo(() => cell.id.toNumber(), [cell]);
+  const id = useMemo(() => cell.id, [cell]);
   const [cellSettings, setCellSettings] = useLocalStorage(
     `${selectedSheetAddress}.${id}`,
     {}

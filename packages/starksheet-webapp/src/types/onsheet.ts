@@ -1,6 +1,7 @@
 import BN from "bn.js";
 import { Abi, FunctionAbi, StructAbi } from "starknet";
 import { BigNumberish } from "starknet/utils/number";
+import { Cell } from "./cells";
 
 type SheetConstructorArgs = {
   name: BigNumberish;
@@ -53,31 +54,6 @@ export type AppStatus = {
   sheets: { [address: string]: Status };
 };
 
-export type CellData = {
-  contractAddress: BN;
-  selector: BN;
-  calldata: BN[];
-  abi?: FunctionAbi;
-};
-
-export type CellRendered = {
-  id: BN;
-  owner: BN;
-  value: BN;
-  error?: boolean;
-  parents?: BN[];
-};
-
-export type Cell = CellRendered & CellData;
-
-export type CellValues = {
-  [address: string]: Cell[];
-};
-
-export type CellGraph = {
-  [key: number]: number;
-};
-
 export type UpdatedValues = {
   [address: string]: { [key: number]: Cell };
 };
@@ -90,3 +66,6 @@ export type OnsheetContractData = {
   allowlist: { [address: string]: string[] };
   contractAbis: { [address: string]: Abi };
 };
+
+export type Uint256 = { low: BigNumberish; high: BigNumberish };
+export type Uint256Output = { low: BN; high: BN };

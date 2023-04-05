@@ -4,20 +4,20 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useRef,
   useState,
 } from "react";
-import { Contract, FunctionAbi } from "starknet";
+import { FunctionAbi } from "starknet";
 import { toBN } from "starknet/utils/number";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
-import { chainProvider, network } from "../provider";
+import { chainProvider } from "../provider";
 import {
   Cell,
   CellData,
   CellGraph,
   CellRendered,
   CellValues,
+  SheetContract,
   UpdatedValues,
 } from "../types";
 import { RC_BOUND } from "../utils/constants";
@@ -28,7 +28,7 @@ import { AppStatusContext } from "./AppStatusContext";
 import { OnsheetContext } from "./OnsheetContext";
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
-  id: toBN(tokenId),
+  id: tokenId,
   owner: toBN(0),
   value: toBN(0),
 });
@@ -80,8 +80,6 @@ export const CellValuesContextProvider = ({
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
   const [selectedCell, setSelectedCell] = React.useState<number>(0);
-  const previousGridData = useRef<any>(undefined);
-  const previousSelectedSheet = useRef<any>(undefined);
 
   const currentCells = useMemo(
     () => (selectedSheetAddress ? values[selectedSheetAddress] || [] : []),
@@ -107,45 +105,13 @@ export const CellValuesContextProvider = ({
 
   const { contract } = useSheetContract();
 
-  const refreshMarketplaces = useCallback(
-    (cells: Cell[]) => {
-      if (
-        previousGridData.current &&
-        previousSelectedSheet.current === selectedSheetAddress
-      ) {
-        cells.forEach((cell, index) => {
-          if (
-            previousGridData.current[index]?.value?.toString() !==
-            cell?.value?.toString()
-          ) {
-            fetch(
-              network === "mainnet"
-                ? `https://api.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
-                : `https://api-testnet.aspect.co/api/v0/asset/${selectedSheetAddress}/${index}/refresh`
-            );
-            fetch(
-              network === "mainnet"
-                ? `https://api.mintsquare.io/nft/metadata/starknet-mainnet/${selectedSheetAddress}/${index}/`
-                : `https://api.mintsquare.io/nft/metadata/starknet-testnet/${selectedSheetAddress}/${index}/`,
-              { method: "POST" }
-            );
-          }
-        });
-      }
-      previousGridData.current = cells;
-      previousSelectedSheet.current = selectedSheetAddress;
-    },
-    [selectedSheetAddress]
-  );
-
   const load = useCallback(
-    (contract: Contract) => {
-      // Copy current sheet address to prevent storing the async call results into the wrong key
-
+    (contract: SheetContract) => {
       if (selectedSheet === undefined) {
         return;
       }
 
+      // Copy current sheet address to prevent storing the async call results into the wrong key
       const _selectedSheetAddress = onsheet.sheets[selectedSheet].address;
       if (!_selectedSheetAddress) {
         return;
@@ -165,72 +131,16 @@ export const CellValuesContextProvider = ({
       let error = false;
       let finalMessage = "";
 
-      const timedoutRenderCell = (tokenId: number) =>
-        Promise.race([
-          contract
-            .call("renderCell", [tokenId], { blockIdentifier: "latest" })
-            .then((result) => result.cell as CellRendered),
-          new Promise((resolve, reject) =>
-            setTimeout(
-              () => reject(new Error(`timeoutRenderCell(${tokenId})`)),
-              30_000
-            )
-          ),
-        ]);
-
-      const tokenIdsPromise = () =>
-        contract
-          .call("totalSupply", [], { blockIdentifier: "latest" })
-          .then((response) => {
-            return Promise.all(
-              Array.from(Array(response.totalSupply.low.toNumber()).keys()).map(
-                (i) =>
-                  contract
-                    .call("tokenByIndex", [[i, "0"]], {
-                      blockIdentifier: "latest",
-                    })
-                    .then((result) => {
-                      return result.tokenId.low.toNumber();
-                    })
-              )
-            );
-          });
-
-      const renderCells = () =>
-        tokenIdsPromise().then((tokenIds) => {
-          return Promise.all(
-            tokenIds.map((tokenId) =>
-              timedoutRenderCell(tokenId).catch((error) => {
-                return contract
-                  .call("ownerOf", [[tokenId, "0"]], {
-                    blockIdentifier: "latest",
-                  })
-                  .then((owner) => {
-                    return {
-                      ...defaultRenderedCell(tokenId),
-                      owner: owner.owner,
-                      error: true,
-                    } as CellRendered;
-                  });
-              })
-            )
-          );
-        });
-
-      const fetchCells = renderCells().then((renderedCells) => {
+      const fetchCells = contract.renderCells().then((renderedCells) => {
         updateSheetStatus(_selectedSheetAddress, {
           message: "Fetching cells metadata",
         });
         return Promise.all(
           (renderedCells as CellRendered[]).map(async (cell) => {
-            const _cell = await contract.call("getCell", [cell.id], {
-              blockIdentifier: "latest",
-            });
+            const _cell = await contract.getCell(cell.id);
             return {
               ...cell,
-              contractAddress: _cell.contractAddress,
-              selector: _cell.value,
-              calldata: _cell.cell_calldata,
+              ..._cell,
               error: cell.error,
             };
           })
@@ -282,7 +192,6 @@ export const CellValuesContextProvider = ({
           );
         })
         .then((cells) => {
-          refreshMarketplaces(cells);
           setValues((prevValues) => ({
             ...prevValues,
             [_selectedSheetAddress]: cells,
@@ -305,7 +214,7 @@ export const CellValuesContextProvider = ({
         });
     },
     // eslint-disable-next-line
-    [refreshMarketplaces, onsheet, selectedSheet]
+    [onsheet, selectedSheet]
   );
 
   React.useEffect(() => {
@@ -360,7 +269,7 @@ export const CellValuesContextProvider = ({
             (cell.contractAddress.lt(RC_BOUND) &&
               cell.contractAddress.toNumber() === id)
         )
-        .map((cell) => cell.id.toNumber());
+        .map((cell) => cell.id);
 
       currentChildren.forEach((_id) => {
         children[_id] = depth || 1;
@@ -396,7 +305,7 @@ export const CellValuesContextProvider = ({
     const newCells = [...currentCells];
     const newUpdatedCells = { ...currentUpdatedCells };
     for (const cell of cells) {
-      const id = cell.id.toNumber();
+      const id = cell.id;
       newCells[id] = {
         ...newCells[id],
         ...cell,

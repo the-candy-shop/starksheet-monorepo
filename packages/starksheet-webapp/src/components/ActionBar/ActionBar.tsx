@@ -8,7 +8,7 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
-import { Cell as CellType, CellData, CellGraph } from "../../types";
+import { CellData, CellGraph, Cell as CellType } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, str2hex } from "../../utils/hexUtils";
 import { resolveContractAddress } from "../../utils/sheetUtils";
@@ -18,8 +18,8 @@ import SaveButton from "../SaveButton/SaveButton";
 import {
   parse,
   parseContractCall,
-  tokenIdToCellName,
   toPlainTextFormula,
+  tokenIdToCellName,
 } from "./formula.utils";
 
 export type ActionBarProps = {
@@ -95,7 +95,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
             if (!error) {
               try {
                 value = await computeValue(_values)(cell);
-                _values[cell.id.toNumber()] = value;
+                _values[cell.id] = value;
               } catch (e) {
                 error = true;
               }

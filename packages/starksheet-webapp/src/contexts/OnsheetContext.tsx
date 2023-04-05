@@ -6,7 +6,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { chainProvider } from "../provider";
 import { Onsheet, Sheet } from "../types";
@@ -114,7 +113,7 @@ export const OnsheetContextProvider = ({
       maxPerWallet: 0,
       rendererAddress: onsheet.defaultRenderer,
     };
-    const address = calculateContractAddressFromHash(
+    const address = contract.calculateSheetAddress(
       sheets.length,
       onsheet.sheetClassHash,
       Object.values(calldata),

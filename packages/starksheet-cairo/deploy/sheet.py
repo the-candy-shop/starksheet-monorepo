@@ -3,7 +3,7 @@ import logging
 from asyncio import run
 
 from constants import ALLOW_LIST
-from deploy.cli import call, invoke, wait_for_transaction
+from deploy.utils import call, invoke, wait_for_transaction
 from utils import address_to_leaf, merkle_proofs, merkle_root
 
 logging.basicConfig()

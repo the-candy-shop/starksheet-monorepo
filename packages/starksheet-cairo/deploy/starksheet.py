@@ -3,22 +3,18 @@ from asyncio import run
 
 from dotenv import load_dotenv
 
-from constants import OWNER
-from deploy.cli import (
-    call,
+from deploy.utils import (
     compile_contract,
     declare,
     deploy,
     dump_declarations,
     dump_deployments,
-    fund_address,
+    get_account,
     get_alias,
-    get_argent_account,
     get_artifact,
     get_declarations,
     get_eth_contract,
     invoke,
-    network,
     wait_for_transaction,
 )
 
@@ -56,9 +52,10 @@ async def main():
                 ["address", "tx"],
                 await deploy(
                     "Starksheet",
-                    OWNER,
+                    (await get_account()).address,
                     class_hash["Sheet"],
                     deployments["BasicCellRenderer"]["address"],
+                    int(0.01 * 1e18),
                 ),
             )
         ),
@@ -71,26 +68,18 @@ async def main():
     name = "Origin"
     symbol = "ORGS"
     proof = []
+    eth_contract = await get_eth_contract()
+
+    tx_hash = (
+        await eth_contract.functions["approve"].invoke(
+            deployments["Starksheet"]["address"],
+            int(0.01 * 1e18),
+            max_fee=int(1e16),
+        )
+    ).hash
+    await wait_for_transaction(tx_hash)
     tx = await invoke("Starksheet", "addSheet", name, symbol, proof)
     await wait_for_transaction(tx)
-
-    if network == "devnet":
-        await fund_address(
-            "0x01C8d2Bb17cdDf22728553c9700ADfBBD42D1999194b409B1188b17191Cc2Efd", 1
-        )
-        argent_account = get_argent_account()
-        eth_contract = await get_eth_contract(argent_account)
-        sheet = await call("Starksheet", "getSheet", 0)
-        balance = await eth_contract.functions["balanceOf"].call(argent_account.address)
-        await eth_contract.functions["approve"].invoke(
-            sheet.address, balance.balance, max_fee=int(1e16)
-        )
-        await eth_contract.functions["allowance"].call(
-            argent_account.address, sheet.address
-        )
-        logger.info(
-            f"Sheet {hex(sheet.address)} allowed to spend {balance.balance * 1e-18} ETH"
-        )
 
 
 if __name__ == "__main__":

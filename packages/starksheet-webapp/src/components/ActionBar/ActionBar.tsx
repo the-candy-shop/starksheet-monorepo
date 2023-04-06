@@ -2,7 +2,7 @@ import { Box, BoxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
-import { toBN } from "starknet/utils/number";
+import { number } from "starknet";
 import { CELL_BORDER_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -49,6 +49,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
     if (previousSelectedCell.current !== selectedCell) {
       const currentCellId = previousSelectedCell.current;
       previousSelectedCell.current = selectedCell;
+
 
       if (
         currentCellId === null ||
@@ -145,14 +146,14 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       const _contractCall = parseContractCall(_value);
 
       if (!_contractCall) {
-        let selector = toBN(0);
+        let selector = number.toBN(0);
         try {
-          selector = toBN(_value);
+          selector = number.toBN(_value);
         } catch (e) {
           try {
-            selector = toBN(str2hex(_value));
+            selector = number.toBN(str2hex(_value));
           } catch (e) {
-            selector = toBN(0);
+            selector = number.toBN(0);
           }
         }
         setCellData({
@@ -165,7 +166,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
       let contractAddress;
       try {
-        contractAddress = toBN(_contractCall.contractAddress);
+        contractAddress = number.toBN(_contractCall.contractAddress);
       } catch (e) {
         return;
       }

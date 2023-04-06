@@ -1,8 +1,12 @@
 import BN from "bn.js";
-import { AbiEntry, FunctionAbi, StructAbi } from "starknet";
-import { getSelectorFromName } from "starknet/dist/utils/hash";
-import { uint256ToBN } from "starknet/dist/utils/uint256";
-import { BigNumberish, toBN } from "starknet/utils/number";
+import {
+  AbiEntry,
+  FunctionAbi,
+  StructAbi,
+  hash,
+  number,
+  uint256,
+} from "starknet";
 import { N_COL } from "../../config";
 import { Cell, CellData, ContractAbi } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
@@ -33,10 +37,12 @@ export function toPlainTextFormula(cellData: CellData): string {
 
   const args = calldata.map((arg) =>
     isDependency(arg)
-      ? tokenIdToCellName(arg.sub(toBN(1)).div(toBN(2)).toNumber())
+      ? tokenIdToCellName(
+          arg.sub(number.toBN(1)).div(number.toBN(2)).toNumber()
+        )
       : arg.gte(RC_BOUND)
-      ? "0x" + arg.div(toBN(2)).toString(16)
-      : arg.div(toBN(2)).toString()
+      ? "0x" + arg.div(number.toBN(2)).toString(16)
+      : arg.div(number.toBN(2)).toString()
   );
 
   let displayedArgs = [];
@@ -52,10 +58,12 @@ export function toPlainTextFormula(cellData: CellData): string {
             throw new Error("Cannot parse Uint256 input");
         } else {
           displayedArgs.push(
-            uint256ToBN({
-              low: args[argsIndex],
-              high: args[argsIndex + 1],
-            }).toString()
+            uint256
+              .uint256ToBN({
+                low: args[argsIndex],
+                high: args[argsIndex + 1],
+              })
+              .toString()
           );
         }
         argsIndex += 2;
@@ -132,9 +140,10 @@ export function parse(
     .split(ARGS_SEP)
     .filter((arg) => arg !== "");
 
-  const selector = getSelectorFromName(rawCall.selector);
+  const selector = hash.getSelectorFromName(rawCall.selector);
   const selectorAbi = abi[selector] as FunctionAbi;
 
+  // @ts-ignore
   if (selectorAbi.type !== "function") return null;
   const inputs = selectorAbi.inputs.filter((i) => !i.name.endsWith("_len"));
 
@@ -148,8 +157,8 @@ export function parse(
     .filter((arg) => arg !== undefined) as BN[];
 
   return {
-    contractAddress: toBN(rawCall.contractAddress),
-    selector: toBN(selector),
+    contractAddress: number.toBN(rawCall.contractAddress),
+    selector: number.toBN(selector),
     calldata,
     abi: selectorAbi,
   };
@@ -167,18 +176,20 @@ export const tokenIdToCellName = (id: number) => {
   return `${col}${row}`;
 };
 
-export const encodeConst = (_arg: BigNumberish): BN => {
+export const encodeConst = (_arg: number.BigNumberish): BN => {
   try {
-    return toBN(_arg).mul(toBN(2));
+    return number.toBN(_arg).mul(number.toBN(2));
   } catch (e) {
-    return toBN(str2hex(_arg.toString(16))).mul(toBN(2));
+    return number.toBN(str2hex(_arg.toString(16))).mul(number.toBN(2));
   }
 };
 
-export const encodeTokenId = (_arg: BigNumberish): BN =>
-  toBN(_arg).mul(toBN(2)).add(toBN(1));
+export const encodeTokenId = (_arg: number.BigNumberish): BN =>
+  number.toBN(_arg).mul(number.toBN(2)).add(number.toBN(1));
 export const decode = (_arg: BN) =>
-  isDependency(_arg) ? _arg.sub(toBN(1)).div(toBN(2)) : _arg.div(toBN(2));
+  isDependency(_arg)
+    ? _arg.sub(number.toBN(1)).div(number.toBN(2))
+    : _arg.div(number.toBN(2));
 
 const parseArg = (
   arg: string,
@@ -204,7 +215,7 @@ const parseArg = (
   }
   const type = inputAbi.type.replace("*", "");
 
-  const typeAbi = contractAbi[getSelectorFromName(type)] as StructAbi;
+  const typeAbi = contractAbi[hash.getSelectorFromName(type)] as StructAbi;
 
   const size = typeAbi?.size || 1;
 
@@ -217,7 +228,7 @@ const parseArg = (
     .filter((_arg) => _arg !== undefined)
     .map((_arg) => {
       // TODO: this is a hard-fix to work only with Uint256 when arg < RC_BOUND
-      const arr = Array(size).fill(toBN(0));
+      const arr = Array(size).fill(number.toBN(0));
 
       arr[0] = _arg;
       return arr;
@@ -228,7 +239,7 @@ const parseArg = (
 };
 
 export const isDependency = (arg: BN): boolean =>
-  arg.mod(toBN(2)).toNumber() !== 0;
+  arg.mod(number.toBN(2)).toNumber() !== 0;
 
 export function getDependencies(calldata: BN[]): number[] {
   return calldata.filter(isDependency).map((data) => (data.toNumber() - 1) / 2);
@@ -270,7 +281,7 @@ export function buildFormulaDisplay(
 
   if (settings?.text) {
     try {
-      return hex2str(bn2hex(toBN(formula)));
+      return hex2str(bn2hex(number.toBN(formula)));
     } catch (e) {
       return formula;
     }

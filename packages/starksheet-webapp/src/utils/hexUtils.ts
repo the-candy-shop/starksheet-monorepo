@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { toBN } from "starknet/utils/number";
+import { number } from "starknet";
 
 export function hex2str(hex: string): string {
   return (hex.match(/[a-f0-9]{2}/g) || [])
@@ -18,6 +18,6 @@ export function isASCII(s: string) {
 }
 
 export const normalizeHexString = (address: string) =>
-  !!address ? "0x" + toBN(address).toString(16) : "";
+  !!address ? "0x" + number.toBN(address).toString(16) : "";
 
 export const bn2hex = (hex: BN): string => "0x" + hex.toString(16);

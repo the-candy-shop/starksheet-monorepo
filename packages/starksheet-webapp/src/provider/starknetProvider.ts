@@ -1,5 +1,4 @@
-import { Abi, RpcProvider, SequencerProvider } from "starknet";
-import { toBN } from "starknet/utils/number";
+import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { ChainProvider } from "./chainProvider";
 
@@ -26,7 +25,7 @@ export class StarknetProvider implements ChainProvider {
 
   async getAbi(address: string): Promise<any> {
     let abi: Abi = [];
-    if (toBN(address).eq(RC_BOUND)) {
+    if (number.toBN(address).eq(RC_BOUND)) {
       return abi;
     }
 

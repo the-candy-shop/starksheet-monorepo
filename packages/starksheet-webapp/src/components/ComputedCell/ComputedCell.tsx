@@ -1,8 +1,6 @@
-import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
 import { useContext, useMemo } from "react";
-import { constants } from "starknet";
-import { toBN } from "starknet/utils/number";
+import { constants, number } from "starknet";
 import Tooltip from "../../Tooltip/Tooltip";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -53,15 +51,18 @@ function ComputedCell({ cell }: ComputedCellProps) {
 
   const { background, borderColor, color } = useMemo(() => {
     const background =
-      cell.owner.eq(toBN(0)) &&
+      cell.owner.eq(number.toBN(0)) &&
       cell.contractAddress.eq(RC_BOUND) &&
-      cell.selector.eq(toBN(0))
+      cell.selector.eq(number.toBN(0))
         ? WHITE
         : isInvoke
         ? GREEN
         : accountAddress === bn2hex(cell.owner) ||
-          (cell.owner.eq(toBN(0)) &&
-            !(cell.contractAddress.eq(RC_BOUND) && cell.selector.eq(toBN(0))))
+          (cell.owner.eq(number.toBN(0)) &&
+            !(
+              cell.contractAddress.eq(RC_BOUND) &&
+              cell.selector.eq(number.toBN(0))
+            ))
         ? BLUE
         : GREY;
 
@@ -82,17 +83,19 @@ function ComputedCell({ cell }: ComputedCellProps) {
       cell.abi?.name === "symbol" ||
       cellSettings.text;
     if (renderString) return hex2str(bn2hex(value));
-    if (cell.contractAddress.eq(toBN(onsheetContractData.mathAddress))) {
+    if (cell.contractAddress.eq(number.toBN(onsheetContractData.mathAddress))) {
       return value
         .add(
-          toBN("0x" + constants.FIELD_PRIME)
-            .div(toBN(2))
+          number
+            .toBN("0x" + constants.FIELD_PRIME)
+            .div(number.toBN(2))
             .abs()
         )
-        .mod(toBN("0x" + constants.FIELD_PRIME))
+        .mod(number.toBN("0x" + constants.FIELD_PRIME))
         .sub(
-          toBN("0x" + constants.FIELD_PRIME)
-            .div(toBN(2))
+          number
+            .toBN("0x" + constants.FIELD_PRIME)
+            .div(number.toBN(2))
             .abs()
         )
         .toString();
@@ -101,7 +104,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
     return value.toString();
   }, [cell, background, cellSettings.text]);
 
-  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+  const onClick = async (e: React.MouseEvent<HTMLElement>) => {
     setSelectedCell(id);
     if (e.detail === 2 && !isInvoke) {
       setCellSettings({ text: !cellSettings.text });
@@ -111,7 +114,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
       if (selectedSheetAddress === undefined) {
         return;
       }
-      if (!getStarknet().isConnected) {
+      if (!accountAddress) {
         enqueueSnackbar(`Connect your wallet to make a transaction`, {
           variant: "error",
         });

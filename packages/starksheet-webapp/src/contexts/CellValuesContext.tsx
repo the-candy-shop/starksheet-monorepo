@@ -6,8 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { FunctionAbi } from "starknet";
-import { toBN } from "starknet/utils/number";
+import { FunctionAbi, number } from "starknet";
 import { isDependency } from "../components/ActionBar/formula.utils";
 import { useSheetContract } from "../hooks/useSheetContract";
 import { chainProvider } from "../provider";
@@ -29,13 +28,13 @@ import { OnsheetContext } from "./OnsheetContext";
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
   id: tokenId,
-  owner: toBN(0),
-  value: toBN(0),
+  owner: number.toBN(0),
+  value: number.toBN(0),
 });
 
 const defaultCellData = (tokenId: number): CellData => ({
   contractAddress: RC_BOUND,
-  selector: toBN(0),
+  selector: number.toBN(0),
   calldata: [],
 });
 
@@ -61,7 +60,7 @@ export const CellValuesContext = React.createContext<{
   currentUpdatedCells: {},
   setUpdatedValues: () => {},
   setCurrentUpdatedCells: () => {},
-  computeValue: () => async () => toBN(0),
+  computeValue: () => async () => number.toBN(0),
   updateCells: () => {},
   buildChildren: () => () => {},
   buildParents: () => () => {},
@@ -239,7 +238,7 @@ export const CellValuesContextProvider = ({
       .map((arg) => {
         return isDependency(arg)
           ? values[(arg.toNumber() - 1) / 2]
-          : arg.div(toBN(2));
+          : arg.div(number.toBN(2));
       })
       .map((arg) => arg.toString());
 
@@ -253,7 +252,8 @@ export const CellValuesContextProvider = ({
       cell.abi.stateMutability === "view"
         ? (await chainProvider.callContract(call)).result[0]
         : NaN;
-    return toBN(value);
+
+    return number.toBN(value);
   };
 
   const buildChildren = useCallback(

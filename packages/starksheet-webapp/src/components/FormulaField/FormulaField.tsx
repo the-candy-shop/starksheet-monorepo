@@ -14,10 +14,10 @@ import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { bn2hex } from "../../utils/hexUtils";
 import {
   ARGS_SEP,
+  CONTRACT_FUNCTION_SEP,
   buildFormulaDisplay,
   cellNameRegex,
   cellNameToTokenId,
-  CONTRACT_FUNCTION_SEP,
 } from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
@@ -61,7 +61,8 @@ function FormulaField({
       }
       getAbiForContract(_selectedContractAddress).then((abi) => {
         const parsedAbi = Object.values(abi)
-          .filter((_abi) => _abi.type === "function")
+          // @ts-ignore
+          .filter((_abi) => (_abi as FunctionAbi).type === "function")
           .reduce(
             (prev, cur) => ({
               ...prev,

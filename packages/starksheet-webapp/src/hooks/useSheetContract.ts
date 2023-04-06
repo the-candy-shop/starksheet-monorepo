@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { BigNumberish, toBN } from "starknet/utils/number";
+import { number } from "starknet";
 import { OnsheetContext } from "../contexts/OnsheetContext";
 import { CellData, CellRendered, SheetContract } from "../types";
 
@@ -29,7 +29,7 @@ class StarknetSheetContract implements SheetContract {
       const owner = await this.ownerOf(tokenId);
       return {
         id: tokenId,
-        value: toBN(0),
+        value: number.toBN(0),
         owner: owner,
         error: true,
       } as CellRendered;
@@ -48,7 +48,7 @@ class StarknetSheetContract implements SheetContract {
     return result.owner;
   }
 
-  async getCell(tokenId: BigNumberish): Promise<CellData> {
+  async getCell(tokenId: number.BigNumberish): Promise<CellData> {
     const _cell = await this.contract.call("getCell", [tokenId], {
       blockIdentifier: "latest",
     });

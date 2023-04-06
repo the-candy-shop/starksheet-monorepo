@@ -1,4 +1,3 @@
-import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
 import React, {
   PropsWithChildren,
@@ -6,8 +5,7 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { Call } from "starknet";
-import { toBN } from "starknet/utils/number";
+import { Call, number } from "starknet";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
@@ -26,7 +24,7 @@ export const TransactionsContext = React.createContext<{
 export const TransactionsContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const { accountAddress } = useContext(AccountContext);
+  const { accountAddress, execute } = useContext(AccountContext);
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
   const { onsheet, validateNewSheets } = useContext(OnsheetContext);
   const { contract } = useOnsheetContract();
@@ -55,7 +53,8 @@ export const TransactionsContextProvider = ({
       .reduce((prev, cur) => [...prev, ...cur], [])
       .filter(
         (cell) =>
-          (cell.owner.eq(toBN(0)) && !cell.selector.eq(toBN(0))) ||
+          (cell.owner.eq(number.toBN(0)) &&
+            !cell.selector.eq(number.toBN(0))) ||
           "0x" + cell.owner.toString(16) === accountAddress
       )
       .map((cell) => contract.setCellTxBuilder(cell));
@@ -70,8 +69,7 @@ export const TransactionsContextProvider = ({
     async (otherTransactions?: Call[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
-      return await getStarknet()
-        .account.execute([...transactions, ..._otherTxs])
+      return execute([...transactions, ..._otherTxs])
         .then(async (response) => {
           await chainProvider.waitForTransaction(response.transaction_hash);
           return chainProvider.getTransactionReceipt(response.transaction_hash);
@@ -93,7 +91,13 @@ export const TransactionsContextProvider = ({
           enqueueSnackbar(error.toString(), { variant: "error" });
         });
     },
-    [setUpdatedValues, validateNewSheets, enqueueSnackbar, transactions]
+    [
+      setUpdatedValues,
+      validateNewSheets,
+      enqueueSnackbar,
+      transactions,
+      execute,
+    ]
   );
 
   return (

@@ -1,8 +1,6 @@
 import BN from "bn.js";
 import { useMemo } from "react";
-import { Abi, Call, Contract, stark } from "starknet";
-import { calculateContractAddressFromHash } from "starknet/dist/utils/hash";
-import { BigNumberish, toBN } from "starknet/utils/number";
+import { Abi, Call, Contract, hash, number, stark } from "starknet";
 import starksheetContractData from "../contract.json";
 import { starknetRpcProvider } from "../provider";
 import { Cell, OnsheetContract } from "../types";
@@ -40,7 +38,7 @@ class StarksheetContract implements OnsheetContract {
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
   ): Call {
-    return cell.owner.eq(toBN(0))
+    return cell.owner.eq(number.toBN(0))
       ? {
           contractAddress: cell.sheetAddress,
           entrypoint: "mintAndSetPublic",
@@ -81,12 +79,12 @@ class StarksheetContract implements OnsheetContract {
   }
 
   calculateSheetAddress(
-    salt: BigNumberish,
-    classHash: BigNumberish,
-    constructorCalldata: BigNumberish[],
-    deployerAddress: BigNumberish
+    salt: number.BigNumberish,
+    classHash: number.BigNumberish,
+    constructorCalldata: number.BigNumberish[],
+    deployerAddress: number.BigNumberish
   ): string {
-    return calculateContractAddressFromHash(
+    return hash.calculateContractAddressFromHash(
       salt,
       classHash,
       constructorCalldata,

@@ -1,6 +1,5 @@
-import { Call } from "starknet";
+import { Call, number } from "starknet";
 import { Cell } from "../cells";
-import { BigNumberish } from "starknet/utils/number";
 
 export interface Onsheet {
   getSheetDefaultRendererAddress(): Promise<string>;
@@ -11,9 +10,9 @@ export interface Onsheet {
   ): Call;
   addSheetTxBuilder(name: string, symbol: string): Call;
   calculateSheetAddress(
-    salt: BigNumberish,
-    classHash: BigNumberish,
-    constructorCalldata: BigNumberish[],
-    deployerAddress: BigNumberish
+    salt: number.BigNumberish,
+    classHash: number.BigNumberish,
+    constructorCalldata: number.BigNumberish[],
+    deployerAddress: number.BigNumberish
   ): string;
 }

@@ -1,9 +1,8 @@
 import { Box, BoxProps } from "@mui/material";
-import { getStarknet } from "get-starknet";
 import { useCallback, useContext, useState } from "react";
+import Tooltip from "../../Tooltip/Tooltip";
 import { AccountContext } from "../../contexts/AccountContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
-import Tooltip from "../../Tooltip/Tooltip";
 import Button from "../Button/Button";
 import Cell from "../Cell/Cell";
 import LoadingDots from "../LoadingDots/LoadingDots";
@@ -24,7 +23,8 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
       return;
     }
     setLoading(true);
-    settleTransactions().then(() => setLoading(false));
+    await settleTransactions();
+    setLoading(false);
   }, [settleTransactions, transactions]);
 
   if (
@@ -54,20 +54,18 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
           sx={{
             width: "221px",
             "& .content": {
-              backgroundColor: !!getStarknet().account?.address
-                ? "#FF4F0A"
-                : undefined,
-              boxShadow: !!getStarknet().account?.address
+              backgroundColor: !!accountAddress ? "#FF4F0A" : undefined,
+              boxShadow: !!accountAddress
                 ? "inset -5px -5px 3px #FF8555, inset 5px 5px 3px #D9450B"
                 : undefined,
               justifyContent: "center",
               textAlign: "center",
-              color: !getStarknet().account?.address ? "#8C95A3" : undefined,
+              color: !accountAddress ? "#8C95A3" : undefined,
             },
             ...sx,
           }}
           onClick={onClick}
-          disabled={!getStarknet().account?.address || loading || !!error}
+          disabled={!accountAddress || loading || !!error}
         >
           {loading ? (
             <Box>

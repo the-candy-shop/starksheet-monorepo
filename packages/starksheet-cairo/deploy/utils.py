@@ -5,7 +5,7 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
 import requests
 from dotenv import load_dotenv
@@ -14,8 +14,12 @@ load_dotenv()
 from caseconverter import snakecase
 from starknet_py.contract import Contract
 from starknet_py.net.account.account import Account
+from starknet_py.net.client import Client
 from starknet_py.net.client_models import Call
+from starknet_py.net.models import Address
 from starknet_py.net.signer.stark_curve_signer import KeyPair
+from starknet_py.proxy.contract_abi_resolver import ProxyConfig
+from starknet_py.proxy.proxy_check import ProxyCheck
 from starkware.starknet.public.abi import get_selector_from_name
 
 from constants import (
@@ -89,29 +93,27 @@ async def get_account(
 ) -> Account:
     address = int(address or ACCOUNT_ADDRESS, 16)
     key_pair = KeyPair.from_private_key(int(private_key or PRIVATE_KEY, 16))
-    try:
-        call = Call(
-            to_addr=address,
-            selector=get_selector_from_name("get_public_key"),
-            calldata=[],
-        )
-        public_key = await GATEWAY_CLIENT.call_contract(call=call, block_hash="pending")
-    except Exception as err:
-        if (
-            json.loads(re.findall("{.*}", err.args[0], re.DOTALL)[0])["code"]
-            == "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT"
-        ):
+    public_key = None
+    for selector in ["get_public_key", "getPublicKey", "getSigner"]:
+        try:
             call = Call(
                 to_addr=address,
-                selector=get_selector_from_name("getPublicKey"),
+                selector=get_selector_from_name(selector),
                 calldata=[],
             )
-            public_key = await GATEWAY_CLIENT.call_contract(
-                call=call, block_hash="pending"
-            )
-        else:
-            raise err
-    if key_pair.public_key != public_key[0]:
+            public_key = (
+                await GATEWAY_CLIENT.call_contract(call=call, block_hash="pending")
+            )[0]
+        except Exception as err:
+            if (
+                json.loads(re.findall("{.*}", err.args[0], re.DOTALL)[0])["code"]
+                == "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT"
+            ):
+                continue
+            else:
+                raise err
+
+    if key_pair.public_key != public_key:
         raise ValueError(
             f"Public key of account 0x{address:064x} is not consistent with provided private key"
         )
@@ -125,9 +127,38 @@ async def get_account(
 
 
 async def get_eth_contract() -> Contract:
+    account = await get_account()
+
+    class EthProxyCheck(ProxyCheck):
+        """
+        See https://github.com/software-mansion/starknet.py/issues/856
+        """
+
+        async def implementation_address(
+            self, address: Address, client: Client
+        ) -> Optional[int]:
+            return await self.get_implementation(address, client)
+
+        async def implementation_hash(
+            self, address: Address, client: Client
+        ) -> Optional[int]:
+            return await self.get_implementation(address, client)
+
+        @staticmethod
+        async def get_implementation(address: Address, client: Client) -> Optional[int]:
+            call = Call(
+                to_addr=address,
+                selector=get_selector_from_name("implementation"),
+                calldata=[],
+            )
+            (implementation,) = await client.call_contract(call=call)
+            return implementation
+
+    proxy_config = (
+        ProxyConfig(proxy_checks=[EthProxyCheck()]) if NETWORK != "devnet" else False
+    )
     return await Contract.from_address(
-        ETH_TOKEN_ADDRESS,
-        await get_account(),
+        ETH_TOKEN_ADDRESS, account, proxy_config=proxy_config
     )
 
 
@@ -195,7 +226,14 @@ def dump_deployments(deployments):
 
 
 def get_deployments():
-    return json.load(open(DEPLOYMENTS_DIR / "deployments.json", "r"))
+    def parse_address_int(obj):
+        if "address" in obj:
+            obj["address"] = int(obj["address"], 16)
+        return obj
+
+    return json.load(
+        open(DEPLOYMENTS_DIR / "deployments.json", "r"), object_hook=parse_address_int
+    )
 
 
 def get_artifact(contract_name):
@@ -243,7 +281,7 @@ async def declare(contract_name):
 
 
 async def deploy(contract_name, *args):
-    logger.info(f"Deploying {contract_name}")
+    logger.info(f"⏳ Deploying {contract_name}")
     account = await get_account()
     abi = json.loads(Path(get_abi(contract_name)).read_text())
 

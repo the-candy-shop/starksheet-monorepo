@@ -14,6 +14,7 @@ from deploy.utils import (
     get_artifact,
     get_declarations,
     get_eth_contract,
+    get_tx_url,
     invoke,
     wait_for_transaction,
 )
@@ -77,9 +78,10 @@ async def main():
             max_fee=int(1e16),
         )
     ).hash
+    logger.info(f"⏳ Approving starksheet")
+    logger.info(f"⏳ Waiting for tx {get_tx_url(tx_hash)}")
     await wait_for_transaction(tx_hash)
-    tx = await invoke("Starksheet", "addSheet", name, symbol, proof)
-    await wait_for_transaction(tx)
+    await invoke("Starksheet", "addSheet", name, symbol, proof)
 
 
 if __name__ == "__main__":

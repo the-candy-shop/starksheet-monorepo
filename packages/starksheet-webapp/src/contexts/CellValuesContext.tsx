@@ -130,24 +130,27 @@ export const CellValuesContextProvider = ({
       let error = false;
       let finalMessage = "";
 
-      const fetchCells = contract.renderCells().then((renderedCells) => {
-        updateSheetStatus(_selectedSheetAddress, {
-          message: "Fetching cells metadata",
-        });
-        return Promise.all(
-          (renderedCells as CellRendered[]).map(async (cell) => {
-            const _cell = await contract.getCell(cell.id);
-            return {
-              ...cell,
-              ..._cell,
-              error: cell.error,
-            };
-          })
-        );
+      const fetchCells = contract
+        .renderCells()
+        .then((renderedCells) => {
+          updateSheetStatus(_selectedSheetAddress, {
+            message: "Fetching cells metadata",
+          });
+          return Promise.all(
+            (renderedCells as CellRendered[]).map(async (cell) => {
+              const _cell = await contract.getCell(cell.id);
+              return {
+                ...cell,
+                ..._cell,
+                error: cell.error,
+              };
+            })
+          );
+        })
+        .catch(() => []);
+      const newGridCells = new Promise<Cell[]>((resolve, reject) => {
+        return resolve([]);
       });
-      const newGridCells = new Promise<Cell[]>((resolve, reject) =>
-        resolve([])
-      );
 
       updateSheetStatus(_selectedSheetAddress, {
         message: "Rendering grid values",

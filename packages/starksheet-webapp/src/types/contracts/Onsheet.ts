@@ -1,3 +1,4 @@
+import BN from "bn.js";
 import { Call, number } from "starknet";
 import { Cell } from "../cells";
 
@@ -15,4 +16,5 @@ export interface Onsheet {
     constructorCalldata: number.BigNumberish[],
     deployerAddress: number.BigNumberish
   ): string;
+  getSheetPrice(): Promise<BN>;
 }

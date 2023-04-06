@@ -69,7 +69,20 @@ export const TransactionsContextProvider = ({
     async (otherTransactions?: Call[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
-      return execute([...transactions, ..._otherTxs])
+      let options;
+      if (newSheetsTransactions.length > 0) {
+        const sheetPrice = await contract.getSheetPrice();
+        options = {
+          value: sheetPrice
+            .mul(number.toBN(newSheetsTransactions.length))
+            .toString(),
+        };
+      }
+
+      return execute(
+        [...newSheetsTransactions, ...cellsTransactions, ..._otherTxs],
+        options
+      )
         .then(async (response) => {
           await chainProvider.waitForTransaction(response.transaction_hash);
           return chainProvider.getTransactionReceipt(response.transaction_hash);
@@ -95,8 +108,10 @@ export const TransactionsContextProvider = ({
       setUpdatedValues,
       validateNewSheets,
       enqueueSnackbar,
-      transactions,
+      newSheetsTransactions,
+      cellsTransactions,
       execute,
+      contract,
     ]
   );
 

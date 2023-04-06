@@ -35,6 +35,11 @@ class StarksheetContract implements OnsheetContract {
     return addresses.map((address: BN) => bn2hex(address));
   }
 
+  async getSheetPrice(): Promise<BN> {
+    const price = await this.contract.functions["getSheetPrice"]();
+    return price.price;
+  }
+
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
   ): Call {

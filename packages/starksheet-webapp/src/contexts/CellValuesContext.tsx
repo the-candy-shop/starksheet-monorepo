@@ -6,42 +6,18 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { FunctionAbi, number } from "starknet";
+import { number } from "starknet";
 import { isDependency } from "../components/ActionBar/formula.utils";
-import { useSheetContract } from "../hooks/useSheetContract";
 import { chainProvider } from "../provider";
-import {
-  Cell,
-  CellData,
-  CellGraph,
-  CellRendered,
-  CellValues,
-  SheetContract,
-  UpdatedValues,
-} from "../types";
+import { Cell, CellData, CellGraph, CellValues, UpdatedValues } from "../types";
 import { RC_BOUND } from "../utils/constants";
 import { bn2hex } from "../utils/hexUtils";
 import { resolveContractAddress } from "../utils/sheetUtils";
-import { AbisContext } from "./AbisContext";
-import { AppStatusContext } from "./AppStatusContext";
 import { OnsheetContext } from "./OnsheetContext";
-
-const defaultRenderedCell = (tokenId: number): CellRendered => ({
-  id: tokenId,
-  owner: number.toBN(0),
-  value: number.toBN(0),
-});
-
-const defaultCellData = (tokenId: number): CellData => ({
-  contractAddress: RC_BOUND,
-  selector: number.toBN(0),
-  calldata: [],
-});
-
-const GRID_SIZE = 15 * 15;
 
 export const CellValuesContext = React.createContext<{
   values: CellValues;
+  setValues: React.Dispatch<React.SetStateAction<CellValues>>;
   updatedValues: UpdatedValues;
   currentCells: Cell[];
   currentUpdatedCells: { [key: number]: Cell };
@@ -55,6 +31,7 @@ export const CellValuesContext = React.createContext<{
   setSelectedCell: (i: number) => void;
 }>({
   values: {},
+  setValues: () => {},
   updatedValues: {},
   currentCells: [],
   currentUpdatedCells: {},
@@ -71,10 +48,7 @@ export const CellValuesContext = React.createContext<{
 export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const { getAbiForContract } = useContext(AbisContext);
-  const { selectedSheetAddress, onsheet, selectedSheet } =
-    useContext(OnsheetContext);
-  const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
+  const { selectedSheetAddress } = useContext(OnsheetContext);
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
@@ -101,129 +75,6 @@ export const CellValuesContextProvider = ({
     },
     [selectedSheetAddress, setUpdatedValues]
   );
-
-  const { contract } = useSheetContract();
-
-  const load = useCallback(
-    (contract: SheetContract) => {
-      if (selectedSheet === undefined) {
-        return;
-      }
-
-      // Copy current sheet address to prevent storing the async call results into the wrong key
-      const _selectedSheetAddress = onsheet.sheets[selectedSheet].address;
-      if (!_selectedSheetAddress) {
-        return;
-      }
-
-      if (appStatus.sheets[_selectedSheetAddress].loading) return;
-
-      updateSheetStatus(_selectedSheetAddress, { loading: true, error: false });
-      if (
-        _selectedSheetAddress in values &&
-        values[_selectedSheetAddress].length !== 0
-      ) {
-        updateSheetStatus(_selectedSheetAddress, { loading: false });
-        return;
-      }
-
-      let error = false;
-      let finalMessage = "";
-
-      const fetchCells = contract
-        .renderCells()
-        .then((renderedCells) => {
-          updateSheetStatus(_selectedSheetAddress, {
-            message: "Fetching cells metadata",
-          });
-          return Promise.all(
-            (renderedCells as CellRendered[]).map(async (cell) => {
-              const _cell = await contract.getCell(cell.id);
-              return {
-                ...cell,
-                ..._cell,
-                error: cell.error,
-              };
-            })
-          );
-        })
-        .catch(() => []);
-      const newGridCells = new Promise<Cell[]>((resolve, reject) => {
-        return resolve([]);
-      });
-
-      updateSheetStatus(_selectedSheetAddress, {
-        message: "Rendering grid values",
-      });
-      (!!onsheet.sheets[selectedSheet].calldata ? newGridCells : fetchCells)
-        .then((cells: Cell[]) => {
-          updateSheetStatus(_selectedSheetAddress, {
-            message: "Finalizing sheet data",
-          });
-          const _cells = cells.reduce(
-            (prev, cell) => ({
-              ...prev,
-              [parseInt(cell.id.toString())]: cell,
-            }),
-            {} as { [id: number]: Cell }
-          );
-
-          return Promise.all(
-            Array.from(Array(GRID_SIZE).keys())
-              .map(
-                (i) =>
-                  _cells[i] || {
-                    ...defaultRenderedCell(i),
-                    ...defaultCellData(i),
-                  }
-              )
-              .map(async (cell, _, array) => {
-                const resolvedContractAddress = cell.contractAddress.lt(
-                  RC_BOUND
-                )
-                  ? array[cell.contractAddress.toNumber()].value
-                  : cell.contractAddress;
-                const abi = await getAbiForContract(
-                  bn2hex(resolvedContractAddress)
-                );
-                return {
-                  ...cell,
-                  abi: abi[bn2hex(cell.selector)] as FunctionAbi,
-                };
-              })
-          );
-        })
-        .then((cells) => {
-          setValues((prevValues) => ({
-            ...prevValues,
-            [_selectedSheetAddress]: cells,
-          }));
-        })
-        .catch(() => {
-          error = true;
-          finalMessage = `Error: Starksheet cannot render the sheet atm!
-              <br />
-              <br />
-              Team is working on it, we'll let you know on Twitter and Discord
-              when it's back.`;
-        })
-        .finally(() => {
-          updateSheetStatus(_selectedSheetAddress, {
-            loading: false,
-            error,
-            message: finalMessage,
-          });
-        });
-    },
-    // eslint-disable-next-line
-    [onsheet, selectedSheet]
-  );
-
-  React.useEffect(() => {
-    if (contract) {
-      load(contract);
-    }
-  }, [contract, load]);
 
   const computeValue = (values: BN[]) => async (cell: CellData) => {
     if (cell.contractAddress.eq(RC_BOUND) || !cell.abi) {
@@ -335,6 +186,7 @@ export const CellValuesContextProvider = ({
     <CellValuesContext.Provider
       value={{
         values,
+        setValues,
         updatedValues,
         currentCells,
         currentUpdatedCells,

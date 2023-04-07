@@ -14,9 +14,9 @@ import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
 export const OnsheetContext = React.createContext<{
   onsheet: Onsheet;
-  selectedSheet?: number;
+  selectedSheetIndex?: number;
   selectedSheetAddress?: string;
-  setSelectedSheet: (index: number) => void;
+  setSelectedSheetAddress: (address: string) => void;
   load: () => Promise<Sheet[]>;
   addSheet: (sheet: Omit<Sheet, "address">, owner: string) => void;
   validateNewSheets: () => void;
@@ -27,7 +27,7 @@ export const OnsheetContext = React.createContext<{
     defaultRenderer: "",
     sheetClassHash: "",
   },
-  setSelectedSheet: () => {},
+  setSelectedSheetAddress: () => {},
   load: async () => [],
   addSheet: () => {},
   validateNewSheets: () => {},
@@ -44,15 +44,17 @@ export const OnsheetContextProvider = ({
     defaultRenderer: "",
     sheetClassHash: "",
   });
-  const [selectedSheet, setSelectedSheet] = useState<number>();
+
+  const [selectedSheetAddress, setSelectedSheetAddress] = useState<string>();
   const { address, sheets } = onsheet;
   const { contract } = useOnsheetContract();
 
-  const selectedSheetAddress = useMemo(
-    () =>
-      selectedSheet !== undefined ? sheets[selectedSheet].address : undefined,
-    [sheets, selectedSheet]
-  );
+  const selectedSheetIndex = useMemo(() => {
+    const index = sheets.findIndex(
+      (sheet) => sheet.address === selectedSheetAddress
+    );
+    return index > -1 ? index : undefined;
+  }, [sheets, selectedSheetAddress]);
 
   const load = useCallback(
     () =>
@@ -124,7 +126,7 @@ export const OnsheetContextProvider = ({
       sheets: [...prevOnsheet.sheets, { ...sheet, address, calldata }],
     }));
     updateSheetStatus(address, defaultSheetStatus);
-    setSelectedSheet(onsheet.sheets.length);
+    setSelectedSheetAddress(address);
   };
 
   const validateNewSheets = () => {
@@ -173,9 +175,9 @@ export const OnsheetContextProvider = ({
     <OnsheetContext.Provider
       value={{
         onsheet,
-        selectedSheet,
+        selectedSheetIndex,
         selectedSheetAddress,
-        setSelectedSheet,
+        setSelectedSheetAddress,
         load,
         addSheet,
         validateNewSheets,

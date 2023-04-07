@@ -75,15 +75,12 @@ class StarknetSheetContract implements SheetContract {
   }
 }
 
-export function useSheetContract() {
+export function useSheetContract(address?: string) {
   const { selectedSheetAddress } = useContext(OnsheetContext);
-
+  const sheetAddress = address || selectedSheetAddress;
   const contract = useMemo(
-    () =>
-      selectedSheetAddress
-        ? new StarknetSheetContract(selectedSheetAddress)
-        : undefined,
-    [selectedSheetAddress]
+    () => (sheetAddress ? new StarknetSheetContract(sheetAddress) : undefined),
+    [sheetAddress]
   );
 
   return { contract };

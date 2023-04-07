@@ -7,7 +7,7 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import LoadingDots from "./components/LoadingDots/LoadingDots";
 import SheetTable from "./components/SheetTable/SheetTable";
-import { CELL_BORDER_WIDTH, CELL_HEIGHT, N_COL, N_ROW } from "./config";
+import { CELL_BORDER_WIDTH, N_COL, N_ROW } from "./config";
 import { AppStatusContext } from "./contexts/AppStatusContext";
 import { CellValuesContext } from "./contexts/CellValuesContext";
 import { OnsheetContext } from "./contexts/OnsheetContext";
@@ -23,8 +23,7 @@ const keyMap = {
 
 function App() {
   const { appStatus } = useContext(AppStatusContext);
-  const { currentCells, selectedCell, setSelectedCell } =
-    useContext(CellValuesContext);
+  const { selectedCell, setSelectedCell } = useContext(CellValuesContext);
   const { selectedSheetAddress } = useContext(OnsheetContext);
 
   const inputRef = React.useRef<ContentEditable>(null);
@@ -90,8 +89,8 @@ function App() {
   );
 
   const hideSheet = useMemo(
-    () => loading || error || message || currentCells.length === 0,
-    [loading, error, message, currentCells]
+    () => loading || error || message || !selectedSheetAddress,
+    [loading, error, message, selectedSheetAddress]
   );
 
   return (
@@ -120,31 +119,8 @@ function App() {
           </Box>
         ) : (
           <SheetTable
-            sx={{
-              zIndex: 0,
-              marginTop: `-${CELL_BORDER_WIDTH}px`,
-              marginBottom: `-${CELL_BORDER_WIDTH}px`,
-              overflow: "auto",
-              flex: 1,
-              "&::-webkit-scrollbar": {
-                width: `${CELL_HEIGHT}px`,
-                height: `${CELL_HEIGHT}px`,
-                backgroundColor: "#C6D2E4",
-                border: `${CELL_BORDER_WIDTH}px solid black`,
-                boxShadow: `inset -5px -5px 3px #DCE3ED, inset 5px 5px 3px #949EAC`,
-              },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "#C6D2E4",
-                border: `${CELL_BORDER_WIDTH}px solid black`,
-                boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
-                cursor: "pointer",
-              },
-              "&::-webkit-scrollbar-corner": {
-                backgroundColor: "#C6D2E4",
-                border: `${CELL_BORDER_WIDTH}px solid black`,
-                boxShadow: `inset 5px 5px 3px #DCE3ED, inset -5px -5px 3px #949EAC`,
-              },
-            }}
+            address={selectedSheetAddress}
+            key={selectedSheetAddress}
           />
         )}
         <Footer sx={{ zIndex: 1 }} />

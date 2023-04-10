@@ -2,13 +2,13 @@ import { Box, BoxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
-import { toBN } from "starknet/utils/number";
+import { number } from "starknet";
 import { CELL_BORDER_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { StarksheetContext } from "../../contexts/StarksheetContext";
-import { Cell as CellType, CellData, CellGraph } from "../../types";
+import { OnsheetContext } from "../../contexts/OnsheetContext";
+import { CellData, CellGraph, Cell as CellType } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, str2hex } from "../../utils/hexUtils";
 import { resolveContractAddress } from "../../utils/sheetUtils";
@@ -18,8 +18,8 @@ import SaveButton from "../SaveButton/SaveButton";
 import {
   parse,
   parseContractCall,
-  tokenIdToCellName,
   toPlainTextFormula,
+  tokenIdToCellName,
 } from "./formula.utils";
 
 export type ActionBarProps = {
@@ -30,7 +30,7 @@ export type ActionBarProps = {
 function ActionBar({ inputRef, sx }: ActionBarProps) {
   const { getAbiForContract } = useContext(AbisContext);
   const { accountAddress } = useContext(AccountContext);
-  const { selectedSheetAddress } = useContext(StarksheetContext);
+  const { selectedSheetAddress } = useContext(OnsheetContext);
   const {
     currentCells,
     computeValue,
@@ -49,6 +49,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
     if (previousSelectedCell.current !== selectedCell) {
       const currentCellId = previousSelectedCell.current;
       previousSelectedCell.current = selectedCell;
+
 
       if (
         currentCellId === null ||
@@ -95,7 +96,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
             if (!error) {
               try {
                 value = await computeValue(_values)(cell);
-                _values[cell.id.toNumber()] = value;
+                _values[cell.id] = value;
               } catch (e) {
                 error = true;
               }
@@ -145,14 +146,14 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       const _contractCall = parseContractCall(_value);
 
       if (!_contractCall) {
-        let selector = toBN(0);
+        let selector = number.toBN(0);
         try {
-          selector = toBN(_value);
+          selector = number.toBN(_value);
         } catch (e) {
           try {
-            selector = toBN(str2hex(_value));
+            selector = number.toBN(str2hex(_value));
           } catch (e) {
-            selector = toBN(0);
+            selector = number.toBN(0);
           }
         }
         setCellData({
@@ -165,7 +166,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
       let contractAddress;
       try {
-        contractAddress = toBN(_contractCall.contractAddress);
+        contractAddress = number.toBN(_contractCall.contractAddress);
       } catch (e) {
         return;
       }

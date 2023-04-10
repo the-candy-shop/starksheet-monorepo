@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "starksheet"
+name = "onsheet"
 version = "0.1.0"
 description = ""
 authors = ["Clément Walter <clement0walter@gmail.com>"]
@@ -7,7 +7,7 @@ packages = [{ include = "*.py" }]
 
 [tool.poetry.dependencies]
 python = "~3.9"
-cairo-lang = "^0.10"
+cairo-lang = "^0.11"
 openzeppelin-cairo-contracts = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -20,8 +20,8 @@ hdwallet = "^2.1.1"
 joblib = "^1.1.0"
 matplotlib = "^3.5.3"
 python-dotenv = "^0.21.0"
-starknet-py = "^0.7.0a0"
-starknet-devnet = "^0.3.5"
+starknet-py = "^0.15.2"
+starknet-devnet = "0.5.0a2"
 pandas = "^1.4.3"
 case-converter = "^1.1.0"
 pytest = "^7.1.2"

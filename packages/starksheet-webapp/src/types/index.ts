@@ -1,5 +1,6 @@
-import { Sheet, Starksheet } from "./starknet-contracts";
-export * from "./starksheet";
+import { Onsheet, Sheet } from "./contracts";
+export * from "./cells";
+export * from "./onsheet";
 export * from "./userSettings";
 export type SheetContract = Sheet;
-export type StarksheetContract = Starksheet;
+export type OnsheetContract = Onsheet;

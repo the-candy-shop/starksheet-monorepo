@@ -1,6 +1,6 @@
 {
-  "name": "starksheet-webapp",
-  "version": "0.1.0",
+  "name": "onsheet-webapp",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -14,15 +14,17 @@
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "bn.js": "^5.2.1",
+    "ethers": "^6.2.3",
     "expr-eval": "^2.0.2",
-    "get-starknet": "^1.5.0",
+    "get-starknet": "^2.0.0",
     "notistack": "^2.0.5",
     "react": "^18.2.0",
     "react-contenteditable": "^3.3.6",
     "react-dom": "^18.2.0",
     "react-hotkeys": "^2.0.0",
+    "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
-    "starknet": "^3.19.0",
+    "starknet": "^4.22.0",
     "ts-toolbelt": "^9.6.0",
     "web-vitals": "^2.1.4"
   },
@@ -54,7 +56,6 @@
     ]
   },
   "devDependencies": {
-    "@typechain/starknet": "^0.2.3",
     "@types/bn.js": "^5.1.0",
     "prettier": "2.7.1",
     "typechain": "^8.1.0",

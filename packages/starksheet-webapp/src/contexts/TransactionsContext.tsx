@@ -1,4 +1,3 @@
-import { getStarknet } from "get-starknet";
 import { useSnackbar } from "notistack";
 import React, {
   PropsWithChildren,
@@ -6,13 +5,13 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { Call, stark } from "starknet";
-import { toBN } from "starknet/utils/number";
-import { starknetRpcProvider } from "../provider";
+import { Call, number } from "starknet";
+import { useOnsheetContract } from "../hooks/useOnsheetContract";
+import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
-import { StarksheetContext } from "./StarksheetContext";
+import { OnsheetContext } from "./OnsheetContext";
 
 export const TransactionsContext = React.createContext<{
   transactions: Call[];
@@ -25,69 +24,41 @@ export const TransactionsContext = React.createContext<{
 export const TransactionsContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const { accountAddress, proof } = useContext(AccountContext);
+  const { accountAddress, execute } = useContext(AccountContext);
   const { updatedValues, setUpdatedValues } = useContext(CellValuesContext);
-  const { starksheet, validateNewSheets } = useContext(StarksheetContext);
+  const { onsheet, validateNewSheets } = useContext(OnsheetContext);
+  const { contract } = useOnsheetContract();
   const { enqueueSnackbar } = useSnackbar();
 
   const newSheetsTransactions = useMemo(() => {
-    return starksheet.sheets
+    return onsheet.sheets
       .filter((sheet): sheet is NewSheet => sheet.calldata !== undefined)
-      .map((sheet) => ({
-        contractAddress: starksheet.address,
-        entrypoint: "addSheet",
-        calldata: stark.compileCalldata({
-          name: sheet.calldata.name.toString(),
-          symbol: sheet.calldata.symbol.toString(),
-          proof,
-        }),
-      }));
-  }, [starksheet, proof]);
+      .map((sheet) =>
+        contract.addSheetTxBuilder(
+          sheet.calldata.name.toString(),
+          sheet.calldata.symbol.toString()
+        )
+      );
+  }, [onsheet, contract]);
 
   const cellsTransactions = useMemo(() => {
     return Object.entries(updatedValues)
       .map(([sheetAddress, sheetUpdatedValues]) => {
         return Object.entries(sheetUpdatedValues).map(([tokenId, cell]) => ({
           ...cell,
-          tokenId,
+          tokenId: parseInt(tokenId),
           sheetAddress,
         }));
       })
       .reduce((prev, cur) => [...prev, ...cur], [])
       .filter(
         (cell) =>
-          (cell.owner.eq(toBN(0)) && !cell.selector.eq(toBN(0))) ||
+          (cell.owner.eq(number.toBN(0)) &&
+            !cell.selector.eq(number.toBN(0))) ||
           "0x" + cell.owner.toString(16) === accountAddress
       )
-      .map((cell) =>
-        cell.owner.eq(toBN(0))
-          ? {
-              contractAddress: cell.sheetAddress,
-              entrypoint: "mintAndSetPublic",
-              calldata: stark.compileCalldata({
-                tokenId: {
-                  type: "struct",
-                  low: cell.tokenId,
-                  high: 0,
-                },
-                proof,
-                contractAddress: cell.contractAddress.toString(),
-                value: cell.selector.toString(),
-                cellCalldata: cell.calldata.map((d) => d.toString()),
-              }),
-            }
-          : {
-              contractAddress: cell.sheetAddress,
-              entrypoint: "setCell",
-              calldata: stark.compileCalldata({
-                tokenId: cell.tokenId,
-                contractAddress: cell.contractAddress.toString(),
-                value: cell.selector.toString(),
-                cellCalldata: cell.calldata.map((d) => d.toString()),
-              }),
-            }
-      );
-  }, [accountAddress, proof, updatedValues]);
+      .map((cell) => contract.setCellTxBuilder(cell));
+  }, [accountAddress, updatedValues, contract]);
 
   const transactions = useMemo(
     () => [...newSheetsTransactions, ...cellsTransactions],
@@ -98,15 +69,23 @@ export const TransactionsContextProvider = ({
     async (otherTransactions?: Call[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
-      return await getStarknet()
-        .account.execute([...transactions, ..._otherTxs])
+      let options;
+      if (newSheetsTransactions.length > 0) {
+        const sheetPrice = await contract.getSheetPrice();
+        options = {
+          value: sheetPrice
+            .mul(number.toBN(newSheetsTransactions.length))
+            .toString(),
+        };
+      }
+
+      return execute(
+        [...newSheetsTransactions, ...cellsTransactions, ..._otherTxs],
+        options
+      )
         .then(async (response) => {
-          await starknetRpcProvider.waitForTransaction(
-            response.transaction_hash
-          );
-          return starknetRpcProvider.getTransactionReceipt(
-            response.transaction_hash
-          );
+          await chainProvider.waitForTransaction(response.transaction_hash);
+          return chainProvider.getTransactionReceipt(response.transaction_hash);
         })
         .then(async (receipt) => {
           if (receipt.status !== "REJECTED") {
@@ -125,7 +104,15 @@ export const TransactionsContextProvider = ({
           enqueueSnackbar(error.toString(), { variant: "error" });
         });
     },
-    [setUpdatedValues, validateNewSheets, enqueueSnackbar, transactions]
+    [
+      setUpdatedValues,
+      validateNewSheets,
+      enqueueSnackbar,
+      newSheetsTransactions,
+      cellsTransactions,
+      execute,
+      contract,
+    ]
   );
 
   return (

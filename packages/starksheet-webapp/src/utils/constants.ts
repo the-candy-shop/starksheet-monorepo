@@ -1,6 +1,6 @@
-import { toBN } from "starknet/utils/number";
+import { number } from "starknet";
 import contract from "../contract.json";
-import { StarksheetContractData } from "../types";
+import { OnsheetContractData } from "../types";
 
-export const RC_BOUND = toBN(2).pow(toBN(128));
-export const starksheetContractData = contract as StarksheetContractData;
+export const RC_BOUND = number.toBN(2).pow(number.toBN(128));
+export const onsheetContractData = contract as OnsheetContractData;

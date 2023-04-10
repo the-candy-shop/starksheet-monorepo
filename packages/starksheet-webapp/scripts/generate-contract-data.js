@@ -27,7 +27,7 @@ async function run() {
   const data = {
     address,
     mathAddress,
-    starkSheetAbi,
+    onsheetAbi: starkSheetAbi,
     sheetAbi,
     allowlist,
     contractAbis,

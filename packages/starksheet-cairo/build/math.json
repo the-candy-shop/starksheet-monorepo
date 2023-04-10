@@ -178,7 +178,7 @@
         "builtins": [
             "range_check"
         ],
-        "compiler_version": "0.10.1",
+        "compiler_version": "0.10.0",
         "data": [
             "0x208b7fff7fff7ffe",
             "0x1104800180018000",
@@ -521,7 +521,7 @@
                         "end_col": 73,
                         "end_line": 7,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
                         },
                         "start_col": 5,
                         "start_line": 7
@@ -538,7 +538,7 @@
                         "end_col": 43,
                         "end_line": 16,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
                         },
                         "start_col": 28,
                         "start_line": 16
@@ -555,7 +555,7 @@
                         "end_col": 30,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
                         },
                         "start_col": 20,
                         "start_line": 17
@@ -572,7 +572,7 @@
                         "end_col": 32,
                         "end_line": 17,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/lang/compiler/lib/registers.cairo"
                         },
                         "start_col": 5,
                         "start_line": 17
@@ -590,7 +590,7 @@
                                 "end_col": 7,
                                 "end_line": 46,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 5,
                                 "start_line": 42
@@ -602,7 +602,7 @@
                         "end_col": 26,
                         "end_line": 47,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 47
@@ -619,21 +619,21 @@
                         "end_col": 46,
                         "end_line": 48,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 31,
                                 "end_line": 41,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 15,
                                         "end_line": 49,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 49
@@ -660,7 +660,7 @@
                         "end_col": 15,
                         "end_line": 49,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 49
@@ -677,21 +677,21 @@
                         "end_col": 31,
                         "end_line": 53,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 31,
                                 "end_line": 41,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 21,
                                         "end_line": 54,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 54
@@ -718,7 +718,7 @@
                         "end_col": 20,
                         "end_line": 54,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 15,
                         "start_line": 54
@@ -735,7 +735,7 @@
                         "end_col": 21,
                         "end_line": 54,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 54
@@ -752,7 +752,7 @@
                         "end_col": 15,
                         "end_line": 55,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 55
@@ -770,7 +770,7 @@
                                 "end_col": 7,
                                 "end_line": 347,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 5,
                                 "start_line": 329
@@ -782,21 +782,21 @@
                         "end_col": 41,
                         "end_line": 327,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 21,
                                 "end_line": 348,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 21,
                                         "end_line": 349,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "start_col": 20,
                                         "start_line": 349
@@ -823,14 +823,14 @@
                         "end_col": 29,
                         "end_line": 348,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 21,
                                 "end_line": 349,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 20,
                                 "start_line": 349
@@ -852,7 +852,7 @@
                         "end_col": 27,
                         "end_line": 349,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 20,
                         "start_line": 349
@@ -869,14 +869,14 @@
                         "end_col": 30,
                         "end_line": 326,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 31,
                                 "end_line": 349,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 30,
                                 "start_line": 349
@@ -898,7 +898,7 @@
                         "end_col": 32,
                         "end_line": 349,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 349
@@ -915,21 +915,21 @@
                         "end_col": 46,
                         "end_line": 328,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 31,
                                 "end_line": 53,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 26,
                                         "end_line": 350,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 350
@@ -956,14 +956,14 @@
                         "end_col": 30,
                         "end_line": 326,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 16,
                                 "end_line": 350,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 15,
                                 "start_line": 350
@@ -985,7 +985,7 @@
                         "end_col": 25,
                         "end_line": 350,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 18,
                         "start_line": 350
@@ -1002,7 +1002,7 @@
                         "end_col": 26,
                         "end_line": 350,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 350
@@ -1019,7 +1019,7 @@
                         "end_col": 26,
                         "end_line": 351,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 25,
                         "start_line": 351
@@ -1036,7 +1036,7 @@
                         "end_col": 34,
                         "end_line": 351,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 25,
                         "start_line": 351
@@ -1053,28 +1053,28 @@
                         "end_col": 31,
                         "end_line": 53,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 26,
                                 "end_line": 350,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 31,
                                         "end_line": 53,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 39,
                                                 "end_line": 351,
                                                 "input_file": {
-                                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 351
@@ -1106,14 +1106,14 @@
                         "end_col": 41,
                         "end_line": 327,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 23,
                                 "end_line": 351,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 15,
                                 "start_line": 351
@@ -1135,7 +1135,7 @@
                         "end_col": 38,
                         "end_line": 351,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 25,
                         "start_line": 351
@@ -1152,7 +1152,7 @@
                         "end_col": 39,
                         "end_line": 351,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 351
@@ -1169,21 +1169,21 @@
                         "end_col": 41,
                         "end_line": 327,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 21,
                                 "end_line": 348,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 14,
                                         "end_line": 352,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "start_col": 13,
                                         "start_line": 352
@@ -1210,28 +1210,28 @@
                         "end_col": 31,
                         "end_line": 53,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 39,
                                 "end_line": 351,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 36,
                                         "end_line": 325,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 19,
                                                 "end_line": 352,
                                                 "input_file": {
-                                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 352
@@ -1263,14 +1263,14 @@
                         "end_col": 29,
                         "end_line": 348,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 14,
                                 "end_line": 352,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 13,
                                 "start_line": 352
@@ -1292,14 +1292,14 @@
                         "end_col": 30,
                         "end_line": 326,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 17,
                                 "end_line": 352,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "start_col": 16,
                                 "start_line": 352
@@ -1321,7 +1321,7 @@
                         "end_col": 19,
                         "end_line": 352,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 352
@@ -1338,7 +1338,7 @@
                         "end_col": 7,
                         "end_line": 15,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 15
@@ -1355,21 +1355,21 @@
                         "end_col": 25,
                         "end_line": 5,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 25,
                                 "end_line": 5,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 24,
                                         "end_line": 16,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                         },
                                         "start_col": 9,
                                         "start_line": 16
@@ -1396,7 +1396,7 @@
                         "end_col": 22,
                         "end_line": 16,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 21,
                         "start_line": 16
@@ -1413,7 +1413,7 @@
                         "end_col": 24,
                         "end_line": 16,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 9,
                         "start_line": 16
@@ -1430,7 +1430,7 @@
                         "end_col": 31,
                         "end_line": 20,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 20
@@ -1447,7 +1447,7 @@
                         "end_col": 35,
                         "end_line": 21,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 21
@@ -1464,7 +1464,7 @@
                         "end_col": 33,
                         "end_line": 22,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 22
@@ -1481,7 +1481,7 @@
                         "end_col": 54,
                         "end_line": 27,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 27
@@ -1499,7 +1499,7 @@
                                 "end_col": 57,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "start_col": 5,
                                 "start_line": 28
@@ -1511,7 +1511,7 @@
                         "end_col": 35,
                         "end_line": 29,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 29
@@ -1528,7 +1528,7 @@
                         "end_col": 39,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 32
@@ -1545,7 +1545,7 @@
                         "end_col": 35,
                         "end_line": 33,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 33
@@ -1562,7 +1562,7 @@
                         "end_col": 19,
                         "end_line": 36,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 36
@@ -1579,7 +1579,7 @@
                         "end_col": 35,
                         "end_line": 39,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 39
@@ -1596,7 +1596,7 @@
                         "end_col": 36,
                         "end_line": 40,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 40
@@ -1613,7 +1613,7 @@
                         "end_col": 52,
                         "end_line": 41,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 41
@@ -1630,7 +1630,7 @@
                         "end_col": 36,
                         "end_line": 43,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 43
@@ -1647,7 +1647,7 @@
                         "end_col": 28,
                         "end_line": 46,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 20,
                         "start_line": 46
@@ -1664,7 +1664,7 @@
                         "end_col": 38,
                         "end_line": 47,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 23,
                         "start_line": 47
@@ -1681,14 +1681,14 @@
                         "end_col": 54,
                         "end_line": 48,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 22,
                                 "end_line": 49,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "start_col": 15,
                                 "start_line": 49
@@ -1710,14 +1710,14 @@
                         "end_col": 54,
                         "end_line": 48,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 22,
                                 "end_line": 49,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "start_col": 15,
                                 "start_line": 49
@@ -1739,14 +1739,14 @@
                         "end_col": 73,
                         "end_line": 48,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 22,
                                 "end_line": 49,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "start_col": 15,
                                 "start_line": 49
@@ -1768,21 +1768,21 @@
                         "end_col": 25,
                         "end_line": 5,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 31,
                                 "end_line": 53,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 28,
                                         "end_line": 49,
                                         "input_file": {
-                                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                         },
                                         "start_col": 5,
                                         "start_line": 49
@@ -1809,14 +1809,14 @@
                         "end_col": 77,
                         "end_line": 48,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 22,
                                 "end_line": 49,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "start_col": 15,
                                 "start_line": 49
@@ -1838,7 +1838,7 @@
                         "end_col": 27,
                         "end_line": 49,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 24,
                         "start_line": 49
@@ -1855,7 +1855,7 @@
                         "end_col": 28,
                         "end_line": 49,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 49
@@ -1872,7 +1872,7 @@
                         "end_col": 25,
                         "end_line": 50,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 17,
                         "start_line": 50
@@ -1889,7 +1889,7 @@
                         "end_col": 27,
                         "end_line": 50,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                         },
                         "start_col": 5,
                         "start_line": 50
@@ -1907,7 +1907,7 @@
                         "end_col": 7,
                         "end_line": 9,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 9
@@ -1925,7 +1925,7 @@
                         "end_col": 18,
                         "end_line": 10,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 17,
                         "start_line": 10
@@ -1943,7 +1943,7 @@
                         "end_col": 21,
                         "end_line": 10,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 9,
                         "start_line": 10
@@ -1961,7 +1961,7 @@
                         "end_col": 48,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 37,
                         "start_line": 13
@@ -1979,7 +1979,7 @@
                         "end_col": 61,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 54,
                         "start_line": 13
@@ -1997,7 +1997,7 @@
                         "end_col": 62,
                         "end_line": 13,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 25,
                         "start_line": 13
@@ -2015,7 +2015,7 @@
                         "end_col": 18,
                         "end_line": 14,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 14
@@ -2033,7 +2033,7 @@
                         "end_col": 32,
                         "end_line": 14,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 14
@@ -2051,7 +2051,7 @@
                         "end_col": 35,
                         "end_line": 14,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 14
@@ -2078,7 +2078,7 @@
                                         "end_col": 9,
                                         "end_line": 8,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 6,
                                         "start_line": 8
@@ -2102,7 +2102,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 8
@@ -2133,7 +2133,7 @@
                                 "end_col": 50,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 41,
                                 "start_line": 8
@@ -2164,7 +2164,7 @@
                                 "end_col": 50,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2178,7 +2178,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -2219,7 +2219,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2233,7 +2233,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -2274,7 +2274,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 8
@@ -2305,7 +2305,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2319,7 +2319,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -2360,7 +2360,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 8
@@ -2391,7 +2391,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2405,7 +2405,7 @@
                                                 "end_col": 35,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 8
@@ -2446,7 +2446,7 @@
                                 "end_col": 23,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2460,7 +2460,7 @@
                                                 "end_col": 35,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 8
@@ -2501,7 +2501,7 @@
                                 "end_col": 35,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 25,
                                 "start_line": 8
@@ -2532,7 +2532,7 @@
                                 "end_col": 23,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2546,7 +2546,7 @@
                                                 "end_col": 35,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 8
@@ -2587,7 +2587,7 @@
                                 "end_col": 23,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2601,7 +2601,7 @@
                                                 "end_col": 35,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 8
@@ -2642,7 +2642,7 @@
                                 "end_col": 35,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 25,
                                 "start_line": 8
@@ -2673,7 +2673,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 8
@@ -2704,7 +2704,7 @@
                                 "end_col": 23,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2718,7 +2718,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -2759,7 +2759,7 @@
                                 "end_col": 35,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2773,7 +2773,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -2807,7 +2807,7 @@
                         "end_col": 9,
                         "end_line": 8,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 6,
                         "start_line": 8
@@ -2833,7 +2833,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2847,7 +2847,7 @@
                                                 "end_col": 35,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "parent_location": [
                                                     {
@@ -2861,7 +2861,7 @@
                                                                 "end_col": 9,
                                                                 "end_line": 8,
                                                                 "input_file": {
-                                                                    "filename": "contracts/utils/math.cairo"
+                                                                    "filename": "src/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
                                                                 "start_line": 8
@@ -2912,7 +2912,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2926,7 +2926,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -2967,7 +2967,7 @@
                                 "end_col": 35,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -2981,7 +2981,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -3022,7 +3022,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 8
@@ -3053,7 +3053,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3067,7 +3067,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -3108,7 +3108,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3122,7 +3122,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -3163,7 +3163,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3177,7 +3177,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -3218,7 +3218,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3232,7 +3232,7 @@
                                                 "end_col": 9,
                                                 "end_line": 8,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 8
@@ -3273,7 +3273,7 @@
                                 "end_col": 9,
                                 "end_line": 8,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 8
@@ -3296,7 +3296,7 @@
                         "end_col": 7,
                         "end_line": 19,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 19
@@ -3314,7 +3314,7 @@
                         "end_col": 18,
                         "end_line": 20,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 17,
                         "start_line": 20
@@ -3332,7 +3332,7 @@
                         "end_col": 21,
                         "end_line": 20,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 9,
                         "start_line": 20
@@ -3350,7 +3350,7 @@
                         "end_col": 50,
                         "end_line": 23,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 39,
                         "start_line": 23
@@ -3368,7 +3368,7 @@
                         "end_col": 63,
                         "end_line": 23,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 56,
                         "start_line": 23
@@ -3386,7 +3386,7 @@
                         "end_col": 64,
                         "end_line": 23,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 26,
                         "start_line": 23
@@ -3404,7 +3404,7 @@
                         "end_col": 18,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 24
@@ -3422,7 +3422,7 @@
                         "end_col": 33,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 24
@@ -3440,7 +3440,7 @@
                         "end_col": 36,
                         "end_line": 24,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 24
@@ -3467,7 +3467,7 @@
                                         "end_col": 10,
                                         "end_line": 18,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 6,
                                         "start_line": 18
@@ -3491,7 +3491,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 18
@@ -3522,7 +3522,7 @@
                                 "end_col": 51,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 42,
                                 "start_line": 18
@@ -3553,7 +3553,7 @@
                                 "end_col": 51,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3567,7 +3567,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -3608,7 +3608,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3622,7 +3622,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -3663,7 +3663,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 18
@@ -3694,7 +3694,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3708,7 +3708,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -3749,7 +3749,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 18
@@ -3780,7 +3780,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3794,7 +3794,7 @@
                                                 "end_col": 36,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
                                                 "start_line": 18
@@ -3835,7 +3835,7 @@
                                 "end_col": 24,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3849,7 +3849,7 @@
                                                 "end_col": 36,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
                                                 "start_line": 18
@@ -3890,7 +3890,7 @@
                                 "end_col": 36,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 26,
                                 "start_line": 18
@@ -3921,7 +3921,7 @@
                                 "end_col": 24,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3935,7 +3935,7 @@
                                                 "end_col": 36,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
                                                 "start_line": 18
@@ -3976,7 +3976,7 @@
                                 "end_col": 24,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -3990,7 +3990,7 @@
                                                 "end_col": 36,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 26,
                                                 "start_line": 18
@@ -4031,7 +4031,7 @@
                                 "end_col": 36,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 26,
                                 "start_line": 18
@@ -4062,7 +4062,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 18
@@ -4093,7 +4093,7 @@
                                 "end_col": 24,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4107,7 +4107,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4148,7 +4148,7 @@
                                 "end_col": 36,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4162,7 +4162,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4196,7 +4196,7 @@
                         "end_col": 10,
                         "end_line": 18,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 6,
                         "start_line": 18
@@ -4222,7 +4222,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4236,7 +4236,7 @@
                                                 "end_col": 36,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "parent_location": [
                                                     {
@@ -4250,7 +4250,7 @@
                                                                 "end_col": 10,
                                                                 "end_line": 18,
                                                                 "input_file": {
-                                                                    "filename": "contracts/utils/math.cairo"
+                                                                    "filename": "src/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
                                                                 "start_line": 18
@@ -4301,7 +4301,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4315,7 +4315,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4356,7 +4356,7 @@
                                 "end_col": 36,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4370,7 +4370,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4411,7 +4411,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 18
@@ -4442,7 +4442,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4456,7 +4456,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4497,7 +4497,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4511,7 +4511,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4552,7 +4552,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4566,7 +4566,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4607,7 +4607,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -4621,7 +4621,7 @@
                                                 "end_col": 10,
                                                 "end_line": 18,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 18
@@ -4662,7 +4662,7 @@
                                 "end_col": 10,
                                 "end_line": 18,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 18
@@ -4685,7 +4685,7 @@
                         "end_col": 28,
                         "end_line": 30,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 9,
                         "start_line": 30
@@ -4703,21 +4703,21 @@
                         "end_col": 25,
                         "end_line": 28,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 36,
                                 "end_line": 325,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 62,
                                         "end_line": 32,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 18,
                                         "start_line": 32
@@ -4745,7 +4745,7 @@
                         "end_col": 39,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 33,
                         "start_line": 32
@@ -4763,7 +4763,7 @@
                         "end_col": 47,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 41,
                         "start_line": 32
@@ -4781,7 +4781,7 @@
                         "end_col": 61,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 49,
                         "start_line": 32
@@ -4799,7 +4799,7 @@
                         "end_col": 62,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 18,
                         "start_line": 32
@@ -4817,28 +4817,28 @@
                         "end_col": 36,
                         "end_line": 325,
                         "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 62,
                                 "end_line": 32,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 25,
                                         "end_line": 28,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "parent_location": [
                                             {
                                                 "end_col": 17,
                                                 "end_line": 33,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 5,
                                                 "start_line": 33
@@ -4871,14 +4871,14 @@
                         "end_col": 11,
                         "end_line": 32,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 14,
                                 "end_line": 33,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 13,
                                 "start_line": 33
@@ -4901,7 +4901,7 @@
                         "end_col": 17,
                         "end_line": 33,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 33
@@ -4928,7 +4928,7 @@
                                         "end_col": 9,
                                         "end_line": 28,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 6,
                                         "start_line": 28
@@ -4952,7 +4952,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 28
@@ -4983,7 +4983,7 @@
                                 "end_col": 67,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 58,
                                 "start_line": 28
@@ -5014,7 +5014,7 @@
                                 "end_col": 67,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5028,7 +5028,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5069,7 +5069,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5083,7 +5083,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5124,7 +5124,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 28
@@ -5155,7 +5155,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5169,7 +5169,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5210,7 +5210,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 28
@@ -5241,7 +5241,7 @@
                                 "end_col": 25,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5255,7 +5255,7 @@
                                                 "end_col": 52,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 42,
                                                 "start_line": 28
@@ -5296,7 +5296,7 @@
                                 "end_col": 40,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5310,7 +5310,7 @@
                                                 "end_col": 52,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 42,
                                                 "start_line": 28
@@ -5351,7 +5351,7 @@
                                 "end_col": 52,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 42,
                                 "start_line": 28
@@ -5382,7 +5382,7 @@
                                 "end_col": 40,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5396,7 +5396,7 @@
                                                 "end_col": 52,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 42,
                                                 "start_line": 28
@@ -5437,7 +5437,7 @@
                                 "end_col": 40,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5451,7 +5451,7 @@
                                                 "end_col": 52,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 42,
                                                 "start_line": 28
@@ -5492,7 +5492,7 @@
                                 "end_col": 52,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 42,
                                 "start_line": 28
@@ -5523,7 +5523,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 28
@@ -5554,7 +5554,7 @@
                                 "end_col": 25,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5568,7 +5568,7 @@
                                                 "end_col": 52,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "parent_location": [
                                                     {
@@ -5582,7 +5582,7 @@
                                                                 "end_col": 9,
                                                                 "end_line": 28,
                                                                 "input_file": {
-                                                                    "filename": "contracts/utils/math.cairo"
+                                                                    "filename": "src/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
                                                                 "start_line": 28
@@ -5633,7 +5633,7 @@
                                 "end_col": 52,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5647,7 +5647,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5688,7 +5688,7 @@
                                 "end_col": 40,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5702,7 +5702,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5743,7 +5743,7 @@
                                 "end_col": 52,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5757,7 +5757,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5791,7 +5791,7 @@
                         "end_col": 9,
                         "end_line": 28,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 6,
                         "start_line": 28
@@ -5817,7 +5817,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5831,7 +5831,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5872,7 +5872,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 28
@@ -5903,7 +5903,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5917,7 +5917,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -5958,7 +5958,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -5972,7 +5972,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -6013,7 +6013,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6027,7 +6027,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -6068,7 +6068,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6082,7 +6082,7 @@
                                                 "end_col": 9,
                                                 "end_line": 28,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 28
@@ -6123,7 +6123,7 @@
                                 "end_col": 9,
                                 "end_line": 28,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 28
@@ -6146,7 +6146,7 @@
                         "end_col": 28,
                         "end_line": 39,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 9,
                         "start_line": 39
@@ -6164,7 +6164,7 @@
                         "end_col": 19,
                         "end_line": 41,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 41
@@ -6182,7 +6182,7 @@
                         "end_col": 28,
                         "end_line": 41,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 22,
                         "start_line": 41
@@ -6200,7 +6200,7 @@
                         "end_col": 28,
                         "end_line": 41,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 13,
                         "start_line": 41
@@ -6218,7 +6218,7 @@
                         "end_col": 31,
                         "end_line": 41,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 41
@@ -6245,7 +6245,7 @@
                                         "end_col": 9,
                                         "end_line": 37,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 6,
                                         "start_line": 37
@@ -6269,7 +6269,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 37
@@ -6300,7 +6300,7 @@
                                 "end_col": 50,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 41,
                                 "start_line": 37
@@ -6331,7 +6331,7 @@
                                 "end_col": 50,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6345,7 +6345,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -6386,7 +6386,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6400,7 +6400,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -6441,7 +6441,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 37
@@ -6472,7 +6472,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6486,7 +6486,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -6527,7 +6527,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 37
@@ -6558,7 +6558,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6572,7 +6572,7 @@
                                                 "end_col": 35,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 37
@@ -6613,7 +6613,7 @@
                                 "end_col": 23,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6627,7 +6627,7 @@
                                                 "end_col": 35,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 37
@@ -6668,7 +6668,7 @@
                                 "end_col": 35,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 25,
                                 "start_line": 37
@@ -6699,7 +6699,7 @@
                                 "end_col": 23,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6713,7 +6713,7 @@
                                                 "end_col": 35,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 37
@@ -6754,7 +6754,7 @@
                                 "end_col": 23,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6768,7 +6768,7 @@
                                                 "end_col": 35,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 25,
                                                 "start_line": 37
@@ -6809,7 +6809,7 @@
                                 "end_col": 35,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 25,
                                 "start_line": 37
@@ -6840,7 +6840,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 37
@@ -6871,7 +6871,7 @@
                                 "end_col": 23,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6885,7 +6885,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -6926,7 +6926,7 @@
                                 "end_col": 35,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -6940,7 +6940,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -6974,7 +6974,7 @@
                         "end_col": 9,
                         "end_line": 37,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 6,
                         "start_line": 37
@@ -7000,7 +7000,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7014,7 +7014,7 @@
                                                 "end_col": 35,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "parent_location": [
                                                     {
@@ -7028,7 +7028,7 @@
                                                                 "end_col": 9,
                                                                 "end_line": 37,
                                                                 "input_file": {
-                                                                    "filename": "contracts/utils/math.cairo"
+                                                                    "filename": "src/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
                                                                 "start_line": 37
@@ -7079,7 +7079,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7093,7 +7093,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -7134,7 +7134,7 @@
                                 "end_col": 35,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7148,7 +7148,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -7189,7 +7189,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 37
@@ -7220,7 +7220,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7234,7 +7234,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -7275,7 +7275,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7289,7 +7289,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -7330,7 +7330,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7344,7 +7344,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -7385,7 +7385,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7399,7 +7399,7 @@
                                                 "end_col": 9,
                                                 "end_line": 37,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 37
@@ -7440,7 +7440,7 @@
                                 "end_col": 9,
                                 "end_line": 37,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 37
@@ -7463,21 +7463,21 @@
                         "end_col": 25,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 25,
                                 "end_line": 5,
                                 "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/3.9.13/envs/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/pow.cairo"
                                 },
                                 "parent_location": [
                                     {
                                         "end_col": 27,
                                         "end_line": 46,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 12,
                                         "start_line": 46
@@ -7505,14 +7505,14 @@
                         "end_col": 31,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 21,
                                 "end_line": 46,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 17,
                                 "start_line": 46
@@ -7535,14 +7535,14 @@
                         "end_col": 36,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "parent_location": [
                             {
                                 "end_col": 26,
                                 "end_line": 46,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 23,
                                 "start_line": 46
@@ -7565,7 +7565,7 @@
                         "end_col": 27,
                         "end_line": 46,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 12,
                         "start_line": 46
@@ -7583,7 +7583,7 @@
                         "end_col": 28,
                         "end_line": 46,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 5,
                         "start_line": 46
@@ -7610,7 +7610,7 @@
                                         "end_col": 9,
                                         "end_line": 45,
                                         "input_file": {
-                                            "filename": "contracts/utils/math.cairo"
+                                            "filename": "src/utils/math.cairo"
                                         },
                                         "start_col": 6,
                                         "start_line": 45
@@ -7634,7 +7634,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 45
@@ -7665,7 +7665,7 @@
                                 "end_col": 51,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 42,
                                 "start_line": 45
@@ -7696,7 +7696,7 @@
                                 "end_col": 51,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7710,7 +7710,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -7751,7 +7751,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7765,7 +7765,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -7806,7 +7806,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 45
@@ -7837,7 +7837,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7851,7 +7851,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -7892,7 +7892,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 45
@@ -7923,7 +7923,7 @@
                                 "end_col": 36,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -7937,7 +7937,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "parent_location": [
                                                     {
@@ -7951,7 +7951,7 @@
                                                                 "end_col": 9,
                                                                 "end_line": 45,
                                                                 "input_file": {
-                                                                    "filename": "contracts/utils/math.cairo"
+                                                                    "filename": "src/utils/math.cairo"
                                                                 },
                                                                 "start_col": 6,
                                                                 "start_line": 45
@@ -8002,7 +8002,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 45
@@ -8033,7 +8033,7 @@
                                 "end_col": 25,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8047,7 +8047,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8088,7 +8088,7 @@
                                 "end_col": 31,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8102,7 +8102,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8143,7 +8143,7 @@
                                 "end_col": 36,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8157,7 +8157,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8191,7 +8191,7 @@
                         "end_col": 9,
                         "end_line": 45,
                         "input_file": {
-                            "filename": "contracts/utils/math.cairo"
+                            "filename": "src/utils/math.cairo"
                         },
                         "start_col": 6,
                         "start_line": 45
@@ -8217,7 +8217,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8231,7 +8231,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8272,7 +8272,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 45
@@ -8303,7 +8303,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8317,7 +8317,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8358,7 +8358,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8372,7 +8372,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8413,7 +8413,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8427,7 +8427,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8468,7 +8468,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "parent_location": [
                                     {
@@ -8482,7 +8482,7 @@
                                                 "end_col": 9,
                                                 "end_line": 45,
                                                 "input_file": {
-                                                    "filename": "contracts/utils/math.cairo"
+                                                    "filename": "src/utils/math.cairo"
                                                 },
                                                 "start_col": 6,
                                                 "start_line": 45
@@ -8523,7 +8523,7 @@
                                 "end_col": 9,
                                 "end_line": 45,
                                 "input_file": {
-                                    "filename": "contracts/utils/math.cairo"
+                                    "filename": "src/utils/math.cairo"
                                 },
                                 "start_col": 6,
                                 "start_line": 45
@@ -9365,6 +9365,25 @@
                 "destination": "starkware.cairo.common.keccak_state.KeccakBuiltinState",
                 "type": "alias"
             },
+            "starkware.cairo.common.cairo_builtins.PoseidonBuiltin": {
+                "full_name": "starkware.cairo.common.cairo_builtins.PoseidonBuiltin",
+                "members": {
+                    "input": {
+                        "cairo_type": "starkware.cairo.common.poseidon_state.PoseidonBuiltinState",
+                        "offset": 0
+                    },
+                    "output": {
+                        "cairo_type": "starkware.cairo.common.poseidon_state.PoseidonBuiltinState",
+                        "offset": 3
+                    }
+                },
+                "size": 6,
+                "type": "struct"
+            },
+            "starkware.cairo.common.cairo_builtins.PoseidonBuiltinState": {
+                "destination": "starkware.cairo.common.poseidon_state.PoseidonBuiltinState",
+                "type": "alias"
+            },
             "starkware.cairo.common.cairo_builtins.SignatureBuiltin": {
                 "full_name": "starkware.cairo.common.cairo_builtins.SignatureBuiltin",
                 "members": {
@@ -9683,6 +9702,25 @@
             "starkware.cairo.common.math_cmp.assert_lt_felt": {
                 "destination": "starkware.cairo.common.math.assert_lt_felt",
                 "type": "alias"
+            },
+            "starkware.cairo.common.poseidon_state.PoseidonBuiltinState": {
+                "full_name": "starkware.cairo.common.poseidon_state.PoseidonBuiltinState",
+                "members": {
+                    "s0": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    },
+                    "s1": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    },
+                    "s2": {
+                        "cairo_type": "felt",
+                        "offset": 2
+                    }
+                },
+                "size": 3,
+                "type": "struct"
             },
             "starkware.cairo.common.pow.assert_le": {
                 "destination": "starkware.cairo.common.math.assert_le",
@@ -10388,6 +10426,25 @@
                     }
                 },
                 "size": 5,
+                "type": "struct"
+            },
+            "starkware.starknet.common.syscalls.REPLACE_CLASS_SELECTOR": {
+                "type": "const",
+                "value": 25500403217443378527601783667
+            },
+            "starkware.starknet.common.syscalls.ReplaceClass": {
+                "full_name": "starkware.starknet.common.syscalls.ReplaceClass",
+                "members": {
+                    "class_hash": {
+                        "cairo_type": "felt",
+                        "offset": 1
+                    },
+                    "selector": {
+                        "cairo_type": "felt",
+                        "offset": 0
+                    }
+                },
+                "size": 2,
                 "type": "struct"
             },
             "starkware.starknet.common.syscalls.SEND_MESSAGE_TO_L1_SELECTOR": {

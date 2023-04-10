@@ -3,14 +3,14 @@ import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
-import { StarksheetContext } from "../../contexts/StarksheetContext";
+import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { network } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
-import discordLogo from "./discord.svg";
 import mintSquareLogo from "./mintsquare.svg";
 import starknetLogo from "./starknet.svg";
+import telegramLogo from "./telegram.svg";
 import twitterLogo from "./twitter.svg";
 
 export type FooterProps = {
@@ -19,8 +19,8 @@ export type FooterProps = {
 
 function Footer({ sx }: FooterProps) {
   const { accountAddress } = useContext(AccountContext);
-  const { starksheet, selectedSheetAddress, addSheet } =
-    useContext(StarksheetContext);
+  const { onsheet, selectedSheetAddress, addSheet } =
+    useContext(OnsheetContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const addSheetOnClick = async () => {
@@ -30,10 +30,10 @@ function Footer({ sx }: FooterProps) {
       });
       return;
     }
-    addSheet(
+    await addSheet(
       {
-        name: `Sheet${starksheet.sheets.length}`,
-        symbol: `SHT${starksheet.sheets.length}`,
+        name: `Sheet${onsheet.sheets.length}`,
+        symbol: `SHT${onsheet.sheets.length}`,
       },
       accountAddress
     );
@@ -60,8 +60,8 @@ function Footer({ sx }: FooterProps) {
           marginTop: `-${CELL_BORDER_WIDTH}px`,
         }}
       >
-        {starksheet.sheets &&
-          starksheet.sheets.map((sheet, index) => (
+        {onsheet.sheets &&
+          onsheet.sheets.map((sheet, index) => (
             <SheetButton
               sheet={sheet}
               index={index}
@@ -105,9 +105,9 @@ function Footer({ sx }: FooterProps) {
             cursor: "pointer",
             "& .content": { justifyContent: "center" },
           }}
-          onClick={() => window.open("https://discord.gg/Aab6qdWb5k", "_blank")}
+          onClick={() => window.open("https://t.me/starksheet", "_blank")}
         >
-          <img src={discordLogo} alt="" />
+          <img src={telegramLogo} alt="" />
         </GreyCell>
         <GreyCell
           sx={{

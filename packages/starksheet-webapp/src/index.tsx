@@ -1,24 +1,44 @@
 import { SnackbarProvider } from "notistack";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import App from "./App";
+import SheetTable from "./components/SheetTable/SheetTable";
 import { AbisContextProvider } from "./contexts/AbisContext";
 import { AccountContextProvider } from "./contexts/AccountContext";
 import { AppStatusContextProvider } from "./contexts/AppStatusContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
-import { StarksheetContextProvider } from "./contexts/StarksheetContext";
+import { OnsheetContextProvider } from "./contexts/OnsheetContext";
 import { TransactionsContextProvider } from "./contexts/TransactionsContext";
-
-import starksheetContractData from "./contract.json";
+import onsheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <Navigate to="/" />,
+    children: [
+      {
+        path: "/:address",
+        element: <SheetTable />,
+        loader: (args) => args,
+      },
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Root />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
@@ -28,17 +48,17 @@ function Root() {
       <AppStatusContextProvider>
         <AccountContextProvider>
           <AbisContextProvider
-            initialContractAbis={starksheetContractData.contractAbis}
+            initialContractAbis={onsheetContractData.contractAbis}
           >
-            <StarksheetContextProvider
-              starksheetAddress={starksheetContractData.address}
+            <OnsheetContextProvider
+              onsheetAddress={onsheetContractData.address}
             >
               <CellValuesContextProvider>
                 <TransactionsContextProvider>
                   <App />
                 </TransactionsContextProvider>
               </CellValuesContextProvider>
-            </StarksheetContextProvider>
+            </OnsheetContextProvider>
           </AbisContextProvider>
         </AccountContextProvider>
       </AppStatusContextProvider>

@@ -51,7 +51,11 @@ async def main():
             "artifact": get_artifact(contract_name),
             "alias": get_alias(contract_name),
         }
-        for contract_name in ["BasicCellRenderer", "math", "execute"]
+        for contract_name in [
+            "BasicCellRenderer",
+            "math",
+            "execute",
+        ]
     }
     deployments["Starksheet"] = {
         **dict(
@@ -76,8 +80,8 @@ async def main():
 
     # %% Add a first sheet
     deployments = get_deployments()
-    name = "Origin"
-    symbol = "ORGS"
+    name = "VisiCalc"
+    symbol = "1979"
     proof = []
     eth_contract = await get_eth_contract()
 

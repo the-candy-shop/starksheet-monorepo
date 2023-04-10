@@ -28,7 +28,7 @@ NETWORK = (
     else "mainnet"
 )
 GATEWAY_URLS = {
-    "mainnet": "alpha-mainnet",
+    "mainnet": "https://alpha-mainnet.starknet.io",
     "testnet": "https://alpha4.starknet.io",
     "testnet2": "https://alpha4-2.starknet.io",
     "devnet": "http://127.0.0.1:5050",

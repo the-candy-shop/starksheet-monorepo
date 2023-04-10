@@ -42,6 +42,7 @@ from constants import (
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+account_verified = False
 
 
 def int_to_uint256(value):
@@ -94,32 +95,37 @@ async def get_account(
     address=None,
     private_key=None,
 ) -> Account:
+    global account_verified
     address = int(address or ACCOUNT_ADDRESS, 16)
     key_pair = KeyPair.from_private_key(int(private_key or PRIVATE_KEY, 16))
-    public_key = None
-    for selector in ["get_public_key", "getPublicKey", "getSigner"]:
-        try:
-            call = Call(
-                to_addr=address,
-                selector=get_selector_from_name(selector),
-                calldata=[],
-            )
-            public_key = (
-                await GATEWAY_CLIENT.call_contract(call=call, block_hash="pending")
-            )[0]
-        except Exception as err:
-            if (
-                json.loads(re.findall("{.*}", err.args[0], re.DOTALL)[0])["code"]
-                == "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT"
-            ):
-                continue
-            else:
-                raise err
 
-    if key_pair.public_key != public_key:
-        raise ValueError(
-            f"Public key of account 0x{address:064x} is not consistent with provided private key"
-        )
+    if not account_verified:
+        public_key = None
+        for selector in ["get_public_key", "getPublicKey", "getSigner"]:
+            try:
+                call = Call(
+                    to_addr=address,
+                    selector=get_selector_from_name(selector),
+                    calldata=[],
+                )
+                public_key = (
+                    await GATEWAY_CLIENT.call_contract(call=call, block_hash="pending")
+                )[0]
+            except Exception as err:
+                if (
+                    json.loads(re.findall("{.*}", err.args[0], re.DOTALL)[0])["code"]
+                    == "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT"
+                ):
+                    continue
+                else:
+                    raise err
+
+        if key_pair.public_key != public_key:
+            raise ValueError(
+                f"Public key of account 0x{address:064x} is not consistent with provided private key"
+            )
+
+        account_verified = True
 
     return Account(
         address=address,

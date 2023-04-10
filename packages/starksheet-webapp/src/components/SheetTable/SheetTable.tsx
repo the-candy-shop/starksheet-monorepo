@@ -1,5 +1,6 @@
 import { Box, BoxProps } from "@mui/material";
 import { useCallback, useContext, useEffect, useMemo } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { FunctionAbi, number } from "starknet";
 import {
   CELL_BORDER_WIDTH,
@@ -14,9 +15,10 @@ import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { useSheetContract } from "../../hooks/useSheetContract";
+import { chainProvider } from "../../provider";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bn2hex, hex2str, normalizeHexString } from "../../utils/hexUtils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
 
@@ -33,18 +35,25 @@ const defaultCellData = (tokenId: number): CellData => ({
 });
 
 export type SheetTableProps = {
-  address?: string;
   sx?: BoxProps["sx"];
 };
 
-const SheetTable = ({ address, sx }: SheetTableProps) => {
+const SheetTable = ({ sx }: SheetTableProps) => {
   const { values, setValues } = useContext(CellValuesContext);
-  const { setSelectedSheetAddress } = useContext(OnsheetContext);
+  const { onsheet, setSelectedSheetAddress, appendSheet } =
+    useContext(OnsheetContext);
   const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
   const { getAbiForContract } = useContext(AbisContext);
+  const { params } = useLoaderData() as { params: { address: string } };
+  const { address } = params;
   const { contract } = useSheetContract(address);
+  const navigate = useNavigate();
 
-  const cells = address ? values[address] : [];
+  const cells = useMemo(
+    () => (address ? values[address] : []),
+    [address, values]
+  );
+
   const colNames = useMemo(
     () =>
       Array.from(Array(N_COL + 1).keys())
@@ -55,13 +64,21 @@ const SheetTable = ({ address, sx }: SheetTableProps) => {
 
   const load = useCallback(
     (address: string) => {
+      if (!address) {
+        return;
+      }
+
       if (!contract) {
         return;
       }
 
-      // Copy current sheet address to prevent storing the async call results into the wrong key
       const _selectedSheetAddress = address;
-      if (appStatus.sheets[_selectedSheetAddress].loading) return;
+      // Copy current sheet address to prevent storing the async call results into the wrong key
+      if (
+        appStatus.sheets[_selectedSheetAddress] &&
+        appStatus.sheets[_selectedSheetAddress].loading
+      )
+        return;
 
       updateSheetStatus(_selectedSheetAddress, {
         loading: true,
@@ -79,9 +96,32 @@ const SheetTable = ({ address, sx }: SheetTableProps) => {
       let error = false;
       let finalMessage = "";
 
-      const fetchCells = contract
-        .renderCells()
-        .then((renderedCells) => {
+      updateSheetStatus(_selectedSheetAddress, {
+        message: "Rendering grid values",
+      });
+      const sheet = onsheet.sheets.find((sheet) => sheet.address === address);
+      if (sheet === undefined) {
+        Promise.all([
+          chainProvider.callContract({
+            contractAddress: address,
+            entrypoint: "name",
+          }),
+          chainProvider.callContract({
+            contractAddress: address,
+            entrypoint: "symbol",
+          }),
+        ]).then((response) => {
+          const [name, symbol] = response.map((result) =>
+            hex2str(normalizeHexString(result.result[0]))
+          );
+          appendSheet({ name, symbol, address });
+        });
+      }
+      let cells;
+      if (sheet?.calldata) {
+        cells = new Promise<Cell[]>((resolve) => resolve([]));
+      } else {
+        cells = contract.renderCells().then((renderedCells) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Fetching cells metadata",
           });
@@ -95,13 +135,9 @@ const SheetTable = ({ address, sx }: SheetTableProps) => {
               };
             })
           );
-        })
-        .catch(() => []);
-
-      updateSheetStatus(_selectedSheetAddress, {
-        message: "Rendering grid values",
-      });
-      fetchCells
+        });
+      }
+      cells
         .then((cells: Cell[]) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
@@ -145,13 +181,14 @@ const SheetTable = ({ address, sx }: SheetTableProps) => {
             [_selectedSheetAddress]: cells,
           }));
         })
-        .catch(() => {
+        .catch((error) => {
           error = true;
-          finalMessage = `Error: Starksheet cannot render the sheet atm!
+          finalMessage = `Error: Starksheet cannot render sheet at address ${address}
               <br />
               <br />
-              Team is working on it, we'll let you know on Twitter and Discord
-              when it's back.`;
+              Double check address or create a new sheet by clicking on the + button`;
+
+          navigate(`/`);
         })
         .finally(() => {
           updateSheetStatus(_selectedSheetAddress, {
@@ -204,6 +241,7 @@ const SheetTable = ({ address, sx }: SheetTableProps) => {
         ))}
       </Box>
       {address &&
+        appStatus.sheets[address] &&
         !appStatus.sheets[address].loading &&
         cells &&
         cells.length === GRID_SIZE &&

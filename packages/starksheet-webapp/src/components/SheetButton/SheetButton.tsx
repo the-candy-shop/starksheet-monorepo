@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { Sheet } from "../../types";
@@ -31,7 +32,12 @@ export function SheetButton({ sheet, index, sx }: SheetButtonProps) {
         ...sx,
       }}
     >
-      {sheet.name}
+      <Link
+        to={`/${sheet.address}`}
+        style={{ color: "inherit", textDecoration: "inherit" }}
+      >
+        {sheet.name}
+      </Link>
       {appStatus.sheets[sheet.address].loading && <LoadingDots />}
     </GreyCell>
   );

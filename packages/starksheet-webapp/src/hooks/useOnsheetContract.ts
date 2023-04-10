@@ -25,8 +25,14 @@ class StarksheetContract implements OnsheetContract {
     ]();
     return bn2hex(renderer.address);
   }
+
   async getSheetClassHash(): Promise<string> {
     const classHash = await this.contract.functions["getSheetClassHash"]();
+    return bn2hex(classHash.hash);
+  }
+
+  async getProxyClassHash(): Promise<string> {
+    const classHash = await this.contract.functions["getProxyClassHash"]();
     return bn2hex(classHash.hash);
   }
 
@@ -86,14 +92,13 @@ class StarksheetContract implements OnsheetContract {
   calculateSheetAddress(
     salt: number.BigNumberish,
     classHash: number.BigNumberish,
-    constructorCalldata: number.BigNumberish[],
-    deployerAddress: number.BigNumberish
+    constructorCalldata: number.BigNumberish[]
   ): string {
     return hash.calculateContractAddressFromHash(
       salt,
       classHash,
       constructorCalldata,
-      deployerAddress
+      this.address
     );
   }
 }

@@ -23,6 +23,10 @@ from sheet.library import (
     DEFAULT_VALUE,
 )
 
+@storage_var
+func initialized() -> (res: felt) {
+}
+
 @view
 func getOwner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
@@ -205,8 +209,8 @@ func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 // Constructor and tokenURI updated
 //
 
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+@external
+func initialize{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     name: felt,
     symbol: felt,
     owner: felt,
@@ -214,13 +218,24 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     max_per_wallet: felt,
     renderer_address: felt,
 ) {
+    let (initialized_) = initialized.read();
+    assert initialized_ = 0;
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     Ownable.initializer(owner);
     Sheet_merkle_root.write(merkle_root);
     Sheet_max_per_wallet.write(max_per_wallet);
     Sheet_cell_renderer.write(renderer_address);
+    initialized.write(1);
     return ();
+}
+
+@view
+func is_initialized{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    res: felt
+) {
+    let (initialized_) = initialized.read();
+    return (res=initialized_);
 }
 
 //

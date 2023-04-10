@@ -5,6 +5,7 @@ import { Cell } from "../cells";
 export interface Onsheet {
   getSheetDefaultRendererAddress(): Promise<string>;
   getSheetClassHash(): Promise<string>;
+  getProxyClassHash(): Promise<string>;
   getSheets(): Promise<string[]>;
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
@@ -13,8 +14,7 @@ export interface Onsheet {
   calculateSheetAddress(
     salt: number.BigNumberish,
     classHash: number.BigNumberish,
-    constructorCalldata: number.BigNumberish[],
-    deployerAddress: number.BigNumberish
+    constructorCalldata: number.BigNumberish[]
   ): string;
   getSheetPrice(): Promise<BN>;
 }

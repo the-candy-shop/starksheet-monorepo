@@ -2,11 +2,11 @@ import { Box } from "@mui/material";
 import React, { useContext, useMemo } from "react";
 import ContentEditable from "react-contenteditable";
 import { HotKeys } from "react-hotkeys";
+import { Outlet, useLocation } from "react-router-dom";
 import ActionBar from "./components/ActionBar/ActionBar";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import LoadingDots from "./components/LoadingDots/LoadingDots";
-import SheetTable from "./components/SheetTable/SheetTable";
 import { CELL_BORDER_WIDTH, N_COL, N_ROW } from "./config";
 import { AppStatusContext } from "./contexts/AppStatusContext";
 import { CellValuesContext } from "./contexts/CellValuesContext";
@@ -27,6 +27,7 @@ function App() {
   const { selectedSheetAddress } = useContext(OnsheetContext);
 
   const inputRef = React.useRef<ContentEditable>(null);
+  const location = useLocation();
 
   const handlers = useMemo(
     () => ({
@@ -89,8 +90,8 @@ function App() {
   );
 
   const hideSheet = useMemo(
-    () => loading || error || message || !selectedSheetAddress,
-    [loading, error, message, selectedSheetAddress]
+    () => loading || error || location.pathname === "/",
+    [loading, error, location]
   );
 
   return (
@@ -118,10 +119,7 @@ function App() {
             {loading && <LoadingDots />}
           </Box>
         ) : (
-          <SheetTable
-            address={selectedSheetAddress}
-            key={selectedSheetAddress}
-          />
+          <Outlet />
         )}
         <Footer sx={{ zIndex: 1 }} />
       </Box>

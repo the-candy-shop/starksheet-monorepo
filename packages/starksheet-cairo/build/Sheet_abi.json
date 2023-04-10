@@ -429,9 +429,21 @@
                 "type": "felt"
             }
         ],
-        "name": "constructor",
+        "name": "initialize",
         "outputs": [],
-        "type": "constructor"
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "is_initialized",
+        "outputs": [
+            {
+                "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     },
     {
         "inputs": [],

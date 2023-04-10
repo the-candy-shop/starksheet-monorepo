@@ -20,6 +20,9 @@ from starknet_py.net.models import Address
 from starknet_py.net.signer.stark_curve_signer import KeyPair
 from starknet_py.proxy.contract_abi_resolver import ProxyConfig
 from starknet_py.proxy.proxy_check import ProxyCheck
+from starkware.starknet.core.os.contract_address.contract_address import (
+    calculate_contract_address_from_hash,
+)
 from starkware.starknet.public.abi import get_selector_from_name
 
 from constants import (
@@ -226,13 +229,15 @@ def dump_deployments(deployments):
 
 
 def get_deployments():
-    def parse_address_int(obj):
+    def parse_hex_strings(obj):
         if "address" in obj:
             obj["address"] = int(obj["address"], 16)
+        if "tx" in obj:
+            obj["tx"] = int(obj["tx"], 16)
         return obj
 
     return json.load(
-        open(DEPLOYMENTS_DIR / "deployments.json", "r"), object_hook=parse_address_int
+        open(DEPLOYMENTS_DIR / "deployments.json", "r"), object_hook=parse_hex_strings
     )
 
 
@@ -267,7 +272,7 @@ def compile_contract(contract_name):
 
 
 async def declare(contract_name):
-    logger.info(f"Declaring {contract_name}")
+    logger.info(f"ℹ️  Declaring {contract_name}")
     account = await get_account()
     artifact = get_artifact(contract_name)
     declare_transaction = await account.sign_declare_transaction(
@@ -281,7 +286,7 @@ async def declare(contract_name):
 
 
 async def deploy(contract_name, *args):
-    logger.info(f"⏳ Deploying {contract_name}")
+    logger.info(f"ℹ️  Deploying {contract_name}")
     account = await get_account()
     abi = json.loads(Path(get_abi(contract_name)).read_text())
 
@@ -309,7 +314,7 @@ async def invoke(contract_name, function_name, *inputs, address=None):
         account,
     )
     call = contract.functions[function_name].prepare(*inputs, max_fee=int(1e16))
-    logger.info(f"⏳ Invoking {contract_name}.{function_name}({json.dumps(inputs)})")
+    logger.info(f"ℹ️  Invoking {contract_name}.{function_name}({json.dumps(inputs)})")
     response = await account.execute(call, max_fee=int(1e16))
     logger.info(f"⏳ Waiting for tx {get_tx_url(response.transaction_hash)}")
     await account.client.wait_for_tx(response.transaction_hash)
@@ -342,3 +347,30 @@ def get_tx_url(tx_hash: int) -> str:
 
 def get_abi(contract_name):
     return BUILD_DIR / f"{contract_name}_abi.json"
+
+
+async def compute_sheet_address(name, symbol):
+    renderer_address = (
+        await call("Starksheet", "getSheetDefaultRendererAddress")
+    ).address
+    sheet_class_hash = (await call("Starksheet", "getSheetClassHash")).hash
+    proxy_class_hash = (await call("Starksheet", "getProxyClassHash")).hash
+    owner = await get_account()
+    deployments = get_deployments()
+    calldata = {
+        "implementation": sheet_class_hash,
+        "selector": get_selector_from_name("initialize"),
+        "calldataLen": 6,
+        "name": int(name.encode().hex(), 16),
+        "symbol": int(symbol.encode().hex(), 16),
+        "owner": owner.address,
+        "merkleRoot": 0,
+        "maxPerWallet": 0,
+        "rendererAddress": renderer_address,
+    }
+    return calculate_contract_address_from_hash(
+        owner.address,
+        proxy_class_hash,
+        list(calldata.values()),
+        deployments["Starksheet"]["address"],
+    )

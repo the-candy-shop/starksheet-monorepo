@@ -6,11 +6,14 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { chainProvider } from "../provider";
 import { Onsheet, Sheet } from "../types";
-import { hex2str, normalizeHexString, str2hex } from "../utils/hexUtils";
+import { str2hex } from "../utils/hexUtils";
+import { AbisContext } from "./AbisContext";
+import { AccountContext } from "./AccountContext";
 import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
+import { hash } from "starknet";
 
 export const OnsheetContext = React.createContext<{
   onsheet: Onsheet;
@@ -18,7 +21,8 @@ export const OnsheetContext = React.createContext<{
   selectedSheetAddress?: string;
   setSelectedSheetAddress: (address: string) => void;
   load: () => Promise<Sheet[]>;
-  addSheet: (sheet: Omit<Sheet, "address">, owner: string) => void;
+  addSheet: (sheet: Omit<Sheet, "address">, owner: string) => Promise<string>;
+  appendSheet: (sheet: Sheet) => void;
   validateNewSheets: () => void;
 }>({
   onsheet: {
@@ -26,10 +30,12 @@ export const OnsheetContext = React.createContext<{
     sheets: [],
     defaultRenderer: "",
     sheetClassHash: "",
+    proxyClassHash: "",
   },
   setSelectedSheetAddress: () => {},
   load: async () => [],
-  addSheet: () => {},
+  addSheet: async () => "",
+  appendSheet: () => {},
   validateNewSheets: () => {},
 });
 
@@ -38,11 +44,15 @@ export const OnsheetContextProvider = ({
   children,
 }: PropsWithChildren<{ onsheetAddress: string }>) => {
   const { updateAppStatus, updateSheetStatus } = useContext(AppStatusContext);
+  const { accountAddress } = useContext(AccountContext);
+  const { getAbiForContract } = useContext(AbisContext);
+  const navigate = useNavigate();
   const [onsheet, setOnsheet] = useState<Onsheet>({
     address: onsheetAddress,
     sheets: [],
     defaultRenderer: "",
     sheetClassHash: "",
+    proxyClassHash: "",
   });
 
   const [selectedSheetAddress, setSelectedSheetAddress] = useState<string>();
@@ -61,42 +71,16 @@ export const OnsheetContextProvider = ({
       Promise.all([
         contract.getSheetDefaultRendererAddress(),
         contract.getSheetClassHash(),
-        contract.getSheets(),
+        contract.getProxyClassHash(),
       ])
         .then(async (response) => {
-          const [renderer, classHash, addresses] = response;
-          const names = await Promise.all(
-            addresses.map((sheet) =>
-              chainProvider
-                .callContract({
-                  contractAddress: sheet,
-                  entrypoint: "name",
-                })
-                .then((response) => normalizeHexString(response.result[0]))
-            )
-          );
-          const symbols = await Promise.all(
-            addresses.map((sheet) =>
-              chainProvider
-                .callContract({
-                  contractAddress: sheet,
-                  entrypoint: "symbol",
-                })
-                .then((response) => normalizeHexString(response.result[0]))
-            )
-          );
+          const [renderer, sheetClassHash, proxyClassHash] = response;
           return {
             address,
             defaultRenderer: renderer,
-            sheetClassHash: classHash,
-            sheets: names.map(
-              (name, index) =>
-                ({
-                  address: addresses[index],
-                  name: hex2str(name),
-                  symbol: hex2str(symbols[index]),
-                } as Sheet)
-            ),
+            sheetClassHash,
+            proxyClassHash,
+            sheets: [],
           };
         })
         .then((_onsheet) => {
@@ -106,8 +90,31 @@ export const OnsheetContextProvider = ({
     [address, contract]
   );
 
-  const addSheet = (sheet: Omit<Sheet, "address">, owner: string) => {
-    const calldata = {
+  const appendSheet = (sheet: Sheet) => {
+    setOnsheet((prevOnsheet) => {
+      const index = prevOnsheet.sheets.findIndex(
+        (s) => s.address === sheet.address
+      );
+      if (index === -1) {
+        return {
+          ...prevOnsheet,
+          sheets: [...prevOnsheet.sheets, sheet],
+        };
+      }
+      return prevOnsheet;
+    });
+    updateSheetStatus(sheet.address, defaultSheetStatus);
+    return address;
+  };
+
+  const addSheet = async (
+    sheet: Omit<Sheet, "address">,
+    owner: string
+  ): Promise<string> => {
+    let calldata = {
+      implementation: onsheet.sheetClassHash,
+      selector: hash.getSelectorFromName("initialize"),
+      calldataLen: 6,
       name: str2hex(sheet.name),
       symbol: str2hex(sheet.symbol),
       owner,
@@ -116,18 +123,32 @@ export const OnsheetContextProvider = ({
       rendererAddress: onsheet.defaultRenderer,
     };
     const address = contract.calculateSheetAddress(
-      sheets.length,
-      onsheet.sheetClassHash,
-      Object.values(calldata),
-      onsheet.address
+      accountAddress,
+      onsheet.proxyClassHash,
+      Object.values(calldata)
     );
+    const abi = await getAbiForContract(address);
+    let newSheet: Sheet;
+    if (Object.keys(abi).length !== 0) {
+      newSheet = { ...sheet, address };
+    } else {
+      newSheet = { ...sheet, address, calldata };
+    }
     setOnsheet((prevOnsheet) => ({
       ...prevOnsheet,
-      sheets: [...prevOnsheet.sheets, { ...sheet, address, calldata }],
+      sheets: [...prevOnsheet.sheets, newSheet],
     }));
     updateSheetStatus(address, defaultSheetStatus);
-    setSelectedSheetAddress(address);
+    return address;
   };
+
+  useEffect(() => {
+    if (onsheet.sheets.length > 0) {
+      const lastSheet = onsheet.sheets[onsheet.sheets.length - 1];
+      navigate(`/${lastSheet.address}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onsheet.sheets]);
 
   const validateNewSheets = () => {
     setOnsheet((prevOnsheet) => ({
@@ -141,30 +162,18 @@ export const OnsheetContextProvider = ({
 
   useEffect(() => {
     load()
-      .then((sheets) => {
+      .then(() => {
         updateAppStatus({
-          message: "Click on a tab to open a sheet",
+          message: "Click on + to create a sheet",
           loading: false,
-          sheets: sheets.reduce(
-            (prev, cur) => ({
-              ...prev,
-              [cur.address]: defaultSheetStatus,
-            }),
-            {}
-          ),
+          sheets: {},
         });
       })
       .catch((e) => {
         updateAppStatus({
           message: `Error loading sheets<br /><br />${e}`,
           loading: false,
-          sheets: sheets.reduce(
-            (prev, cur) => ({
-              ...prev,
-              [cur.address]: defaultSheetStatus,
-            }),
-            {}
-          ),
+          sheets: {},
         });
       });
     // Disable missing updateAppStatus
@@ -180,6 +189,7 @@ export const OnsheetContextProvider = ({
         setSelectedSheetAddress,
         load,
         addSheet,
+        appendSheet,
         validateNewSheets,
       }}
     >

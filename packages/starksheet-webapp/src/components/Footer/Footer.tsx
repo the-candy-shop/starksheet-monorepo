@@ -30,7 +30,7 @@ function Footer({ sx }: FooterProps) {
       });
       return;
     }
-    addSheet(
+    await addSheet(
       {
         name: `Sheet${onsheet.sheets.length}`,
         symbol: `SHT${onsheet.sheets.length}`,

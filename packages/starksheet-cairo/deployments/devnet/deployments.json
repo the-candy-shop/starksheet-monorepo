@@ -1,25 +1,25 @@
 {
   "BasicCellRenderer": {
-    "address": "0x6ddf9dbc88d9c1914efb85974a6a37f3612616a51eb4a8d4a88592a1782fe5d",
-    "tx": "0x8c77df6775ca38800e4d4b4f536515c6233b42d493cee49daab1ba13d83718",
+    "address": "0x4ec137f07cfb1a5ddfd8459cfae828195ff6e2546866eb1da8ad3be2860edab",
+    "tx": "0x2881ac37bd3d20282300233ae3190fb8b5402caffdcb384c8957a87d87758a3",
     "artifact": "build/BasicCellRenderer.json",
     "alias": "basic_cell_renderer"
   },
   "math": {
-    "address": "0x3aac446ff15347ee9db538eef40a248910ad21da0ee6c47ebaeb6819d10089",
-    "tx": "0x558fdb7257053d629e650031c886d22a92e15ae9e0b179cfe4646900477c2da",
+    "address": "0x712c564d047226d17c07b482220d5c40e5d43bf03a420672cfc3575c0f66852",
+    "tx": "0x1185b772c28aae1fd119ba9c969e65bd2f0c989e5942f34ffa37af0c9a9bab0",
     "artifact": "build/math.json",
     "alias": "math"
   },
   "execute": {
-    "address": "0x46b736319771b71fd61e4650db90ff65e3459f3ed8babbd4433e8b035e3a7b5",
-    "tx": "0x70fd9283d17df4b3afe8e93ea818fcab6b53362d53f94813536867d0db89e49",
+    "address": "0x5a49065a5e5962a86d8c23f54c08bfcb089d31384ff7dd7578847378d794d10",
+    "tx": "0x1cd83051dcc9b9abdbe0edd58d597af2eec54efb54caac902082eee3a9e427b",
     "artifact": "build/execute.json",
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x2282a9a97954f2ca46f8c70fee75573859bd15da47f94b5fe9743eddbf8aea2",
-    "tx": "0x4a5c9d21b50fac85b970e1ef2dedf11a544978ab96831a489fd45c824691969",
+    "address": "0x355c162f58d0cd57f34ba471bec90404d036d1d86644859f57ecda6196a8201",
+    "tx": "0x7eed10feb48928b0760a0eee516feb15593701f34b3a6b6bca8f568ef245e95",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   }

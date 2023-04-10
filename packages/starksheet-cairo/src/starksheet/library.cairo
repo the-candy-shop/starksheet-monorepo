@@ -10,6 +10,10 @@ from utils.string import str
 from utils.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build, _hash_sorted
 
 @storage_var
+func Starksheet_proxy_class_hash() -> (hash: felt) {
+}
+
+@storage_var
 func Starksheet_sheet_class_hash() -> (hash: felt) {
 }
 
@@ -54,7 +58,8 @@ namespace Starksheet {
         name: felt, symbol: felt, proof_len: felt, proof: felt*
     ) -> (address: felt) {
         alloc_locals;
-        let (class_hash) = Starksheet_sheet_class_hash.read();
+        let (sheet_class_hash) = Starksheet_sheet_class_hash.read();
+        let (proxy_class_hash) = Starksheet_proxy_class_hash.read();
         let (local sheets_count) = Starksheet_sheets_count.read();
         let (owner) = get_caller_address();
 
@@ -66,34 +71,23 @@ namespace Starksheet {
             assert is_allow_list = allow_list_enabled;
         }
 
-        let (local constructor_calldata: felt*) = alloc();
-        if (name == 0) {
-            let (count_str) = str(sheets_count);
-            tempvar sheet_name = 'Sheet' * 256 * 256 + count_str;
-            tempvar sheet_symbol = 'SHT' * 256 * 256 + count_str;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-            tempvar range_check_ptr = range_check_ptr;
-        } else {
-            tempvar sheet_name = name;
-            tempvar sheet_symbol = symbol;
-            tempvar syscall_ptr = syscall_ptr;
-            tempvar pedersen_ptr = pedersen_ptr;
-            tempvar range_check_ptr = range_check_ptr;
-        }
+        let (local calldata_: felt*) = alloc();
         let (renderer) = Starksheet_sheet_default_renderer_address.read();
-        assert constructor_calldata[0] = sheet_name;
-        assert constructor_calldata[1] = sheet_symbol;
-        assert constructor_calldata[2] = owner;
-        assert constructor_calldata[3] = 0;
-        assert constructor_calldata[4] = 0;
-        assert constructor_calldata[5] = renderer;
+        assert calldata_[0] = sheet_class_hash;  // implementation
+        assert calldata_[1] = 0x79dc0da7c54b95f10aa182ad0a46400db63156920adb65eca2654c0945a463;  // selector
+        assert calldata_[2] = 6; // calldata_len
+        assert calldata_[3] = name; // calldata*
+        assert calldata_[4] = symbol;
+        assert calldata_[5] = owner;
+        assert calldata_[6] = 0;
+        assert calldata_[7] = 0;
+        assert calldata_[8] = renderer;
 
         let (address) = deploy(
-            class_hash=class_hash,
-            contract_address_salt=sheets_count,
-            constructor_calldata_size=6,
-            constructor_calldata=constructor_calldata,
+            class_hash=proxy_class_hash,
+            contract_address_salt=owner,
+            constructor_calldata_size=9,
+            constructor_calldata=calldata_,
             deploy_from_zero=0,
         );
 
@@ -111,6 +105,18 @@ namespace Starksheet {
         hash: felt
     ) {
         Starksheet_sheet_class_hash.write(hash);
+        return ();
+    }
+
+    func get_proxy_class_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        ) -> (hash: felt) {
+        return Starksheet_proxy_class_hash.read();
+    }
+
+    func set_proxy_class_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        hash: felt
+    ) {
+        Starksheet_proxy_class_hash.write(hash);
         return ();
     }
 

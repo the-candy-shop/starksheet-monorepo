@@ -63,6 +63,29 @@
     {
         "inputs": [
             {
+                "name": "hash",
+                "type": "felt"
+            }
+        ],
+        "name": "setProxyClassHash",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getProxyClassHash",
+        "outputs": [
+            {
+                "name": "hash",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "price",
                 "type": "felt"
             }
@@ -168,6 +191,12 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "withdraw",
+        "outputs": [],
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "name": "owner",
@@ -175,6 +204,10 @@
             },
             {
                 "name": "sheet_class_hash",
+                "type": "felt"
+            },
+            {
+                "name": "proxy_class_hash",
                 "type": "felt"
             },
             {

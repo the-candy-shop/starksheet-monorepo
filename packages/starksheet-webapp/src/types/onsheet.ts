@@ -26,6 +26,7 @@ export type Onsheet = {
   address: string;
   defaultRenderer: string;
   sheetClassHash: string;
+  proxyClassHash: string;
 };
 
 // Starknet types

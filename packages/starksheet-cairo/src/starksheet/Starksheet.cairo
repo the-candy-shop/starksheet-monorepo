@@ -2,7 +2,7 @@
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from openzeppelin.access.ownable.library import Ownable
-from interfaces import IERC20
+from openzeppelin.token.erc20.IERC20 import IERC20
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 from starkware.cairo.common.uint256 import Uint256
 
@@ -40,6 +40,22 @@ func getSheetClassHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     hash: felt
 ) {
     return Starksheet.get_sheet_class_hash();
+}
+
+@external
+func setProxyClassHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    hash: felt
+) {
+    Ownable.assert_only_owner();
+    Starksheet.set_proxy_class_hash(hash);
+    return ();
+}
+
+@view
+func getProxyClassHash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    hash: felt
+) {
+    return Starksheet.get_proxy_class_hash();
 }
 
 @external
@@ -101,12 +117,27 @@ func addSheet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     return Starksheet.add_sheet(name, symbol, proof_len, proof);
 }
 
+@external
+func withdraw{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    Ownable.assert_only_owner();
+    let (contract_address) = get_contract_address();
+    let (amount) = IERC20.balanceOf(contract_address=ETH_ADDRESS, account=contract_address);
+    let (recipient) = Ownable.owner();
+    IERC20.transfer(contract_address=ETH_ADDRESS, recipient=recipient, amount=amount);
+    return ();
+}
+
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    owner: felt, sheet_class_hash: felt, default_renderer_address: felt, sheet_price: felt
+    owner: felt,
+    sheet_class_hash: felt,
+    proxy_class_hash: felt,
+    default_renderer_address: felt,
+    sheet_price: felt,
 ) {
     Ownable.initializer(owner);
     Starksheet.set_sheet_class_hash(sheet_class_hash);
+    Starksheet.set_proxy_class_hash(proxy_class_hash);
     Starksheet.set_sheet_default_renderer_address(default_renderer_address);
     Starksheet.set_sheet_price(sheet_price);
     return ();

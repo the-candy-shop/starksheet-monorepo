@@ -15,9 +15,11 @@ import { OnsheetContext } from "./OnsheetContext";
 
 export const TransactionsContext = React.createContext<{
   transactions: Call[];
+  newSheetsTransactions: Call[];
   settleTransactions: (tx?: Call[]) => Promise<void>;
 }>({
   transactions: [],
+  newSheetsTransactions: [],
   settleTransactions: async () => {},
 });
 
@@ -119,6 +121,7 @@ export const TransactionsContextProvider = ({
     <TransactionsContext.Provider
       value={{
         transactions,
+        newSheetsTransactions,
         settleTransactions,
       }}
     >

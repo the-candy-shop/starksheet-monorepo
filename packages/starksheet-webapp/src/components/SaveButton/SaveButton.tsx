@@ -1,5 +1,5 @@
 import { Box, BoxProps } from "@mui/material";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import Tooltip from "../../Tooltip/Tooltip";
 import { AccountContext } from "../../contexts/AccountContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
@@ -14,9 +14,18 @@ export type SaveButtonProps = {
 };
 
 function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
-  const { transactions, settleTransactions } = useContext(TransactionsContext);
+  const { transactions, newSheetsTransactions, settleTransactions } =
+    useContext(TransactionsContext);
   const { accountAddress } = useContext(AccountContext);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const cost = useMemo(
+    () =>
+      newSheetsTransactions.length
+        ? ` (${newSheetsTransactions.length * 0.01})`
+        : "",
+    [newSheetsTransactions]
+  );
 
   const onClick = useCallback(async () => {
     if (transactions.length === 0) {
@@ -73,7 +82,7 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
               <LoadingDots />
             </Box>
           ) : (
-            `Save`
+            `Save${cost}`
           )}
         </Button>
       </span>

@@ -8,6 +8,7 @@ import { network } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import aspectLogo from "./aspect.png";
+import githubLogo from "./github.svg";
 import mintSquareLogo from "./mintsquare.svg";
 import starknetLogo from "./starknet.svg";
 import telegramLogo from "./telegram.svg";
@@ -97,6 +98,22 @@ function Footer({ sx }: FooterProps) {
           }
         >
           <img src={starknetLogo} alt="" />
+        </GreyCell>
+        <GreyCell
+          sx={{
+            marginLeft: `-${CELL_BORDER_WIDTH}px`,
+            width: `${CELL_HEIGHT}px`,
+            cursor: "pointer",
+            "& .content": { justifyContent: "center" },
+          }}
+          onClick={() =>
+            window.open(
+              "https://github.com/the-candy-shop/starksheet-monorepo/",
+              "_blank"
+            )
+          }
+        >
+          <img src={githubLogo} alt="" />
         </GreyCell>
         <GreyCell
           sx={{

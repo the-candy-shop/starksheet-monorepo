@@ -7,13 +7,13 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { hash } from "starknet";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { Onsheet, Sheet } from "../types";
 import { str2hex } from "../utils/hexUtils";
 import { AbisContext } from "./AbisContext";
 import { AccountContext } from "./AccountContext";
 import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
-import { hash } from "starknet";
 
 export const OnsheetContext = React.createContext<{
   onsheet: Onsheet;
@@ -112,6 +112,7 @@ export const OnsheetContextProvider = ({
     owner: string
   ): Promise<string> => {
     let calldata = {
+      proxyAdmin: owner,
       implementation: onsheet.sheetClassHash,
       selector: hash.getSelectorFromName("initialize"),
       calldataLen: 6,

@@ -18,8 +18,8 @@
     "alias": "basic_cell_renderer"
   },
   "Starksheet": {
-    "address": "0x76a028b19d27310f5e9f941041ae4a3a52c0e0024d593ddcb0d34e1dcd24af1",
-    "tx": "0x6dc7583b135eab780fdf2486e545d595404eccc6bf6faabcb0921a859060c0a",
+    "address": "0x71d48483dcfa86718a717f57cf99a72ff8198b4538a6edccd955312fe624747",
+    "tx": "0x76b14441a6b7cabfc14226bde6e9707e2272a60caf19a6daffa95825043cd5d",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   }

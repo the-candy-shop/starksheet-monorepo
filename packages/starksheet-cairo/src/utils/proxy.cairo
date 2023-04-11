@@ -9,15 +9,21 @@ from openzeppelin.upgrades.library import Proxy
 
 // @dev Cairo doesn't support native decoding like Solidity yet,
 //      that's why we pass three arguments for calldata instead of one
+// @param proxy_admin proxy admin (can upgrade the contract)
 // @param implementation_hash the implementation contract hash
 // @param selector the implementation initializer function selector
 // @param calldata_len the calldata length for the initializer
 // @param calldata an array of felt containing the raw calldata
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    implementation_hash: felt, selector: felt, calldata_len: felt, calldata: felt*
+    proxy_admin: felt,
+    implementation_hash: felt,
+    selector: felt,
+    calldata_len: felt,
+    calldata: felt*,
 ) {
     alloc_locals;
+    Proxy.initializer(proxy_admin);
     Proxy._set_implementation_hash(implementation_hash);
 
     if (selector != 0) {
@@ -76,4 +82,13 @@ func get_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, ran
 ) {
     let (class_hash) = Proxy.get_implementation_hash();
     return (class_hash=class_hash);
+}
+
+@external
+func set_implementation_hash{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    class_hash: felt
+) -> () {
+    Proxy.assert_only_admin();
+    Proxy._set_implementation_hash(class_hash);
+    return ();
 }

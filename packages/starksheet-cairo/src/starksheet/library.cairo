@@ -73,20 +73,21 @@ namespace Starksheet {
 
         let (local calldata_: felt*) = alloc();
         let (renderer) = Starksheet_sheet_default_renderer_address.read();
-        assert calldata_[0] = sheet_class_hash;  // implementation
-        assert calldata_[1] = 0x79dc0da7c54b95f10aa182ad0a46400db63156920adb65eca2654c0945a463;  // selector
-        assert calldata_[2] = 6; // calldata_len
-        assert calldata_[3] = name; // calldata*
-        assert calldata_[4] = symbol;
-        assert calldata_[5] = owner;
-        assert calldata_[6] = 0;
+        assert calldata_[0] = owner;  // proxy_admin
+        assert calldata_[1] = sheet_class_hash;  // implementation
+        assert calldata_[2] = 0x79dc0da7c54b95f10aa182ad0a46400db63156920adb65eca2654c0945a463;  // selector
+        assert calldata_[3] = 6;  // calldata_len
+        assert calldata_[4] = name;  // calldata*
+        assert calldata_[5] = symbol;
+        assert calldata_[6] = owner;
         assert calldata_[7] = 0;
-        assert calldata_[8] = renderer;
+        assert calldata_[8] = 0;
+        assert calldata_[9] = renderer;
 
         let (address) = deploy(
             class_hash=proxy_class_hash,
             contract_address_salt=owner,
-            constructor_calldata_size=9,
+            constructor_calldata_size=10,
             constructor_calldata=calldata_,
             deploy_from_zero=0,
         );

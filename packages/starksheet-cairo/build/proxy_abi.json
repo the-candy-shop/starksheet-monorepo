@@ -28,6 +28,10 @@
     {
         "inputs": [
             {
+                "name": "proxy_admin",
+                "type": "felt"
+            },
+            {
                 "name": "implementation_hash",
                 "type": "felt"
             },
@@ -105,6 +109,17 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "class_hash",
+                "type": "felt"
+            }
+        ],
+        "name": "set_implementation_hash",
+        "outputs": [],
         "type": "function"
     }
 ]

@@ -30,7 +30,7 @@ logger.setLevel(logging.INFO)
 
 async def main():
     # %% Compile & declare contracts
-    class_hash = {}
+    class_hash = get_declarations()
     for contract_name in [
         "Sheet",
         "Starksheet",
@@ -45,6 +45,7 @@ async def main():
 
     # %% Deploy contracts
     class_hash = get_declarations()
+    deployments = get_deployments()
     deployments = {
         contract_name: {
             **dict(zip(["address", "tx"], await deploy(contract_name))),
@@ -100,7 +101,7 @@ async def main():
     # %% TODO: remove when wallets work on devnet
     origin_address = (await call("Starksheet", "getSheet", 0)).address
     assert origin_address == await compute_sheet_address(name, symbol)
-    logger.info(f"ℹ️ Origin sheet address {hex(origin_address)}")
+    logger.info(f"ℹ️  Origin sheet address {hex(origin_address)}")
     assert (
         name
         == bytes.fromhex(

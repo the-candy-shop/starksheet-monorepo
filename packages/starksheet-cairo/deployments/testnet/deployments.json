@@ -18,8 +18,8 @@
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x4689249b9d3041c5bee2c2f03e2ce5d3f8712989920271d281d0a2ebd548982",
-    "tx": "0x64da74b763ffc00fc0b1113cebc9a39e85dc2be22908633c003425cafb45206",
+    "address": "0x19beed12acd80f2a33d0d614d1a77649904c49c1f0a53adffc3ce8c04011f50",
+    "tx": "0x5a1e5ac0b910f32e709c7f1bd34a4ff7cb32226117cc72a8914f2bb8df2b156",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   }

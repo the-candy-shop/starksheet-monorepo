@@ -8,10 +8,8 @@ from pathlib import Path
 from typing import Optional, Union
 
 import requests
-from dotenv import load_dotenv
-
-load_dotenv()
 from caseconverter import snakecase
+from dotenv import load_dotenv
 from starknet_py.contract import Contract
 from starknet_py.net.account.account import Account
 from starknet_py.net.client import Client
@@ -24,6 +22,8 @@ from starkware.starknet.core.os.contract_address.contract_address import (
     calculate_contract_address_from_hash,
 )
 from starkware.starknet.public.abi import get_selector_from_name
+
+load_dotenv()
 
 from constants import (
     ACCOUNT_ADDRESS,
@@ -210,12 +210,16 @@ def dump_declarations(declarations):
 
 
 def get_declarations():
-    return {
-        name: int(class_hash, 16)
-        for name, class_hash in json.load(
-            open(DEPLOYMENTS_DIR / "declarations.json")
-        ).items()
-    }
+    return (
+        {
+            name: int(class_hash, 16)
+            for name, class_hash in json.load(
+                open(DEPLOYMENTS_DIR / "declarations.json")
+            ).items()
+        }
+        if (DEPLOYMENTS_DIR / "declarations.json").is_file()
+        else {}
+    )
 
 
 def dump_deployments(deployments):
@@ -242,8 +246,12 @@ def get_deployments():
             obj["tx"] = int(obj["tx"], 16)
         return obj
 
-    return json.load(
-        open(DEPLOYMENTS_DIR / "deployments.json", "r"), object_hook=parse_hex_strings
+    return (
+        json.load(
+            open(DEPLOYMENTS_DIR / "deployments.json"), object_hook=parse_hex_strings
+        )
+        if (DEPLOYMENTS_DIR / "deployments.json").is_file()
+        else {}
     )
 
 
@@ -364,6 +372,7 @@ async def compute_sheet_address(name, symbol):
     owner = await get_account()
     deployments = get_deployments()
     calldata = {
+        "proxyAdmin": owner.address,
         "implementation": sheet_class_hash,
         "selector": get_selector_from_name("initialize"),
         "calldataLen": 6,

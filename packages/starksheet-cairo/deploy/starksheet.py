@@ -101,7 +101,7 @@ async def main():
     # %% TODO: remove when wallets work on devnet
     origin_address = (await call("Starksheet", "getSheet", 0)).address
     assert origin_address == await compute_sheet_address(name, symbol)
-    logger.info(f"ℹ️  Origin sheet address {hex(origin_address)}")
+    logger.info(f"ℹ️  {name} sheet address {hex(origin_address)}")
     assert (
         name
         == bytes.fromhex(

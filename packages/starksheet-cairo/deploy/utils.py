@@ -331,9 +331,9 @@ async def invoke(contract_name, function_name, *inputs, address=None):
     logger.info(f"ℹ️  Invoking {contract_name}.{function_name}({json.dumps(inputs)})")
     response = await account.execute(call, max_fee=int(1e16))
     logger.info(f"⏳ Waiting for tx {get_tx_url(response.transaction_hash)}")
-    await account.client.wait_for_tx(response.transaction_hash)
+    status = await account.client.wait_for_tx(response.transaction_hash)
     logger.info(
-        f"✅ {contract_name}.{function_name} invoked at tx: %s",
+        f"✅ {contract_name}.{function_name} status: {status}",
         hex(response.transaction_hash),
     )
     return response.transaction_hash

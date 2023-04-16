@@ -5,7 +5,7 @@ import pytest_asyncio
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.testing.starknet import Starknet
 
-from constants import CONTRACTS
+from utils.constants import CONTRACTS
 
 
 @pytest.fixture(scope="session")
@@ -27,6 +27,7 @@ async def math(starknet):
             [str(CONTRACTS["math"])],
             debug_info=True,
             disable_hint_validation=True,
+            cairo_path=["src"],
         ),
         constructor_calldata=[],
     )
@@ -39,6 +40,20 @@ async def renderer(starknet):
             [str(CONTRACTS["BasicCellRenderer"])],
             debug_info=True,
             disable_hint_validation=True,
+            cairo_path=["src"],
+        ),
+        constructor_calldata=[],
+    )
+
+
+@pytest_asyncio.fixture(scope="session")
+async def subdomain(starknet):
+    return await starknet.deploy(
+        contract_class=compile_starknet_files(
+            [str(CONTRACTS["Subdomain"])],
+            debug_info=True,
+            disable_hint_validation=True,
+            cairo_path=["src"],
         ),
         constructor_calldata=[],
     )

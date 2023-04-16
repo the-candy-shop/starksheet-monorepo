@@ -2,7 +2,12 @@ import random
 
 import pytest
 
-from utils import address_to_leaf, merkle_proofs, merkle_root, merkle_verify
+from utils.merkle_proof import (
+    address_to_leaf,
+    merkle_proofs,
+    merkle_root,
+    merkle_verify,
+)
 
 random.seed(0)
 

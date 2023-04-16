@@ -4,8 +4,8 @@ from urllib.parse import unquote
 
 import pytest
 
-from constants import N_COLS, N_ROWS
-from utils import number_to_index
+from utils.constants import N_COLS, N_ROWS
+from utils.merkle_proof import number_to_index
 
 
 @pytest.mark.asyncio

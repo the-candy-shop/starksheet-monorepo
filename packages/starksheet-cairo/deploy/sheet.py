@@ -2,9 +2,9 @@ import json
 import logging
 from asyncio import run
 
-from constants import ALLOW_LIST
-from deploy.utils import call, invoke, wait_for_transaction
-from utils import address_to_leaf, merkle_proofs, merkle_root
+from utils.constants import ALLOW_LIST
+from utils.deployment import call, invoke, wait_for_transaction
+from utils.merkle_proof import address_to_leaf, merkle_proofs, merkle_root
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

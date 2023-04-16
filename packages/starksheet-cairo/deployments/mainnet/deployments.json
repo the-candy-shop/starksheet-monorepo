@@ -22,5 +22,11 @@
     "tx": "0x76b14441a6b7cabfc14226bde6e9707e2272a60caf19a6daffa95825043cd5d",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
+  },
+  "Subdomain": {
+    "address": "0x372bc172be19d7cc89bf8db93a0c40bb6502647a78358ef0fca043bb15b584",
+    "tx": "0x363952e0c42887b34a2d8c97ef534a6e4ed7cceb7ff85f3478b5c03586183b",
+    "artifact": "build/Subdomain.json",
+    "alias": "subdomain"
   }
 }

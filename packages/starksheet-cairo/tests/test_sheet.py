@@ -13,11 +13,12 @@ from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
 
-from constants import ALLOW_LIST, CONTRACTS, OWNER
-from utils import address_to_leaf, merkle_proof, merkle_root, number_to_index
+from utils.constants import ACCOUNT_ADDRESS, ALLOW_LIST, CONTRACTS
+from utils.merkle_proof import address_to_leaf, merkle_proof, merkle_root, number_to_index
 
 Cell = namedtuple("Cell", ["contract_address", "id", "value", "calldata"])
 random.seed(0)
+OWNER = int(ACCOUNT_ADDRESS, 16)
 
 
 def _div(l_len, *l):

@@ -3,7 +3,7 @@ from asyncio import run
 
 from dotenv import load_dotenv
 
-from deploy.utils import (
+from utils.deployment import (
     call,
     compile_contract,
     compute_sheet_address,

@@ -3,8 +3,9 @@ import pytest_asyncio
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
 
-from constants import CONTRACTS, OWNER
+from utils.constants import ACCOUNT_ADDRESS, CONTRACTS
 
+OWNER = int(ACCOUNT_ADDRESS, 16)
 OTHER = OWNER + 1
 
 

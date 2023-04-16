@@ -4,7 +4,7 @@ from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.testing.starknet import StarknetContract
 
-from constants import CONTRACTS
+from utils.constants import CONTRACTS
 
 
 @pytest_asyncio.fixture(scope="session")

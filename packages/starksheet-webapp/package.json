@@ -13,6 +13,8 @@
     "@types/node": "^16.11.41",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "bn.js": "^5.2.1",
     "ethers": "5.7.2",
     "expr-eval": "^2.0.2",
@@ -26,7 +28,8 @@
     "react-scripts": "5.0.1",
     "starknet": "^4.22.0",
     "ts-toolbelt": "^9.6.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "wido-widget": "^1.0.3"
   },
   "scripts": {
     "prestart": "npm run prebuild",

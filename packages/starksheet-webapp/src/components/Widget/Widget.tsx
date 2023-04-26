@@ -50,11 +50,11 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
 
   const handleMetamask = useCallback(async () => {
     await activate(injected)
-  }, [])
+  }, [activate])
 
   const handleConnectWalletClick = useCallback(
     (chainId: number) => {
-      if (chainId == STARKNET_ID) {
+      if (chainId === STARKNET_ID) {
         handleStarknet()
       } else {
         handleMetamask()

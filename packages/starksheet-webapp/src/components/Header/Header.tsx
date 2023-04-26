@@ -3,8 +3,12 @@ import { CELL_BORDER_WIDTH } from "../../config";
 import Button from "../Button/Button";
 import ConnectButton from "../ConnectButton/ConnectButton";
 import GreyCell from "../GreyCell/GreyCell";
+import BridgeButton from '../BridgeButton/BridgeButton';
+import Widget from '../Widget/Widget';
+import React from 'react';
 
 function Header() {
+  const [isOpenWidget, setOpenWidget] = React.useState<boolean>(false);
   return (
     <Box sx={{ display: "flex" }}>
       <GreyCell sx={{ textIndent: "20px", flex: 1 }}>Starksheet</GreyCell>
@@ -19,8 +23,20 @@ function Header() {
       >
         Learn more
       </Button>
+      <BridgeButton
+        onClick={() => {
+          setOpenWidget(true)
+        }}
+        sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
+      />
       <ConnectButton
         sx={{ width: "174px", marginLeft: `-${CELL_BORDER_WIDTH}px` }}
+      />
+      <Widget
+        open={isOpenWidget}
+        onClose={() => {
+          setOpenWidget(false)
+        }}
       />
     </Box>
   );

@@ -21,8 +21,6 @@ import {
   toPlainTextFormula,
   tokenIdToCellName,
 } from "./formula.utils";
-import BridgeButton from '../BridgeButton/BridgeButton';
-import Widget  from '../Widget/Widget';
 
 export type ActionBarProps = {
   inputRef: React.RefObject<ContentEditable>;
@@ -44,7 +42,6 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
   const [unSavedValue, setUnsavedValue] = React.useState<string>("");
   const [cellData, setCellData] = React.useState<CellData | null>(null);
-  const [isOpenWidget, setOpenWidget] = React.useState<boolean>(false);
 
   const previousSelectedCell = React.useRef<number>(selectedCell);
 
@@ -244,17 +241,6 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       <SaveButton
         currentCellOwnerAddress={owner}
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
-      />
-      <BridgeButton
-        onClick={() => {
-          setOpenWidget(true)
-        }}
-      />
-      <Widget
-        open={isOpenWidget}
-        onClose={() => {
-          setOpenWidget(false)
-        }}
       />
     </Box>
   );

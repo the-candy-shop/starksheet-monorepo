@@ -1,11 +1,13 @@
 import Tooltip from "../../Tooltip/Tooltip";
 import Button from "../Button/Button";
+import { BoxProps } from '@mui/material';
 
 export type BridgeButtonProps = {
-  onClick: () => void
+  onClick: () => void;
+  sx?: BoxProps["sx"];
 };
 
-function BridgeButton({ onClick }: BridgeButtonProps) {
+function BridgeButton({ onClick, sx }: BridgeButtonProps) {
   return (
     <Tooltip title={false} followCursor>
       <span>
@@ -18,6 +20,7 @@ function BridgeButton({ onClick }: BridgeButtonProps) {
               justifyContent: "center",
               textAlign: "center",
             },
+            ...sx
           }}
           onClick={onClick}
         >

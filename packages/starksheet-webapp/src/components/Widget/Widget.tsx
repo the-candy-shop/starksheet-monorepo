@@ -92,7 +92,13 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
       onClose={onClose}
       children={widget}
       style={{
-        zIndex: 40 // required to allow starknet wallet selector on top of the widget
+        zIndex: 40, // required to allow starknet wallet selector on top of the widget
+      }}
+      PaperProps={{
+        style: {
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+        },
       }}
     />
   );

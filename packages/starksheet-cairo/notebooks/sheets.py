@@ -100,6 +100,8 @@ ax = ts.plot.bar()
 x_labels = [d.date().strftime("%Y-%m-%d") for d in ts.index]
 ax.set_xticks(range(len(ts)))
 ax.set_xticklabels(x_labels, rotation=45, ha="right")
+ax.set_axisbelow(True)
+ax.grid(axis="y", linestyle="--", color="grey")
 ax.set_xlabel("Date")
 ax.set_ylabel("New sheets")
 

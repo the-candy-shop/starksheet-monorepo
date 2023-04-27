@@ -29,7 +29,7 @@
     "starknet": "^4.22.0",
     "ts-toolbelt": "^9.6.0",
     "web-vitals": "^2.1.4",
-    "wido-widget": "1.0.4"
+    "wido-widget": "1.0.6"
   },
   "scripts": {
     "prestart": "npm run prebuild",

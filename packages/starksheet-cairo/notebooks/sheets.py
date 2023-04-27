@@ -102,3 +102,13 @@ ax.set_xticks(range(len(ts)))
 ax.set_xticklabels(x_labels, rotation=45, ha="right")
 ax.set_xlabel("Date")
 ax.set_ylabel("New sheets")
+
+# %% Plot hourly sheet creation
+(
+    calls.loc[lambda df: df.selector_name == "addSheet"]
+    .timestamp.astype("datetime64[s]")
+    .dt.strftime("%H")
+    .value_counts()
+    .sort_index()
+    .plot.bar(xlabel="Hour")
+)

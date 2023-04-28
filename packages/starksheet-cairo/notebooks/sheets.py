@@ -104,6 +104,7 @@ ax.set_axisbelow(True)
 ax.grid(axis="y", linestyle="--", color="grey")
 ax.set_xlabel("Date")
 ax.set_ylabel("New sheets")
+ax.set_title(f"Total: {ts.sum()}")
 
 # %% Plot hourly sheet creation
 (

@@ -1,7 +1,7 @@
 # %% Imports and query
 import logging
-from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 
@@ -134,6 +134,8 @@ ax.set_xlabel("Date")
 ax.set_ylabel("New sheets")
 ax.set_title(f"Total: {ts.sum()}")
 logger.info(f"📈 sheets: {ts.sum()}")
+plt.tight_layout()
+plt.savefig("daily_sheets.png")
 
 # %% Plot hourly sheet creation
 (

@@ -82,17 +82,17 @@ data = {
 }
 
 # %% Fetch data
-if Path("calls.csv").is_file():
-    previous_calls = pd.read_csv("calls.csv")
-    after = (
-        previous_calls.sort_values("timestamp", ascending=True)
-        .drop_duplicates("contract_address")
-        .set_index("contract_address")
-        .cursor.to_dict()
-    )
-else:
-    after = {}
-    previous_calls = pd.DataFrame()
+# if Path("calls.csv").is_file():
+#     previous_calls = pd.read_csv("calls.csv")
+#     after = (
+#         previous_calls.sort_values("timestamp", ascending=True)
+#         .drop_duplicates("contract_address")
+#         .set_index("contract_address")
+#         .cursor.to_dict()
+#     )
+# else:
+after = {}
+previous_calls = pd.DataFrame()
 
 
 calls = []
@@ -100,7 +100,7 @@ for contract_address in [
     "0x076a028b19d27310f5e9f941041ae4a3a52c0e0024d593ddcb0d34e1dcd24af1",
     "0x071d48483dcfa86718a717f57cf99a72ff8198b4538a6edccd955312fe624747",
 ]:
-    data["variables"]["after"] = after.get(contract_address)
+    # data["variables"]["after"] = after.get(contract_address)
     data["variables"]["input"]["contract_address"] = contract_address
     response = requests.post(url, headers=headers, json=data)
     calls += response.json()["data"]["calls"]["edges"]

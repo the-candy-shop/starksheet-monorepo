@@ -35,11 +35,8 @@ data = {
                   calls(first: $first, after: $after, input: $input) {
                     edges {
                       node {
-                        id
                         ...AccountCallsTableRowFragment_call
-                        __typename
                       }
-                      cursor
                     }
                     pageInfo {
                       endCursor
@@ -48,21 +45,9 @@ data = {
                   }
                 }
                 fragment AccountCallsTableRowFragment_call on Call {
-                  call_id
-                  block_number
-                  transaction_hash
-                  selector
-                  contract_address
                   contract_identifier
-                  contract {
-                    is_social_verified
-                    id
-                  }
                   timestamp
                   selector_name
-                  selector_identifier
-                  calldata_decoded
-                  calldata
                 }
                 """,
     "variables": {
@@ -82,66 +67,74 @@ data = {
 }
 
 # %% Fetch data
-# if Path("calls.csv").is_file():
-#     previous_calls = pd.read_csv("calls.csv")
-#     after = (
-#         previous_calls.sort_values("timestamp", ascending=True)
-#         .drop_duplicates("contract_address")
-#         .set_index("contract_address")
-#         .cursor.to_dict()
-#     )
-# else:
-after = {}
-previous_calls = pd.DataFrame()
-
-
-calls = []
+_calls = []
 for contract_address in [
+    "0x028850a764600d53b2009b17428ae9eb980a4c4ea930a69ed8668048ef082a04",
     "0x076a028b19d27310f5e9f941041ae4a3a52c0e0024d593ddcb0d34e1dcd24af1",
     "0x071d48483dcfa86718a717f57cf99a72ff8198b4538a6edccd955312fe624747",
 ]:
-    # data["variables"]["after"] = after.get(contract_address)
+    page = 0
+    data["variables"]["after"] = None
     data["variables"]["input"]["contract_address"] = contract_address
     response = requests.post(url, headers=headers, json=data)
-    calls += response.json()["data"]["calls"]["edges"]
+    _calls += response.json()["data"]["calls"]["edges"]
+    while response.json()["data"]["calls"]["pageInfo"]["hasNextPage"]:
+        page += 1
+        logger.info(f"⏳ contract {contract_address}: fetching page {page}")
+        data["variables"]["after"] = response.json()["data"]["calls"]["pageInfo"][
+            "endCursor"
+        ]
+        response = requests.post(url, headers=headers, json=data)
+        _calls += response.json()["data"]["calls"]["edges"]
 
 
 calls = (
-    pd.concat(
-        [
-            pd.DataFrame(
-                [{**call["node"], "cursor": call["cursor"]} for call in calls]
-            ),
-            previous_calls,
-        ]
-    )
+    pd.DataFrame([call["node"] for call in _calls])
     .loc[lambda df: df.selector_name == "addSheet"]
-    .filter(items=["contract_address", "timestamp", "cursor", "selector_name"])
+    .astype({"timestamp": "datetime64[s]"})
+    .assign(
+        contract_identifier=lambda df: df.contract_identifier.str.extract(r"(v\d+)")
+    )
 )
 
 calls.to_csv("calls.csv", index=False)
 
 # %% Plot daily sheet creation
-ts = calls.timestamp.astype("datetime64[s]").value_counts().resample("D").sum()
-ax = ts.plot.bar()
+# define the date range for the plot
+start_date = pd.Timestamp("2023-03-01")
+end_date = pd.Timestamp.today()
+date_range = pd.date_range(start_date, end_date, freq="D")
 
-x_labels = [d.date().strftime("%Y-%m-%d") for d in ts.index]
-ax.set_xticks(range(len(ts)))
-ax.set_xticklabels(x_labels, rotation=45, ha="right")
+counts = (
+    calls.groupby(["contract_identifier", pd.Grouper(key="timestamp", freq="D")])
+    .size()
+    .unstack("contract_identifier", fill_value=0)
+    .reindex(date_range)
+    .fillna(0)
+    .astype(int)
+)
+
+ax = counts.plot(kind="bar", stacked=True)
+
+x_labels = [d.date().strftime("%m-%d") for d in counts.index]
+category_sums = counts.sum()
+ax.legend(
+    labels=[f"{category}: {category_sums[category]}" for category in counts.columns],
+    loc="upper left",
+    bbox_to_anchor=(0, 1),
+)
+ax.set_xticks(range(len(counts)))
+ax.set_xticklabels(x_labels, size=6)
 ax.set_axisbelow(True)
 ax.grid(axis="y", linestyle="--", color="grey")
 ax.set_xlabel("Date")
 ax.set_ylabel("New sheets")
-ax.set_title(f"Total: {ts.sum()}")
-logger.info(f"📈 sheets: {ts.sum()}")
+ax.set_title(f"Total: {counts.sum().sum()}")
+logger.info(f"📈 sheets: {counts.sum().sum()}")
 plt.tight_layout()
 plt.savefig("daily_sheets.png")
 
 # %% Plot hourly sheet creation
-(
-    calls.timestamp.astype("datetime64[s]")
-    .dt.strftime("%H")
-    .value_counts()
-    .sort_index()
-    .plot.bar(xlabel="Hour")
-)
+(calls.timestamp.dt.strftime("%H").value_counts().sort_index().plot.bar(xlabel="Hour"))
+
+# %%

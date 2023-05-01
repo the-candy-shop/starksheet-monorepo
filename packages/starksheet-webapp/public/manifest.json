@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Onsheet",
+  "name": "Onsheet, the on-chain spreadsheet",
   "icons": [
     {
       "src": "favicon.ico",

@@ -5,8 +5,6 @@ export type Network = "mainnet" | "testnet" | "testnet2" | "devnet";
 
 const ETHEREUM_MAINNET_ID = 1;
 const ETHEREUM_GOERLI_ID = 5;
-const STARKNET_MAINNET_ID = 15366;
-const STARKNET_TESTNET_ID = 15367;
 
 const sequencerUrls = {
   mainnet: "https://alpha-mainnet.starknet.io",
@@ -36,13 +34,6 @@ const ethChainIds = {
   devnet: ETHEREUM_GOERLI_ID,
 };
 
-const snChainIds = {
-  mainnet: STARKNET_MAINNET_ID,
-  testnet: STARKNET_TESTNET_ID,
-  testnet2: STARKNET_TESTNET_ID,
-  devnet: STARKNET_TESTNET_ID,
-};
-
 export const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
 export const chainProvider = new StarknetProvider(
@@ -57,4 +48,3 @@ export const starknetRpcProvider = new RpcProvider({
 export const chainId = chainIds[network];
 
 export const ethChainId = ethChainIds[network];
-export const snChainId = snChainIds[network];

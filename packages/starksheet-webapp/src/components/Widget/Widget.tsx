@@ -7,9 +7,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { providers } from 'ethers';
-import { ethChainId, snChainId } from '../../provider';
+import { chainId as envChainId, ethChainId } from '../../provider';
 
 const injected = new InjectedConnector({})
+
+const WIDO_STARKNET_MAINNET_ID = 15366;
+const WIDO_STARKNET_TESTNET_ID = 15367;
 
 type WidgetProps = {
   open: boolean,
@@ -29,6 +32,10 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
   const [fromTokens, setFromTokens] = useState<TokenList>([])
   const [toTokens, setToTokens] = useState<TokenList>([])
 
+  const snChainId = envChainId === 'SN_MAIN'
+    ? WIDO_STARKNET_MAINNET_ID
+    : WIDO_STARKNET_TESTNET_ID;
+
   useEffect(() => {
     getSupportedTokens({
       chainId: [ethChainId, snChainId],
@@ -38,7 +45,7 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
       setFromTokens(ethereumTokens);
       setToTokens(starknetTokens);
     })
-  }, [setFromTokens, setToTokens])
+  }, [snChainId, setFromTokens, setToTokens])
 
   const { library, activate, account, chainId } = useWeb3React()
 
@@ -78,7 +85,7 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
         handleMetamask()
       }
     },
-    [handleStarknet, handleMetamask]
+    [snChainId, handleStarknet, handleMetamask]
   )
 
   const widget = <WidoWidget

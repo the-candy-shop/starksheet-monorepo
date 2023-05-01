@@ -7,9 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { providers } from 'ethers';
-
-const ETHEREUM_ID = 1;
-const STARKNET_ID = 15366;
+import { ethChainId, snChainId } from '../../provider';
 
 const injected = new InjectedConnector({})
 
@@ -33,10 +31,10 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
 
   useEffect(() => {
     getSupportedTokens({
-      chainId: [ETHEREUM_ID, STARKNET_ID],
+      chainId: [ethChainId, snChainId],
     }).then((tokens) => {
-      const ethereumTokens = tokens.filter(token => token.chainId === ETHEREUM_ID);
-      const starknetTokens = tokens.filter(token => token.chainId === STARKNET_ID);
+      const ethereumTokens = tokens.filter(token => token.chainId === ethChainId);
+      const starknetTokens = tokens.filter(token => token.chainId === snChainId);
       setFromTokens(ethereumTokens);
       setToTokens(starknetTokens);
     })
@@ -74,7 +72,7 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
 
   const handleConnectWalletClick = useCallback(
     (chainId: number) => {
-      if (chainId === STARKNET_ID) {
+      if (chainId === snChainId) {
         handleStarknet()
       } else {
         handleMetamask()

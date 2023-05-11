@@ -1,32 +1,38 @@
 {
   "BasicCellRenderer": {
-    "address": "0x2b9429886f89c268b1742513ae9a87bf0f35936ca6999503dbf740c089bbef0",
-    "tx": "0x1de8b9ae9ac31990ea7cd3c7dfbd5392419ad27c6b1de69047775d968ac949a",
+    "address": "0x410f3f8edd676d3b572bdacdc5b3eebf619d879911f722dc1b4552f6cc7f3fc",
+    "tx": "0x7c31f8c0a982c4f76a2653aba5da2981d020c36878881689953111aa1dadc71",
     "artifact": "build/BasicCellRenderer.json",
     "alias": "basic_cell_renderer"
   },
   "math": {
-    "address": "0x31366d7249b229b9735f99d50014bd1ce67b1e6202018bb8ded87fe103637ab",
-    "tx": "0x112556f755708ba606a5da57bd4e44ee2ed7af2daebe560c1e9dd7365176957",
+    "address": "0x5c1440bb5088a9bcf7861a5a2bb0a15f48df15d1988c4167652f1ba68ceb4fb",
+    "tx": "0x21e11fe398cbc17851494747bcc2c14bfb9b53c71d3f32f9a8cf84fc9c839c3",
     "artifact": "build/math.json",
     "alias": "math"
   },
   "execute": {
-    "address": "0x7eec2d5642bc59f4c01206cb1b4eeeff6a0e360d2f7674d84f1d5d92e82753d",
-    "tx": "0x743fa0c094df659e332069c856c390d9b602c0a946115b6f08db167aa9b4918",
+    "address": "0x2b5845896810c67e8a8cd2e2ec1d06b581861ec26be2cbe3cb85c80949cbea3",
+    "tx": "0x6797539896acdbd5bd4dc149a8ea3b9efe6bd8f1a6033eacecc856699ab9086",
     "artifact": "build/execute.json",
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x35299235debcf05b6ddfebe4a12a8cfd0c2af3d5a85f221d8f3fdda4f9404e0",
-    "tx": "0x196092aef5089d8bdc9ff116e14f8a6720c4e1102d9d5b75a2b2c6b9dae6dfe",
+    "address": "0x4262ac484acad6a5039e0bfa0ddfac1bafcd96af86e0dc4e5e82d6bc915c111",
+    "tx": "0xbf81098f917a83cc44ddb794b9249fbbcd8dacb91f764d9a8f379fcc9b6052",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   },
-  "Subdomain": {
-    "address": "0x4ac399ef3151767fe66ac0c3d5c23cf8406403e05eedcbcdc02499ecafa9b53",
-    "tx": "0x6af58d35fcf87042c9407f7b42f258fefcb83efa00bcad1a63acac9ae5fc87d",
-    "artifact": "build/Subdomain.json",
-    "alias": "subdomain"
+  "IpfsRenderer": {
+    "address": "0x3ef03d825f87c1d5aee8910d8f7091ff07e2b7abd160f79f80d46a47ce5b6bc",
+    "tx": "0x9dc3d6c7d256338f66bc8427f03116e1fc76b9132ceef14de8b5c7644ca343",
+    "artifact": "build/IpfsRenderer.json",
+    "alias": "ipfs_renderer"
+  },
+  "UriRenderer": {
+    "address": "0xab858dc8b083c45afaec7e06f8f7baf5ba7a00e17f04e4d5ebe7aae898e784",
+    "tx": "0x568262183227a95e41c5c135a8a0d6b924071d51c159985c7cc3b3da04b6f3d",
+    "artifact": "build/UriRenderer.json",
+    "alias": "uri_renderer"
   }
 }

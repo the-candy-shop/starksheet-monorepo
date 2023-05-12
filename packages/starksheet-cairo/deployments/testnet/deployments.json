@@ -28,5 +28,11 @@
     "tx": "0xdce28b209d3aede9d3233fd0296365d20d039a3d8ed6f60b9029d6080199bc",
     "artifact": "build/Subdomain.json",
     "alias": "subdomain"
+  },
+  "UriRenderer": {
+    "address": "0x1bad81d6fd6d4f547c55157ae00565ded863e33cc196d20a2e7daeaa1bc03fd",
+    "tx": "0x7161e2f2ad28db486b569eceb435d70117e33bcb3c523037b8cba68a4c744f2",
+    "artifact": "build/UriRenderer.json",
+    "alias": "uri_renderer"
   }
 }

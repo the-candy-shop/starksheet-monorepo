@@ -28,5 +28,11 @@
     "tx": "0x363952e0c42887b34a2d8c97ef534a6e4ed7cceb7ff85f3478b5c03586183b",
     "artifact": "build/Subdomain.json",
     "alias": "subdomain"
+  },
+  "DustyPilotRenderer": {
+    "address": "0x533c93602a6db1d9886747c00e9b681b7991d65e559a992bcc6e59dedfbe684",
+    "tx": "0x7a94f59bcd12db55dc6432cee3c2ab304e88d93b86c075f73f06758589a1430",
+    "artifact": "build/DustyPilotRenderer.json",
+    "alias": "dusty_pilot_renderer"
   }
 }

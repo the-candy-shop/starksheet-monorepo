@@ -1,38 +1,32 @@
 {
   "BasicCellRenderer": {
-    "address": "0x410f3f8edd676d3b572bdacdc5b3eebf619d879911f722dc1b4552f6cc7f3fc",
-    "tx": "0x7c31f8c0a982c4f76a2653aba5da2981d020c36878881689953111aa1dadc71",
+    "address": "0x379847df05e55e5ab5038f047393f09522c56255532d35c50f4790b4a85dc75",
+    "tx": "0x48e262d62edbf0cfcf7e2965a900fd4e127f5089119dfc44c2b397a90d255e9",
     "artifact": "build/BasicCellRenderer.json",
     "alias": "basic_cell_renderer"
   },
   "math": {
-    "address": "0x5c1440bb5088a9bcf7861a5a2bb0a15f48df15d1988c4167652f1ba68ceb4fb",
-    "tx": "0x21e11fe398cbc17851494747bcc2c14bfb9b53c71d3f32f9a8cf84fc9c839c3",
+    "address": "0x1f257736e44d46499aaea6f75328ae138cfe9a78d936000513ceefac9330585",
+    "tx": "0x1eb19330afe9a34c873431c54d01f1c9f2935591a3ae9792b26d6cbb09afb99",
     "artifact": "build/math.json",
     "alias": "math"
   },
   "execute": {
-    "address": "0x2b5845896810c67e8a8cd2e2ec1d06b581861ec26be2cbe3cb85c80949cbea3",
-    "tx": "0x6797539896acdbd5bd4dc149a8ea3b9efe6bd8f1a6033eacecc856699ab9086",
+    "address": "0x5ef9048a99e4af26c135f6c9568207c69bee0080373417077c363e32fb3b864",
+    "tx": "0x2ec2cfa446f67c5ccfb8d81fa4d46b7fe83bea43147410d8f14bb464481ec4f",
     "artifact": "build/execute.json",
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x4262ac484acad6a5039e0bfa0ddfac1bafcd96af86e0dc4e5e82d6bc915c111",
-    "tx": "0xbf81098f917a83cc44ddb794b9249fbbcd8dacb91f764d9a8f379fcc9b6052",
+    "address": "0xb05d8e64fa27cce87a8d2f81c86aeb6d6feefa0187f4fd856a27acd48ae3d2",
+    "tx": "0x65fd7f01857f9162cd5b042a2c44fec6e9615ebe09e9744f6f9dfbb6325f8c0",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   },
-  "IpfsRenderer": {
-    "address": "0x3ef03d825f87c1d5aee8910d8f7091ff07e2b7abd160f79f80d46a47ce5b6bc",
-    "tx": "0x9dc3d6c7d256338f66bc8427f03116e1fc76b9132ceef14de8b5c7644ca343",
-    "artifact": "build/IpfsRenderer.json",
-    "alias": "ipfs_renderer"
-  },
-  "UriRenderer": {
-    "address": "0xab858dc8b083c45afaec7e06f8f7baf5ba7a00e17f04e4d5ebe7aae898e784",
-    "tx": "0x568262183227a95e41c5c135a8a0d6b924071d51c159985c7cc3b3da04b6f3d",
-    "artifact": "build/UriRenderer.json",
-    "alias": "uri_renderer"
+  "DustyPilotRenderer": {
+    "address": "0x5a67c96cc3b79e9c4103aa9a278e4eff02ee87d8c4d1a370d71812dc65ab71a",
+    "tx": "0x389c221abc2b0e8273530374ac895e266c4f20eda74cc6d72cc929fb729b218",
+    "artifact": "build/DustyPilotRenderer.json",
+    "alias": "dusty_pilot_renderer"
   }
 }

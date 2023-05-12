@@ -34,5 +34,11 @@
     "tx": "0x7161e2f2ad28db486b569eceb435d70117e33bcb3c523037b8cba68a4c744f2",
     "artifact": "build/UriRenderer.json",
     "alias": "uri_renderer"
+  },
+  "DustyPilotRenderer": {
+    "address": "0xb3fe3bd6c664427ef4cebabcf3b59e3167e54b6b9981ed8da5b8d674fcf7ea",
+    "tx": "0x48c5a2867bd30b4422e878d2708535b7a1d78db5a8d606d700d8b5264592b42",
+    "artifact": "build/DustyPilotRenderer.json",
+    "alias": "dusty_pilot_renderer"
   }
 }

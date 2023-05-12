@@ -97,7 +97,7 @@ dusted_pilots[["gh", "ipfs", "rarity"]].to_csv("dust_pilots/dusted.csv")
                 "name": row.gh,
                 "attributes": row.attributes,
             },
-            open(f"dust_pilots/token_uris/{row['index']}.json", "w"),
+            open(f"dust_pilots/token_uris/{row['index'] + 1}.json", "w"),
             indent=4,
         ),
         axis=1,

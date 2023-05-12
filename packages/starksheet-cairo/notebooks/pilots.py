@@ -69,8 +69,8 @@ dusted_pilots = (
         pilot=lambda df: list(random.randbytes(len(df))),
         attributes=lambda df: df[["dust", "pilot"]].agg(
             lambda row: [
-                {"trait_type": "Pilot", "trait_value": row.pilot},
-                {"trait_type": "Dust", "trait_value": row.dust},
+                {"trait_type": "Pilot", "value": row.pilot},
+                {"trait_type": "Dust", "value": row.dust},
             ],
             axis=1,
         ),

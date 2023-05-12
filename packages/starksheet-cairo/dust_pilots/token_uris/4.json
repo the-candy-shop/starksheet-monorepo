@@ -6,11 +6,11 @@
     "attributes": [
         {
             "trait_type": "Pilot",
-            "trait_value": 240
+            "value": 3
         },
         {
             "trait_type": "Dust",
-            "trait_value": "TheArkProject"
+            "value": "TheArkProject"
         }
     ]
 }

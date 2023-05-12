@@ -6,11 +6,11 @@
     "attributes": [
         {
             "trait_type": "Pilot",
-            "trait_value": 226
+            "value": 5
         },
         {
             "trait_type": "Dust",
-            "trait_value": "The Cairo Book"
+            "value": "The Cairo Book"
         }
     ]
 }

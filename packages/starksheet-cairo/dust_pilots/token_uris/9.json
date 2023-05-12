@@ -6,11 +6,11 @@
     "attributes": [
         {
             "trait_type": "Pilot",
-            "trait_value": 218
+            "value": 205
         },
         {
             "trait_type": "Dust",
-            "trait_value": "ZK-Swap"
+            "value": "ZK-Swap"
         }
     ]
 }

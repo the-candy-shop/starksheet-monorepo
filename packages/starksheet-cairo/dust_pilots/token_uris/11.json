@@ -6,11 +6,11 @@
     "attributes": [
         {
             "trait_type": "Pilot",
-            "trait_value": 35
+            "value": 108
         },
         {
             "trait_type": "Dust",
-            "trait_value": "Hardhat-Plugin"
+            "value": "Hardhat-Plugin"
         }
     ]
 }

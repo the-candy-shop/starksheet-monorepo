@@ -12,7 +12,7 @@ from starkware.cairo.common.math import signed_div_rem
 from starkware.cairo.common.memcpy import memcpy
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import call_contract, get_caller_address
-
+from starkware.starknet.common.syscalls import library_call
 from interfaces import ICellRenderer
 from utils.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build, _hash_sorted
 from utils.string import str
@@ -56,6 +56,18 @@ func Sheet_cell(id: felt) -> (cell_data: CellData) {
 
 @storage_var
 func Sheet_cell_calldata(id: felt, index: felt) -> (value: felt) {
+}
+
+@storage_var
+func Sheet_contract_uri_len() -> (res: felt) {
+}
+
+@storage_var
+func Sheet_contract_uri(index: felt) -> (res: felt) {
+}
+
+@storage_var
+func Sheet_is_mint_open() -> (res: felt) {
 }
 
 namespace Sheet {
@@ -135,6 +147,7 @@ namespace Sheet {
     func mint{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
         token_id: Uint256, proof_len: felt, proof: felt*
     ) {
+        _assert_is_open();
         let (address) = get_caller_address();
         with address {
             _assert_is_allowed(proof_len, proof);
@@ -173,6 +186,42 @@ namespace Sheet {
             renderer_address, token_id.low, value, name
         );
         return (token_uri_len, token_uri);
+    }
+
+    func contract_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        contract_uri_len: felt, contract_uri: felt*
+    ) {
+        alloc_locals;
+        let (contract_uri) = alloc();
+        let (contract_uri_len) = Sheet_contract_uri_len.read();
+        if (contract_uri_len == 0) {
+            let (name) = ERC721.name();
+            assert [contract_uri + 0] = 'data:application/json,{"descrip';
+            assert [contract_uri + 1] = 'tion": "Starksheet", "name": "';
+            assert [contract_uri + 2] = name;
+            assert [contract_uri + 3] = '"}';
+            return (4, contract_uri);
+        }
+        _contract_uri_read(0, contract_uri);
+        return (contract_uri_len, contract_uri);
+    }
+
+    func set_contract_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        contract_uri_len: felt, contract_uri: felt*
+    ) {
+        Sheet_contract_uri_len.write(contract_uri_len);
+        _contract_uri_write(0, contract_uri_len, contract_uri);
+        return ();
+    }
+
+    func open_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        Sheet_is_mint_open.write(1);
+        return ();
+    }
+
+    func close_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+        Sheet_is_mint_open.write(0);
+        return ();
     }
 }
 
@@ -281,6 +330,29 @@ func _render_cell_calldata{
     return _render_cell_calldata(index + 1);
 }
 
+func _contract_uri_write{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    index: felt, contract_uri_len: felt, contract_uri: felt*
+) {
+    if (index == contract_uri_len) {
+        return ();
+    }
+    let current = contract_uri[index];
+    Sheet_contract_uri.write(index, current);
+    return _contract_uri_write(index + 1, contract_uri_len, contract_uri);
+}
+
+func _contract_uri_read{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    index: felt, contract_uri: felt*
+) -> (contract_uri: felt*) {
+    let (max_len) = Sheet_contract_uri_len.read();
+    if (index == max_len) {
+        return (contract_uri=contract_uri);
+    }
+    let (current) = Sheet_contract_uri.read(index);
+    assert [contract_uri] = current;
+    return _contract_uri_read(index + 1, contract_uri + 1);
+}
+
 // Caller checks
 
 func _assert_is_allowed{
@@ -306,6 +378,14 @@ func _assert_does_not_exceed_allocation{
     let remaining_allocation = is_le(user_balance.low, allocation - 1);
     with_attr error_message("mint: user {address} exceeds allocation {allocation}") {
         assert remaining_allocation * use_allocation + (1 - use_allocation) = TRUE;
+    }
+    return ();
+}
+
+func _assert_is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    with_attr error_mesage("Mint is not open") {
+        let (is_open) = Sheet_is_mint_open.read();
+        assert is_open = 1;
     }
     return ();
 }

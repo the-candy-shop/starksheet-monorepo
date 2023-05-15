@@ -16,7 +16,7 @@
     },
     {
         "inputs": [],
-        "name": "getUseValue",
+        "name": "getUseTokenId",
         "outputs": [
             {
                 "name": "res",
@@ -33,7 +33,7 @@
                 "type": "felt"
             }
         ],
-        "name": "setUseValue",
+        "name": "setUseTokenId",
         "outputs": [],
         "type": "function"
     },
@@ -65,11 +65,19 @@
             {
                 "name": "owner",
                 "type": "felt"
+            },
+            {
+                "name": "base_uri_len",
+                "type": "felt"
+            },
+            {
+                "name": "base_uri",
+                "type": "felt*"
             }
         ],
-        "name": "initialize",
+        "name": "constructor",
         "outputs": [],
-        "type": "function"
+        "type": "constructor"
     },
     {
         "inputs": [],

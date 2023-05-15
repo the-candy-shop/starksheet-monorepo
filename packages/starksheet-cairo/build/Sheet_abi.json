@@ -131,7 +131,7 @@
     },
     {
         "inputs": [],
-        "name": "getOwner",
+        "name": "owner",
         "outputs": [
             {
                 "name": "owner",
@@ -447,6 +447,37 @@
     },
     {
         "inputs": [],
+        "name": "contractURI",
+        "outputs": [
+            {
+                "name": "contractURI_len",
+                "type": "felt"
+            },
+            {
+                "name": "contractURI",
+                "type": "felt*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "contract_uri_len",
+                "type": "felt"
+            },
+            {
+                "name": "contract_uri",
+                "type": "felt*"
+            }
+        ],
+        "name": "setContractUri",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "totalSupply",
         "outputs": [
             {
@@ -525,6 +556,17 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "name": "name",
+                "type": "felt"
+            }
+        ],
+        "name": "setName",
+        "outputs": [],
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "symbol",
         "outputs": [
@@ -534,6 +576,29 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "symbol",
+                "type": "felt"
+            }
+        ],
+        "name": "setSymbol",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "openMint",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "closeMint",
+        "outputs": [],
         "type": "function"
     },
     {

@@ -1,7 +1,7 @@
 %lang starknet
 
 from openzeppelin.access.ownable.library import Ownable
-from openzeppelin.token.erc721.library import ERC721
+from openzeppelin.token.erc721.library import ERC721, ERC721_name, ERC721_symbol
 from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
 from openzeppelin.introspection.erc165.library import ERC165
 from starkware.cairo.common.alloc import alloc
@@ -28,7 +28,7 @@ func initialized() -> (res: felt) {
 }
 
 @view
-func getOwner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
 }
 
@@ -53,6 +53,7 @@ func getMaxPerWallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 ) {
     return Sheet_max_per_wallet.read();
 }
+
 @external
 func setCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
@@ -226,6 +227,7 @@ func initialize{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     Sheet_merkle_root.write(merkle_root);
     Sheet_max_per_wallet.write(max_per_wallet);
     Sheet_cell_renderer.write(renderer_address);
+    Sheet.open_mint();
     initialized.write(1);
     return ();
 }
@@ -236,6 +238,23 @@ func is_initialized{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_
 ) {
     let (initialized_) = initialized.read();
     return (res=initialized_);
+}
+
+@view
+func contractURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    contractURI_len: felt, contractURI: felt*
+) {
+    let (contract_uri_len, contract_uri) = Sheet.contract_uri();
+    return (contract_uri_len, contract_uri);
+}
+
+@external
+func setContractUri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    contract_uri_len: felt, contract_uri: felt*
+) {
+    Ownable.assert_only_owner();
+    Sheet.set_contract_uri(contract_uri_len, contract_uri);
+    return ();
 }
 
 //
@@ -280,10 +299,38 @@ func name{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> 
     return (name,);
 }
 
+@external
+func setName{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(name: felt) {
+    Ownable.assert_only_owner();
+    ERC721_name.write(name);
+    return ();
+}
+
 @view
 func symbol{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (symbol: felt) {
     let (symbol) = ERC721.symbol();
     return (symbol,);
+}
+
+@external
+func setSymbol{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(symbol: felt) {
+    Ownable.assert_only_owner();
+    ERC721_symbol.write(symbol);
+    return ();
+}
+
+@external
+func openMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    Ownable.assert_only_owner();
+    Sheet.open_mint();
+    return ();
+}
+
+@external
+func closeMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    Ownable.assert_only_owner();
+    Sheet.close_mint();
+    return ();
 }
 
 @view

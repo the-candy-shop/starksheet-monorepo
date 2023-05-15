@@ -1,12 +1,10 @@
+# %% Imports
 import logging
 from asyncio import run
 
 from dotenv import load_dotenv
-
 from utils.deployment import (
-    call,
     compile_contract,
-    compute_sheet_address,
     declare,
     deploy,
     dump_declarations,
@@ -16,10 +14,6 @@ from utils.deployment import (
     get_artifact,
     get_declarations,
     get_deployments,
-    get_eth_contract,
-    get_tx_url,
-    invoke,
-    wait_for_transaction,
 )
 
 load_dotenv()
@@ -28,6 +22,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+# %% Main
 async def main():
     # %% Compile & declare contracts
     class_hash = get_declarations()
@@ -35,6 +30,7 @@ async def main():
         "Sheet",
         "Starksheet",
         "BasicCellRenderer",
+        "UriRenderer",
         "math",
         "execute",
         "proxy",
@@ -78,42 +74,6 @@ async def main():
         "alias": get_alias("Starksheet"),
     }
     dump_deployments(deployments)
-
-    # %% Add a first sheet
-    deployments = get_deployments()
-    name = "VisiCalc"
-    symbol = "1979"
-    proof = []
-    eth_contract = await get_eth_contract()
-
-    tx_hash = (
-        await eth_contract.functions["approve"].invoke(
-            deployments["Starksheet"]["address"],
-            int(0.01 * 1e18),
-            max_fee=int(1e16),
-        )
-    ).hash
-    logger.info(f"ℹ️  Approving starksheet")
-    logger.info(f"⏳ Waiting for tx {get_tx_url(tx_hash)}")
-    await wait_for_transaction(tx_hash)
-    await invoke("Starksheet", "addSheet", name, symbol, proof)
-
-    # %% TODO: remove when wallets work on devnet
-    origin_address = (await call("Starksheet", "getSheet", 0)).address
-    assert origin_address == await compute_sheet_address(name, symbol)
-    logger.info(f"ℹ️  {name} sheet address {hex(origin_address)}")
-    assert (
-        name
-        == bytes.fromhex(
-            f'{(await call("Sheet", "name", address=origin_address)).name:x}'
-        ).decode()
-    )
-    assert (
-        symbol
-        == bytes.fromhex(
-            f'{(await call("Sheet", "symbol", address=origin_address)).symbol:x}'
-        ).decode()
-    )
 
 
 # %% Main

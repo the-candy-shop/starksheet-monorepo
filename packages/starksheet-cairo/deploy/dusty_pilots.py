@@ -30,8 +30,8 @@ async def main():
     class_hash = get_declarations()
     for contract_name in [
         "DustyPilots",
-        # "DustyPilotRenderer",
-        # "proxy",
+        "DustyPilotRenderer",
+        "proxy",
     ]:
         compile_contract(contract_name)
         class_hash[contract_name] = await declare(contract_name)
@@ -58,24 +58,31 @@ async def main():
     }
     dump_deployments(deployments)
 
+    thresholds = pd.read_csv("dust_pilots/dusted.csv").threshold.to_list()
+    await invoke("DustyPilotRenderer", "setThresholds", thresholds)
+
     # %% TODO: remove when wallets work on devnet
     class_hash = get_declarations()
     deployments = get_deployments()
-
-    origin_address = (await call("Starksheet", "getSheet", 0)).address
-    name = bytes.fromhex(
-        hex((await call("Sheet", "name", address=origin_address)).name)[2:]
-    ).decode()
-    logger.info(f"ℹ️  {name} sheet address {hex(origin_address)}")
-    await invoke(
-        "Sheet",
-        "setCellRenderer",
-        deployments["DustyPilotRenderer"]["address"],
-        address=origin_address,
+    name = int.from_bytes(b"Dusty Pilots", "big")
+    symbol = int.from_bytes(b"DSTP", "big")
+    address, _ = await deploy(
+        "proxy",
+        (await get_account()).address,  # proxy_admin
+        class_hash["DustyPilots"],  # implementation_hash
+        get_selector_from_name("initialize"),  # selector
+        (
+            name,
+            symbol,
+            (await get_account()).address,
+            0,  # merkle_root
+            0,  # max_per_wallet
+            deployments["DustyPilotRenderer"]["address"],  # renderer_address
+        ),  # calldata
     )
-    thresholds = pd.read_csv("dust_pilots/dusted.csv").rarity.to_list()
-    await invoke("DustyPilotRenderer", "setThresholds", thresholds)
 
+    await invoke("DustyPilots", "openMint", address=address)
+    await invoke("DustyPilots", "setNRow", 18, address=address)
     value = 0x1234
     token_id = 4
     await invoke(
@@ -86,14 +93,10 @@ async def main():
         2**128,  # contractAddress
         value,
         [],  # cellCalldata_len, cellCalldata
-        address=origin_address,
+        address=address,
     )
 
-    bytes(
-        (await call("Sheet", "tokenURI", token_id, address=origin_address)).token_uri[
-            :-1
-        ]
-    )
+    bytes((await call("Sheet", "tokenURI", token_id, address=address)).token_uri[:-1])
 
     # %% Update class hash
     await invoke(

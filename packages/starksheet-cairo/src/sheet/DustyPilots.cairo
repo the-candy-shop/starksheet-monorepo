@@ -8,7 +8,7 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.math_cmp import is_not_zero, RC_BOUND
 from starkware.cairo.common.math import assert_le
-from starkware.cairo.common.uint256 import split_64, Uint256
+from starkware.cairo.common.uint256 import split_64, Uint256, assert_uint256_le
 from starkware.cairo.common.bool import TRUE
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.registers import get_label_location
@@ -26,10 +26,6 @@ from sheet.library import (
 
 @storage_var
 func initialized() -> (res: felt) {
-}
-
-@storage_var
-func is_open() -> (res: felt) {
 }
 
 @storage_var
@@ -101,14 +97,14 @@ func setMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 @external
 func openMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     Ownable.assert_only_owner();
-    is_open.write(1);
+    Sheet.open_mint();
     return ();
 }
 
 @external
 func closeMint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     Ownable.assert_only_owner();
-    is_open.write(0);
+    Sheet.close_mint();
     return ();
 }
 
@@ -199,13 +195,9 @@ func renderGrid{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 func mintPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     tokenId: Uint256, proof_len: felt, proof: felt*
 ) {
-    with_attr error_message("Mint closed") {
-        let (_is_open) = is_open.read();
-        assert _is_open = 1;
-    }
     with_attr error_message("Token out of grid") {
         let (n_row) = _n_row.read();
-        assert_le(tokenId.low, n_row * 15);
+        assert_le(tokenId.low, n_row * 15 - 1);
         assert tokenId.high = 0;
     }
 
@@ -231,13 +223,9 @@ func mintAndSetPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
     cellCalldata_len: felt,
     cellCalldata: felt*,
 ) {
-    with_attr error_message("Mint closed") {
-        let (_is_open) = is_open.read();
-        assert _is_open = 1;
-    }
     with_attr error_message("Token out of grid") {
         let (n_row) = _n_row.read();
-        assert_le(tokenId.low, n_row * 15);
+        assert_le(tokenId.low, n_row * 15 - 1);
         assert tokenId.high = 0;
     }
 

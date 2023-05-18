@@ -1,16 +1,16 @@
 {
-    "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
-    "external_url": "https://app.starksheet.xyz/0xd1540fbe29acb2522694e9e3d1d776f1ab70773d33149997a65d06cc8a816f",
-    "image": "ipfs://QmbhG75pgTKFLRK5yTVhsgu6bUV1z2ZyoY6nVJYHjG1oqi",
-    "name": "MartianGreed",
-    "attributes": [
-        {
-            "trait_type": "Pilot",
-            "value": 134
-        },
-        {
-            "trait_type": "Dust",
-            "value": "Kakarot"
-        }
-    ]
+  "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
+  "external_url": "https://github.com/0xEniotna",
+  "image": "ipfs://QmdkbPRqD7LAuS8bMAF8YBu5ZGco8x2M6HRrSRrmEneUjc",
+  "name": "0xEniotna",
+  "attributes": [
+    {
+      "trait_type": "Pilot",
+      "value": 7760
+    },
+    {
+      "trait_type": "Dust",
+      "value": "Damn  Vulnerable Defi Starknet"
+    }
+  ]
 }

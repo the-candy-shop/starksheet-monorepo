@@ -178,6 +178,29 @@
     {
         "inputs": [
             {
+                "name": "n_row",
+                "type": "felt"
+            }
+        ],
+        "name": "setNRow",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getNRow",
+        "outputs": [
+            {
+                "name": "n_row",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "address",
                 "type": "felt"
             }

@@ -7,6 +7,7 @@ from openzeppelin.introspection.erc165.library import ERC165
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.math_cmp import is_not_zero, RC_BOUND
+from starkware.cairo.common.math import assert_le
 from starkware.cairo.common.uint256 import split_64, Uint256
 from starkware.cairo.common.bool import TRUE
 from starkware.starknet.common.syscalls import get_caller_address
@@ -29,6 +30,10 @@ func initialized() -> (res: felt) {
 
 @storage_var
 func is_open() -> (res: felt) {
+}
+
+@storage_var
+func _n_row() -> (n_row: felt) {
 }
 
 @view
@@ -57,6 +62,19 @@ func getMaxPerWallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 ) {
     return Sheet_max_per_wallet.read();
 }
+
+@external
+func setNRow{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(n_row: felt) {
+    Ownable.assert_only_owner();
+    _n_row.write(n_row);
+    return ();
+}
+
+@view
+func getNRow{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (n_row: felt) {
+    return _n_row.read();
+}
+
 @external
 func setCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
@@ -185,6 +203,12 @@ func mintPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}
         let (_is_open) = is_open.read();
         assert _is_open = 1;
     }
+    with_attr error_message("Token out of grid") {
+        let (n_row) = _n_row.read();
+        assert_le(tokenId.low, n_row * 15);
+        assert tokenId.high = 0;
+    }
+
     Sheet.mint(tokenId, proof_len, proof);
     let cell_calldata: felt* = alloc();
     Sheet.set_cell(
@@ -211,6 +235,12 @@ func mintAndSetPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
         let (_is_open) = is_open.read();
         assert _is_open = 1;
     }
+    with_attr error_message("Token out of grid") {
+        let (n_row) = _n_row.read();
+        assert_le(tokenId.low, n_row * 15);
+        assert tokenId.high = 0;
+    }
+
     Sheet.mint(tokenId, proof_len, proof);
     Sheet.set_cell(
         token_id=tokenId.low,

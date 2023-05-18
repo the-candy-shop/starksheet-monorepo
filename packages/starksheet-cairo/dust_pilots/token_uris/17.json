@@ -1,16 +1,16 @@
 {
   "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
-  "external_url": "https://github.com/gershon",
-  "image": "ipfs://QmQQbQTmhP26EkGnydyhPQL6NCwovEt7wEpyjt9tH2hS5Q",
-  "name": "gershon",
+  "external_url": "https://github.com/Eikix",
+  "image": "ipfs://QmUEUV5GXAoyQWqyyn6ouR6aJMzjtFX3xa6R2ZHdja1N3R",
+  "name": "Eikix",
   "attributes": [
     {
       "trait_type": "Pilot",
-      "value": 172
+      "value": 7712
     },
     {
       "trait_type": "Dust",
-      "value": NaN
+      "value": "Kakarot"
     }
   ]
 }

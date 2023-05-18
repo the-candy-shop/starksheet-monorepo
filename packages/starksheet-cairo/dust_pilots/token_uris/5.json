@@ -1,16 +1,16 @@
 {
   "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
-  "external_url": "https://app.starksheet.xyz/0xd1540fbe29acb2522694e9e3d1d776f1ab70773d33149997a65d06cc8a816f",
-  "image": "ipfs://Qmcg37Jx3W1uUjX5q13ScvU2rs7msLqWC45ERmANgGJpff",
-  "name": "greged93",
+  "external_url": "https://github.com/zarboq",
+  "image": "ipfs://Qmb85djmJQ3v29ivGE5hKkRWjx6kR4Nro2FsqNmZBNuK3E",
+  "name": "zarboq",
   "attributes": [
     {
       "trait_type": "Pilot",
-      "value": 5450
+      "value": 4751
     },
     {
       "trait_type": "Dust",
-      "value": "Kakarot"
+      "value": "Cairo-Foundry"
     }
   ]
 }

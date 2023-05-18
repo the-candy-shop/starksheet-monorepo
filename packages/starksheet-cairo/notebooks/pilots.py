@@ -33,7 +33,7 @@ def download_profile_picture(profile_url):
             else:
                 print(f"Failed to download profile picture for {username}.")
     else:
-        print("Failed to retrieve profile information.")
+        print(f"Failed to retrieve profile information for {profile_url}.")
     return False
 
 
@@ -66,42 +66,55 @@ dusted_pilots = (
             upload_image_to_ipfs
         ),
         dust=lambda df: df.projects.str.split(",", expand=True).loc[:, 0],
-        pilot=lambda df: list(random.randbytes(len(df))),
+        total=lambda df: df.total.str.replace("$", "").str.replace(",", "").astype(int),
+        threshold=lambda df: ((1 / df.total).cumsum() * 1e5).astype(int),
+    )
+    .assign(
+        threshold=lambda df: ((df.threshold / df.threshold.max()) * 1000).astype(int),
+        rarity=lambda df: df.threshold.diff().fillna(df.threshold.min()) / 1000,
+    )
+    .merge(pd.read_csv("dust_pilots/pilots.csv"), on="gh", how="outer")
+    .filter(
+        items=[
+            "gh",
+            "gh_profile",
+            "ipfs",
+            "pilot",
+            "dust",
+            "total",
+            "threshold",
+            "rarity",
+        ]
+    )
+    .reset_index(drop=True)
+)
+dusted_pilots.to_csv("dust_pilots/dusted.csv")
+
+# %% Dump token uris
+(
+    pd.read_csv("dust_pilots/dusted.csv", index_col=0)
+    .assign(
         attributes=lambda df: df[["dust", "pilot"]].agg(
             lambda row: [
                 {"trait_type": "Pilot", "value": row.pilot},
-                {"trait_type": "Dust", "value": row.dust},
-            ],
+            ]
+            + ([{"trait_type": "Dust", "value": row.dust}] if row.dust else []),
             axis=1,
         ),
-        rarity=lambda df: (
-            (
-                1 / df.total.str.replace("$", "").str.replace(",", "").astype(int)
-            ).cumsum()
-            * 1e5
-        ).astype(int),
     )
-    .assign(rarity=lambda df: ((df.rarity / df.rarity.max()) * 1000).astype(int))
-    .filter(items=["gh", "attributes", "ipfs", "rarity"])
-    .reset_index(drop=True)
-)
-dusted_pilots[["gh", "ipfs", "rarity"]].to_csv("dust_pilots/dusted.csv")
-
-(
-    dusted_pilots.reset_index().apply(
+    .reset_index()
+    .apply(
         lambda row: json.dump(
             {
                 "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
-                "external_url": "https://app.starksheet.xyz/0xd1540fbe29acb2522694e9e3d1d776f1ab70773d33149997a65d06cc8a816f",
+                "external_url": row.gh_profile,
                 "image": "ipfs://" + row.ipfs,
                 "name": row.gh,
                 "attributes": row.attributes,
             },
             open(f"dust_pilots/token_uris/{row['index'] + 1}.json", "w"),
-            indent=4,
+            indent=2,
         ),
         axis=1,
     )
 )
-
-# %%

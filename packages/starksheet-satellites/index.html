@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Starksheet satellite</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa; /* change this to match the color theme you want */
+      }
+      .width-500 {
+        width: 500px;
+      }
+    </style>
+    <script src="script.js"></script>
+  </head>
+  <body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-xl rounded-lg p-8 width-500">
+      <h1 class="text-3xl mb-4">RandomRenderer URI Computer</h1>
+      <textarea
+        id="uris"
+        rows="4"
+        class="w-full p-2 mb-4 rounded shadow resize"
+      ></textarea>
+      <button
+        onclick="onComputeClicked()"
+        class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-4"
+      >
+        Compute
+      </button>
+      <div
+        class="w-full overflow-x-auto text-lg bg-gray-100 p-2 rounded resize-x"
+      >
+        <p id="output" class="truncate"></p>
+      </div>
+      <button
+        onclick="copyResult()"
+        class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 mt-4"
+      >
+        Copy
+      </button>
+    </div>
+  </body>
+</html>

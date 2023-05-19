@@ -1,12 +1,17 @@
 function onComputeClicked() {
   let uris = document.getElementById("uris").value;
-  let result = compute(uris);
+  let [input, result] = compute(uris);
+  console.log("input", input);
+  console.log("result", result);
+  document.getElementById("uris").value = input.join("\n");
   document.getElementById("output").innerHTML = result;
 }
 
 function compute(uris) {
+  console.log("input", uris);
   uris = uris.split(/\s*,\s*|\s*\n\s*/);
   uris = uris.map((uri) => uri.replace(/['"]/g, ""));
+  console.log("uris", uris);
 
   let l = uris.map((uri) => Math.ceil(uri.length / 31) + 1);
   let uris_encoded = [];
@@ -26,7 +31,7 @@ function compute(uris) {
     }
   }
 
-  return uris_encoded;
+  return [uris, uris_encoded];
 }
 
 function a2hex(str) {

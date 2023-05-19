@@ -27,13 +27,11 @@ async def main():
     # %% Compile & declare contracts
     class_hash = get_declarations()
     for contract_name in [
-        # "Sheet",
-        # "Starksheet",
-        # "BasicCellRenderer",
-        # "UriRenderer",
-        "RandomRenderer",
-        # "math",
-        # "execute",
+        "Sheet",
+        "Starksheet",
+        "BasicCellRenderer",
+        "math",
+        "execute",
         "proxy",
     ]:
         compile_contract(contract_name)

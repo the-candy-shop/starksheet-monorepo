@@ -98,13 +98,6 @@ async def main():
 
     bytes((await call("Sheet", "tokenURI", token_id, address=address)).token_uri[:-1])
 
-    # %% Update class hash
-    await invoke(
-        origin_address,
-        "set_implementation_hash",
-        class_hash["DustyPilots"],
-    )
-
 
 # %% Main
 if __name__ == "__main__":

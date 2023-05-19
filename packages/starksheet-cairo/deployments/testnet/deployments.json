@@ -1,43 +1,31 @@
 {
   "BasicCellRenderer": {
-    "address": "0x81e1731e6a58a5b51ac3e5da754749eab43f4a44dd6eb5dbe7cc0d0a845929",
-    "tx": "0x119fba58d9148236c4a9e6ee9d7c94a4d31c5e2a2bc32948aa655bcd1faee00",
+    "address": "0x60674f0608d6695012043ac9ae563c35f07a96919badf61d86d10d0dc257f23",
+    "tx": "0x2683fea67a71d789556eda9e34e037bea5fd62c1cf540376e9ede3b06607c6a",
     "artifact": "build/BasicCellRenderer.json",
     "alias": "basic_cell_renderer"
   },
   "math": {
-    "address": "0x9e0699702c78ac50c2f43ab10cedd38dc71dc0969b1da10a393b949170f47d",
-    "tx": "0x648237b0abab70f0a63d3f7a2de0ba918c3d8874eddb50424fdcc51869c9a92",
+    "address": "0x225d9ad361d13c810db847ac8e6c045315b311fdb3194b0f9a5d5474ad891fe",
+    "tx": "0x20aaef7e505db79396883fa7af6d90339aa5c75b6164066af40ac27a5250356",
     "artifact": "build/math.json",
     "alias": "math"
   },
   "execute": {
-    "address": "0xa87c4796c60f604640e70c7586c9a1e65dc6d9118121e7a3c3d51a78c48883",
-    "tx": "0x3ef76fe06d014422742133dedd110b244c4e5a14b88d5ab6cba57d408468a0d",
+    "address": "0x16e85b13e5c5de1ba0d6e43f9a81ee36974e4137834765b93d537ad96cf701e",
+    "tx": "0x15aa817a5beddf59cc9ad6cf44915c02385eedd2421be01d44edfe31dbfc951",
     "artifact": "build/execute.json",
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x19beed12acd80f2a33d0d614d1a77649904c49c1f0a53adffc3ce8c04011f50",
-    "tx": "0x5a1e5ac0b910f32e709c7f1bd34a4ff7cb32226117cc72a8914f2bb8df2b156",
+    "address": "0x143787cd418efbd92815b9ea6b76c6f01bd4b4fad09856e7f9a24442f2b8098",
+    "tx": "0x78badbd1d940f112008adb73868e713d5aa4acd8557168d2c6a12001f87cfdb",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
   },
-  "Subdomain": {
-    "address": "0x5667aae255ea09839a6ed8c0f731b1b65d5ff37f238da9e0e92b8f1dfcfd65c",
-    "tx": "0xdce28b209d3aede9d3233fd0296365d20d039a3d8ed6f60b9029d6080199bc",
-    "artifact": "build/Subdomain.json",
-    "alias": "subdomain"
-  },
-  "UriRenderer": {
-    "address": "0x1bad81d6fd6d4f547c55157ae00565ded863e33cc196d20a2e7daeaa1bc03fd",
-    "tx": "0x7161e2f2ad28db486b569eceb435d70117e33bcb3c523037b8cba68a4c744f2",
-    "artifact": "build/UriRenderer.json",
-    "alias": "uri_renderer"
-  },
   "DustyPilotRenderer": {
-    "address": "0xb3fe3bd6c664427ef4cebabcf3b59e3167e54b6b9981ed8da5b8d674fcf7ea",
-    "tx": "0x48c5a2867bd30b4422e878d2708535b7a1d78db5a8d606d700d8b5264592b42",
+    "address": "0x65bd8ec474def8d8b215dec0f3782bdf3397b18c4b783942f2320ceb501ae8",
+    "tx": "0x5bdd77244e7c7198b1fc495f40a76ac94c216a1c9cb2589ad17e9ae53897163",
     "artifact": "build/DustyPilotRenderer.json",
     "alias": "dusty_pilot_renderer"
   }

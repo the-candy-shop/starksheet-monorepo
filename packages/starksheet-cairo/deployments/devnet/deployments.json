@@ -28,5 +28,11 @@
     "tx": "0x6cba29d600a7c90100f98c5e7bff976e4289f6e52ab411a0200240b9cffa664",
     "artifact": "build/DustyPilotRenderer.json",
     "alias": "dusty_pilot_renderer"
+  },
+  "RandomRenderer": {
+    "address": "0x255deb5ae46dd369209d87a1c19d012b9db33e2622ce25fe45bc324498d10fd",
+    "tx": "0x2682a1e015db7e03abdfd0ecf20a4c75dd03816857479d66cce315a4209fd54",
+    "artifact": "build/RandomRenderer.json",
+    "alias": "random_renderer"
   }
 }

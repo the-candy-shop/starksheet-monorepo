@@ -1,10 +1,4 @@
-import os
-from pathlib import Path
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
+import logging
 import os
 import re
 from enum import Enum
@@ -13,6 +7,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 from starknet_py.net.gateway_client import GatewayClient
 
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 load_dotenv()
 
 ETH_TOKEN_ADDRESS = 0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7
@@ -23,9 +20,9 @@ NETWORK = (
     if re.match(r".*(testnet|goerli)$", NETWORK, flags=re.I)
     else "testnet2"
     if re.match(r".*(testnet|goerli)-?2$", NETWORK, flags=re.I)
-    else "devnet"
-    if re.match(r".*(devnet|local).*", NETWORK, flags=re.I)
     else "mainnet"
+    if re.match(r".*mainnet$", NETWORK, flags=re.I)
+    else "devnet"
 )
 GATEWAY_URLS = {
     "mainnet": "https://alpha-mainnet.starknet.io",
@@ -155,3 +152,5 @@ STARKNET_ID_NAMING = {
     "testnet": 0x003BAB268E932D2CECD1946F100AE67CE3DFF9FD234119EA2F6DA57D16D29FCE,
     "devnet": 0x003BAB268E932D2CECD1946F100AE67CE3DFF9FD234119EA2F6DA57D16D29FCE,
 }[NETWORK]
+
+logger.info(f"ℹ️  Using Chain id {CHAIN_ID.name} with Gateway {GATEWAY_URLS[NETWORK]}")

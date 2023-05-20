@@ -10,10 +10,6 @@ from starkware.cairo.common.registers import get_label_location
 from starkware.cairo.common.memcpy import memcpy
 
 @storage_var
-func initialized() -> (res: felt) {
-}
-
-@storage_var
 func _uris_len() -> (res: felt) {
 }
 
@@ -75,12 +71,13 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
-@external
-func initialize{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(owner: felt) {
-    let (initialized_) = initialized.read();
-    assert initialized_ = 0;
+@constructor
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    owner: felt, uris_len: felt, uris: felt*
+) {
     Ownable.initializer(owner);
-    initialized.write(1);
+    _uris_len.write(uris_len);
+    _uris_write(index=0, uris_len=uris_len, uris=uris);
     return ();
 }
 
@@ -95,20 +92,6 @@ func token_uri{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     let (_, index) = unsigned_div_rem(rarity, uri_count);
     let (token_uri_len, token_uri) = _get_uri(index);
     return (token_uri_len, token_uri);
-}
-
-func _find_index{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    rarity: felt, arr_len: felt, arr: felt*
-) -> (index: felt) {
-    if (arr_len == 0) {
-        return (index=2 ** 128);
-    }
-    let current = [arr];
-    let index = is_le(rarity, current);
-    if (index == 0) {
-        return _find_index(rarity, arr_len - 1, arr + 1);
-    }
-    return (index=arr_len);
 }
 
 func _uris_write{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

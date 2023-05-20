@@ -123,11 +123,19 @@
             {
                 "name": "owner",
                 "type": "felt"
+            },
+            {
+                "name": "uris_len",
+                "type": "felt"
+            },
+            {
+                "name": "uris",
+                "type": "felt*"
             }
         ],
-        "name": "initialize",
+        "name": "constructor",
         "outputs": [],
-        "type": "function"
+        "type": "constructor"
     },
     {
         "inputs": [

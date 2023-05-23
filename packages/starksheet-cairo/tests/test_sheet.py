@@ -12,9 +12,13 @@ from starkware.crypto.signature.signature import FIELD_PRIME
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.public.abi import get_selector_from_name
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
-
-from utils.constants import ACCOUNT_ADDRESS, ALLOW_LIST, CONTRACTS
-from utils.merkle_proof import address_to_leaf, merkle_proof, merkle_root, number_to_index
+from utils.constants import ACCOUNT_ADDRESS, ALLOW_LIST, CONTRACTS, SOURCE_DIR
+from utils.merkle_proof import (
+    address_to_leaf,
+    merkle_proof,
+    merkle_root,
+    number_to_index,
+)
 
 Cell = namedtuple("Cell", ["contract_address", "id", "value", "calldata"])
 random.seed(0)
@@ -97,16 +101,26 @@ def cells(math):
                 dependencies_to_calldata(dependencies),
             )
         )
-        rendered = render(_cells)(id)
-        while rendered > 2**64 - 1:
-            dependencies.pop()
+
+        try:
+            rendered = render(_cells)(id)
+            while rendered > 2**64 - 1:
+                dependencies.pop()
+                _cells[-1] = Cell(
+                    contract_address,
+                    id,
+                    value,
+                    dependencies_to_calldata(dependencies),
+                )
+                rendered = render(_cells)(id)
+        except ZeroDivisionError:
+            dependencies[-1] = 1
             _cells[-1] = Cell(
                 contract_address,
                 id,
                 value,
                 dependencies_to_calldata(dependencies),
             )
-            rendered = render(_cells)(id)
     return _cells
 
 
@@ -117,16 +131,18 @@ async def sheet(starknet: Starknet, renderer, cells) -> StarknetContract:
             [str(CONTRACTS["Sheet"])],
             debug_info=True,
             disable_hint_validation=True,
+            cairo_path=[str(SOURCE_DIR)],
         ),
-        constructor_calldata=[
-            int(NAME.encode().hex(), 16),
-            int(SYMBOL.encode().hex(), 16),
-            OWNER,
-            MERKLE_ROOT,
-            MAX_PER_WALLET,
-            renderer.contract_address,
-        ],
+        constructor_calldata=[],
     )
+    await _sheet.initialize(
+        int(NAME.encode().hex(), 16),  # name
+        int(SYMBOL.encode().hex(), 16),  # symbol
+        OWNER,  # owner
+        MERKLE_ROOT,  # merkle_root
+        MAX_PER_WALLET,  # max_per_wallet
+        renderer.contract_address,  # renderer_address
+    ).execute(caller_address=OWNER)
     for cell in cells:
         await _sheet.mintOwner(OWNER, (cell.id, 0)).execute(caller_address=OWNER)
         await _sheet.setCell(

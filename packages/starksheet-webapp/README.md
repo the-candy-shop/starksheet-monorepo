@@ -1,46 +1,92 @@
-# Getting Started with Create React App
+# Starksheet webapp
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the starksheet webapp as deployed in
+[app.starksheet.xyz](app.starksheet.xyz).
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+```bash
+npm install
+```
 
-### `npm start`
+## Tests
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+No tests 😰
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Run
 
-### `npm test`
+The ENV variable `REACT_APP_NETWORK` is used to target one given network. By
+default, it will target the devnet, see
+[Starksheet cairo README](../starksheet-cairo/README.md#deployment).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The app will automatically uses the latest deployments made in
+[starksheet-cairo](../starksheet-cairo/deployments/) so you just need to provide
+the ENV variable:
 
-### `npm run build`
+```bash
+REACT_APP_NETWORK=devnet npm start
+REACT_APP_NETWORK=testnet npm start
+REACT_APP_NETWORK=testnet2 npm start
+REACT_APP_NETWORK=mainnet npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Note: when using the devnet, you need to **first** start the devnet and run
+`python deploy/starksheet.py` and **then** run `npm start`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Architecture
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The app (too ?) heavily relies on
+[React contexts](https://react.dev/reference/react/useContext) to store data and
+manage the state. To give a smooth UX, the app indeed caches every on-chain data
+that it uses (note: a wss should be used to listen to new events).
 
-### `npm run eject`
+### Contexts
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### AbisContext
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This context stores all the ABIs already retrieved and help fetching new ABIs
+when required.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+While it's not strictly necessary for Starksheet to access these ABIs (it's not
+require to know the ABI to make a contract call), pulling the ABIs lets display
+to the user what is actually available at a given input address, and the
+expected inputs of a function.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### AccountContext
 
-## Learn More
+This context is responsible for managing everything related to the connect
+account (user). To make the mutlicall feature chain agnostic, the
+`AccountContext` is responsible for making the "Save" multicall.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### AppStatus
 
-To learn React, check out the [React documentation](https://reactjs.org/)
+This is probably a hack because I didn't know any lib nor how to make this
+properly. It is basically a place to write state of given part of the app
+(loading or loaded sheet, error message, etc.).
+
+#### CellValuesContext
+
+This is THE place where everything is stored, and consequently quite messy.
+Basically, the app can open several sheets and each sheet has its own data.
+During the a session, a user starts from an initial state (fetch from the chain)
+and makes update.
+
+When they save, they send a multicall to _publish_ all their diff to the chain.
+In the meantime, the app displays the data considering the updated state: when
+you update a cell, you need to "Save" to see it's new value on the app.
+
+In other words, one could say that the FE acts as a local L3/Buffer and when the
+user "Save", it commits to L2 (where the Sheet contract is actually deployed).
+
+#### OnsheetContext
+
+This context manages the list of opened sheet. Worth noticing is the fact that
+when a user creates a sheet (with +), the sheet is directly available for
+edition while it's not deployed already.
+
+To have the final "Save" multicall working in this context requires to know in
+advance what will be the address of each deployed sheet.
+
+#### TransactionContext
+
+This context stores the transactions to be made when the user clicks on "Save".

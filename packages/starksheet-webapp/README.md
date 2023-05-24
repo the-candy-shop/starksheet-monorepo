@@ -15,20 +15,24 @@ No tests 😰
 
 ## Run
 
-The ENV variable `REACT_APP_NETWORK` is used to target one given network. By
-default, it will target the devnet, see
+When developing the web app, it's possible to target any networks (devnet,
+testnet and mainnet). It's not because you work on the FE that you have to run a
+devnet. Depending on your need, it may be enough to target the testnet or even
+the mainnet for final testing.
+
+The ENV variable `REACT_APP_NETWORK` is used to select the target network. By
+default (not set), it will target the devnet, see
 [Starksheet cairo README](../starksheet-cairo/README.md#deployment).
 
 The app will automatically uses the latest deployments made in
 [starksheet-cairo](../starksheet-cairo/deployments/) so you just need to provide
 the ENV variable:
 
-```bash
-REACT_APP_NETWORK=devnet npm start
-REACT_APP_NETWORK=testnet npm start
-REACT_APP_NETWORK=testnet2 npm start
-REACT_APP_NETWORK=mainnet npm start
-```
+- `REACT_APP_NETWORK=devnet npm start` => use local devnet
+- `npm start` => use local devnet
+- `REACT_APP_NETWORK=testnet npm start` => use testnet
+- `REACT_APP_NETWORK=testnet2 npm start` => use testnet2
+- `REACT_APP_NETWORK=mainnet npm start` => use mainnet
 
 Note: when using the devnet, you need to **first** start the devnet and run
 `python deploy/starksheet.py` and **then** run `npm start`.

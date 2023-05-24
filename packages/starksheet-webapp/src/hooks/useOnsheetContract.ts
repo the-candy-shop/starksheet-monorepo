@@ -1,8 +1,16 @@
 import BN from "bn.js";
 import { useMemo } from "react";
-import { Abi, Call, Contract, hash, number, stark } from "starknet";
+import {
+  Abi,
+  Call,
+  Contract,
+  RpcProvider,
+  hash,
+  number,
+  stark,
+} from "starknet";
 import starksheetContractData from "../contract.json";
-import { starknetRpcProvider } from "../provider";
+import { rpcUrl } from "../provider";
 import { Cell, OnsheetContract } from "../types";
 import { bn2hex } from "../utils/hexUtils";
 
@@ -14,7 +22,9 @@ class StarksheetContract implements OnsheetContract {
     this.contract = new Contract(
       starksheetContractData.onsheetAbi as Abi,
       starksheetContractData.address,
-      starknetRpcProvider
+      new RpcProvider({
+        nodeUrl: rpcUrl,
+      })
     );
     this.address = starksheetContractData.address;
   }

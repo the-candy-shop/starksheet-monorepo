@@ -1,4 +1,3 @@
-import { RpcProvider } from "starknet";
 import { StarknetProvider } from "./starknetProvider";
 
 export type Network = "mainnet" | "testnet" | "testnet2" | "devnet";
@@ -34,17 +33,13 @@ const ethChainIds = {
   devnet: ETHEREUM_GOERLI_ID,
 };
 
-export const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
-
-export const chainProvider = new StarknetProvider(
-  rpcUrls[network],
-  sequencerUrls[network]
-);
-
-export const starknetRpcProvider = new RpcProvider({
-  nodeUrl: rpcUrls[network],
-});
+const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
 export const chainId = chainIds[network];
+export const rpcUrl = rpcUrls[network];
+export const chainProvider = new StarknetProvider(
+  rpcUrl,
+  sequencerUrls[network]
+);
 
 export const ethChainId = ethChainIds[network];

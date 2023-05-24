@@ -19,6 +19,7 @@ export class StarknetProvider implements ChainProvider {
   waitForTransaction(hash: string): Promise<any> {
     return this.rpcProvider.waitForTransaction(hash, 50_000);
   }
+
   getTransactionReceipt(hash: string): Promise<any> {
     return this.rpcProvider.getTransactionReceipt(hash);
   }

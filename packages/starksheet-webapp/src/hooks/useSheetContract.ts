@@ -1,12 +1,12 @@
 import { useContext, useMemo } from "react";
-import { number } from "starknet";
+import { RpcProvider, number } from "starknet";
 import { OnsheetContext } from "../contexts/OnsheetContext";
 import { CellData, CellRendered, SheetContract } from "../types";
 
 import BN from "bn.js";
 import { Abi, Contract } from "starknet";
 import onsheetContractData from "../contract.json";
-import { starknetRpcProvider } from "../provider";
+import { rpcUrl } from "../provider";
 
 class StarknetSheetContract implements SheetContract {
   private contract: Contract;
@@ -15,7 +15,9 @@ class StarknetSheetContract implements SheetContract {
     this.contract = new Contract(
       onsheetContractData.sheetAbi as Abi,
       address,
-      starknetRpcProvider
+      new RpcProvider({
+        nodeUrl: rpcUrl,
+      })
     );
   }
 

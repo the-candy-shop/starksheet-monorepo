@@ -56,47 +56,51 @@ async def main():
         "artifact": get_artifact("DustyPilotRenderer"),
         "alias": get_alias("DustyPilotRenderer"),
     }
+
+    deployments["DustyPilots"] = {
+        **dict(
+            zip(
+                ["address", "tx"],
+                await deploy(
+                    "proxy",
+                    (await get_account()).address,  # proxy_admin
+                    class_hash["DustyPilots"],  # implementation_hash
+                    get_selector_from_name("initialize"),  # selector
+                    (
+                        int.from_bytes(b"Dusty Pilots", "big"),
+                        int.from_bytes(b"DSTP", "big"),
+                        (await get_account()).address,
+                        0,  # merkle_root
+                        0,  # max_per_wallet
+                        deployments["DustyPilotRenderer"][
+                            "address"
+                        ],  # renderer_address
+                    ),  # calldata
+                ),
+            )
+        ),
+        "artifact": get_artifact("DustyPilots"),
+        "alias": get_alias("DustyPilots"),
+    }
+
     dump_deployments(deployments)
 
+    # %% Setup
     thresholds = pd.read_csv("dust_pilots/dusted.csv").threshold.to_list()
     await invoke("DustyPilotRenderer", "setThresholds", thresholds)
-
-    # %% TODO: remove when wallets work on devnet
-    class_hash = get_declarations()
-    deployments = get_deployments()
-    name = int.from_bytes(b"Dusty Pilots", "big")
-    symbol = int.from_bytes(b"DSTP", "big")
-    address, _ = await deploy(
-        "proxy",
-        (await get_account()).address,  # proxy_admin
-        class_hash["DustyPilots"],  # implementation_hash
-        get_selector_from_name("initialize"),  # selector
-        (
-            name,
-            symbol,
-            (await get_account()).address,
-            0,  # merkle_root
-            0,  # max_per_wallet
-            deployments["DustyPilotRenderer"]["address"],  # renderer_address
-        ),  # calldata
-    )
-
-    await invoke("DustyPilots", "openMint", address=address)
-    await invoke("DustyPilots", "setNRow", 18, address=address)
+    await invoke("DustyPilots", "openMint")
+    await invoke("DustyPilots", "setNRow", 19)
     value = 0x1234
     token_id = 4
     await invoke(
-        "Sheet",
+        "DustyPilots",
         "mintAndSetPublic",
         token_id,  # tokenId
         [],  # proof
         2**128,  # contractAddress
         value,
         [],  # cellCalldata_len, cellCalldata
-        address=address,
     )
-
-    bytes((await call("Sheet", "tokenURI", token_id, address=address)).token_uri[:-1])
 
 
 # %% Main

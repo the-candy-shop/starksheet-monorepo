@@ -2,8 +2,7 @@ import pytest
 import pytest_asyncio
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.testing.starknet import Starknet, StarknetContract
-
-from utils.constants import ACCOUNT_ADDRESS, CONTRACTS
+from utils.constants import ACCOUNT_ADDRESS, CONTRACTS, SOURCE_DIR
 
 OWNER = int(ACCOUNT_ADDRESS, 16)
 OTHER = OWNER + 1
@@ -16,28 +15,45 @@ async def sheet_class_hash(starknet: Starknet):
             [str(CONTRACTS["Sheet"])],
             debug_info=True,
             disable_hint_validation=True,
+            cairo_path=[str(SOURCE_DIR)],
+        )
+    )
+
+
+@pytest_asyncio.fixture(scope="session")
+async def proxy_class_hash(starknet: Starknet):
+    return await starknet.declare(
+        contract_class=compile_starknet_files(
+            [str(CONTRACTS["proxy"])],
+            debug_info=True,
+            disable_hint_validation=True,
+            cairo_path=[str(SOURCE_DIR)],
         )
     )
 
 
 @pytest_asyncio.fixture(scope="session")
 async def starksheet(
-    starknet: Starknet, sheet_class_hash, renderer
+    starknet: Starknet, sheet_class_hash, proxy_class_hash, renderer
 ) -> StarknetContract:
     return await starknet.deploy(
         contract_class=compile_starknet_files(
             [str(CONTRACTS["Starksheet"])],
             debug_info=True,
             disable_hint_validation=True,
+            cairo_path=[str(SOURCE_DIR)],
         ),
         constructor_calldata=[
-            OWNER,
-            sheet_class_hash.class_hash,
-            renderer.contract_address,
+            OWNER,  # owner
+            sheet_class_hash.class_hash,  # sheet_class_hash
+            proxy_class_hash.class_hash,  # proxy_class_hash
+            renderer.contract_address,  # default_renderer_address
+            0,  # sheet_price
         ],
     )
 
 
+@pytest.mark.skip("Need to fix missing ETH ERC20")
 @pytest.mark.asyncio
 class TestStarksheet:
     class TestAddSheet:

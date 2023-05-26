@@ -7,4 +7,6 @@ export interface ChainProvider {
   }): Promise<any>;
   waitForTransaction(hash: string): Promise<any>;
   getTransactionReceipt(hash: string): Promise<any>;
+  getExplorerAddress(contractAddress: string): string;
+  getNftMarketplaceAddress(contractAddress: string): string;
 }

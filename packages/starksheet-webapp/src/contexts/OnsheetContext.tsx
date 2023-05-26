@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { hash } from "starknet";
+import { N_ROW } from "../config";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { Onsheet, Sheet } from "../types";
 import { str2hex } from "../utils/hexUtils";
@@ -133,7 +134,7 @@ export const OnsheetContextProvider = ({
     if (Object.keys(abi).length !== 0) {
       newSheet = { ...sheet, address };
     } else {
-      newSheet = { ...sheet, address, calldata };
+      newSheet = { ...sheet, address, calldata, nRow: N_ROW };
     }
     setOnsheet((prevOnsheet) => ({
       ...prevOnsheet,

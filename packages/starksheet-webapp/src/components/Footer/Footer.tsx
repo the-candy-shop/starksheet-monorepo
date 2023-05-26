@@ -1,13 +1,12 @@
 import { Box, BoxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
-import { CELL_BORDER_WIDTH, CELL_HEIGHT } from "../../config";
+import { CELL_BORDER_WIDTH, CELL_HEIGHT, N_ROW } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
-import { network } from "../../provider";
+import { chainProvider } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
-import aspectLogo from "./aspect.png";
 import githubLogo from "./github.svg";
 import mintSquareLogo from "./mintsquare.svg";
 import starknetLogo from "./starknet.svg";
@@ -35,6 +34,7 @@ function Footer({ sx }: FooterProps) {
       {
         name: `Sheet${onsheet.sheets.length}`,
         symbol: `SHT${onsheet.sheets.length}`,
+        nRow: N_ROW,
       },
       accountAddress
     );
@@ -90,9 +90,9 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "mainnet"
-                ? `https://starkscan.co/contract/${selectedSheetAddress}`
-                : `https://testnet.starkscan.co/contract/${selectedSheetAddress}`,
+              selectedSheetAddress
+                ? chainProvider.getExplorerAddress(selectedSheetAddress)
+                : "",
               "_blank"
             )
           }
@@ -148,27 +148,9 @@ function Footer({ sx }: FooterProps) {
           }}
           onClick={() =>
             window.open(
-              network === "mainnet"
-                ? `https://aspect.co/collection/${selectedSheetAddress}`
-                : `https://testnet.aspect.co/collection/${selectedSheetAddress}`,
-              "_blank"
-            )
-          }
-        >
-          <img src={aspectLogo} alt="" style={{ width: "18px" }} />
-        </GreyCell>
-        <GreyCell
-          sx={{
-            marginLeft: `-${CELL_BORDER_WIDTH}px`,
-            width: `${CELL_HEIGHT}px`,
-            cursor: "pointer",
-            "& .content": { justifyContent: "center" },
-          }}
-          onClick={() =>
-            window.open(
-              network === "mainnet"
-                ? `https://mintsquare.io/collection/starknet/${selectedSheetAddress}/nfts`
-                : `https://mintsquare.io/collection/starknet-testnet/${selectedSheetAddress}/nfts`,
+              selectedSheetAddress
+                ? chainProvider.getNftMarketplaceAddress(selectedSheetAddress)
+                : "",
               "_blank"
             )
           }

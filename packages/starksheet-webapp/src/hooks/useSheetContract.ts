@@ -5,6 +5,7 @@ import { CellData, CellRendered, SheetContract } from "../types";
 
 import BN from "bn.js";
 import { Abi, Contract } from "starknet";
+import { N_ROW } from "../config";
 import onsheetContractData from "../contract.json";
 import { rpcUrl } from "../provider";
 
@@ -19,6 +20,21 @@ class StarknetSheetContract implements SheetContract {
         nodeUrl: rpcUrl,
       })
     );
+  }
+
+  async nRow() {
+    try {
+      return parseInt(
+        (
+          await this.contract.providerOrAccount.callContract({
+            contractAddress: this.contract.address,
+            entrypoint: "getNRow",
+          })
+        ).result[0]
+      );
+    } catch (e) {
+      return N_ROW;
+    }
   }
 
   async renderCell(tokenId: number): Promise<CellRendered> {

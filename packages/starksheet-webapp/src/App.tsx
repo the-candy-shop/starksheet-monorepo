@@ -7,7 +7,7 @@ import ActionBar from "./components/ActionBar/ActionBar";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import LoadingDots from "./components/LoadingDots/LoadingDots";
-import { CELL_BORDER_WIDTH, N_COL, N_ROW } from "./config";
+import { CELL_BORDER_WIDTH, N_COL } from "./config";
 import { AppStatusContext } from "./contexts/AppStatusContext";
 import { CellValuesContext } from "./contexts/CellValuesContext";
 import { OnsheetContext } from "./contexts/OnsheetContext";
@@ -32,9 +32,7 @@ function App() {
   const handlers = useMemo(
     () => ({
       RIGHT: () => {
-        setSelectedCell(
-          selectedCell + 1 < N_ROW * N_COL ? selectedCell + 1 : selectedCell
-        );
+        setSelectedCell(selectedCell + 1);
       },
       LEFT: () => {
         setSelectedCell(
@@ -47,19 +45,13 @@ function App() {
         );
       },
       BOTTOM: () => {
-        setSelectedCell(
-          selectedCell + N_COL < N_COL * N_ROW
-            ? selectedCell + N_COL
-            : selectedCell
-        );
+        setSelectedCell(selectedCell + N_COL);
       },
       ESC: () => {
         inputRef?.current?.el.current.blur();
       },
       TAB: () => {
-        setSelectedCell(
-          selectedCell + 1 < N_ROW * N_COL ? selectedCell + 1 : selectedCell
-        );
+        setSelectedCell(selectedCell + 1);
       },
     }),
     [selectedCell, setSelectedCell]
@@ -69,7 +61,7 @@ function App() {
     () =>
       selectedSheetAddress
         ? appStatus.sheets[selectedSheetAddress].message
-        : appStatus.message,
+        : appStatus?.message,
     [appStatus, selectedSheetAddress]
   );
 

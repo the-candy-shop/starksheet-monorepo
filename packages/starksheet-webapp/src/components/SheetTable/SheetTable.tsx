@@ -1,14 +1,12 @@
 import { Box, BoxProps } from "@mui/material";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { FunctionAbi, number } from "starknet";
 import {
   CELL_BORDER_WIDTH,
   CELL_HEIGHT,
   CELL_WIDTH,
-  GRID_SIZE,
   N_COL,
-  N_ROW,
 } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
@@ -40,8 +38,12 @@ export type SheetTableProps = {
 
 const SheetTable = ({ sx }: SheetTableProps) => {
   const { values, setValues } = useContext(CellValuesContext);
-  const { onsheet, setSelectedSheetAddress, appendSheet } =
-    useContext(OnsheetContext);
+  const {
+    onsheet,
+    setSelectedSheetAddress,
+    selectedSheetAddress,
+    appendSheet,
+  } = useContext(OnsheetContext);
   const { appStatus, updateSheetStatus } = useContext(AppStatusContext);
   const { getAbiForContract } = useContext(AbisContext);
   const { params } = useLoaderData() as { params: { address: string } };
@@ -62,6 +64,8 @@ const SheetTable = ({ sx }: SheetTableProps) => {
     []
   );
 
+  const sheet = onsheet.sheets.find((sheet) => sheet.address === address);
+
   const load = useCallback(
     (address: string) => {
       if (!address) {
@@ -72,8 +76,8 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         return;
       }
 
-      const _selectedSheetAddress = address;
       // Copy current sheet address to prevent storing the async call results into the wrong key
+      const _selectedSheetAddress = address;
       if (
         appStatus.sheets[_selectedSheetAddress] &&
         appStatus.sheets[_selectedSheetAddress].loading
@@ -99,22 +103,30 @@ const SheetTable = ({ sx }: SheetTableProps) => {
       updateSheetStatus(_selectedSheetAddress, {
         message: "Rendering grid values",
       });
-      const sheet = onsheet.sheets.find((sheet) => sheet.address === address);
+      const sheet = onsheet.sheets.find(
+        (sheet) => sheet.address === _selectedSheetAddress
+      );
       if (sheet === undefined) {
         Promise.all([
           chainProvider.callContract({
-            contractAddress: address,
+            contractAddress: _selectedSheetAddress,
             entrypoint: "name",
           }),
           chainProvider.callContract({
-            contractAddress: address,
+            contractAddress: _selectedSheetAddress,
             entrypoint: "symbol",
           }),
+          contract.nRow(),
         ]).then((response) => {
-          const [name, symbol] = response.map((result) =>
-            hex2str(normalizeHexString(result.result[0]))
-          );
-          appendSheet({ name, symbol, address });
+          const [name, symbol] = response
+            .slice(0, -1)
+            .map((result) => hex2str(normalizeHexString(result.result[0])));
+          appendSheet({
+            name,
+            symbol,
+            address: _selectedSheetAddress,
+            nRow: response[2],
+          });
         });
       }
       let cells;
@@ -137,7 +149,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           );
         });
       }
-      cells
+      return cells
         .then((cells: Cell[]) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
@@ -150,30 +162,32 @@ const SheetTable = ({ sx }: SheetTableProps) => {
             {} as { [id: number]: Cell }
           );
 
-          return Promise.all(
-            Array.from(Array(GRID_SIZE).keys())
-              .map(
-                (i) =>
-                  _cells[i] || {
-                    ...defaultRenderedCell(i),
-                    ...defaultCellData(i),
-                  }
-              )
-              .map(async (cell, _, array) => {
-                const resolvedContractAddress = cell.contractAddress.lt(
-                  RC_BOUND
+          return contract.nRow().then((n) => {
+            return Promise.all(
+              Array.from(Array(n * N_COL).keys())
+                .map(
+                  (i) =>
+                    _cells[i] || {
+                      ...defaultRenderedCell(i),
+                      ...defaultCellData(i),
+                    }
                 )
-                  ? array[cell.contractAddress.toNumber()].value
-                  : cell.contractAddress;
-                const abi = await getAbiForContract(
-                  bn2hex(resolvedContractAddress)
-                );
-                return {
-                  ...cell,
-                  abi: abi[bn2hex(cell.selector)] as FunctionAbi,
-                };
-              })
-          );
+                .map(async (cell, _, array) => {
+                  const resolvedContractAddress = cell.contractAddress.lt(
+                    RC_BOUND
+                  )
+                    ? array[cell.contractAddress.toNumber()].value
+                    : cell.contractAddress;
+                  const abi = await getAbiForContract(
+                    bn2hex(resolvedContractAddress)
+                  );
+                  return {
+                    ...cell,
+                    abi: abi[bn2hex(cell.selector)] as FunctionAbi,
+                  };
+                })
+            );
+          });
         })
         .then((cells) => {
           setValues((prevValues) => ({
@@ -207,7 +221,19 @@ const SheetTable = ({ sx }: SheetTableProps) => {
       setSelectedSheetAddress(address);
       load(address);
     }
-  }, [address, load, setSelectedSheetAddress]);
+  }, [address, load, setSelectedSheetAddress, contract]);
+
+  const showGrid = useMemo(() => {
+    return (
+      address &&
+      appStatus.sheets[address] &&
+      !appStatus.sheets[address].loading &&
+      cells &&
+      sheet !== undefined &&
+      cells.length === sheet.nRow * N_COL &&
+      address === selectedSheetAddress
+    );
+  }, [address, sheet, appStatus.sheets, selectedSheetAddress, cells]);
 
   return (
     <Box sx={{ position: "relative", background: "#e2e2e2", ...sx }}>
@@ -240,12 +266,8 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           </GreyCell>
         ))}
       </Box>
-      {address &&
-        appStatus.sheets[address] &&
-        !appStatus.sheets[address].loading &&
-        cells &&
-        cells.length === GRID_SIZE &&
-        Array.from(Array(N_ROW).keys()).map((rowIndex) => (
+      {showGrid &&
+        Array.from(Array(sheet?.nRow).keys()).map((rowIndex) => (
           <Box
             key={rowIndex}
             sx={{ display: "flex", marginTop: `-${CELL_BORDER_WIDTH}px` }}

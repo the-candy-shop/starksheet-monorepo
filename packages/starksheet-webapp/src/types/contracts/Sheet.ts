@@ -8,4 +8,5 @@ export interface Sheet {
   getCell(tokenId: number): Promise<CellData>;
   renderCell(tokenId: number): Promise<CellRendered>;
   renderCells(): Promise<CellRendered[]>;
+  nRow(): Promise<number>;
 }

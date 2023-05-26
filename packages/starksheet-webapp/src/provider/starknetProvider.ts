@@ -1,10 +1,12 @@
 import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
+import { hex2str } from "../utils/hexUtils";
 import { ChainProvider } from "./chainProvider";
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
   private sequencerProvider: SequencerProvider;
+  private chainId: string;
 
   constructor(rpcUrl: string, sequencerUrl: string) {
     this.sequencerProvider = new SequencerProvider({
@@ -14,6 +16,21 @@ export class StarknetProvider implements ChainProvider {
     this.rpcProvider = new RpcProvider({
       nodeUrl: rpcUrl,
     });
+
+    this.chainId = "";
+    this.rpcProvider.getChainId().then((id) => (this.chainId = hex2str(id)));
+  }
+
+  getExplorerAddress(contractAddress: string) {
+    return this.chainId === "SN_MAIN"
+      ? `https://starkscan.co/contract/${contractAddress}`
+      : `https://testnet.starkscan.co/contract/${contractAddress}`;
+  }
+
+  getNftMarketplaceAddress(contractAddress: string) {
+    return this.chainId === "SN_MAIN"
+      ? `https://starkscan.co/contract/${contractAddress}`
+      : `https://testnet.starkscan.co/contract/${contractAddress}`;
   }
 
   waitForTransaction(hash: string): Promise<any> {

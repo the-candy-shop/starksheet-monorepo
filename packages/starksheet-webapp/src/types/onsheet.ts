@@ -1,6 +1,5 @@
 import BN from "bn.js";
-import { Abi, FunctionAbi, StructAbi } from "starknet";
-import { number } from "starknet";
+import { Abi, FunctionAbi, StructAbi, number } from "starknet";
 import { Cell } from "./cells";
 
 type SheetConstructorArgs = {
@@ -16,6 +15,7 @@ export type Sheet = {
   name: string;
   symbol: string;
   address: string;
+  nRow: number;
   calldata?: SheetConstructorArgs;
 };
 

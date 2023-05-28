@@ -22,6 +22,8 @@ NETWORK = (
     if re.match(r".*(testnet|goerli)-?2$", NETWORK, flags=re.I)
     else "mainnet"
     if re.match(r".*mainnet$", NETWORK, flags=re.I)
+    else "devnetDocker"
+    if re.match(r".*devnetDocker$", NETWORK, flags=re.I)
     else "devnet"
 )
 GATEWAY_URLS = {
@@ -29,6 +31,7 @@ GATEWAY_URLS = {
     "testnet": "https://alpha4.starknet.io",
     "testnet2": "https://alpha4-2.starknet.io",
     "devnet": "http://127.0.0.1:5050",
+    "devnetDocker": "http://starknet-devnet:5050",
 }
 GATEWAY_CLIENT = GatewayClient(net=GATEWAY_URLS[NETWORK])
 STARKNET_NETWORKS = {
@@ -36,6 +39,7 @@ STARKNET_NETWORKS = {
     "testnet": "alpha-goerli",
     "testnet2": "alpha-goerli2",
     "devnet": "alpha-goerli",
+    "devnetDocker": "alpha-goerli",
 }
 STARKNET_NETWORK = STARKNET_NETWORKS[NETWORK]
 STARKSCAN_URLS = {
@@ -43,6 +47,7 @@ STARKSCAN_URLS = {
     "testnet": "https://testnet.starkscan.co",
     "testnet2": "https://testnet-2.starkscan.co",
     "devnet": "https://devnet.starkscan.co",
+    "devnetDocker": "https://devnet.starkscan.co",
 }
 STARKSCAN_URL = STARKSCAN_URLS[NETWORK]
 
@@ -52,6 +57,7 @@ class ChainId(Enum):
     testnet = int.from_bytes(b"SN_GOERLI", "big")
     testnet2 = int.from_bytes(b"SN_GOERLI2", "big")
     devnet = int.from_bytes(b"SN_GOERLI", "big")
+    devnetDocker = int.from_bytes(b"SN_GOERLI", "big")
 
 
 CHAIN_ID = getattr(ChainId, NETWORK)
@@ -146,11 +152,13 @@ STARKNET_ID_ADDRESS = {
     "mainnet": 0x05DBDEDC203E92749E2E746E2D40A768D966BD243DF04A6B712E222BC040A9AF,
     "testnet": 0x0783A9097B26EAE0586373B2CE0ED3529DDC44069D1E0FBC4F66D42B69D6850D,
     "devnet": 0x0783A9097B26EAE0586373B2CE0ED3529DDC44069D1E0FBC4F66D42B69D6850D,
+    "devnetDocker": 0x0783A9097B26EAE0586373B2CE0ED3529DDC44069D1E0FBC4F66D42B69D6850D,
 }[NETWORK]
 STARKNET_ID_NAMING = {
     "mainnet": 0x06AC597F8116F886FA1C97A23FA4E08299975ECAF6B598873CA6792B9BBFB678,
     "testnet": 0x003BAB268E932D2CECD1946F100AE67CE3DFF9FD234119EA2F6DA57D16D29FCE,
     "devnet": 0x003BAB268E932D2CECD1946F100AE67CE3DFF9FD234119EA2F6DA57D16D29FCE,
+    "devnetDocker": 0x003BAB268E932D2CECD1946F100AE67CE3DFF9FD234119EA2F6DA57D16D29FCE,
 }[NETWORK]
 
 logger.info(f"ℹ️  Using Chain id {CHAIN_ID.name} with Gateway {GATEWAY_URLS[NETWORK]}")

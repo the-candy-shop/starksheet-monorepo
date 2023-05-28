@@ -269,7 +269,7 @@ def compile_contract(contract_name):
         raise ValueError(f"Cannot find src/**/{contract_name}.cairo in {os.getcwd()}")
     output = subprocess.run(
         [
-            "starknet-compile",
+            "starknet-compile-deprecated",
             contract_file,
             "--output",
             BUILD_DIR / f"{contract_name}.json",

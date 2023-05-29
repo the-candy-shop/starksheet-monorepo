@@ -30,7 +30,7 @@ export class EVMProvider implements ChainProvider {
     const params = new URLSearchParams({
       action: 'getabi',
       address,
-      apikey: 'FMUMQEYWRHAB67Q8YYGZFHM76K6HI1C4XK',
+      apikey: process.env.EXPLORER_KEY || '',
       module: 'contract',
     });
     // build the query url

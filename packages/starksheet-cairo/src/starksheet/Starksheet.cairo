@@ -6,9 +6,8 @@ from openzeppelin.token.erc20.IERC20 import IERC20
 from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 from starkware.cairo.common.uint256 import Uint256
 
+from constants import ETH_ADDRESS
 from starksheet.library import Starksheet
-
-const ETH_ADDRESS = 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7;
 
 @external
 func setSheetDefaultRendererAddress{

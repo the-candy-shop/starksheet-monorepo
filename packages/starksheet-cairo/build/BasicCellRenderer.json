@@ -51,11 +51,11 @@
         "CONSTRUCTOR": [],
         "EXTERNAL": [
             {
-                "offset": "0x47e",
+                "offset": 1150,
                 "selector": "0x226ad7e84c1fe08eb4c525ed93cccadf9517670341304571e66f7c4f95cbe54"
             },
             {
-                "offset": "0x133",
+                "offset": 307,
                 "selector": "0x3de4eb31fc674e7a692bd85ab4062d839aa8954dde3141ed7bc7e5e898365cc"
             }
         ],
@@ -67,7 +67,7 @@
             "pedersen",
             "range_check"
         ],
-        "compiler_version": "0.10.0",
+        "compiler_version": "0.11.0.2",
         "data": [
             "0x40780017fff7fff",
             "0x1",

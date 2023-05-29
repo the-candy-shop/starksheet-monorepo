@@ -1,19 +1,20 @@
 %lang starknet
 
 from openzeppelin.access.ownable.library import Ownable
-from openzeppelin.token.erc721.library import ERC721, ERC721_name, ERC721_symbol
-from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
 from openzeppelin.introspection.erc165.library import ERC165
+from openzeppelin.token.erc20.IERC20 import IERC20
+from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
+from openzeppelin.token.erc721.library import ERC721, ERC721_name, ERC721_symbol
 from starkware.cairo.common.alloc import alloc
+from starkware.cairo.common.bool import TRUE
 from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
+from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
+from starkware.cairo.common.dict import DictAccess
 from starkware.cairo.common.math_cmp import is_not_zero, RC_BOUND
 from starkware.cairo.common.uint256 import split_64, Uint256
-from starkware.cairo.common.bool import TRUE
-from starkware.starknet.common.syscalls import get_caller_address
+from starkware.starknet.common.syscalls import get_caller_address, get_contract_address
 
-from starkware.cairo.common.dict import DictAccess
-from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
-
+from constants import ETH_ADDRESS
 from sheet.library import (
     Sheet,
     Sheet_merkle_root,
@@ -52,6 +53,20 @@ func getMaxPerWallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     max: felt
 ) {
     return Sheet_max_per_wallet.read();
+}
+
+@external
+func setCellPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(price: felt) {
+    Ownable.assert_only_owner();
+    Sheet.set_cell_price(price);
+    return ();
+}
+
+@view
+func getCellPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    price: felt
+) {
+    return Sheet.get_cell_price();
 }
 
 @external
@@ -164,6 +179,15 @@ func renderGrid{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 func mintPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     tokenId: Uint256, proof_len: felt, proof: felt*
 ) {
+    let (cell_price) = Sheet.get_cell_price();
+    let (sender) = get_caller_address();
+    let (recipient) = get_contract_address();
+    IERC20.transferFrom(
+        contract_address=ETH_ADDRESS,
+        sender=sender,
+        recipient=recipient,
+        amount=Uint256(cell_price, 0),
+    );
     Sheet.mint(tokenId, proof_len, proof);
     let cell_calldata: felt* = alloc();
     Sheet.set_cell(
@@ -186,6 +210,15 @@ func mintAndSetPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
     cellCalldata_len: felt,
     cellCalldata: felt*,
 ) {
+    let (cell_price) = Sheet.get_cell_price();
+    let (sender) = get_caller_address();
+    let (recipient) = get_contract_address();
+    IERC20.transferFrom(
+        contract_address=ETH_ADDRESS,
+        sender=sender,
+        recipient=recipient,
+        amount=Uint256(cell_price, 0),
+    );
     Sheet.mint(tokenId, proof_len, proof);
     Sheet.set_cell(
         token_id=tokenId.low,

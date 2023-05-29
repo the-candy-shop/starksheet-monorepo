@@ -127,27 +127,27 @@
     "entry_points_by_type": {
         "CONSTRUCTOR": [
             {
-                "offset": "0x13a",
+                "offset": 314,
                 "selector": "0x28ffe4ff0f226a9107253e17a904099aa4f63a02a5621de0576e5aa71bc5194"
             }
         ],
         "EXTERNAL": [
             {
-                "offset": "0x16a",
+                "offset": 362,
                 "selector": "0x0"
             },
             {
-                "offset": "0x1bb",
+                "offset": 443,
                 "selector": "0x1679fae2e055e520e40aa3151502bc246034020f987623497fa9bd662846fa7"
             },
             {
-                "offset": "0x1a3",
+                "offset": 419,
                 "selector": "0x1d15dd5e6cac14c959221a0b45927b113a91fcfffa4c7bbab19b28d345467df"
             }
         ],
         "L1_HANDLER": [
             {
-                "offset": "0x183",
+                "offset": 387,
                 "selector": "0x0"
             }
         ]
@@ -213,14 +213,9 @@
             "pedersen",
             "range_check"
         ],
-        "compiler_version": "0.10.0",
+        "compiler_version": "0.11.0.2",
         "data": [
             "0x40780017fff7fff",
-            "0x1",
-            "0x208b7fff7fff7ffe",
-            "0x20780017fff7ffd",
-            "0x4",
-            "0x400780017fff7ffd",
             "0x1",
             "0x208b7fff7fff7ffe",
             "0x480680017fff8000",
@@ -280,6 +275,11 @@
             "0x482680017ff98000",
             "0x5",
             "0x208b7fff7fff7ffe",
+            "0x20780017fff7ffd",
+            "0x4",
+            "0x400780017fff7ffd",
+            "0x1",
+            "0x208b7fff7fff7ffe",
             "0x40780017fff7fff",
             "0x2",
             "0x1104800180018000",
@@ -301,7 +301,7 @@
             "0x4828800180007ffc",
             "0x480a80017fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffe3",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffde",
             "0x480a7ffc7fff8000",
             "0x208b7fff7fff7ffe",
             "0x40780017fff7fff",
@@ -326,7 +326,7 @@
             "0x4828800180007ffc",
             "0x480a80017fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffca",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffc5",
             "0x480a7ffb7fff8000",
             "0x208b7fff7fff7ffe",
             "0x480a7ffc7fff8000",
@@ -341,7 +341,7 @@
             "0x480a7ffb7fff8000",
             "0x48127ffe7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffab",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffa6",
             "0x48127ffe7fff8000",
             "0x48127ff57fff8000",
             "0x48127ff57fff8000",
@@ -355,7 +355,7 @@
             "0x48127ffe7fff8000",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffa5",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffffa0",
             "0x48127ff67fff8000",
             "0x48127ff67fff8000",
             "0x208b7fff7fff7ffe",
@@ -371,7 +371,7 @@
             "0x480a7ffb7fff8000",
             "0x48127ffe7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff8d",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff88",
             "0x48127ffe7fff8000",
             "0x48127ff57fff8000",
             "0x48127ff57fff8000",
@@ -385,7 +385,7 @@
             "0x48127ffe7fff8000",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff87",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff82",
             "0x48127ff67fff8000",
             "0x48127ff67fff8000",
             "0x208b7fff7fff7ffe",
@@ -401,7 +401,7 @@
             "0x480a7ffb7fff8000",
             "0x48127ffe7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff6f",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff6a",
             "0x48127ffe7fff8000",
             "0x48127ff57fff8000",
             "0x48127ff57fff8000",
@@ -415,7 +415,7 @@
             "0x48127ffe7fff8000",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff69",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff64",
             "0x48127ff67fff8000",
             "0x48127ff67fff8000",
             "0x208b7fff7fff7ffe",
@@ -439,7 +439,7 @@
             "0x208b7fff7fff7ffe",
             "0x480a7ffb7fff8000",
             "0x1104800180018000",
-            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff42",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff3d",
             "0x48127ffe7fff8000",
             "0x480a7ffc7fff8000",
             "0x480a7ffd7fff8000",
@@ -485,7 +485,7 @@
             "0x208b7fff7fff7ffe",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffef7",
+            "0x800000000000010ffffffffffffffffffffffffffffffffffffffffffffff30",
             "0x480a7ffa7fff8000",
             "0x480a7ffb7fff8000",
             "0x480a7ffc7fff8000",
@@ -524,7 +524,7 @@
             "0x480a7ffc7fff8000",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffed5",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffed0",
             "0x48127ffd7fff8000",
             "0x480a80007fff8000",
             "0x480a80017fff8000",
@@ -570,7 +570,7 @@
             "0x480a7ffc7fff8000",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffea7",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffea2",
             "0x48127ffd7fff8000",
             "0x48127ff17fff8000",
             "0x48127ff17fff8000",
@@ -597,7 +597,7 @@
             "0x480a7ffc7fff8000",
             "0x480a7ffd7fff8000",
             "0x1104800180018000",
-            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffe98",
+            "0x800000000000010fffffffffffffffffffffffffffffffffffffffffffffe93",
             "0x48127ffd7fff8000",
             "0x48127ff17fff8000",
             "0x48127ff17fff8000",
@@ -780,70 +780,6 @@
                 },
                 "3": {
                     "accessible_scopes": [
-                        "starkware.cairo.common.math",
-                        "starkware.cairo.common.math.assert_not_zero"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [
-                        {
-                            "location": {
-                                "end_col": 7,
-                                "end_line": 11,
-                                "input_file": {
-                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
-                                },
-                                "start_col": 5,
-                                "start_line": 7
-                            },
-                            "n_prefix_newlines": 1
-                        }
-                    ],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 12,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 12
-                    }
-                },
-                "5": {
-                    "accessible_scopes": [
-                        "starkware.cairo.common.math",
-                        "starkware.cairo.common.math.assert_not_zero"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 18,
-                        "end_line": 14,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
-                        },
-                        "start_col": 9,
-                        "start_line": 14
-                    }
-                },
-                "7": {
-                    "accessible_scopes": [
-                        "starkware.cairo.common.math",
-                        "starkware.cairo.common.math.assert_not_zero"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 15,
-                        "end_line": 17,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 17
-                    }
-                },
-                "8": {
-                    "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call"
                     ],
@@ -859,92 +795,92 @@
                         "start_line": 90
                     }
                 },
+                "5": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 95,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 89
+                    }
+                },
+                "6": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 95,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 89
+                    }
+                },
+                "7": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 95,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 89
+                    }
+                },
+                "8": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 95,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 89
+                    }
+                },
+                "9": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 95,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 89
+                    }
+                },
                 "10": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 95,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 89
-                    }
-                },
-                "11": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 95,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 89
-                    }
-                },
-                "12": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 95,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 89
-                    }
-                },
-                "13": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 95,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 89
-                    }
-                },
-                "14": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 95,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 89
-                    }
-                },
-                "15": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call"
@@ -998,7 +934,7 @@
                         "start_line": 99
                     }
                 },
-                "17": {
+                "12": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call"
@@ -1015,7 +951,7 @@
                         "start_line": 100
                     }
                 },
-                "18": {
+                "13": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call"
@@ -1032,7 +968,7 @@
                         "start_line": 100
                     }
                 },
-                "19": {
+                "14": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call"
@@ -1049,7 +985,7 @@
                         "start_line": 100
                     }
                 },
-                "20": {
+                "15": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call_l1_handler"
@@ -1066,92 +1002,92 @@
                         "start_line": 112
                     }
                 },
+                "17": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call_l1_handler"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 117,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 111
+                    }
+                },
+                "18": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call_l1_handler"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 117,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 111
+                    }
+                },
+                "19": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call_l1_handler"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 117,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 111
+                    }
+                },
+                "20": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call_l1_handler"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 117,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 111
+                    }
+                },
+                "21": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.library_call_l1_handler"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 117,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 111
+                    }
+                },
                 "22": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call_l1_handler"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 117,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 111
-                    }
-                },
-                "23": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call_l1_handler"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 117,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 111
-                    }
-                },
-                "24": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call_l1_handler"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 117,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 111
-                    }
-                },
-                "25": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call_l1_handler"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 117,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 111
-                    }
-                },
-                "26": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.library_call_l1_handler"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 117,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 111
-                    }
-                },
-                "27": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call_l1_handler"
@@ -1205,7 +1141,7 @@
                         "start_line": 121
                     }
                 },
-                "29": {
+                "24": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call_l1_handler"
@@ -1222,7 +1158,7 @@
                         "start_line": 122
                     }
                 },
-                "30": {
+                "25": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call_l1_handler"
@@ -1239,7 +1175,7 @@
                         "start_line": 122
                     }
                 },
-                "31": {
+                "26": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.library_call_l1_handler"
@@ -1256,7 +1192,7 @@
                         "start_line": 122
                     }
                 },
-                "32": {
+                "27": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.get_caller_address"
@@ -1273,7 +1209,7 @@
                         "start_line": 202
                     }
                 },
-                "34": {
+                "29": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.get_caller_address"
@@ -1290,7 +1226,7 @@
                         "start_line": 202
                     }
                 },
-                "35": {
+                "30": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.get_caller_address"
@@ -1344,7 +1280,7 @@
                         "start_line": 204
                     }
                 },
-                "37": {
+                "32": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.get_caller_address"
@@ -1361,7 +1297,7 @@
                         "start_line": 205
                     }
                 },
-                "38": {
+                "33": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.get_caller_address"
@@ -1378,7 +1314,7 @@
                         "start_line": 205
                     }
                 },
-                "39": {
+                "34": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_read"
@@ -1395,7 +1331,7 @@
                         "start_line": 354
                     }
                 },
-                "41": {
+                "36": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_read"
@@ -1412,7 +1348,7 @@
                         "start_line": 354
                     }
                 },
-                "42": {
+                "37": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_read"
@@ -1429,7 +1365,7 @@
                         "start_line": 354
                     }
                 },
-                "43": {
+                "38": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_read"
@@ -1483,7 +1419,7 @@
                         "start_line": 357
                     }
                 },
-                "45": {
+                "40": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_read"
@@ -1500,7 +1436,7 @@
                         "start_line": 358
                     }
                 },
-                "46": {
+                "41": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_read"
@@ -1517,7 +1453,7 @@
                         "start_line": 358
                     }
                 },
-                "47": {
+                "42": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_write"
@@ -1534,7 +1470,7 @@
                         "start_line": 372
                     }
                 },
-                "49": {
+                "44": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_write"
@@ -1551,7 +1487,7 @@
                         "start_line": 371
                     }
                 },
-                "50": {
+                "45": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_write"
@@ -1568,7 +1504,7 @@
                         "start_line": 371
                     }
                 },
-                "51": {
+                "46": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_write"
@@ -1585,7 +1521,7 @@
                         "start_line": 371
                     }
                 },
-                "52": {
+                "47": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_write"
@@ -1639,7 +1575,7 @@
                         "start_line": 375
                     }
                 },
-                "54": {
+                "49": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.storage_write"
@@ -1656,7 +1592,7 @@
                         "start_line": 376
                     }
                 },
-                "55": {
+                "50": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.emit_event"
@@ -1673,92 +1609,92 @@
                         "start_line": 392
                     }
                 },
+                "52": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.emit_event"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 393,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 391
+                    }
+                },
+                "53": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.emit_event"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 393,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 391
+                    }
+                },
+                "54": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.emit_event"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 393,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 391
+                    }
+                },
+                "55": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.emit_event"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 393,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 391
+                    }
+                },
+                "56": {
+                    "accessible_scopes": [
+                        "starkware.starknet.common.syscalls",
+                        "starkware.starknet.common.syscalls.emit_event"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 393,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 391
+                    }
+                },
                 "57": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.emit_event"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 393,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 391
-                    }
-                },
-                "58": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.emit_event"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 393,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 391
-                    }
-                },
-                "59": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.emit_event"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 393,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 391
-                    }
-                },
-                "60": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.emit_event"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 393,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 391
-                    }
-                },
-                "61": {
-                    "accessible_scopes": [
-                        "starkware.starknet.common.syscalls",
-                        "starkware.starknet.common.syscalls.emit_event"
-                    ],
-                    "flow_tracking_data": null,
-                    "hints": [],
-                    "inst": {
-                        "end_col": 7,
-                        "end_line": 393,
-                        "input_file": {
-                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/starknet/common/syscalls.cairo"
-                        },
-                        "start_col": 5,
-                        "start_line": 391
-                    }
-                },
-                "62": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.emit_event"
@@ -1812,7 +1748,7 @@
                         "start_line": 395
                     }
                 },
-                "64": {
+                "59": {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
                         "starkware.starknet.common.syscalls.emit_event"
@@ -1827,6 +1763,70 @@
                         },
                         "start_col": 5,
                         "start_line": 396
+                    }
+                },
+                "60": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_not_zero"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [
+                        {
+                            "location": {
+                                "end_col": 7,
+                                "end_line": 11,
+                                "input_file": {
+                                    "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                                },
+                                "start_col": 5,
+                                "start_line": 7
+                            },
+                            "n_prefix_newlines": 1
+                        }
+                    ],
+                    "inst": {
+                        "end_col": 7,
+                        "end_line": 12,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 12
+                    }
+                },
+                "62": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_not_zero"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 18,
+                        "end_line": 14,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 9,
+                        "start_line": 14
+                    }
+                },
+                "64": {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_not_zero"
+                    ],
+                    "flow_tracking_data": null,
+                    "hints": [],
+                    "inst": {
+                        "end_col": 15,
+                        "end_line": 17,
+                        "input_file": {
+                            "filename": "/Users/clementwalter/.pyenv/versions/starksheet/lib/python3.9/site-packages/starkware/cairo/common/math.cairo"
+                        },
+                        "start_col": 5,
+                        "start_line": 17
                     }
                 },
                 "65": {
@@ -14310,25 +14310,7 @@
                     }
                 }
             ],
-            "3": [
-                {
-                    "accessible_scopes": [
-                        "starkware.cairo.common.math",
-                        "starkware.cairo.common.math.assert_not_zero"
-                    ],
-                    "code": "from starkware.cairo.common.math_utils import assert_integer\nassert_integer(ids.value)\nassert ids.value % PRIME != 0, f'assert_not_zero failed: {ids.value} = 0.'",
-                    "flow_tracking_data": {
-                        "ap_tracking": {
-                            "group": 1,
-                            "offset": 0
-                        },
-                        "reference_ids": {
-                            "starkware.cairo.common.math.assert_not_zero.value": 0
-                        }
-                    }
-                }
-            ],
-            "15": [
+            "10": [
                 {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
@@ -14337,16 +14319,16 @@
                     "code": "syscall_handler.library_call(segments=segments, syscall_ptr=ids.syscall_ptr)",
                     "flow_tracking_data": {
                         "ap_tracking": {
-                            "group": 2,
+                            "group": 1,
                             "offset": 1
                         },
                         "reference_ids": {
-                            "starkware.starknet.common.syscalls.library_call.syscall_ptr": 1
+                            "starkware.starknet.common.syscalls.library_call.syscall_ptr": 0
                         }
                     }
                 }
             ],
-            "27": [
+            "22": [
                 {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
@@ -14355,16 +14337,16 @@
                     "code": "syscall_handler.library_call_l1_handler(segments=segments, syscall_ptr=ids.syscall_ptr)",
                     "flow_tracking_data": {
                         "ap_tracking": {
-                            "group": 3,
+                            "group": 2,
                             "offset": 1
                         },
                         "reference_ids": {
-                            "starkware.starknet.common.syscalls.library_call_l1_handler.syscall_ptr": 2
+                            "starkware.starknet.common.syscalls.library_call_l1_handler.syscall_ptr": 1
                         }
                     }
                 }
             ],
-            "35": [
+            "30": [
                 {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
@@ -14373,16 +14355,16 @@
                     "code": "syscall_handler.get_caller_address(segments=segments, syscall_ptr=ids.syscall_ptr)",
                     "flow_tracking_data": {
                         "ap_tracking": {
-                            "group": 4,
+                            "group": 3,
                             "offset": 1
                         },
                         "reference_ids": {
-                            "starkware.starknet.common.syscalls.get_caller_address.syscall_ptr": 3
+                            "starkware.starknet.common.syscalls.get_caller_address.syscall_ptr": 2
                         }
                     }
                 }
             ],
-            "43": [
+            "38": [
                 {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
@@ -14391,16 +14373,16 @@
                     "code": "syscall_handler.storage_read(segments=segments, syscall_ptr=ids.syscall_ptr)",
                     "flow_tracking_data": {
                         "ap_tracking": {
-                            "group": 5,
+                            "group": 4,
                             "offset": 1
                         },
                         "reference_ids": {
-                            "starkware.starknet.common.syscalls.storage_read.syscall_ptr": 4
+                            "starkware.starknet.common.syscalls.storage_read.syscall_ptr": 3
                         }
                     }
                 }
             ],
-            "52": [
+            "47": [
                 {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
@@ -14409,16 +14391,16 @@
                     "code": "syscall_handler.storage_write(segments=segments, syscall_ptr=ids.syscall_ptr)",
                     "flow_tracking_data": {
                         "ap_tracking": {
-                            "group": 6,
+                            "group": 5,
                             "offset": 1
                         },
                         "reference_ids": {
-                            "starkware.starknet.common.syscalls.storage_write.syscall_ptr": 5
+                            "starkware.starknet.common.syscalls.storage_write.syscall_ptr": 4
                         }
                     }
                 }
             ],
-            "62": [
+            "57": [
                 {
                     "accessible_scopes": [
                         "starkware.starknet.common.syscalls",
@@ -14427,11 +14409,29 @@
                     "code": "syscall_handler.emit_event(segments=segments, syscall_ptr=ids.syscall_ptr)",
                     "flow_tracking_data": {
                         "ap_tracking": {
-                            "group": 7,
+                            "group": 6,
                             "offset": 1
                         },
                         "reference_ids": {
-                            "starkware.starknet.common.syscalls.emit_event.syscall_ptr": 6
+                            "starkware.starknet.common.syscalls.emit_event.syscall_ptr": 5
+                        }
+                    }
+                }
+            ],
+            "60": [
+                {
+                    "accessible_scopes": [
+                        "starkware.cairo.common.math",
+                        "starkware.cairo.common.math.assert_not_zero"
+                    ],
+                    "code": "from starkware.cairo.common.math_utils import assert_integer\nassert_integer(ids.value)\nassert ids.value % PRIME != 0, f'assert_not_zero failed: {ids.value} = 0.'",
+                    "flow_tracking_data": {
+                        "ap_tracking": {
+                            "group": 7,
+                            "offset": 0
+                        },
+                        "reference_ids": {
+                            "starkware.cairo.common.math.assert_not_zero.value": 6
                         }
                     }
                 }
@@ -16159,7 +16159,7 @@
             },
             "starkware.cairo.common.math.assert_not_zero": {
                 "decorators": [],
-                "pc": 3,
+                "pc": 60,
                 "type": "function"
             },
             "starkware.cairo.common.math.assert_not_zero.Args": {
@@ -16193,10 +16193,10 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 1,
+                            "group": 7,
                             "offset": 0
                         },
-                        "pc": 3,
+                        "pc": 60,
                         "value": "[cast(fp + (-3), felt*)]"
                     }
                 ],
@@ -16902,7 +16902,7 @@
             },
             "starkware.starknet.common.syscalls.emit_event": {
                 "decorators": [],
-                "pc": 55,
+                "pc": 50,
                 "type": "function"
             },
             "starkware.starknet.common.syscalls.emit_event.Args": {
@@ -16953,18 +16953,18 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 7,
+                            "group": 6,
                             "offset": 0
                         },
-                        "pc": 55,
+                        "pc": 50,
                         "value": "[cast(fp + (-7), felt**)]"
                     },
                     {
                         "ap_tracking_data": {
-                            "group": 7,
+                            "group": 6,
                             "offset": 1
                         },
-                        "pc": 62,
+                        "pc": 57,
                         "value": "cast([fp + (-7)] + 5, felt*)"
                     }
                 ],
@@ -16972,7 +16972,7 @@
             },
             "starkware.starknet.common.syscalls.get_caller_address": {
                 "decorators": [],
-                "pc": 32,
+                "pc": 27,
                 "type": "function"
             },
             "starkware.starknet.common.syscalls.get_caller_address.Args": {
@@ -17006,18 +17006,18 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 4,
+                            "group": 3,
                             "offset": 0
                         },
-                        "pc": 32,
+                        "pc": 27,
                         "value": "[cast(fp + (-3), felt**)]"
                     },
                     {
                         "ap_tracking_data": {
-                            "group": 4,
+                            "group": 3,
                             "offset": 1
                         },
-                        "pc": 35,
+                        "pc": 30,
                         "value": "cast([fp + (-3)] + 2, felt*)"
                     }
                 ],
@@ -17025,7 +17025,7 @@
             },
             "starkware.starknet.common.syscalls.library_call": {
                 "decorators": [],
-                "pc": 8,
+                "pc": 3,
                 "type": "function"
             },
             "starkware.starknet.common.syscalls.library_call.Args": {
@@ -17076,18 +17076,18 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 2,
+                            "group": 1,
                             "offset": 0
                         },
-                        "pc": 8,
+                        "pc": 3,
                         "value": "[cast(fp + (-7), felt**)]"
                     },
                     {
                         "ap_tracking_data": {
-                            "group": 2,
+                            "group": 1,
                             "offset": 1
                         },
-                        "pc": 15,
+                        "pc": 10,
                         "value": "cast([fp + (-7)] + 7, felt*)"
                     }
                 ],
@@ -17095,7 +17095,7 @@
             },
             "starkware.starknet.common.syscalls.library_call_l1_handler": {
                 "decorators": [],
-                "pc": 20,
+                "pc": 15,
                 "type": "function"
             },
             "starkware.starknet.common.syscalls.library_call_l1_handler.Args": {
@@ -17146,18 +17146,18 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 3,
+                            "group": 2,
                             "offset": 0
                         },
-                        "pc": 20,
+                        "pc": 15,
                         "value": "[cast(fp + (-7), felt**)]"
                     },
                     {
                         "ap_tracking_data": {
-                            "group": 3,
+                            "group": 2,
                             "offset": 1
                         },
-                        "pc": 27,
+                        "pc": 22,
                         "value": "cast([fp + (-7)] + 7, felt*)"
                     }
                 ],
@@ -17165,7 +17165,7 @@
             },
             "starkware.starknet.common.syscalls.storage_read": {
                 "decorators": [],
-                "pc": 39,
+                "pc": 34,
                 "type": "function"
             },
             "starkware.starknet.common.syscalls.storage_read.Args": {
@@ -17204,18 +17204,18 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 5,
+                            "group": 4,
                             "offset": 0
                         },
-                        "pc": 39,
+                        "pc": 34,
                         "value": "[cast(fp + (-4), felt**)]"
                     },
                     {
                         "ap_tracking_data": {
-                            "group": 5,
+                            "group": 4,
                             "offset": 1
                         },
-                        "pc": 43,
+                        "pc": 38,
                         "value": "cast([fp + (-4)] + 3, felt*)"
                     }
                 ],
@@ -17223,7 +17223,7 @@
             },
             "starkware.starknet.common.syscalls.storage_write": {
                 "decorators": [],
-                "pc": 47,
+                "pc": 42,
                 "type": "function"
             },
             "starkware.starknet.common.syscalls.storage_write.Args": {
@@ -17266,18 +17266,18 @@
                 "references": [
                     {
                         "ap_tracking_data": {
-                            "group": 6,
+                            "group": 5,
                             "offset": 0
                         },
-                        "pc": 47,
+                        "pc": 42,
                         "value": "[cast(fp + (-5), felt**)]"
                     },
                     {
                         "ap_tracking_data": {
-                            "group": 6,
+                            "group": 5,
                             "offset": 1
                         },
-                        "pc": 52,
+                        "pc": 47,
                         "value": "cast([fp + (-5)] + 3, felt*)"
                     }
                 ],
@@ -17294,14 +17294,14 @@
                         "offset": 0
                     },
                     "pc": 3,
-                    "value": "[cast(fp + (-3), felt*)]"
+                    "value": "[cast(fp + (-7), felt**)]"
                 },
                 {
                     "ap_tracking_data": {
                         "group": 2,
                         "offset": 0
                     },
-                    "pc": 8,
+                    "pc": 15,
                     "value": "[cast(fp + (-7), felt**)]"
                 },
                 {
@@ -17309,40 +17309,40 @@
                         "group": 3,
                         "offset": 0
                     },
-                    "pc": 20,
-                    "value": "[cast(fp + (-7), felt**)]"
+                    "pc": 27,
+                    "value": "[cast(fp + (-3), felt**)]"
                 },
                 {
                     "ap_tracking_data": {
                         "group": 4,
                         "offset": 0
                     },
-                    "pc": 32,
-                    "value": "[cast(fp + (-3), felt**)]"
+                    "pc": 34,
+                    "value": "[cast(fp + (-4), felt**)]"
                 },
                 {
                     "ap_tracking_data": {
                         "group": 5,
                         "offset": 0
                     },
-                    "pc": 39,
-                    "value": "[cast(fp + (-4), felt**)]"
+                    "pc": 42,
+                    "value": "[cast(fp + (-5), felt**)]"
                 },
                 {
                     "ap_tracking_data": {
                         "group": 6,
                         "offset": 0
                     },
-                    "pc": 47,
-                    "value": "[cast(fp + (-5), felt**)]"
+                    "pc": 50,
+                    "value": "[cast(fp + (-7), felt**)]"
                 },
                 {
                     "ap_tracking_data": {
                         "group": 7,
                         "offset": 0
                     },
-                    "pc": 55,
-                    "value": "[cast(fp + (-7), felt**)]"
+                    "pc": 60,
+                    "value": "[cast(fp + (-3), felt*)]"
                 }
             ]
         }

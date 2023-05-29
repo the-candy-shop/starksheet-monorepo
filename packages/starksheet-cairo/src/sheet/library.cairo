@@ -70,7 +70,24 @@ func Sheet_contract_uri(index: felt) -> (res: felt) {
 func Sheet_is_mint_open() -> (res: felt) {
 }
 
+@storage_var
+func Sheet_cell_price() -> (price: felt) {
+}
+
 namespace Sheet {
+    func get_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        price: felt
+    ) {
+        return Sheet_cell_price.read();
+    }
+
+    func set_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        price: felt
+    ) {
+        Sheet_cell_price.write(price);
+        return ();
+    }
+
     func set_cell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: felt,
         contract_address: felt,

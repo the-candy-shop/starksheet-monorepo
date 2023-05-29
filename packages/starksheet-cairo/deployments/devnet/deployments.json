@@ -1,38 +1,26 @@
 {
   "BasicCellRenderer": {
-    "address": "0x6f7ed5fd4515398a779f62c6a0a639c6fc064099acaec80cd86be4e0dcb4351",
-    "tx": "0x926b0695dd3322a752c5fa93e67f51dfb6c105e8bc1c521e2aa82963a34b35",
+    "address": "0x3ec441147cc121806bd7b14f7620abfd905b2250034fa1cc5b6a212f277a530",
+    "tx": "0x2879e5f9271139fe72e483ab545f372acbd8fd18ce0335a1d198d90a5cc9e09",
     "artifact": "build/BasicCellRenderer.json",
     "alias": "basic_cell_renderer"
   },
   "math": {
-    "address": "0x5e5e7dbc717973fd3f0240576e5713171d6775b66d7c57f4257ab178008868b",
-    "tx": "0x20b978a8689709d2701f33e771dd4cff420ea6214f8819d0f82419f986d9487",
+    "address": "0x572f139f37e5db0ecb7fad520b8e762c17bbeca1abec926ab7d466d441b7868",
+    "tx": "0x7de617a56a567a2b90332f981031e5b88289f8eef0d69f29f6dc8783cd1ebeb",
     "artifact": "build/math.json",
     "alias": "math"
   },
   "execute": {
-    "address": "0x1e1e46f01c05a232e8019dc34a04484a35d6cdacb46048e3cb0dc91bacaf7e1",
-    "tx": "0x70a409441f4644617db49964e863fe1fa6b71e1c1fde4088c5d2fc261f53769",
+    "address": "0x54abcdfe0a7d46cf3b1521f7d8a9316b1c7e26a8760a26dff2350472077ec4b",
+    "tx": "0x4f4165fe3ccd10adda12c0f01ce9819922952995a4a80aaf120882648fca682",
     "artifact": "build/execute.json",
     "alias": "execute"
   },
   "Starksheet": {
-    "address": "0x2b07de0bdafc49382951fd5ed42bba9b6e2f444d68d86cb4c5b37bfc9a71e1d",
-    "tx": "0x309790f3ed11899e322c58b92b94e74db2244536c35eddb5d191070641d27fc",
+    "address": "0x6460b8d03431fc80a8a628b03cddff22d6b4be3584b716b323afcccdc8164f8",
+    "tx": "0x5f56e457720113d693b94181d67e3a9aa388f525b3adad2e881ca946b6a633d",
     "artifact": "build/Starksheet.json",
     "alias": "starksheet"
-  },
-  "DustyPilotRenderer": {
-    "address": "0x21c6bc6626f463acc4544db2d935b5399ac6ca8312b74a0a3513643e99d7fdf",
-    "tx": "0x137bc8d57db40371c8edc693f8f1c91c7157853c31f2647135560f6e9a2e94c",
-    "artifact": "build/DustyPilotRenderer.json",
-    "alias": "dusty_pilot_renderer"
-  },
-  "DustyPilots": {
-    "address": "0x638c5a5e7fcbf221aa922e5579bcec14fe11467ff404ee3b34f32340290144c",
-    "tx": "0x41f0f72bc240dda39aa9ea0df9e5b0b27f41d8382a01fd160e4fbf1e85761c0",
-    "artifact": "build/DustyPilots.json",
-    "alias": "dusty_pilots"
   }
 }

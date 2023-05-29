@@ -178,6 +178,29 @@
     {
         "inputs": [
             {
+                "name": "price",
+                "type": "felt"
+            }
+        ],
+        "name": "setCellPrice",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getCellPrice",
+        "outputs": [
+            {
+                "name": "price",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "address",
                 "type": "felt"
             }

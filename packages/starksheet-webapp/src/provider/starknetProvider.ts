@@ -1,7 +1,7 @@
 import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { hex2str } from "../utils/hexUtils";
-import { ChainConfig, ChainProvider, ContractCall } from '../types';
+import {ChainConfig, ChainId, ChainProvider, ChainType, ContractCall} from '../types';
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
@@ -28,6 +28,20 @@ export class StarknetProvider implements ChainProvider {
 
   public static build(rpcUrl: string, config: ChainConfig): StarknetProvider {
     return new StarknetProvider(rpcUrl, rpcUrl, config);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getChainId(): ChainId {
+    return this.config.chainId;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getChainType(): ChainType {
+    return this.config.chainType;
   }
 
   /**

@@ -1,6 +1,8 @@
 import { ABI } from "./ABI";
 import { ContractCall } from "./ContractCall";
 import { TransactionReceipt } from "./TransactionReceipt";
+import {ChainType} from './ChainType';
+import {ChainId} from './ChainId';
 
 /**
  * Represents a chain provider.
@@ -22,6 +24,16 @@ export interface ChainProvider {
    * Waits for the transaction matching the given hash to complete.
    */
   waitForTransaction(hash: string): Promise<void>;
+
+  /**
+   * Gets the chain id.
+   */
+  getChainId(): ChainId;
+
+  /**
+   * Gets the chain type.
+   */
+  getChainType(): ChainType;
 
   /**
    * Gets the receipt of the transaction matching the given hash.

@@ -19,8 +19,7 @@ RUN pip install poetry
 COPY . /app/
 
 # install dependencies
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+RUN poetry install --no-interaction --no-ansi
 
 # command to run on container start
-CMD ["python", "deploy/starksheet.py"]
+CMD ["poetry", "run", "python", "deploy/starksheet.py"]

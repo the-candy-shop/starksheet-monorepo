@@ -3,7 +3,7 @@ services:
   starknet-devnet:
     image: shardlabs/starknet-devnet
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "5050"]
+      test: ["CMD-SHELL", "if [ $(wget -qO- http://0.0.0.0:5050/is_alive) == 'Alive!!!' ]; then exit 0; else exit 1; fi"]
       interval: 5s
     command:
       - "--seed=0"

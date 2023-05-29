@@ -1,0 +1,56 @@
+services:
+
+  starknet-devnet:
+    image: shardlabs/starknet-devnet
+    healthcheck:
+      test: ["CMD-SHELL", "if [ $(wget -qO- http://0.0.0.0:5050/is_alive) == 'Alive!!!' ]; then exit 0; else exit 1; fi"]
+      interval: 5s
+    command:
+      - "--seed=0"
+      - "--disable-rpc-request-validation"
+    ports:
+      - '5050:5050'
+
+  starknet-deployer:
+    depends_on:
+      starknet-devnet:
+        condition: service_healthy
+    build:
+      context: ./packages/starksheet-cairo
+    environment:
+      ACCOUNT_ADDRESS: "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a"
+      PRIVATE_KEY: "0xe3e70682c2094cac629f6fbed82c07cd"
+      STARKNET_NETWORK: "devnetDocker"
+
+  ethereum-devnet:
+    image: ghcr.io/foundry-rs/foundry
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8545"]
+      interval: 5s
+    ports:
+      - '8545:8545'
+    environment:
+      ANVIL_IP_ADDR: "0.0.0.0"
+      CHAIN: 1
+    platform: linux/x86_64
+    entrypoint: anvil
+
+  ethereum-deployer:
+    depends_on:
+      ethereum-devnet:
+        condition: service_healthy
+    image: ghcr.io/foundry-rs/foundry
+    environment:
+      PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+      ETHERSCAN_API_KEY: "foobar"
+    volumes:
+      - ./packages/starksheet-solidity:/app
+    working_dir: /app
+    platform: linux/x86_64
+    entrypoint: forge
+    command:
+      - "script"
+      - "/app/script/Evmsheet.s.sol:EvmsheetScript"
+      - "--broadcast"
+      - "--verify"
+      - "--rpc-url=http://ethereum-devnet:8545"

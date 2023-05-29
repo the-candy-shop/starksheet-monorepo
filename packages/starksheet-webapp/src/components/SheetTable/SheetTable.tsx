@@ -118,6 +118,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
             entrypoint: "symbol",
           }),
           contract.nRow(),
+          contract.getCellPrice(),
         ]).then((response) => {
           const [name, symbol] = response
             .slice(0, -1)
@@ -127,6 +128,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
             symbol,
             address: _selectedSheetAddress,
             nRow: response[2],
+            cellPrice: response[3] / 10 ** 18,
           });
         });
       }

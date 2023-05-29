@@ -17,6 +17,7 @@ export type Sheet = {
   address: string;
   nRow: number;
   calldata?: SheetConstructorArgs;
+  cellPrice: number;
 };
 
 export type NewSheet = Required<Sheet>;
@@ -27,6 +28,7 @@ export type Onsheet = {
   defaultRenderer: string;
   sheetClassHash: string;
   proxyClassHash: string;
+  sheetPrice: number;
 };
 
 // Starknet types

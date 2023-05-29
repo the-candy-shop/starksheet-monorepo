@@ -14,18 +14,12 @@ export type SaveButtonProps = {
 };
 
 function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
-  const { transactions, newSheetsTransactions, settleTransactions } =
+  const { transactions, settleTransactions, costEth } =
     useContext(TransactionsContext);
   const { accountAddress } = useContext(AccountContext);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const cost = useMemo(
-    () =>
-      newSheetsTransactions.length
-        ? ` (${newSheetsTransactions.length * 0.01})`
-        : "",
-    [newSheetsTransactions]
-  );
+  const cost = useMemo(() => (costEth > 0 ? ` (${costEth})` : ""), [costEth]);
 
   const onClick = useCallback(async () => {
     if (transactions.length === 0) {

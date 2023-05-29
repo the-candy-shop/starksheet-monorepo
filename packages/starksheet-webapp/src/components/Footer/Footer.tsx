@@ -36,6 +36,7 @@ function Footer({ sx }: FooterProps) {
         name: `Sheet${onsheet.sheets.length}`,
         symbol: `SHT${onsheet.sheets.length}`,
         nRow: N_ROW,
+        cellPrice: 0,
       },
       accountAddress
     );

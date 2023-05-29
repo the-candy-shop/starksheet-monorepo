@@ -12,8 +12,8 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
+import { useChainProvider } from "../../hooks/useChainProvider";
 import { useSheetContract } from "../../hooks/useSheetContract";
-import { chainProvider } from "../../provider";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, hex2str, normalizeHexString } from "../../utils/hexUtils";
@@ -50,6 +50,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
   const { address } = params;
   const { contract } = useSheetContract(address);
   const navigate = useNavigate();
+  const chainProvider = useChainProvider();
 
   const cells = useMemo(
     () => (address ? values[address] : []),
@@ -120,7 +121,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         ]).then((response) => {
           const [name, symbol] = response
             .slice(0, -1)
-            .map((result) => hex2str(normalizeHexString(result.result[0])));
+            .map((result) => hex2str(normalizeHexString(result as string)));
           appendSheet({
             name,
             symbol,

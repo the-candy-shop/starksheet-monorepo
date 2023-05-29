@@ -1,4 +1,6 @@
+import { Web3Provider } from '@ethersproject/providers';
 import { StarknetProvider } from "./starknetProvider";
+import { EVMProvider } from "./EVMProvider";
 
 export type Network = "mainnet" | "testnet" | "testnet2" | "devnet";
 
@@ -37,9 +39,11 @@ const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
 export const chainId = chainIds[network];
 export const rpcUrl = rpcUrls[network];
-export const chainProvider = new StarknetProvider(
+export const starknetChainProvider = new StarknetProvider(
   rpcUrl,
   sequencerUrls[network]
 );
+
+export const evmChainProvider = new EVMProvider('https://goerli.etherscan.io/', new Web3Provider(window.ethereum));
 
 export const ethChainId = ethChainIds[network];

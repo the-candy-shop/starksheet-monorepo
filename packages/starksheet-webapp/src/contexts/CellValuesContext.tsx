@@ -8,11 +8,11 @@ import React, {
 } from "react";
 import { number } from "starknet";
 import { isDependency } from "../components/ActionBar/formula.utils";
-import { chainProvider } from "../provider";
 import { Cell, CellData, CellGraph, CellValues, UpdatedValues } from "../types";
 import { RC_BOUND } from "../utils/constants";
 import { bn2hex } from "../utils/hexUtils";
 import { resolveContractAddress } from "../utils/sheetUtils";
+import { useChainProvider } from "../hooks/useChainProvider";
 import { OnsheetContext } from "./OnsheetContext";
 
 export const CellValuesContext = React.createContext<{
@@ -49,6 +49,7 @@ export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { selectedSheetAddress } = useContext(OnsheetContext);
+  const chainProvider = useChainProvider();
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});
@@ -104,7 +105,7 @@ export const CellValuesContextProvider = ({
 
     const value =
       cell.abi.stateMutability === "view"
-        ? (await chainProvider.callContract(call)).result[0]
+        ? (await chainProvider.callContract<string>(call))
         : NaN;
 
     return number.toBN(value);

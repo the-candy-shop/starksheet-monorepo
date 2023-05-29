@@ -67,6 +67,8 @@ export class EVMProvider implements ChainProvider {
 
   /**
    * @inheritDoc
+   *
+   * todo: implement with an actual marketplace address
    */
   getNftMarketplaceAddress(contractAddress: string): string {
     return this.getExplorerAddress(contractAddress);

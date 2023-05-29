@@ -44,6 +44,6 @@ export const starknetChainProvider = new StarknetProvider(
   sequencerUrls[network]
 );
 
-export const evmChainProvider = new EVMProvider('https://etherscan.io/', new Web3Provider(window.ethereum));
+export const evmChainProvider = new EVMProvider('https://goerli.etherscan.io/', new Web3Provider(window.ethereum));
 
 export const ethChainId = ethChainIds[network];

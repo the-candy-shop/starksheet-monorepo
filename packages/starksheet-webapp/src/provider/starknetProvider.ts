@@ -39,8 +39,8 @@ export class StarknetProvider implements ChainProvider {
    */
   getNftMarketplaceAddress(contractAddress: string) {
     return this.chainId === "SN_MAIN"
-      ? `https://starkscan.co/contract/${contractAddress}`
-      : `https://testnet.starkscan.co/contract/${contractAddress}`;
+      ? `https://mintsquare.io/collection/starknet/${contractAddress}`
+      : `https://mintsquare.io/collection/starknet-testnet/${contractAddress}`;
   }
 
   /**

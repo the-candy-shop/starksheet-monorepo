@@ -8,12 +8,12 @@ import React, {
 } from "react";
 import { number } from "starknet";
 import { isDependency } from "../components/ActionBar/formula.utils";
-import { chainProvider } from "../provider";
 import { Cell, CellData, CellGraph, CellValues, UpdatedValues } from "../types";
 import { RC_BOUND } from "../utils/constants";
 import { bn2hex } from "../utils/hexUtils";
 import { resolveContractAddress } from "../utils/sheetUtils";
 import { OnsheetContext } from "./OnsheetContext";
+import {useChainProvider} from '../hooks/useChainProvider';
 
 export const CellValuesContext = React.createContext<{
   values: CellValues;
@@ -49,6 +49,7 @@ export const CellValuesContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { selectedSheetAddress } = useContext(OnsheetContext);
+  const chainProvider = useChainProvider();
 
   const [values, setValues] = useState<CellValues>({});
   const [updatedValues, setUpdatedValues] = useState<UpdatedValues>({});

@@ -44,9 +44,6 @@ export const starknetChainProvider = new StarknetProvider(
   sequencerUrls[network]
 );
 
-// todo: refactor this hardcoded provider to a custom hook ()
 export const evmChainProvider = new EVMProvider('https://etherscan.io/', new Web3Provider(window.ethereum));
-
-export const chainProvider = evmChainProvider;
 
 export const ethChainId = ethChainIds[network];

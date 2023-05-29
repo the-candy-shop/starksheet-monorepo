@@ -7,11 +7,11 @@ import React, {
 } from "react";
 import { Call, number } from "starknet";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
 import { OnsheetContext } from "./OnsheetContext";
+import {useChainProvider} from '../hooks/useChainProvider';
 
 export const TransactionsContext = React.createContext<{
   transactions: Call[];
@@ -31,6 +31,7 @@ export const TransactionsContextProvider = ({
   const { onsheet, validateNewSheets } = useContext(OnsheetContext);
   const { contract } = useOnsheetContract();
   const { enqueueSnackbar } = useSnackbar();
+  const chainProvider = useChainProvider();
 
   const newSheetsTransactions = useMemo(() => {
     return onsheet.sheets
@@ -114,6 +115,7 @@ export const TransactionsContextProvider = ({
       cellsTransactions,
       execute,
       contract,
+      chainProvider,
     ]
   );
 

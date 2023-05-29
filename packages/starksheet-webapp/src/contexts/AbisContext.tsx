@@ -1,9 +1,9 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
-import { chainProvider } from "../provider";
 import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
 import { parseAbi } from "../utils/abiUtils";
 import { normalizeHexString } from "../utils/hexUtils";
+import {useChainProvider} from '../hooks/useChainProvider';
 
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;
@@ -28,6 +28,8 @@ export const AbisContextProvider = ({
   );
   const [contractAbis, setContractAbis] =
     useState<ContractAbis>(_initialContractAbis);
+
+  const chainProvider = useChainProvider();
 
   const setAbiForContract = (address: string, abi: Abi) => {
     setContractAbis((prevContractAbis) => ({

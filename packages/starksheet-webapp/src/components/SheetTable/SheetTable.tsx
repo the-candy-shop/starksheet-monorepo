@@ -13,12 +13,12 @@ import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { useSheetContract } from "../../hooks/useSheetContract";
-import { chainProvider } from "../../provider";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, hex2str, normalizeHexString } from "../../utils/hexUtils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
+import {useChainProvider} from '../../hooks/useChainProvider';
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
   id: tokenId,
@@ -50,6 +50,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
   const { address } = params;
   const { contract } = useSheetContract(address);
   const navigate = useNavigate();
+  const chainProvider = useChainProvider();
 
   const cells = useMemo(
     () => (address ? values[address] : []),

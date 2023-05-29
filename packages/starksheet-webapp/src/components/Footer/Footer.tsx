@@ -4,7 +4,6 @@ import { useContext } from "react";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, N_ROW } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
-import { chainProvider } from "../../provider";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import githubLogo from "./github.svg";
@@ -12,6 +11,7 @@ import mintSquareLogo from "./mintsquare.svg";
 import starknetLogo from "./starknet.svg";
 import telegramLogo from "./telegram.svg";
 import twitterLogo from "./twitter.svg";
+import {useChainProvider} from '../../hooks/useChainProvider';
 
 export type FooterProps = {
   sx?: BoxProps["sx"];
@@ -22,6 +22,7 @@ function Footer({ sx }: FooterProps) {
   const { onsheet, selectedSheetAddress, addSheet } =
     useContext(OnsheetContext);
   const { enqueueSnackbar } = useSnackbar();
+  const chainProvider = useChainProvider();
 
   const addSheetOnClick = async () => {
     if (!accountAddress) {

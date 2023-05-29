@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { hash } from "starknet";
+import { hash, number } from "starknet";
 import { N_ROW } from "../config";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { Onsheet, Sheet } from "../types";
@@ -32,6 +32,7 @@ export const OnsheetContext = React.createContext<{
     defaultRenderer: "",
     sheetClassHash: "",
     proxyClassHash: "",
+    sheetPrice: 0,
   },
   setSelectedSheetAddress: () => {},
   load: async () => [],
@@ -54,6 +55,7 @@ export const OnsheetContextProvider = ({
     defaultRenderer: "",
     sheetClassHash: "",
     proxyClassHash: "",
+    sheetPrice: 0,
   });
 
   const [selectedSheetAddress, setSelectedSheetAddress] = useState<string>();
@@ -73,15 +75,20 @@ export const OnsheetContextProvider = ({
         contract.getSheetDefaultRendererAddress(),
         contract.getSheetClassHash(),
         contract.getProxyClassHash(),
+        contract.getSheetPrice(),
       ])
         .then(async (response) => {
-          const [renderer, sheetClassHash, proxyClassHash] = response;
+          const [renderer, sheetClassHash, proxyClassHash, sheetPrice] =
+            response;
           return {
             address,
             defaultRenderer: renderer,
             sheetClassHash,
             proxyClassHash,
             sheets: [],
+            sheetPrice:
+              sheetPrice.div(number.toBN(10).pow(number.toBN(9))).toNumber() /
+              1_000_000_000,
           };
         })
         .then((_onsheet) => {
@@ -134,7 +141,7 @@ export const OnsheetContextProvider = ({
     if (Object.keys(abi).length !== 0) {
       newSheet = { ...sheet, address };
     } else {
-      newSheet = { ...sheet, address, calldata, nRow: N_ROW };
+      newSheet = { ...sheet, address, calldata, nRow: N_ROW, cellPrice: 0 };
     }
     setOnsheet((prevOnsheet) => ({
       ...prevOnsheet,

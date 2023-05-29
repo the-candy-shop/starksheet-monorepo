@@ -9,4 +9,5 @@ export interface Sheet {
   renderCell(tokenId: number): Promise<CellRendered>;
   renderCells(): Promise<CellRendered[]>;
   nRow(): Promise<number>;
+  getCellPrice(): Promise<number>;
 }

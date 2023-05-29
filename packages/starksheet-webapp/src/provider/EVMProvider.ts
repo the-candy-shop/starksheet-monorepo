@@ -1,7 +1,7 @@
-import { ChainProvider } from "./chainProvider";
-import { ABI, ContractCall, TransactionReceipt } from "../types";
 import { Web3Provider } from "@ethersproject/providers";
 import { Contract } from "ethers";
+import { ABI, ContractCall, TransactionReceipt } from "../types";
+import { ChainProvider } from "./chainProvider";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -28,13 +28,13 @@ export class EVMProvider implements ChainProvider {
   async getAbi(address: string): Promise<ABI> {
     // build the query parameters
     const params = new URLSearchParams({
-      action: 'getabi',
+      action: "getabi",
       address,
-      apikey: process.env.EXPLORER_KEY || '',
-      module: 'contract',
+      apikey: process.env.EXPLORER_KEY || "",
+      module: "contract",
     });
     // build the query url
-    const url = new URL('https://api-goerli.etherscan.io/api', '');
+    const url = new URL("https://api-goerli.etherscan.io/api", "");
     url.search = params.toString();
 
     const rawAbi = await fetch(url)
@@ -44,16 +44,14 @@ export class EVMProvider implements ChainProvider {
           throw response.statusText;
         }
         return response.json();
-    })
+      })
       // check the body of the response contains a "result" and returns it
       .then((data) => {
         if (!data.result) {
-          throw `Unexpected error, got ${JSON.stringify(data)}`;
+          throw new Error(`Unexpected error, got ${JSON.stringify(data)}`);
         }
-        return data.result
-      })
-    ;
-
+        return data.result;
+      });
     // parse the raw abi and return it
     return JSON.parse(rawAbi);
   }

@@ -1,4 +1,4 @@
-import { ApplicationBinaryInterface, ContractCall, TransactionReceipt } from "../types";
+import { ABI, ContractCall, TransactionReceipt } from "../types";
 
 /**
  * Represents a chain provider.
@@ -9,7 +9,7 @@ export interface ChainProvider {
   /**
    * Gets the ABI of the contract matching the given address.
    */
-  getAbi(address: string): Promise<ApplicationBinaryInterface>;
+  getAbi(address: string): Promise<ABI>;
 
   /**
    * Calls a contract entry point with some optional data.

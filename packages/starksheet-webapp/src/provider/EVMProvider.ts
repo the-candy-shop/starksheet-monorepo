@@ -1,5 +1,5 @@
 import { ChainProvider } from "./chainProvider";
-import { ApplicationBinaryInterface, ContractCall, TransactionReceipt } from "../types";
+import { ABI, ContractCall, TransactionReceipt } from "../types";
 import { Web3Provider } from "@ethersproject/providers";
 import { Contract } from "ethers";
 
@@ -25,7 +25,7 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  async getAbi(address: string): Promise<ApplicationBinaryInterface> {
+  async getAbi(address: string): Promise<ABI> {
     // build the query parameters
     const params = new URLSearchParams({
       action: 'getabi',

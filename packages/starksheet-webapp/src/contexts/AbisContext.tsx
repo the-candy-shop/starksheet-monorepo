@@ -3,7 +3,7 @@ import { Abi } from "starknet";
 import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
 import { parseAbi } from "../utils/abiUtils";
 import { normalizeHexString } from "../utils/hexUtils";
-import {useChainProvider} from '../hooks/useChainProvider';
+import { useChainProvider } from "../hooks/useChainProvider";
 
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;

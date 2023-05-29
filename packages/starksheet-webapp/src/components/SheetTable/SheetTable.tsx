@@ -12,13 +12,13 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
+import { useChainProvider } from "../../hooks/useChainProvider";
 import { useSheetContract } from "../../hooks/useSheetContract";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, hex2str, normalizeHexString } from "../../utils/hexUtils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
-import {useChainProvider} from '../../hooks/useChainProvider';
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
   id: tokenId,

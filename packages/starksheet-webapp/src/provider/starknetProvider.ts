@@ -2,7 +2,7 @@ import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { hex2str } from "../utils/hexUtils";
 import { ChainProvider } from "./chainProvider";
-import {ContractCall} from '../types';
+import { ContractCall } from "../types";
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;

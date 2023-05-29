@@ -1,7 +1,7 @@
-import { ChainProvider } from './chainProvider';
-import { ApplicationBinaryInterface, ContractCall, TransactionReceipt } from '../types';
-import { Web3Provider } from '@ethersproject/providers';
-import { Contract } from 'ethers';
+import { ChainProvider } from "./chainProvider";
+import { ApplicationBinaryInterface, ContractCall, TransactionReceipt } from "../types";
+import { Web3Provider } from "@ethersproject/providers";
+import { Contract } from "ethers";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.

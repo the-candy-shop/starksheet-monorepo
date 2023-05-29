@@ -1,6 +1,6 @@
+import { Web3Provider } from '@ethersproject/providers';
 import { StarknetProvider } from "./starknetProvider";
-import {EVMProvider} from './EVMProvider';
-import {Web3Provider} from '@ethersproject/providers';
+import { EVMProvider } from "./EVMProvider";
 
 export type Network = "mainnet" | "testnet" | "testnet2" | "devnet";
 

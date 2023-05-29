@@ -1,4 +1,4 @@
-import { ApplicationBinaryInterface, ContractCall, TransactionReceipt } from '../types';
+import { ApplicationBinaryInterface, ContractCall, TransactionReceipt } from "../types";
 
 /**
  * Represents a chain provider.

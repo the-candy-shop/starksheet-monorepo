@@ -12,8 +12,8 @@ import { Cell, CellData, CellGraph, CellValues, UpdatedValues } from "../types";
 import { RC_BOUND } from "../utils/constants";
 import { bn2hex } from "../utils/hexUtils";
 import { resolveContractAddress } from "../utils/sheetUtils";
+import { useChainProvider } from "../hooks/useChainProvider";
 import { OnsheetContext } from "./OnsheetContext";
-import {useChainProvider} from '../hooks/useChainProvider';
 
 export const CellValuesContext = React.createContext<{
   values: CellValues;

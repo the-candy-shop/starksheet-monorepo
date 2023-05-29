@@ -1,4 +1,4 @@
-import { starknetChainProvider } from '../provider';
+import { starknetChainProvider } from "../provider";
 
 export function useChainProvider() {
   return starknetChainProvider;

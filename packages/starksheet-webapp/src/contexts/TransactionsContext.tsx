@@ -7,11 +7,11 @@ import React, {
 } from "react";
 import { Call, number } from "starknet";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
+import { useChainProvider } from "../hooks/useChainProvider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
 import { OnsheetContext } from "./OnsheetContext";
-import {useChainProvider} from '../hooks/useChainProvider';
 
 export const TransactionsContext = React.createContext<{
   transactions: Call[];

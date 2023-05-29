@@ -120,7 +120,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         ]).then((response) => {
           const [name, symbol] = response
             .slice(0, -1)
-            .map((result) => hex2str(normalizeHexString(result.result[0])));
+            .map((result) => hex2str(normalizeHexString(result as string)));
           appendSheet({
             name,
             symbol,

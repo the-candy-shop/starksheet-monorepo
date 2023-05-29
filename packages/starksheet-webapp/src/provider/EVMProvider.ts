@@ -1,4 +1,4 @@
-import { Web3Provider } from "@ethersproject/providers";
+import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
 import { ABI, ContractCall, TransactionReceipt } from "../types";
 import { ChainProvider } from "./chainProvider";
@@ -10,7 +10,12 @@ export class EVMProvider implements ChainProvider {
   /**
    * Constructs an EVM Provider.
    */
-  constructor(private explorer: string, private provider: Web3Provider) {}
+  constructor(private explorer: string, private provider: JsonRpcProvider) {}
+
+  public static build(rpcUrl: string, config: ChainConfig): EVMProvider {
+    const provider = new JsonRpcProvider(rpcUrl)
+    return new EVMProvider(config.explorerBaseUrl, provider);
+  }
 
   /**
    * @inheritDoc

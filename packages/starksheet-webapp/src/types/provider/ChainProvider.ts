@@ -1,4 +1,6 @@
-import { ABI, ContractCall, TransactionReceipt } from "../types";
+import { ABI } from "./ABI";
+import { ContractCall } from "./ContractCall";
+import { TransactionReceipt } from "./TransactionReceipt";
 
 /**
  * Represents a chain provider.

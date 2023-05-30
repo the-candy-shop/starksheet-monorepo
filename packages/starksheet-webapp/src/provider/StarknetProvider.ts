@@ -26,6 +26,9 @@ export class StarknetProvider implements ChainProvider {
     this.rpcProvider.getChainId().then((id) => (this.chainId = hex2str(id)));
   }
 
+  /**
+   * Builds a starknet provider for the given rpc and config.
+   */
   public static build(rpcUrl: string, config: ChainConfig): StarknetProvider {
     return new StarknetProvider(rpcUrl, rpcUrl, config);
   }

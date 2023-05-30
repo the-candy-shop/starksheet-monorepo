@@ -1,8 +1,8 @@
 import { ABI } from "./ABI";
 import { ContractCall } from "./ContractCall";
 import { TransactionReceipt } from "./TransactionReceipt";
-import {ChainType} from './ChainType';
-import {ChainId} from './ChainId';
+import { ChainType } from "./ChainType";
+import { ChainId } from "./ChainId";
 
 /**
  * Represents a chain provider.

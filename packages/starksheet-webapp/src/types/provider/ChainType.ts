@@ -1,4 +1,4 @@
 export enum ChainType {
-  EVM = 'evm',
-  STARKNET = 'starknet',
+  EVM = "evm",
+  STARKNET = "starknet",
 }

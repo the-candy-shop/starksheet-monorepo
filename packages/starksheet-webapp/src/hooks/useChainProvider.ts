@@ -37,7 +37,6 @@ async function getChainInfoFromRpc(rpcUrl: string): Promise<[ChainId, ChainType]
   const starknetCallResult = await fetchRpcMethod(rpcUrl, 'starknet_chainId');
   const starknetChainId = starknetCallResult.result;
   if (starknetChainId) {
-    console.log(starknetChainId);
     return [starknetChainId, ChainType.STARKNET];
   }
 

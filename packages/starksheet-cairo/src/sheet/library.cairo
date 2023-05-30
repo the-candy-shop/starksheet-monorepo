@@ -8,7 +8,7 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
 from starkware.cairo.common.dict import DictAccess, dict_write, dict_read
 from starkware.cairo.common.math_cmp import is_le, is_not_zero, is_nn, RC_BOUND
-from starkware.cairo.common.math import signed_div_rem
+from starkware.cairo.common.math import signed_div_rem, unsigned_div_rem
 from starkware.cairo.common.memcpy import memcpy
 from starkware.cairo.common.uint256 import Uint256
 from starkware.starknet.common.syscalls import call_contract, get_caller_address
@@ -16,6 +16,7 @@ from starkware.starknet.common.syscalls import library_call
 from interfaces import ICellRenderer
 from utils.merkle_tree import merkle_verify, addresses_to_leafs, merkle_build, _hash_sorted
 from utils.string import str
+from openzeppelin.access.ownable.library import Ownable
 
 const DEFAULT_VALUE = 2 ** 128 - 1;
 const SHOULD_RENDER_FLAG = 2;
@@ -70,7 +71,50 @@ func Sheet_contract_uri(index: felt) -> (res: felt) {
 func Sheet_is_mint_open() -> (res: felt) {
 }
 
+@storage_var
+func Sheet_cell_price() -> (price: felt) {
+}
+
+@storage_var
+func Sheet_royalty_rate() -> (rate: felt) {
+}
+
 namespace Sheet {
+    func get_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        price: felt
+    ) {
+        return Sheet_cell_price.read();
+    }
+
+    func set_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        price: felt
+    ) {
+        Sheet_cell_price.write(price);
+        return ();
+    }
+
+    func get_royalty_rate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        rate: felt
+    ) {
+        return Sheet_royalty_rate.read();
+    }
+
+    func set_royalty_rate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        rate: felt
+    ) {
+        Sheet_royalty_rate.write(rate);
+        return ();
+    }
+
+    func royalty_info{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        token_id: felt, sale_price: felt
+    ) -> (receiver: felt, royalty_amount: felt) {
+        let (receiver) = Ownable.owner();
+        let (royalty_rate) = Sheet_royalty_rate.read();
+        let (royalty_amount, _) = unsigned_div_rem(sale_price * royalty_rate, 1000);
+        return (receiver, royalty_amount);
+    }
+
     func set_cell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         token_id: felt,
         contract_address: felt,

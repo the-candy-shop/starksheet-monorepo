@@ -37,6 +37,21 @@ class StarknetSheetContract implements SheetContract {
     }
   }
 
+  async getCellPrice() {
+    try {
+      return parseInt(
+        (
+          await this.contract.providerOrAccount.callContract({
+            contractAddress: this.contract.address,
+            entrypoint: "getCellPrice",
+          })
+        ).result[0]
+      );
+    } catch (e) {
+      return 0;
+    }
+  }
+
   async renderCell(tokenId: number): Promise<CellRendered> {
     try {
       const result = await this.contract.call("renderCell", [tokenId], {

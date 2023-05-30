@@ -1,13 +1,13 @@
-import { Dialog, } from "@mui/material";
-import { Web3ReactProvider } from '@web3-react/core';
-import { AccountInterface, WidoWidget } from 'wido-widget';
-import { getSupportedTokens } from 'wido';
-import { connect as getStarknet, StarknetWindowObject } from 'get-starknet';
-import { useCallback, useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
-import { InjectedConnector } from '@web3-react/injected-connector';
-import { providers } from 'ethers';
-import { chainId as envChainId, ethChainId } from '../../provider';
+import { Dialog } from "@mui/material";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
+import { AccountInterface, WidoWidget } from "wido-widget";
+import { getSupportedTokens } from "wido";
+import { connect as getStarknet, StarknetWindowObject } from "get-starknet";
+import { useCallback, useEffect, useState } from "react";
+import { InjectedConnector } from "@web3-react/injected-connector";
+import { providers } from "ethers";
+import { useChainProvider } from "../../hooks/useChainProvider";
+import { ChainId, ChainProvider, ChainType } from "../../types";
 
 const injected = new InjectedConnector({})
 
@@ -15,16 +15,17 @@ const WIDO_STARKNET_MAINNET_ID = 15366;
 const WIDO_STARKNET_TESTNET_ID = 15367;
 
 type WidgetProps = {
-  open: boolean,
-  onClose: () => void
+  open: boolean;
+  onClose: () => void;
+  provider: ChainProvider;
 };
 
 type TokenList = {
-  chainId: number
-  address: string
+  chainId: number;
+  address: string;
 }[]
 
-const WidgetDialog = ({ open, onClose }: WidgetProps) => {
+const WidgetDialog = ({ open, onClose, provider }: WidgetProps) => {
   const [ethProvider, setEthProvider] = useState<providers.Web3Provider | undefined>()
   const [starknetAccount, setStarknetAccount] = useState<AccountInterface | undefined>(undefined)
   const [starknet, setStarknet] = useState<StarknetWindowObject | null>()
@@ -32,9 +33,13 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
   const [fromTokens, setFromTokens] = useState<TokenList>([])
   const [toTokens, setToTokens] = useState<TokenList>([])
 
-  const snChainId = envChainId === 'SN_MAIN'
+  const snChainId = provider.getChainId() === ChainId.STARKNET_MAINNET
     ? WIDO_STARKNET_MAINNET_ID
     : WIDO_STARKNET_TESTNET_ID;
+
+  const ethChainId = provider.getChainId() === ChainId.STARKNET_MAINNET
+    ? parseInt(ChainId.ETHEREUM_MAINNET)
+    : parseInt(ChainId.ETHEREUM_TESTNET);
 
   useEffect(() => {
     getSupportedTokens({
@@ -45,7 +50,7 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
       setFromTokens(ethereumTokens);
       setToTokens(starknetTokens);
     })
-  }, [snChainId, setFromTokens, setToTokens])
+  }, [ethChainId, snChainId, setFromTokens, setToTokens])
 
   const { library, activate, account, chainId } = useWeb3React()
 
@@ -117,11 +122,17 @@ const WidgetDialog = ({ open, onClose }: WidgetProps) => {
   );
 };
 
-export default function Widget(props: WidgetProps) {
+export default function Widget(props: Omit<WidgetProps, 'provider'>) {
+  const provider = useChainProvider();
+
+  // only display the widget for starknet chains
+  if (provider?.getChainType() !== ChainType.STARKNET) {
+    return null;
+  }
+
   return (
     <Web3ReactProvider getLibrary={(provider) => provider}>
-      <WidgetDialog {...props} />
+      <WidgetDialog {...props} provider={provider} />
     </Web3ReactProvider>
   )
 }
-

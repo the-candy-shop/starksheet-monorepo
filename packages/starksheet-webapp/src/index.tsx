@@ -12,6 +12,7 @@ import { AbisContextProvider } from "./contexts/AbisContext";
 import { AccountContextProvider } from "./contexts/AccountContext";
 import { AppStatusContextProvider } from "./contexts/AppStatusContext";
 import { CellValuesContextProvider } from "./contexts/CellValuesContext";
+import { ChainProviderContextProvider } from "./contexts/ChainProviderContext";
 import { OnsheetContextProvider } from "./contexts/OnsheetContext";
 import { TransactionsContextProvider } from "./contexts/TransactionsContext";
 import onsheetContractData from "./contract.json";
@@ -44,25 +45,27 @@ root.render(
 
 function Root() {
   return (
-    <SnackbarProvider maxSnack={3}>
-      <AppStatusContextProvider>
-        <AccountContextProvider>
-          <AbisContextProvider
-            initialContractAbis={onsheetContractData.contractAbis}
-          >
-            <OnsheetContextProvider
-              onsheetAddress={onsheetContractData.address}
+    <ChainProviderContextProvider>
+      <SnackbarProvider maxSnack={3}>
+        <AppStatusContextProvider>
+          <AccountContextProvider>
+            <AbisContextProvider
+              initialContractAbis={onsheetContractData.contractAbis}
             >
-              <CellValuesContextProvider>
-                <TransactionsContextProvider>
-                  <App />
-                </TransactionsContextProvider>
-              </CellValuesContextProvider>
-            </OnsheetContextProvider>
-          </AbisContextProvider>
-        </AccountContextProvider>
-      </AppStatusContextProvider>
-    </SnackbarProvider>
+              <OnsheetContextProvider
+                onsheetAddress={onsheetContractData.address}
+              >
+                <CellValuesContextProvider>
+                  <TransactionsContextProvider>
+                    <App />
+                  </TransactionsContextProvider>
+                </CellValuesContextProvider>
+              </OnsheetContextProvider>
+            </AbisContextProvider>
+          </AccountContextProvider>
+        </AppStatusContextProvider>
+      </SnackbarProvider>
+    </ChainProviderContextProvider>
   );
 }
 

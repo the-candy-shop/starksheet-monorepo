@@ -5,7 +5,6 @@ from asyncio import run
 import pandas as pd
 from starkware.starknet.public.abi import get_selector_from_name
 from utils.deployment import (
-    call,
     compile_contract,
     declare,
     deploy,

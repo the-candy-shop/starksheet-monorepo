@@ -178,6 +178,77 @@
     {
         "inputs": [
             {
+                "name": "price",
+                "type": "felt"
+            }
+        ],
+        "name": "setCellPrice",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getCellPrice",
+        "outputs": [
+            {
+                "name": "price",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "rate",
+                "type": "felt"
+            }
+        ],
+        "name": "setRoyaltyRate",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getRoyaltyRate",
+        "outputs": [
+            {
+                "name": "rate",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "tokenId",
+                "type": "Uint256"
+            },
+            {
+                "name": "salePrice",
+                "type": "Uint256"
+            }
+        ],
+        "name": "royaltyInfo",
+        "outputs": [
+            {
+                "name": "receiver",
+                "type": "felt"
+            },
+            {
+                "name": "royaltyAmount",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "name": "address",
                 "type": "felt"
             }

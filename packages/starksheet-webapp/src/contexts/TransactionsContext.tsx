@@ -6,8 +6,8 @@ import React, {
   useMemo,
 } from "react";
 import { Call, number } from "starknet";
+import { useChainProvider } from "../hooks/useChainProvider";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { chainProvider } from "../provider";
 import { NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
@@ -17,10 +17,12 @@ export const TransactionsContext = React.createContext<{
   transactions: Call[];
   newSheetsTransactions: Call[];
   settleTransactions: (tx?: Call[]) => Promise<void>;
+  costEth: number;
 }>({
   transactions: [],
   newSheetsTransactions: [],
   settleTransactions: async () => {},
+  costEth: 0,
 });
 
 export const TransactionsContextProvider = ({
@@ -31,6 +33,7 @@ export const TransactionsContextProvider = ({
   const { onsheet, validateNewSheets } = useContext(OnsheetContext);
   const { contract } = useOnsheetContract();
   const { enqueueSnackbar } = useSnackbar();
+  const chainProvider = useChainProvider();
 
   const newSheetsTransactions = useMemo(() => {
     return onsheet.sheets
@@ -67,16 +70,41 @@ export const TransactionsContextProvider = ({
     [newSheetsTransactions, cellsTransactions]
   );
 
+  const costEth = useMemo(() => {
+    // *10_000 then / 10_000 to trim javascript wrong computing
+    // I don't expect people to put more than 4 digits after ","
+    // in cell or sheet prices
+    return (
+      Math.round(
+        (newSheetsTransactions.length * onsheet.sheetPrice +
+          cellsTransactions
+            .filter((tx) => tx.entrypoint === "mintAndSetPublic")
+            .map(
+              (tx) =>
+                onsheet.sheets.find((s) => s.address === tx.contractAddress)
+                  ?.cellPrice || 0
+            )
+            .reduce((a, b) => a + b, 0)) *
+          10_000
+      ) / 10_000
+    );
+  }, [
+    newSheetsTransactions,
+    onsheet.sheetPrice,
+    onsheet.sheets,
+    cellsTransactions,
+  ]);
+
   const settleTransactions = useCallback(
     async (otherTransactions?: Call[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
       let options;
-      if (newSheetsTransactions.length > 0) {
-        const sheetPrice = await contract.getSheetPrice();
+      if (costEth > 0) {
         options = {
-          value: sheetPrice
-            .mul(number.toBN(newSheetsTransactions.length))
+          value: number
+            .toBN(costEth * 1_000_000_000)
+            .mul(number.toBN(10).pow(number.toBN(9)))
             .toString(),
         };
       }
@@ -113,7 +141,8 @@ export const TransactionsContextProvider = ({
       newSheetsTransactions,
       cellsTransactions,
       execute,
-      contract,
+      chainProvider,
+      costEth,
     ]
   );
 
@@ -123,6 +152,7 @@ export const TransactionsContextProvider = ({
         transactions,
         newSheetsTransactions,
         settleTransactions,
+        costEth,
       }}
     >
       {children}

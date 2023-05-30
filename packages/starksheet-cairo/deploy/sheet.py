@@ -1,3 +1,4 @@
+# %% Imports
 import json
 import logging
 from asyncio import run
@@ -11,7 +12,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+# %% Main
 async def main():
+    # %% Computing allow list
     logger.info("Computing Merkle proofs...")
     json.dump(
         {
@@ -27,6 +30,7 @@ async def main():
     root = merkle_root(leafs)
     logger.info(f"Merkle root: {root}")
 
+    # %% Update first sheet
     (sheet,) = await call("Starksheet", "getSheet", 0)
     await invoke("Sheet", "setMerkleRoot", root, address=sheet)
     (max_per_wallet,) = await call("Sheet", "getMaxPerWallet", address=sheet)
@@ -37,5 +41,6 @@ async def main():
     logger.info(f"Sheet {sheet} ready to be used!")
 
 
+# %% Run
 if __name__ == "__main__":
     run(main())

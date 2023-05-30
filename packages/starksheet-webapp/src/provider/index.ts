@@ -1,8 +1,5 @@
 export type Network = "mainnet" | "testnet" | "testnet2" | "devnet";
 
-const ETHEREUM_MAINNET_ID = 1;
-const ETHEREUM_GOERLI_ID = 5;
-
 const rpcUrls = {
   mainnet: process.env.REACT_APP_RPC_NODE_URI_MAINNET as string,
   testnet: process.env.REACT_APP_RPC_NODE_URI_GOERLI as string,
@@ -19,17 +16,7 @@ const chainIds = {
   docker: "SN_GOERLI",
 };
 
-const ethChainIds = {
-  mainnet: ETHEREUM_MAINNET_ID,
-  testnet: ETHEREUM_GOERLI_ID,
-  testnet2: ETHEREUM_GOERLI_ID,
-  devnet: ETHEREUM_GOERLI_ID,
-  docker: ETHEREUM_GOERLI_ID,
-};
-
 const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
 export const chainId = chainIds[network];
 export const rpcUrl = rpcUrls[network];
-
-export const ethChainId = ethChainIds[network];

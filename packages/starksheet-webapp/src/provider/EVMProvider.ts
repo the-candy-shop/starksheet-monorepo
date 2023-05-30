@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
-import { ABI, ChainProvider, ChainId, ChainType, ContractCall, TransactionReceipt } from "../types";
+import { ABI, ChainProvider, ChainConfig, ChainId, ChainType, ContractCall, TransactionReceipt } from "../types";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.

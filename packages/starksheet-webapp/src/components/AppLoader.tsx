@@ -1,5 +1,5 @@
-import React from 'react';
-import {useChainProvider} from '../hooks/useChainProvider';
+import React from "react";
+import { useChainProvider } from "../hooks/useChainProvider";
 
 /**
  * Provides a loader for the app.

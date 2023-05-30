@@ -1,13 +1,13 @@
-import { Dialog } from '@mui/material';
-import { useWeb3React, Web3ReactProvider } from '@web3-react/core';
-import { AccountInterface, WidoWidget } from 'wido-widget';
-import { getSupportedTokens } from 'wido';
-import { connect as getStarknet, StarknetWindowObject } from 'get-starknet';
-import { useCallback, useEffect, useState } from 'react';
-import { InjectedConnector } from '@web3-react/injected-connector';
-import { providers } from 'ethers';
-import { useChainProvider } from '../../hooks/useChainProvider';
-import { ChainId, ChainProvider, ChainType } from '../../types';
+import { Dialog } from "@mui/material";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
+import { AccountInterface, WidoWidget } from "wido-widget";
+import { getSupportedTokens } from "wido";
+import { connect as getStarknet, StarknetWindowObject } from "get-starknet";
+import { useCallback, useEffect, useState } from "react";
+import { InjectedConnector } from "@web3-react/injected-connector";
+import { providers } from "ethers";
+import { useChainProvider } from "../../hooks/useChainProvider";
+import { ChainId, ChainProvider, ChainType } from "../../types";
 
 const injected = new InjectedConnector({})
 

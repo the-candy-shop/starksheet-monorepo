@@ -1,6 +1,6 @@
-import { ChainConfig, ChainId, ChainType } from '../types';
-import {EVMProvider} from './EVMProvider';
-import {StarknetProvider} from './starknetProvider';
+import { ChainConfig, ChainId, ChainType } from "../types";
+import { EVMProvider } from "./EVMProvider";
+import { StarknetProvider } from "./StarknetProvider";
 
 export const chains: ChainConfig[] = [
   {

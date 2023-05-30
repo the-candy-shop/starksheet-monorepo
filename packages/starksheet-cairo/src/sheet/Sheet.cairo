@@ -69,6 +69,29 @@ func getCellPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     return Sheet.get_cell_price();
 }
 
+// @notice Royalty rate taken as per thousand, ie that inputing 1 give 0.1% of royalty over the sell price
+@external
+func setRoyaltyRate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(rate: felt) {
+    Ownable.assert_only_owner();
+    Sheet.set_royalty_rate(rate);
+    return ();
+}
+
+@view
+func getRoyaltyRate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    rate: felt
+) {
+    return Sheet.get_royalty_rate();
+}
+
+@view
+func royaltyInfo{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: Uint256, salePrice: Uint256
+) -> (receiver: felt, royaltyAmount: Uint256) {
+    let (receiver, royalty_amount) = Sheet.royalty_info(tokenId.low, salePrice.low);
+    return (receiver, Uint256(low=royalty_amount, high=0));
+}
+
 @external
 func setCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     address: felt
@@ -322,6 +345,10 @@ func tokenOfOwnerByIndex{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_c
 func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     interfaceId: felt
 ) -> (success: felt) {
+    if (interfaceId == 0x2a55205a) {
+        // See https://eips.ethereum.org/EIPS/eip-2981
+        return (1,);
+    }
     let (success) = ERC165.supports_interface(interfaceId);
     return (success,);
 }

@@ -19,4 +19,4 @@ const chainIds = {
 const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
 export const chainId = chainIds[network];
-export const rpcUrl = rpcUrls[network];
+export const rpcUrl = process.env.REACT_APP_RPC_PROVIDER || rpcUrls[network];

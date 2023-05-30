@@ -100,7 +100,7 @@ export const TransactionsContextProvider = ({
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
       let options;
-      if (newSheetsTransactions.length > 0) {
+      if (costEth > 0) {
         options = {
           value: number
             .toBN(costEth * 1_000_000_000)

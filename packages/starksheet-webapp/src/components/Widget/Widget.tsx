@@ -50,7 +50,7 @@ const WidgetDialog = ({ open, onClose, provider }: WidgetProps) => {
       setFromTokens(ethereumTokens);
       setToTokens(starknetTokens);
     })
-  }, [snChainId, setFromTokens, setToTokens])
+  }, [ethChainId, snChainId, setFromTokens, setToTokens])
 
   const { library, activate, account, chainId } = useWeb3React()
 

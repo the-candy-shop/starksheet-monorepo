@@ -1,8 +1,7 @@
 import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { hex2str } from "../utils/hexUtils";
-import { ChainProvider } from "./chainProvider";
-import { ContractCall } from "../types";
+import {ChainConfig, ChainId, ChainProvider, ChainType, ContractCall} from '../types';
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
@@ -11,8 +10,10 @@ export class StarknetProvider implements ChainProvider {
 
   /**
    * Constructs a StarknetProvider.
+   *
+   * todo: remove sequencerUrl and rely solely on rpc
    */
-  constructor(rpcUrl: string, sequencerUrl: string) {
+  constructor(rpcUrl: string, sequencerUrl: string, private config: ChainConfig) {
     this.sequencerProvider = new SequencerProvider({
       baseUrl: sequencerUrl,
     });
@@ -26,21 +27,38 @@ export class StarknetProvider implements ChainProvider {
   }
 
   /**
+   * Builds a starknet provider for the given rpc and config.
+   */
+  public static build(rpcUrl: string, config: ChainConfig): StarknetProvider {
+    return new StarknetProvider(rpcUrl, rpcUrl, config);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getChainId(): ChainId {
+    return this.config.chainId;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getChainType(): ChainType {
+    return this.config.chainType;
+  }
+
+  /**
    * @inheritDoc
    */
   getExplorerAddress(contractAddress: string) {
-    return this.chainId === "SN_MAIN"
-      ? `https://starkscan.co/contract/${contractAddress}`
-      : `https://testnet.starkscan.co/contract/${contractAddress}`;
+    return `${this.config.explorerBaseUrl}${contractAddress}`;
   }
 
   /**
    * @inheritDoc
    */
   getNftMarketplaceAddress(contractAddress: string) {
-    return this.chainId === "SN_MAIN"
-      ? `https://mintsquare.io/collection/starknet/${contractAddress}`
-      : `https://mintsquare.io/collection/starknet-testnet/${contractAddress}`;
+    return `${this.config.nftBaseUrl}${contractAddress}`;
   }
 
   /**

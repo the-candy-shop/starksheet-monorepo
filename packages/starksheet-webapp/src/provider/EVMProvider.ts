@@ -1,7 +1,6 @@
-import { Web3Provider } from "@ethersproject/providers";
+import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
-import { ABI, ContractCall, TransactionReceipt } from "../types";
-import { ChainProvider } from "./chainProvider";
+import { ABI, ChainProvider, ChainConfig, ChainId, ChainType, ContractCall, TransactionReceipt } from "../types";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -10,7 +9,15 @@ export class EVMProvider implements ChainProvider {
   /**
    * Constructs an EVM Provider.
    */
-  constructor(private explorer: string, private provider: Web3Provider) {}
+  constructor(private provider: JsonRpcProvider, private config: ChainConfig) {}
+
+  /**
+   * Builds an EVM provider for the given rpc and config
+   */
+  public static build(rpcUrl: string, config: ChainConfig): EVMProvider {
+    const provider = new JsonRpcProvider(rpcUrl)
+    return new EVMProvider(provider, config);
+  }
 
   /**
    * @inheritDoc
@@ -59,17 +66,29 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  getExplorerAddress(contractAddress: string): string {
-    return `${this.explorer}/contract/${contractAddress}`;
+  getChainId(): ChainId {
+    return this.config.chainId;
   }
 
   /**
    * @inheritDoc
-   *
-   * todo: implement with an actual marketplace address
+   */
+  getChainType(): ChainType {
+    return this.config.chainType;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getExplorerAddress(contractAddress: string): string {
+    return `${this.config.explorerBaseUrl}${contractAddress}`;
+  }
+
+  /**
+   * @inheritDoc
    */
   getNftMarketplaceAddress(contractAddress: string): string {
-    return this.getExplorerAddress(contractAddress);
+    return `${this.config.nftBaseUrl}${contractAddress}`;
   }
 
   /**

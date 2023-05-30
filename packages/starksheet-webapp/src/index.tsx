@@ -17,6 +17,7 @@ import { TransactionsContextProvider } from "./contexts/TransactionsContext";
 import onsheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import AppLoader from './components/AppLoader';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ root.render(
 function Root() {
   return (
     <SnackbarProvider maxSnack={3}>
+      <AppLoader>
       <AppStatusContextProvider>
         <AccountContextProvider>
           <AbisContextProvider
@@ -62,6 +64,7 @@ function Root() {
           </AbisContextProvider>
         </AccountContextProvider>
       </AppStatusContextProvider>
+      </AppLoader>
     </SnackbarProvider>
   );
 }

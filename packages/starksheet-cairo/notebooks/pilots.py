@@ -1,6 +1,5 @@
 # %% Imports
 import json
-import random
 from pathlib import Path
 from urllib.parse import urlparse, urlunparse
 
@@ -8,6 +7,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from ipfshttpclient import Client
+from utils.deployment import invoke
 
 
 # %% Download all pp
@@ -118,3 +118,10 @@ dusted_pilots.to_csv("dust_pilots/dusted.csv")
         axis=1,
     )
 )
+
+# %% Update contract parameters
+DUSTY_PILOTS_ADDRESS = (
+    0x00D1540FBE29ACB2522694E9E3D1D776F1AB70773D33149997A65D06CC8A816F
+)
+await invoke("DustyPilots", "setNRow", len(dusted_pilots), address=DUSTY_PILOTS_ADDRESS)
+await invoke("DustyPilotRenderer", "setThresholds", dusted_pilots.threshold.to_list())

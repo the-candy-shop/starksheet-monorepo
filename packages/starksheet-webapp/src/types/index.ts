@@ -1,4 +1,4 @@
-import { SpreadsheetContract, Sheet } from "./contracts";
+import { Sheet } from "./contracts";
 export * from "./cells";
 export * from "./onsheet";
 export * from "./provider";

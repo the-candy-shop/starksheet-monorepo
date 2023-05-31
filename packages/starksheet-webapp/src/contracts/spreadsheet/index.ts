@@ -1,2 +1,2 @@
-export * from "./EvmSpreadsheet";
-export * from "./StarknetSpreadsheet";
+export * from "./EvmSpreadsheetContract";
+export * from "./StarknetSpreadsheetContract";

@@ -131,7 +131,7 @@ export const OnsheetContextProvider = ({
       maxPerWallet: 0,
       rendererAddress: onsheet.defaultRenderer,
     };
-    const address = contract.calculateSheetAddress(
+    const address = await contract.calculateSheetAddress(
       accountAddress,
       onsheet.proxyClassHash,
       Object.values(calldata)

@@ -1,18 +1,21 @@
 import BN from "bn.js";
-import { BigNumberish, Contract } from "ethers";
+import { BigNumberish, Contract, ethers } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import abi from "./evm.abi.json";
 import { Cell, ContractCall } from "../../types";
 import { SpreadsheetContract } from "../../types/contracts";
 
-export class EvmSpreadsheet implements SpreadsheetContract {
+/**
+ * Represents an EVM compatible implementation of the SpreadsheetContract.
+ */
+export class EvmSpreadsheetContract implements SpreadsheetContract {
 
   private contract: Contract;
 
   /**
-   *
+   * The class constructor.
    */
-  constructor(private address: string, provider: JsonRpcProvider) {
+  constructor(private address: string, private provider: JsonRpcProvider) {
     this.contract = new Contract(address, abi, provider);
   }
 
@@ -30,49 +33,57 @@ export class EvmSpreadsheet implements SpreadsheetContract {
   /**
    * @inheritDoc
    */
-  calculateSheetAddress(salt: BigNumberish, classHash: BigNumberish, constructorCalldata: BigNumberish[]): string {
-    throw "unimplemented";
+  async calculateSheetAddress(salt: BigNumberish, classHash: BigNumberish, constructorCalldata: BigNumberish[]): Promise<string> {
+    const from = this.address;
+    const nonce = await this.provider.getTransactionCount(from);
+    return ethers.utils.getContractAddress({ from, nonce })
   }
 
   /**
    * @inheritDoc
    */
   getProxyClassHash(): Promise<string> {
-    return this.contract.getProxyClassHash();
+    // return this.contract.getProxyClassHash();
+    return Promise.resolve("0x0");
   }
 
   /**
    * @inheritDoc
    */
   getSheetClassHash(): Promise<string> {
-    return this.contract.getSheetClassHash();
+    // return this.contract.getSheetClassHash();
+    return Promise.resolve("0x0");
   }
 
   /**
    * @inheritDoc
    */
   getSheetDefaultRendererAddress(): Promise<string> {
-    return this.contract.getSheetDefaultRendererAddress();
+    return this.contract.defaultRenderer();
   }
 
   /**
    * @inheritDoc
    */
   getSheetPrice(): Promise<BN> {
-    return this.contract.getSheetPrice();
+    return this.contract.sheetPrice();
   }
 
   /**
    * @inheritDoc
    */
   getSheets(): Promise<string[]> {
-    return this.contract.getSheets();
+    return this.contract.sheets();
   }
 
   /**
    * @inheritDoc
    */
   setCellTxBuilder(cell: Cell & { tokenId: number; sheetAddress: string }): ContractCall {
-    throw "unimplemented";
+    return {
+      contractAddress: this.address,
+      entrypoint: "setCell",
+      calldata: [cell.id, cell.contractAddress.toString(), cell.selector, cell.calldata],
+    };
   }
 }

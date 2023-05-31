@@ -2,7 +2,7 @@ import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { hex2str } from "../utils/hexUtils";
 import { ChainConfig, ChainId, ChainProvider, ChainType, ContractCall } from "../types";
-import { StarknetSpreadsheet } from "../contracts/spreadsheet";
+import { StarknetSpreadsheetContract } from "../contracts/spreadsheet";
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
@@ -65,8 +65,8 @@ export class StarknetProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  getSpreadsheetContract(): StarknetSpreadsheet {
-    return new StarknetSpreadsheet(this.rpcProvider);
+  getSpreadsheetContract(): StarknetSpreadsheetContract {
+    return new StarknetSpreadsheetContract(this.rpcProvider);
   }
 
   /**

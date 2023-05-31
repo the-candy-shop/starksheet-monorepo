@@ -1,6 +1,6 @@
 import BN from "bn.js";
 import { Cell } from "../cells";
-import {ContractCall} from '../provider';
+import { ContractCall } from "../provider";
 
 export interface SpreadsheetContract {
   getSheetDefaultRendererAddress(): Promise<string>;
@@ -15,6 +15,6 @@ export interface SpreadsheetContract {
     salt: number | string,
     classHash: number | string,
     constructorCalldata: (number | string)[],
-  ): string;
+  ): Promise<string>;
   getSheetPrice(): Promise<BN>;
 }

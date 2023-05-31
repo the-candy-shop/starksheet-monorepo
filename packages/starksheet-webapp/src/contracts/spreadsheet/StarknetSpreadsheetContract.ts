@@ -5,7 +5,7 @@ import { bn2hex } from "../../utils/hexUtils";
 import BN from "bn.js";
 import { SpreadsheetContract } from "../../types/contracts";
 
-export class StarknetSpreadsheet implements SpreadsheetContract {
+export class StarknetSpreadsheetContract implements SpreadsheetContract {
   private contract: Contract;
   public address: string;
 
@@ -92,12 +92,12 @@ export class StarknetSpreadsheet implements SpreadsheetContract {
     salt: number.BigNumberish,
     classHash: number.BigNumberish,
     constructorCalldata: number.BigNumberish[]
-  ): string {
-    return hash.calculateContractAddressFromHash(
+  ): Promise<string> {
+    return Promise.resolve(hash.calculateContractAddressFromHash(
       salt,
       classHash,
       constructorCalldata,
       this.address
-    );
+    ));
   }
 }

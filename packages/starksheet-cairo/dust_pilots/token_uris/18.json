@@ -1,16 +1,16 @@
 {
   "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
-  "external_url": "https://github.com/Cheelax",
-  "image": "ipfs://QmdsAUEP8KQk9UM3P8nbf3JFtDp5UqX9F67nnsfGuFSG1y",
-  "name": "Cheelax",
+  "external_url": "https://github.com/Eikix",
+  "image": "ipfs://QmUEUV5GXAoyQWqyyn6ouR6aJMzjtFX3xa6R2ZHdja1N3R",
+  "name": "Eikix",
   "attributes": [
     {
       "trait_type": "Pilot",
-      "value": 6463
+      "value": 7712
     },
     {
       "trait_type": "Dust",
-      "value": "The Cairo Book"
+      "value": "Kakarot"
     }
   ]
 }

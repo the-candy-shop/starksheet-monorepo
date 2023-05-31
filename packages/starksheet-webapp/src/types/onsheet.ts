@@ -22,7 +22,7 @@ export type Sheet = {
 
 export type NewSheet = Required<Sheet>;
 
-export type Onsheet = {
+export type Spreadsheet = {
   sheets: Sheet[];
   address: string;
   defaultRenderer: string;

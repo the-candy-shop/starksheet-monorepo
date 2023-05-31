@@ -3,6 +3,7 @@ import { ContractCall } from "./ContractCall";
 import { TransactionReceipt } from "./TransactionReceipt";
 import { ChainType } from "./ChainType";
 import { ChainId } from "./ChainId";
+import { SpreadsheetContract } from "../contracts";
 
 /**
  * Represents a chain provider.
@@ -34,6 +35,11 @@ export interface ChainProvider {
    * Gets the chain type.
    */
   getChainType(): ChainType;
+
+  /**
+   * Gets a spreadsheet contract implementation matching the chain type.
+   */
+  getSpreadsheetContract(): SpreadsheetContract;
 
   /**
    * Gets the receipt of the transaction matching the given hash.

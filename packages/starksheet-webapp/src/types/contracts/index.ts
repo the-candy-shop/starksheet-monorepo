@@ -1,2 +1,2 @@
-export type { Onsheet } from "./Onsheet";
+export type { SpreadsheetContract } from "./SpreadsheetContract";
 export type { Sheet } from "./Sheet";

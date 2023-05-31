@@ -1,7 +1,8 @@
 import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { hex2str } from "../utils/hexUtils";
-import {ChainConfig, ChainId, ChainProvider, ChainType, ContractCall} from '../types';
+import { ChainConfig, ChainId, ChainProvider, ChainType, ContractCall } from "../types";
+import { StarknetSpreadsheetContract } from "../contracts/spreadsheet";
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
@@ -59,6 +60,13 @@ export class StarknetProvider implements ChainProvider {
    */
   getNftMarketplaceAddress(contractAddress: string) {
     return `${this.config.nftBaseUrl}${contractAddress}`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getSpreadsheetContract(): StarknetSpreadsheetContract {
+    return new StarknetSpreadsheetContract(this.rpcProvider);
   }
 
   /**

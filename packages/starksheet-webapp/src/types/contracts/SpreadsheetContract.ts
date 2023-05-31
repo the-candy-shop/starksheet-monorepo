@@ -1,20 +1,20 @@
 import BN from "bn.js";
-import { Call, number } from "starknet";
 import { Cell } from "../cells";
+import { ContractCall } from "../provider";
 
-export interface Onsheet {
+export interface SpreadsheetContract {
   getSheetDefaultRendererAddress(): Promise<string>;
   getSheetClassHash(): Promise<string>;
   getProxyClassHash(): Promise<string>;
   getSheets(): Promise<string[]>;
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
-  ): Call;
-  addSheetTxBuilder(name: string, symbol: string): Call;
+  ): ContractCall;
+  addSheetTxBuilder(name: string, symbol: string): ContractCall;
   calculateSheetAddress(
-    salt: number.BigNumberish,
-    classHash: number.BigNumberish,
-    constructorCalldata: number.BigNumberish[]
-  ): string;
+    salt: number | string,
+    classHash: number | string,
+    constructorCalldata: (number | string)[],
+  ): Promise<string>;
   getSheetPrice(): Promise<BN>;
 }

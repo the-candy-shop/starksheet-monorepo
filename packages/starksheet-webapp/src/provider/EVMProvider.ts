@@ -1,6 +1,8 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
 import { ABI, ChainProvider, ChainConfig, ChainId, ChainType, ContractCall, TransactionReceipt } from "../types";
+import { EvmSpreadsheetContract } from "../contracts/spreadsheet";
+import {spreadsheetAddress} from './index';
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -89,6 +91,13 @@ export class EVMProvider implements ChainProvider {
    */
   getNftMarketplaceAddress(contractAddress: string): string {
     return `${this.config.nftBaseUrl}${contractAddress}`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getSpreadsheetContract(): EvmSpreadsheetContract {
+    return new EvmSpreadsheetContract(spreadsheetAddress, this.provider);
   }
 
   /**

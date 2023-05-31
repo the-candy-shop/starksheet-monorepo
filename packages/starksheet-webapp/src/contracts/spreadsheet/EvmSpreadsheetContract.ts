@@ -43,7 +43,6 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   getProxyClassHash(): Promise<string> {
-    // return this.contract.getProxyClassHash();
     return Promise.resolve("0x0");
   }
 
@@ -51,7 +50,6 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   getSheetClassHash(): Promise<string> {
-    // return this.contract.getSheetClassHash();
     return Promise.resolve("0x0");
   }
 

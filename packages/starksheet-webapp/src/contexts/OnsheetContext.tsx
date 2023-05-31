@@ -10,14 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { hash, number } from "starknet";
 import { N_ROW } from "../config";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { Onsheet, Sheet } from "../types";
+import { Spreadsheet, Sheet } from "../types";
 import { str2hex } from "../utils/hexUtils";
 import { AbisContext } from "./AbisContext";
 import { AccountContext } from "./AccountContext";
 import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
 export const OnsheetContext = React.createContext<{
-  onsheet: Onsheet;
+  onsheet: Spreadsheet;
   selectedSheetIndex?: number;
   selectedSheetAddress?: string;
   setSelectedSheetAddress: (address: string) => void;
@@ -49,7 +49,7 @@ export const OnsheetContextProvider = ({
   const { accountAddress } = useContext(AccountContext);
   const { getAbiForContract } = useContext(AbisContext);
   const navigate = useNavigate();
-  const [onsheet, setOnsheet] = useState<Onsheet>({
+  const [onsheet, setOnsheet] = useState<Spreadsheet>({
     address: onsheetAddress,
     sheets: [],
     defaultRenderer: "",

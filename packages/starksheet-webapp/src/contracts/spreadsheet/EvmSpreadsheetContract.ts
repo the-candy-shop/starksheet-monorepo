@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { BigNumberish, Contract, ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import abi from "./evm.abi.json";
 import { Cell, ContractCall } from "../../types";
@@ -33,7 +33,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * @inheritDoc
    */
-  async calculateSheetAddress(salt: BigNumberish, classHash: BigNumberish, constructorCalldata: BigNumberish[]): Promise<string> {
+  async calculateSheetAddress(): Promise<string> {
     const from = this.address;
     const nonce = await this.provider.getTransactionCount(from);
     return ethers.utils.getContractAddress({ from, nonce })

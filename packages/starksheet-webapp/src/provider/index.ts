@@ -18,7 +18,7 @@ const chainIds = {
 
 const network = (process.env.REACT_APP_NETWORK as Network) || "devnet";
 
-export const spreadsheetAddress = process.env.REACT_APP_SPREADSHEET_ADDRESS!;t
+export const spreadsheetAddress = process.env.REACT_APP_SPREADSHEET_ADDRESS!;
 
 if (!spreadsheetAddress) {
   throw new Error("missing env variable REACT_APP_SPREADSHEET_ADDRESS");

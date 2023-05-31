@@ -1,12 +1,16 @@
 {
   "description": "Be careful pilot, going crazy high in the sky can make you become quickly only dust",
-  "external_url": "https://github.com/gershon",
-  "image": "ipfs://QmQQbQTmhP26EkGnydyhPQL6NCwovEt7wEpyjt9tH2hS5Q",
-  "name": "gershon",
+  "external_url": "https://github.com/Marchand-Nicolas",
+  "image": "ipfs://QmWvEdFFKZ2cRPn4KCZFszFnqw7zHZFVBwKHhZwJWhbPXi",
+  "name": "Marchand-Nicolas",
   "attributes": [
     {
       "trait_type": "Pilot",
-      "value": 172
+      "value": 7174
+    },
+    {
+      "trait_type": "Dust",
+      "value": "Starknet-id"
     }
   ]
 }

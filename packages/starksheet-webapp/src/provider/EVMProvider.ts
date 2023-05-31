@@ -2,6 +2,7 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
 import { ABI, ChainProvider, ChainConfig, ChainId, ChainType, ContractCall, TransactionReceipt } from "../types";
 import { EvmSpreadsheetContract } from "../contracts/spreadsheet";
+import {spreadsheetAddress} from './index';
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -96,13 +97,7 @@ export class EVMProvider implements ChainProvider {
    * @inheritDoc
    */
   getSpreadsheetContract(): EvmSpreadsheetContract {
-    const address = process.env.REACT_APP_SPREADSHEET_ADDRESS;
-
-    if (!address) {
-      throw new Error("missing env variable REACT_APP_SPREADSHEET_ADDRESS");
-    }
-
-    return new EvmSpreadsheetContract(address, this.provider);
+    return new EvmSpreadsheetContract(spreadsheetAddress, this.provider);
   }
 
   /**

@@ -6,4 +6,8 @@ export interface ChainConfig {
   chainType: ChainType;
   explorerBaseUrl: string;
   nftBaseUrl: string;
+  sequencerUrl?: string;
+  addresses: {
+    spreadsheet: string;
+  };
 }

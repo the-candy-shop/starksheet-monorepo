@@ -1,7 +1,6 @@
-import { Abi, Call, Contract, hash, number, RpcProvider, stark } from "starknet";
+import { Call, Contract, hash, number, RpcProvider, stark } from "starknet";
 import BN from "bn.js";
-import { Cell, SheetConstructorArgs } from "../../types";
-import starksheetContractData from "../../contract.json";
+import { ABI, Cell, SheetConstructorArgs } from "../../types";
 import { bn2hex } from "../../utils/hexUtils";
 import { SpreadsheetContract } from "../../types/contracts";
 
@@ -10,18 +9,16 @@ import { SpreadsheetContract } from "../../types/contracts";
  */
 export class StarknetSpreadsheetContract implements SpreadsheetContract {
   private contract: Contract;
-  public address: string;
 
   /**
    * The class constructor.
    */
-  constructor(provider: RpcProvider) {
+  constructor(private address: string, private abi: ABI, provider: RpcProvider) {
     this.contract = new Contract(
-      starksheetContractData.onsheetAbi as Abi,
-      starksheetContractData.address,
-      provider
+      abi,
+      address,
+      provider,
     );
-    this.address = starksheetContractData.address;
   }
 
   /**

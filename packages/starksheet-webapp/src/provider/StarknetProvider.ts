@@ -3,6 +3,7 @@ import { RC_BOUND } from "../utils/constants";
 import { hex2str } from "../utils/hexUtils";
 import { ChainConfig, ChainId, ChainProvider, ChainType, ContractCall } from "../types";
 import { StarknetSpreadsheetContract } from "../contracts/spreadsheet";
+import { chainAbi } from "./chains";
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
@@ -11,8 +12,6 @@ export class StarknetProvider implements ChainProvider {
 
   /**
    * Constructs a StarknetProvider.
-   *
-   * todo: remove sequencerUrl and rely solely on rpc
    */
   constructor(rpcUrl: string, sequencerUrl: string, private config: ChainConfig) {
     this.sequencerProvider = new SequencerProvider({
@@ -31,7 +30,7 @@ export class StarknetProvider implements ChainProvider {
    * Builds a starknet provider for the given rpc and config.
    */
   public static build(rpcUrl: string, config: ChainConfig): StarknetProvider {
-    return new StarknetProvider(rpcUrl, rpcUrl, config);
+    return new StarknetProvider(rpcUrl, config.sequencerUrl!, config);
   }
 
   /**
@@ -66,7 +65,10 @@ export class StarknetProvider implements ChainProvider {
    * @inheritDoc
    */
   getSpreadsheetContract(): StarknetSpreadsheetContract {
-    return new StarknetSpreadsheetContract(this.rpcProvider);
+    const address = this.config.addresses.spreadsheet;
+    const abi = chainAbi[this.config.chainType].spreadsheet;
+
+    return new StarknetSpreadsheetContract(address, abi, this.rpcProvider);
   }
 
   /**

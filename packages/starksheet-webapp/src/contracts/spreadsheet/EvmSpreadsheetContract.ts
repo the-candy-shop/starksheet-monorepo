@@ -1,8 +1,7 @@
 import BN from "bn.js";
 import { Contract, ethers } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import abi from "./evm.abi.json";
-import { Cell, ContractCall } from "../../types";
+import {ABI, Cell, ContractCall} from '../../types';
 import { SpreadsheetContract } from "../../types/contracts";
 
 /**
@@ -15,7 +14,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * The class constructor.
    */
-  constructor(private address: string, private provider: JsonRpcProvider) {
+  constructor(private address: string, private abi: ABI, private provider: JsonRpcProvider) {
     this.contract = new Contract(address, abi, provider);
   }
 

@@ -2,7 +2,7 @@ import BN from "bn.js";
 import { Abi, FunctionAbi, StructAbi, number } from "starknet";
 import { Cell } from "./cells";
 
-type SheetConstructorArgs = {
+export type SheetConstructorArgs = {
   name: number.BigNumberish;
   symbol: number.BigNumberish;
   owner: number.BigNumberish;
@@ -26,8 +26,6 @@ export type Spreadsheet = {
   sheets: Sheet[];
   address: string;
   defaultRenderer: string;
-  sheetClassHash: string;
-  proxyClassHash: string;
   sheetPrice: number;
 };
 

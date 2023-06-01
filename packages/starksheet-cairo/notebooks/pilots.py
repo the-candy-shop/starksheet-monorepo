@@ -98,7 +98,11 @@ dusted_pilots.to_csv("dust_pilots/dusted.csv")
             lambda row: [
                 {"trait_type": "Pilot", "value": row.pilot},
             ]
-            + ([{"trait_type": "Dust", "value": row.dust}] if row.dust else []),
+            + (
+                [{"trait_type": "Dust", "value": row.dust}]
+                if not isinstance(row.dust, float)
+                else []
+            ),
             axis=1,
         ),
     )

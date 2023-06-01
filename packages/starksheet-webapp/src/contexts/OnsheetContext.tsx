@@ -7,10 +7,10 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { hash, number } from "starknet";
+import { BN } from "bn.js";
 import { N_ROW } from "../config";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { Spreadsheet, Sheet } from "../types";
+import {Spreadsheet, Sheet, SheetConstructorArgs} from '../types';
 import { str2hex } from "../utils/hexUtils";
 import { AbisContext } from "./AbisContext";
 import { AccountContext } from "./AccountContext";
@@ -30,8 +30,6 @@ export const OnsheetContext = React.createContext<{
     address: "",
     sheets: [],
     defaultRenderer: "",
-    sheetClassHash: "",
-    proxyClassHash: "",
     sheetPrice: 0,
   },
   setSelectedSheetAddress: () => {},
@@ -53,8 +51,6 @@ export const OnsheetContextProvider = ({
     address: onsheetAddress,
     sheets: [],
     defaultRenderer: "",
-    sheetClassHash: "",
-    proxyClassHash: "",
     sheetPrice: 0,
   });
 
@@ -73,21 +69,17 @@ export const OnsheetContextProvider = ({
     () =>
       Promise.all([
         contract.getSheetDefaultRendererAddress(),
-        contract.getSheetClassHash(),
-        contract.getProxyClassHash(),
         contract.getSheetPrice(),
       ])
         .then(async (response) => {
-          const [renderer, sheetClassHash, proxyClassHash, sheetPrice] =
+          const [renderer, sheetPrice] =
             response;
           return {
             address,
             defaultRenderer: renderer,
-            sheetClassHash,
-            proxyClassHash,
             sheets: [],
             sheetPrice:
-              sheetPrice.div(number.toBN(10).pow(number.toBN(9))).toNumber() /
+              sheetPrice.div(new BN(10).pow(new BN(9))).toNumber() /
               1_000_000_000,
           };
         })
@@ -119,11 +111,7 @@ export const OnsheetContextProvider = ({
     sheet: Omit<Sheet, "address">,
     owner: string
   ): Promise<string> => {
-    let calldata = {
-      proxyAdmin: owner,
-      implementation: onsheet.sheetClassHash,
-      selector: hash.getSelectorFromName("initialize"),
-      calldataLen: 6,
+    let calldata: SheetConstructorArgs = {
       name: str2hex(sheet.name),
       symbol: str2hex(sheet.symbol),
       owner,
@@ -131,10 +119,10 @@ export const OnsheetContextProvider = ({
       maxPerWallet: 0,
       rendererAddress: onsheet.defaultRenderer,
     };
+
     const address = await contract.calculateSheetAddress(
       accountAddress,
-      onsheet.proxyClassHash,
-      Object.values(calldata)
+      calldata,
     );
     const abi = await getAbiForContract(address);
     let newSheet: Sheet;

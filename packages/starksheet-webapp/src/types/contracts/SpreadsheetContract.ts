@@ -1,11 +1,10 @@
 import BN from "bn.js";
 import { Cell } from "../cells";
 import { ContractCall } from "../provider";
+import { SheetConstructorArgs } from "../onsheet";
 
 export interface SpreadsheetContract {
   getSheetDefaultRendererAddress(): Promise<string>;
-  getSheetClassHash(): Promise<string>;
-  getProxyClassHash(): Promise<string>;
   getSheets(): Promise<string[]>;
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
@@ -13,8 +12,7 @@ export interface SpreadsheetContract {
   addSheetTxBuilder(name: string, symbol: string): ContractCall;
   calculateSheetAddress(
     salt: number | string,
-    classHash: number | string,
-    constructorCalldata: (number | string)[],
+    constructorCalldata: SheetConstructorArgs,
   ): Promise<string>;
   getSheetPrice(): Promise<BN>;
 }

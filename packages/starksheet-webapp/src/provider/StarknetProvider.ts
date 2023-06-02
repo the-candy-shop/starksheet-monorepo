@@ -9,6 +9,7 @@ export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
   private sequencerProvider: SequencerProvider;
   private chainId: string;
+  private spreadsheetContract: StarknetSpreadsheetContract;
 
   /**
    * Constructs a StarknetProvider.
@@ -24,6 +25,10 @@ export class StarknetProvider implements ChainProvider {
 
     this.chainId = "";
     this.rpcProvider.getChainId().then((id) => (this.chainId = hex2str(id)));
+
+    const address = config.addresses.spreadsheet;
+    const abi = chainAbi[this.config.chainType].spreadsheet;
+    this.spreadsheetContract = new StarknetSpreadsheetContract(address, abi, this.rpcProvider);
   }
 
   /**
@@ -65,10 +70,7 @@ export class StarknetProvider implements ChainProvider {
    * @inheritDoc
    */
   getSpreadsheetContract(): StarknetSpreadsheetContract {
-    const address = this.config.addresses.spreadsheet;
-    const abi = chainAbi[this.config.chainType].spreadsheet;
-
-    return new StarknetSpreadsheetContract(address, abi, this.rpcProvider);
+    return this.spreadsheetContract;
   }
 
   /**

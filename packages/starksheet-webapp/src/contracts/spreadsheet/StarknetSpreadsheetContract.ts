@@ -11,6 +11,16 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
   private contract: Contract;
 
   /**
+   * The proxy contract class hash.
+   */
+  private proxyClassHash: Promise<string>;
+
+  /**
+   * The sheet contract class hash.
+   */
+  private sheetClashHash: Promise<string>;
+
+  /**
    * The class constructor.
    */
   constructor(private address: string, private abi: ABI, provider: RpcProvider) {
@@ -19,6 +29,8 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
       address,
       provider,
     );
+    this.proxyClassHash = this.getProxyClassHash();
+    this.sheetClashHash = this.getSheetClassHash();
   }
 
   /**
@@ -103,11 +115,11 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
     salt: number.BigNumberish,
     constructorCalldata: SheetConstructorArgs,
   ): Promise<string> {
-    const classHash = await this.getProxyClassHash();
+    const classHash = await this.proxyClassHash;
 
     const extendedCall = {
       proxyAdmin: constructorCalldata.owner,
-      implementation: await this.getSheetClassHash(),
+      implementation: await this.sheetClashHash,
       selector: hash.getSelectorFromName("initialize"),
       calldataLen: 6,
       name: constructorCalldata.name,

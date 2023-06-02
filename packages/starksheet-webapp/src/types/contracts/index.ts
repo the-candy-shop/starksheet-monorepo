@@ -1,2 +1,2 @@
 export type { SpreadsheetContract } from "./SpreadsheetContract";
-export type { Sheet } from "./Sheet";
+export type { WorksheetContract } from "./WorksheetContract";

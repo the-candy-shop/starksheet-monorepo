@@ -3,7 +3,7 @@ import { ContractCall } from "./ContractCall";
 import { TransactionReceipt } from "./TransactionReceipt";
 import { ChainType } from "./ChainType";
 import { ChainId } from "./ChainId";
-import { SpreadsheetContract } from "../contracts";
+import { SpreadsheetContract, WorksheetContract } from "../contracts";
 
 /**
  * Represents a chain provider.
@@ -40,6 +40,11 @@ export interface ChainProvider {
    * Gets a spreadsheet contract implementation matching the chain type.
    */
   getSpreadsheetContract(): SpreadsheetContract;
+
+  /**
+   * Gets a worksheet contract implementation matching the chain type for the given address.
+   */
+  getWorksheetContractByAddress(address: string): WorksheetContract;
 
   /**
    * Gets the receipt of the transaction matching the given hash.

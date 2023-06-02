@@ -4,6 +4,8 @@ import { hex2str } from "../utils/hexUtils";
 import { ChainConfig, ChainId, ChainProvider, ChainType, ContractCall } from "../types";
 import { StarknetSpreadsheetContract } from "../contracts/spreadsheet";
 import { chainAbi } from "./chains";
+import { StarknetWorksheetContract } from '../contracts/worksheet';
+import { WorksheetContract } from '../types/contracts';
 
 export class StarknetProvider implements ChainProvider {
   private rpcProvider: RpcProvider;
@@ -71,6 +73,14 @@ export class StarknetProvider implements ChainProvider {
    */
   getSpreadsheetContract(): StarknetSpreadsheetContract {
     return this.spreadsheetContract;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getWorksheetContractByAddress(address: string): WorksheetContract {
+    const abi = chainAbi[this.config.chainType].spreadsheet;
+    return new StarknetWorksheetContract(address, abi, this.rpcProvider);
   }
 
   /**

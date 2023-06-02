@@ -1,8 +1,17 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
-import { ABI, ChainProvider, ChainConfig, ChainId, ChainType, ContractCall, TransactionReceipt } from "../types";
-import { EvmSpreadsheetContract } from "../contracts/spreadsheet";
-import {chainAbi} from './chains';
+import {
+  ABI,
+  ChainProvider,
+  ChainConfig,
+  ChainId,
+  ChainType,
+  ContractCall,
+  TransactionReceipt,
+  WorksheetContract,
+} from "../types";
+import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
+import { chainAbi } from "./chains";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -108,6 +117,14 @@ export class EVMProvider implements ChainProvider {
    */
   getTransactionReceipt(hash: string): Promise<TransactionReceipt> {
     return this.provider.getTransactionReceipt(hash);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getWorksheetContractByAddress(address: string): WorksheetContract {
+    const abi = chainAbi[this.config.chainType].spreadsheet;
+    return new EvmWorksheetContract(address, abi, this.provider);
   }
 
   /**

@@ -3,6 +3,7 @@ import { EVMProvider } from "./EVMProvider";
 import { StarknetProvider } from "./StarknetProvider";
 import evmSpreadsheetAbi from "../contracts/spreadsheet/evm.abi.json";
 import starknetSpreadsheetAbi from "../contracts/spreadsheet/starknet.abi.json";
+import { evmWorksheetAbi, starknetWorksheetAbi } from "../contracts/worksheet";
 
 export const chains: ChainConfig[] = [
   {
@@ -56,9 +57,11 @@ export const chainImplementations = {
 export const chainAbi = {
   [ChainType.EVM]: {
     spreadsheet: evmSpreadsheetAbi,
+    worksheet: evmWorksheetAbi,
   },
   [ChainType.STARKNET]: {
     spreadsheet: starknetSpreadsheetAbi,
+    worksheet: starknetWorksheetAbi,
   },
 }
 

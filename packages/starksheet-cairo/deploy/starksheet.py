@@ -30,6 +30,7 @@ async def main():
         "Sheet",
         "Starksheet",
         "BasicCellRenderer",
+        "UriRenderer",
         "math",
         "execute",
         "proxy",

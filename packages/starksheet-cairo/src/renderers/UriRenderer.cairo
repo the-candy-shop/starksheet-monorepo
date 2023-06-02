@@ -51,6 +51,7 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     Ownable.initializer(owner);
     _base_uri_len.write(base_uri_len);
     _base_uri_write(0, base_uri_len, base_uri);
+    _use_token_id.write(1);
     return ();
 }
 
@@ -90,7 +91,8 @@ func token_uri{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     let (token_id_ascii) = str(token_id);
     assert [final] = '/';
     assert [final + 1] = token_id_ascii;
-    return (token_uri_len + 2, token_uri);
+    assert [final + 2] = '.json';
+    return (token_uri_len + 3, token_uri);
 }
 
 func _base_uri_write{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(

@@ -2,7 +2,7 @@ import BN from "bn.js";
 import { Contract } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { ABI, CellData, CellRendered, WorksheetContract } from "../../types";
-import {N_COL, N_ROW} from '../../config';
+import { N_COL, N_ROW } from "../../config";
 
 export class EvmWorksheetContract implements WorksheetContract {
   private contract: Contract;

@@ -59,24 +59,24 @@ function App() {
 
   const message = useMemo(
     () =>
-      selectedSheetAddress
-        ? appStatus.sheets[selectedSheetAddress]?.message
+      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
+        ? appStatus.sheets[selectedSheetAddress].message
         : appStatus?.message,
     [appStatus, selectedSheetAddress]
   );
 
   const loading = useMemo(
     () =>
-      selectedSheetAddress
-        ? appStatus.sheets[selectedSheetAddress]?.loading
+      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
+        ? appStatus.sheets[selectedSheetAddress].loading
         : appStatus.loading,
     [appStatus, selectedSheetAddress]
   );
 
   const error = useMemo(
     () =>
-      selectedSheetAddress
-        ? appStatus.sheets[selectedSheetAddress]?.error
+      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
+        ? appStatus.sheets[selectedSheetAddress].error
         : appStatus.error,
     [appStatus, selectedSheetAddress]
   );

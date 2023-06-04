@@ -79,7 +79,7 @@ export class StarknetProvider implements ChainProvider {
    * @inheritDoc
    */
   getWorksheetContractByAddress(address: string): WorksheetContract {
-    const abi = chainAbi[this.config.chainType].spreadsheet;
+    const abi = chainAbi[this.config.chainType].worksheet;
     return new StarknetWorksheetContract(address, abi, this.rpcProvider);
   }
 

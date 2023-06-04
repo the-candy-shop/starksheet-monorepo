@@ -8,6 +8,7 @@ services:
     command:
       - "--seed=0"
       - "--disable-rpc-request-validation"
+      - "--fork-network=alpha-goerli"
     ports:
       - '5050:5050'
 

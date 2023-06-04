@@ -59,7 +59,7 @@ function App() {
 
   const message = useMemo(
     () =>
-      selectedSheetAddress
+      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
         ? appStatus.sheets[selectedSheetAddress].message
         : appStatus?.message,
     [appStatus, selectedSheetAddress]
@@ -67,7 +67,7 @@ function App() {
 
   const loading = useMemo(
     () =>
-      selectedSheetAddress
+      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
         ? appStatus.sheets[selectedSheetAddress].loading
         : appStatus.loading,
     [appStatus, selectedSheetAddress]
@@ -75,7 +75,7 @@ function App() {
 
   const error = useMemo(
     () =>
-      selectedSheetAddress
+      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
         ? appStatus.sheets[selectedSheetAddress].error
         : appStatus.error,
     [appStatus, selectedSheetAddress]

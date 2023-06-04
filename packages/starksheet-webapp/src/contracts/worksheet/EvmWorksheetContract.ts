@@ -2,6 +2,7 @@ import BN from "bn.js";
 import { Contract } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { ABI, CellData, CellRendered, WorksheetContract } from "../../types";
+import {N_COL, N_ROW} from '../../config';
 
 export class EvmWorksheetContract implements WorksheetContract {
   private contract: Contract;
@@ -29,14 +30,14 @@ export class EvmWorksheetContract implements WorksheetContract {
    * @inheritDoc
    */
   getCellPrice(): Promise<number> {
-    throw new Error("not implemented");
+    return Promise.resolve(0);
   }
 
   /**
    * @inheritDoc
    */
   nRow(): Promise<number> {
-    throw new Error("not implemented");
+    return Promise.resolve(N_ROW);
   }
 
   /**
@@ -58,8 +59,8 @@ export class EvmWorksheetContract implements WorksheetContract {
    * @inheritDoc
    */
   async renderCells(): Promise<CellRendered[]> {
-    const totalSupply = await this.totalSupply();
-    const cellIds = Array.from(Array(totalSupply).keys());
+    const maxCellIndex = N_ROW * N_COL;
+    const cellIds = Array.from(Array(maxCellIndex).keys());
     return Promise.all(cellIds.map((id) => this.renderCell(id)));
   }
 

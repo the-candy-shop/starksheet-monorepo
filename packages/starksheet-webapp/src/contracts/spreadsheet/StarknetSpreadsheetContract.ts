@@ -1,8 +1,7 @@
 import { Call, Contract, hash, number, RpcProvider, stark } from "starknet";
 import BN from "bn.js";
-import { ABI, Cell, SheetConstructorArgs } from "../../types";
+import { ABI, Cell, SheetConstructorArgs, SpreadsheetContract } from "../../types";
 import { bn2hex } from "../../utils/hexUtils";
-import { SpreadsheetContract } from "../../types/contracts";
 
 /**
  * Represents a starknet implementation of the SpreadsheetContract.

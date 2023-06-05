@@ -12,6 +12,7 @@ import {
 } from "../types";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
+import { InvokeFunctionResponse } from "starknet";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -133,5 +134,13 @@ export class EVMProvider implements ChainProvider {
   async waitForTransaction(hash: string): Promise<void> {
     const transaction = await this.provider.getTransaction(hash);
     await transaction.wait();
+  }
+
+  execute(): Promise<InvokeFunctionResponse> {
+    throw 'unimplemented';
+  }
+
+  login(): Promise<string> {
+    throw 'unimplemented';
   }
 }

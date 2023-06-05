@@ -4,6 +4,8 @@ import { TransactionReceipt } from "./TransactionReceipt";
 import { ChainType } from "./ChainType";
 import { ChainId } from "./ChainId";
 import { SpreadsheetContract, WorksheetContract } from "../contracts";
+import {Call, InvokeFunctionResponse} from 'starknet';
+import {BigNumberish} from 'ethers';
 
 /**
  * Represents a chain provider.
@@ -25,6 +27,11 @@ export interface ChainProvider {
    * Waits for the transaction matching the given hash to complete.
    */
   waitForTransaction(hash: string): Promise<void>;
+
+  /**
+   * todo: refactor
+   */
+  execute(calls: Call[], options?: { value?: BigNumberish }): Promise<InvokeFunctionResponse>;
 
   /**
    * Gets the chain id.
@@ -60,4 +67,9 @@ export interface ChainProvider {
    * Gets the address (url) of the nft marketplace for the current chain.
    */
   getNftMarketplaceAddress(contractAddress: string): string;
+
+  /**
+   * Connects the user with the given chain provider.
+   */
+  login(): Promise<string>;
 }

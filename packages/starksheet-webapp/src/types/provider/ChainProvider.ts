@@ -21,7 +21,7 @@ export interface ChainProvider {
   /**
    * Calls a contract entry point with some optional data.
    */
-  callContract<T>(options: ContractCall): Promise<T>;
+  callContract(options: ContractCall): Promise<string>;
 
   /**
    * Waits for the transaction matching the given hash to complete.

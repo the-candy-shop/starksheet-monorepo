@@ -1,5 +1,5 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { Contract } from "ethers";
+import { Contract, ethers } from "ethers";
 import {
   ABI,
   ChainConfig,
@@ -9,7 +9,7 @@ import {
   ContractCall,
   TransactionReceipt,
   WorksheetContract,
-} from '../types';
+} from "../types";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
 import { InvokeFunctionResponse } from "starknet";
@@ -42,11 +42,28 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  async callContract<T = string>(options: ContractCall): Promise<T> {
+  async callContract(options: ContractCall): Promise<string> {
     const abi = await this.getAbi(options.contractAddress);
     const contract = new Contract(options.contractAddress, abi, this.provider);
+    const functionDefinition = contract.interface.getFunction(options.entrypoint);
 
-    return contract[options.entrypoint](...options.calldata);
+    const result = await contract[options.entrypoint](...options.calldata);
+    const resultType = functionDefinition.outputs![0];
+
+    // checks if the result is of type number
+    if (resultType.type.startsWith('uint') || resultType.type.startsWith('int')) {
+      return result as string;
+    }
+    // checks if the result is of type string
+    if (resultType.type === 'string') {
+      const bytes = ethers.utils.toUtf8Bytes(result);
+      const hex = ethers.utils.hexlify(bytes);
+      const decimal = ethers.BigNumber.from(hex).toString();
+      console.log(`decimal value of ${result} is ${decimal}`);
+      return decimal;
+    }
+
+    throw new Error(`Unhandled return type (${resultType})`);
   }
 
   /**

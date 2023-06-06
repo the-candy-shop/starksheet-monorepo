@@ -2,14 +2,14 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract } from "ethers";
 import {
   ABI,
-  ChainProvider,
   ChainConfig,
   ChainId,
+  ChainProvider,
   ChainType,
   ContractCall,
   TransactionReceipt,
   WorksheetContract,
-} from "../types";
+} from '../types';
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
 import { InvokeFunctionResponse } from "starknet";
@@ -18,6 +18,14 @@ import { InvokeFunctionResponse } from "starknet";
  * Represents an EVM-compatible implementation of the chain provider.
  */
 export class EVMProvider implements ChainProvider {
+  /**
+   * The ABI dictionary.
+   */
+  private cachedAbis: Record<string, ABI> = {
+    '0x0000000000000000000000000000000000000000': [],
+    '0x100000000000000000000000000000000': [],
+  };
+
   /**
    * Constructs an EVM Provider.
    */
@@ -45,15 +53,23 @@ export class EVMProvider implements ChainProvider {
    * @inheritDoc
    */
   async getAbi(address: string): Promise<ABI> {
+    const cachedAbi = this.cachedAbis[address];
+    if (cachedAbi) {
+      console.log(`abi retrieved from cache for address ${address}`);
+      return cachedAbi;
+    } {
+      console.log(`no cache match for address ${address}, fetching from block explorer`)
+    }
+
     // build the query parameters
     const params = new URLSearchParams({
       action: "getabi",
       address,
-      apikey: process.env.EXPLORER_KEY || "",
+      apikey: process.env.REACT_APP_EXPLORER_KEY || "",
       module: "contract",
     });
     // build the query url
-    const url = new URL("https://api-goerli.etherscan.io/api", "");
+    const url = new URL("https://api-goerli.etherscan.io/api");
     url.search = params.toString();
 
     const rawAbi = await fetch(url)
@@ -71,8 +87,21 @@ export class EVMProvider implements ChainProvider {
         }
         return data.result;
       });
+
+    if (rawAbi === 'Contract source code not verified') {
+      return [];
+      // todo: throw error
+    }
+
+    if (rawAbi === 'Invalid Address format') {
+      return [];
+      // todo: throw error
+    }
+
     // parse the raw abi and return it
-    return JSON.parse(rawAbi);
+    const abi = JSON.parse(rawAbi);
+    this.cachedAbis[address] = abi;
+    return abi;
   }
 
   /**
@@ -124,7 +153,7 @@ export class EVMProvider implements ChainProvider {
    * @inheritDoc
    */
   getWorksheetContractByAddress(address: string): WorksheetContract {
-    const abi = chainAbi[this.config.chainType].spreadsheet;
+    const abi = chainAbi[this.config.chainType].worksheet;
     return new EvmWorksheetContract(address, abi, this.provider);
   }
 
@@ -140,7 +169,16 @@ export class EVMProvider implements ChainProvider {
     throw 'unimplemented';
   }
 
-  login(): Promise<string> {
-    throw 'unimplemented';
+  async login(): Promise<string> {
+    if (!window.ethereum) {
+      throw new Error("Metamask not detected");
+    }
+
+    try {
+      const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
+      return accounts[0];
+    } catch (error) {
+      throw new Error("login failed");
+    }
   }
 }

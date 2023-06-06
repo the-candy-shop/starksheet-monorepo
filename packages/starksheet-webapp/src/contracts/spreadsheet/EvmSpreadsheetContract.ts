@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { Contract, ethers } from "ethers";
+import { Contract, ethers, BigNumber } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import {ABI, Cell, ContractCall} from '../../types';
 import { SpreadsheetContract } from "../../types/contracts";
@@ -41,20 +41,6 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * @inheritDoc
    */
-  getProxyClassHash(): Promise<string> {
-    return Promise.resolve("0x0");
-  }
-
-  /**
-   * @inheritDoc
-   */
-  getSheetClassHash(): Promise<string> {
-    return Promise.resolve("0x0");
-  }
-
-  /**
-   * @inheritDoc
-   */
   getSheetDefaultRendererAddress(): Promise<string> {
     return this.contract.defaultRenderer();
   }
@@ -62,8 +48,9 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * @inheritDoc
    */
-  getSheetPrice(): Promise<BN> {
-    return this.contract.sheetPrice();
+  async getSheetPrice(): Promise<BN> {
+    const value: BigNumber = await this.contract.sheetPrice();
+    return new BN(value.toString());
   }
 
   /**

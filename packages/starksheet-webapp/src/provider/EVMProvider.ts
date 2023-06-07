@@ -12,7 +12,8 @@ import {
 } from "../types";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
-import { InvokeFunctionResponse } from "starknet";
+import {Call, InvokeFunctionResponse, Sequencer} from 'starknet';
+import { BigNumberish } from "ethers";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -162,8 +163,12 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  getTransactionReceipt(hash: string): Promise<TransactionReceipt> {
-    return this.provider.getTransactionReceipt(hash);
+  async getTransactionReceipt(hash: string): Promise<TransactionReceipt> {
+    const receipt = await this.provider.getTransactionReceipt(hash);
+    return {
+      transaction_hash: receipt.transactionHash,
+      status: receipt.status,
+    }
   }
 
   /**
@@ -182,8 +187,40 @@ export class EVMProvider implements ChainProvider {
     await transaction.wait();
   }
 
-  execute(): Promise<InvokeFunctionResponse> {
-    throw 'unimplemented';
+  /**
+   * @inheritDoc
+   */
+  execute = async (calls: Call[], options: { value: BigNumberish })  => {
+    // const abi = this.getAbi(calls)
+    console.log(calls, options);
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+
+    // Callers of the execute function assume the chain supports multi-call, which EVM does not natively.
+    // The following is a hack: we wait for every transaction before resolving, then returning one of the transactions.
+    // This works because callers do not really care about the transaction response, only its status and completion
+    const receipts = await Promise.all(calls.map(async (call) => {
+      const abi = await this.getAbi(call.contractAddress);
+      const contract = new Contract(call.contractAddress, abi, signer);
+
+      const response: ethers.providers.TransactionResponse = await contract[call.entrypoint](...(call.calldata || []), {
+        value: options.value,
+      });
+      return await response.wait();
+      }));
+
+    const firstToFail = receipts.find((receipt) => receipt.status !== 1)
+    if (firstToFail) {
+      return {
+        transaction_hash: firstToFail.transactionHash,
+      };
+    }
+
+    return {
+      transaction_hash: receipts[0].transactionHash,
+    }
   }
 
   async login(): Promise<string> {

@@ -7,7 +7,6 @@ import { chainAbi } from "./chains";
 import { connect as getStarknet, disconnect } from "get-starknet";
 import { chainId } from "./index";
 import { BigNumberish } from "ethers";
-import BN from 'bn.js';
 
 export class StarknetProvider implements ChainProvider {
   private readonly rpcProvider: RpcProvider;

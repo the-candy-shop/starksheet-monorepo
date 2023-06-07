@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 
 from dotenv import load_dotenv
-from starknet_py.net.gateway_client import GatewayClient
+from starknet_py.net.full_node_client import FullNodeClient
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -26,22 +26,14 @@ NETWORK = (
     if re.match(r".*docker$", NETWORK, flags=re.I)
     else "devnet"
 )
-GATEWAY_URLS = {
-    "mainnet": "https://alpha-mainnet.starknet.io",
-    "testnet": "https://alpha4.starknet.io",
-    "testnet2": "https://alpha4-2.starknet.io",
-    "devnet": "http://127.0.0.1:5050",
-    "docker": "http://starknet-devnet:5050",
-}
-GATEWAY_CLIENT = GatewayClient(net=GATEWAY_URLS[NETWORK])
-STARKNET_NETWORKS = {
-    "mainnet": "alpha-mainnet",
-    "testnet": "alpha-goerli",
-    "testnet2": "alpha-goerli2",
-    "devnet": "alpha-goerli",
-    "docker": "alpha-goerli",
-}
-STARKNET_NETWORK = STARKNET_NETWORKS[NETWORK]
+
+RPC_URL = os.getenv(f"{NETWORK.upper()}_RPC_URL", os.getenv("RPC_URL"))
+if RPC_URL is None:
+    raise ValueError(
+        f"Either {NETWORK.upper()}_RPC_URL or RPC_URL env variable needs to be set"
+    )
+RPC_CLIENT = FullNodeClient(node_url=RPC_URL)
+
 STARKSCAN_URLS = {
     "mainnet": "https://starkscan.co",
     "testnet": "https://testnet.starkscan.co",
@@ -162,4 +154,4 @@ STARKNET_ID_NAMING = {
     "docker": 0x003BAB268E932D2CECD1946F100AE67CE3DFF9FD234119EA2F6DA57D16D29FCE,
 }[NETWORK]
 
-logger.info(f"ℹ️  Using Chain id {CHAIN_ID.name} with Gateway {GATEWAY_URLS[NETWORK]}")
+logger.info(f"ℹ️  Using Chain id {CHAIN_ID.name} with RPC {RPC_CLIENT.url}")

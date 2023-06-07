@@ -2,8 +2,8 @@ import functools
 import json
 import logging
 import os
-import re
 import subprocess
+import time
 from pathlib import Path
 from typing import List, Optional, Union, cast
 
@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from starknet_py.contract import Contract
 from starknet_py.net.account.account import Account
 from starknet_py.net.client import Client
-from starknet_py.net.client_models import Call
+from starknet_py.net.client_models import Call, TransactionStatus
 from starknet_py.net.models import Address
 from starknet_py.net.signer.stark_curve_signer import KeyPair
 from starknet_py.proxy.contract_abi_resolver import ProxyConfig
@@ -32,10 +32,9 @@ from utils.constants import (
     CONTRACTS,
     DEPLOYMENTS_DIR,
     ETH_TOKEN_ADDRESS,
-    GATEWAY_CLIENT,
     NETWORK,
     PRIVATE_KEY,
-    STARKNET_NETWORK,
+    RPC_CLIENT,
     STARKSCAN_URL,
 )
 
@@ -50,45 +49,6 @@ def int_to_uint256(value):
     low = value & ((1 << 128) - 1)
     high = value >> 128
     return {"low": low, "high": high}
-
-
-async def create_account():
-    env = os.environ.copy()
-    env[
-        "STARKNET_WALLET"
-    ] = "starkware.starknet.wallets.open_zeppelin.OpenZeppelinAccount"
-    env["STARKNET_NETWORK"] = STARKNET_NETWORK
-    output = subprocess.run(
-        ["starknet", "new_account", "--account", "starksheet"],
-        env=env,
-        capture_output=True,
-    )
-    if output.returncode != 0:
-        raise Exception(output.stderr.decode())
-    account_address = re.search(
-        r"account address: (.*)", (output.stdout.decode() + output.stderr.decode()).lower()  # type: ignore
-    )[1]
-    input(f"Send ETH to {account_address} and press enter to continue")
-    output = subprocess.run(
-        [
-            "starknet",
-            "deploy_account",
-            "--account",
-            "starksheet",
-            "--gateway_url",
-            f"{GATEWAY_CLIENT.net}/gateway",
-            "--feeder_gateway_url",
-            f"{GATEWAY_CLIENT.net}/feeder_gateway",
-        ],
-        env=env,
-        capture_output=True,
-    )
-    if output.returncode != 0:
-        raise Exception(output.stderr.decode())
-    transaction_hash = re.search(
-        r"transaction hash: (.*)", (output.stdout.decode() + output.stderr.decode()).lower()  # type: ignore
-    )[1]
-    await GATEWAY_CLIENT.wait_for_tx(transaction_hash)
 
 
 async def get_account(
@@ -109,12 +69,13 @@ async def get_account(
                     calldata=[],
                 )
                 public_key = (
-                    await GATEWAY_CLIENT.call_contract(call=call, block_hash="pending")
+                    await RPC_CLIENT.call_contract(call=call, block_hash="latest")
                 )[0]
             except Exception as err:
                 if (
-                    json.loads(re.findall("{.*}", err.args[0], re.DOTALL)[0])["code"]
-                    == "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT"
+                    err.message == "Client failed with code 40: Contract error."
+                    or err.message
+                    == "Client failed with code 21: Invalid message selector."
                 ):
                     continue
                 else:
@@ -129,7 +90,7 @@ async def get_account(
 
     return Account(
         address=address,
-        client=GATEWAY_CLIENT,
+        client=RPC_CLIENT,
         chain=CHAIN_ID,
         key_pair=key_pair,
     )
@@ -179,7 +140,7 @@ async def fund_address(address: Union[int, str], amount: float):
     amount = amount * 1e18
     if NETWORK == "devnet":
         response = requests.post(
-            f"{GATEWAY_CLIENT.net}/mint", json={"address": address, "amount": amount}
+            f"http://127.0.0.1:5050/mint", json={"address": address, "amount": amount}
         )
         if response.status_code != 200:
             logger.error(f"Cannot mint token to {address}: {response.text}")
@@ -195,7 +156,7 @@ async def fund_address(address: Union[int, str], amount: float):
         tx = await eth_contract.functions["transfer"].invoke(
             address, int_to_uint256(amount), max_fee=int(1e16)
         )
-        await tx.wait_for_acceptance()
+        await wait_for_transaction(tx.hash)
         logger.info(
             f"{amount / 1e18} ETH sent from {hex(account.address)} to {address}"
         )
@@ -294,7 +255,7 @@ async def declare(contract_name):
     )
     resp = await account.client.declare(transaction=declare_transaction)
     logger.info(f"⏳ Waiting for tx {get_tx_url(resp.transaction_hash)}")
-    await account.client.wait_for_tx(resp.transaction_hash)
+    await wait_for_transaction(resp.transaction_hash)
     logger.info(f"✅ {contract_name} class hash: {hex(resp.class_hash)}")
     return resp.class_hash
 
@@ -312,7 +273,7 @@ async def deploy(contract_name, *args):
         max_fee=int(1e16),
     )
     logger.info(f"⏳ Waiting for tx {get_tx_url(deploy_result.hash)}")
-    await deploy_result.wait_for_acceptance()
+    await wait_for_transaction(deploy_result.hash)
     logger.info(
         f"✅ {contract_name} deployed at: {hex(deploy_result.deployed_contract.address)}"
     )
@@ -359,8 +320,7 @@ async def invoke(contract, *args, **kwargs):
         else invoke_contract(contract, *args, **kwargs)
     )
     logger.info(f"⏳ Waiting for tx {get_tx_url(response.transaction_hash)}")
-    status = (await GATEWAY_CLIENT.wait_for_tx(response.transaction_hash))[1].name
-    logger.info(f"✅ Status: {status}")
+    await wait_for_transaction(response.transaction_hash)
 
 
 async def call_address(contract_address, function_name, *calldata):
@@ -393,9 +353,28 @@ async def call(contract, *args, **kwargs):
     )
 
 
-@functools.wraps(GATEWAY_CLIENT.wait_for_tx)
+# TODO: use RPC_CLIENT when RPC wait_for_tx is fixed, see https://github.com/kkrt-labs/kakarot/issues/586
+@functools.wraps(RPC_CLIENT.wait_for_tx)
 async def wait_for_transaction(*args, **kwargs):
-    return await GATEWAY_CLIENT.wait_for_tx(*args, **kwargs)
+    check_interval = kwargs.get("check_interval", 15 if NETWORK != "devnet" else 2)
+    transaction_hash = args[0] if args else kwargs["tx_hash"]
+    status = TransactionStatus.NOT_RECEIVED
+    while status not in [TransactionStatus.ACCEPTED_ON_L2, TransactionStatus.REJECTED]:
+        logger.info(f"ℹ️  Sleeping for {check_interval}s")
+        time.sleep(check_interval)
+        response = requests.post(
+            RPC_CLIENT.url,
+            json={
+                "jsonrpc": "2.0",
+                "method": f"starknet_getTransactionReceipt",
+                "params": {"transaction_hash": hex(transaction_hash)},
+                "id": 0,
+            },
+        )
+        status = json.loads(response.text).get("result", {}).get("status")
+        if status is not None:
+            status = TransactionStatus(status)
+            logger.info(f"ℹ️  Current status: {status.value}")
 
 
 def get_tx_url(tx_hash: int) -> str:

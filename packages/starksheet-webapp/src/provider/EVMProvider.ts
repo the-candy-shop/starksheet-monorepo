@@ -12,7 +12,7 @@ import {
 } from "../types";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
-import {Call, InvokeFunctionResponse, Sequencer} from 'starknet';
+import { Call } from "starknet";
 import { BigNumberish } from "ethers";
 
 /**
@@ -75,7 +75,7 @@ export class EVMProvider implements ChainProvider {
     if (cachedAbi) {
       console.log(`abi retrieved from cache for address ${address}`);
       return cachedAbi;
-    } {
+    } else {
       console.log(`no cache match for address ${address}, fetching from block explorer`)
     }
 
@@ -191,8 +191,6 @@ export class EVMProvider implements ChainProvider {
    * @inheritDoc
    */
   execute = async (calls: Call[], options: { value: BigNumberish })  => {
-    // const abi = this.getAbi(calls)
-    console.log(calls, options);
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();

@@ -13,7 +13,6 @@ import {
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
 import { Call } from "starknet";
-import { BigNumberish } from "ethers";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.

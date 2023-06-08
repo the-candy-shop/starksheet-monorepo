@@ -4,8 +4,7 @@ import { TransactionReceipt } from "./TransactionReceipt";
 import { ChainType } from "./ChainType";
 import { ChainId } from "./ChainId";
 import { SpreadsheetContract, WorksheetContract } from "../contracts";
-import {Call, InvokeFunctionResponse} from 'starknet';
-import {BigNumberish} from 'ethers';
+import { TransactionResponse } from "./TransactionResponse";
 
 /**
  * Represents a chain provider.
@@ -31,7 +30,7 @@ export interface ChainProvider {
   /**
    * todo: refactor
    */
-  execute(calls: Call[], options?: { value?: BigNumberish }): Promise<InvokeFunctionResponse>;
+  execute(calls: ContractCall[], options?: { value?: number | string }): Promise<TransactionResponse>;
 
   /**
    * Gets the chain id.

@@ -48,7 +48,7 @@ export class EVMProvider implements ChainProvider {
     const contract = new Contract(options.contractAddress, abi, this.provider);
     const functionDefinition = contract.interface.getFunction(options.entrypoint);
 
-    const result = await contract[options.entrypoint](...options.calldata);
+    const result = await contract[options.entrypoint](...(options.calldata || []));
     const resultType = functionDefinition.outputs![0];
 
     // checks if the result is of type number
@@ -190,7 +190,7 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  execute = async (calls: Call[], options: { value: BigNumberish })  => {
+  execute = async (calls: Call[], options: { value: number | string })  => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();

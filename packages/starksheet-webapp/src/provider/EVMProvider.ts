@@ -58,9 +58,7 @@ export class EVMProvider implements ChainProvider {
     if (resultType.type === 'string') {
       const bytes = ethers.utils.toUtf8Bytes(result);
       const hex = ethers.utils.hexlify(bytes);
-      const decimal = ethers.BigNumber.from(hex).toString();
-      console.log(`decimal value of ${result} is ${decimal}`);
-      return decimal;
+      return ethers.BigNumber.from(hex).toString();
     }
 
     throw new Error(`Unhandled return type (${resultType})`);
@@ -191,6 +189,7 @@ export class EVMProvider implements ChainProvider {
    */
   execute = async (calls: Call[], options: { value: number | string })  => {
 
+    // [ { address: spreadsheet, entrypoint: addSheet  }, { address: spreadsheet, entrypoint: setCell } ]
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 

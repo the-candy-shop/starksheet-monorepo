@@ -1,10 +1,9 @@
-import { BigNumberish } from "ethers";
 import { useSnackbar } from "notistack";
 import React, { PropsWithChildren, useMemo, useState } from "react";
-import { Call, InvokeFunctionResponse } from "starknet";
+import { Call } from "starknet";
 import onsheetContractData from "../contract.json";
 import { useChainProvider } from "../hooks";
-import { StarknetProvider } from "../provider/StarknetProvider";
+import { TransactionResponse } from "../types";
 
 export const AccountContext = React.createContext<{
   accountAddress: string;
@@ -12,8 +11,8 @@ export const AccountContext = React.createContext<{
   connect: () => Promise<void>;
   execute: (
     calls: Call[],
-    options?: { value?: BigNumberish }
-  ) => Promise<InvokeFunctionResponse>;
+    options?: { value?: number | string }
+  ) => Promise<TransactionResponse>;
   proof: string[];
 }>({
   accountAddress: "",
@@ -35,7 +34,7 @@ export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
     [accountAddress]
   );
 
-  const provider = useChainProvider() as StarknetProvider;
+  const provider = useChainProvider();
   const execute = provider.execute;
 
   const connect = () => provider.login()

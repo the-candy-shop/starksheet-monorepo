@@ -1,7 +1,15 @@
-import { Abi, RpcProvider, SequencerProvider, number, Call, InvokeFunctionResponse, stark } from "starknet";
+import { Abi, RpcProvider, SequencerProvider, number, Call, stark } from "starknet";
 import { RC_BOUND } from "../utils/constants";
 import { hex2str, normalizeHexString } from "../utils/hexUtils";
-import { ChainConfig, ChainId, ChainProvider, ChainType, ContractCall, WorksheetContract } from "../types";
+import {
+  ChainConfig,
+  ChainId,
+  ChainProvider,
+  ChainType,
+  ContractCall,
+  TransactionResponse,
+  WorksheetContract
+} from '../types';
 import { StarknetSpreadsheetContract, StarknetWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
 import { connect as getStarknet, disconnect } from "get-starknet";
@@ -196,7 +204,7 @@ export class StarknetProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  async execute(calls: Call[], options?: { value?: BigNumberish }): Promise<InvokeFunctionResponse> {
+  async execute(calls: Call[], options?: { value?: BigNumberish }): Promise<TransactionResponse> {
     const starknetWindow = await getStarknet({ modalMode: "neverAsk" });
     if (starknetWindow === null) {
       throw new Error("Account is not connected");

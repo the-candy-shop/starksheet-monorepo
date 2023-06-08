@@ -84,7 +84,7 @@ export class EVMProvider implements ChainProvider {
       module: "contract",
     });
     // build the query url
-    const url = new URL("https://api-goerli.etherscan.io/api");
+    const url = new URL(this.config.explorerApiUrl!);
     url.search = params.toString();
 
     const rawAbi = await fetch(url)
@@ -188,8 +188,6 @@ export class EVMProvider implements ChainProvider {
    * @inheritDoc
    */
   execute = async (calls: Call[], options: { value: number | string })  => {
-
-    // [ { address: spreadsheet, entrypoint: addSheet  }, { address: spreadsheet, entrypoint: setCell } ]
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 

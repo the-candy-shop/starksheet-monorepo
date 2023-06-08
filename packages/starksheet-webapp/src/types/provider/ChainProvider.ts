@@ -4,6 +4,7 @@ import { TransactionReceipt } from "./TransactionReceipt";
 import { ChainType } from "./ChainType";
 import { ChainId } from "./ChainId";
 import { SpreadsheetContract, WorksheetContract } from "../contracts";
+import { TransactionResponse } from "./TransactionResponse";
 
 /**
  * Represents a chain provider.
@@ -19,12 +20,17 @@ export interface ChainProvider {
   /**
    * Calls a contract entry point with some optional data.
    */
-  callContract<T>(options: ContractCall): Promise<T>;
+  callContract(options: ContractCall): Promise<string>;
 
   /**
    * Waits for the transaction matching the given hash to complete.
    */
   waitForTransaction(hash: string): Promise<void>;
+
+  /**
+   * todo: refactor
+   */
+  execute(calls: ContractCall[], options?: { value?: number | string }): Promise<TransactionResponse>;
 
   /**
    * Gets the chain id.
@@ -60,4 +66,9 @@ export interface ChainProvider {
    * Gets the address (url) of the nft marketplace for the current chain.
    */
   getNftMarketplaceAddress(contractAddress: string): string;
+
+  /**
+   * Connects the user with the given chain provider.
+   */
+  login(): Promise<string>;
 }

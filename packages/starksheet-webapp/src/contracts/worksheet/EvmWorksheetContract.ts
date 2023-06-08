@@ -3,6 +3,7 @@ import { Contract } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { ABI, CellData, CellRendered, WorksheetContract } from "../../types";
 import { N_COL, N_ROW } from "../../config";
+import { ethersHexStringToBN } from "../../utils/hexUtils";
 
 export class EvmWorksheetContract implements WorksheetContract {
   private contract: Contract;
@@ -20,8 +21,8 @@ export class EvmWorksheetContract implements WorksheetContract {
   async getCell(tokenId: number): Promise<CellData> {
     const [contractAddress, value, data] = await this.contract.getCell(tokenId);
     return {
-      contractAddress,
-      selector: value,
+      contractAddress: ethersHexStringToBN(contractAddress),
+      selector: ethersHexStringToBN(value),
       calldata: data,
     };
   }

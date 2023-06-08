@@ -1,17 +1,26 @@
-import { Abi, RpcProvider, SequencerProvider, number } from "starknet";
+import { Abi, RpcProvider, SequencerProvider, number, Call, stark } from "starknet";
 import { RC_BOUND } from "../utils/constants";
-import { hex2str } from "../utils/hexUtils";
-import { ChainConfig, ChainId, ChainProvider, ChainType, ContractCall } from "../types";
-import { StarknetSpreadsheetContract } from "../contracts/spreadsheet";
+import { hex2str, normalizeHexString } from "../utils/hexUtils";
+import {
+  ChainConfig,
+  ChainId,
+  ChainProvider,
+  ChainType,
+  ContractCall,
+  TransactionResponse,
+  WorksheetContract
+} from '../types';
+import { StarknetSpreadsheetContract, StarknetWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
-import { StarknetWorksheetContract } from '../contracts/worksheet';
-import { WorksheetContract } from '../types/contracts';
+import { connect as getStarknet, disconnect } from "get-starknet";
+import { chainId } from "./index";
+import { BigNumberish } from "ethers";
 
 export class StarknetProvider implements ChainProvider {
-  private rpcProvider: RpcProvider;
+  private readonly rpcProvider: RpcProvider;
+  private readonly spreadsheetContract: StarknetSpreadsheetContract;
   private sequencerProvider: SequencerProvider;
   private chainId: string;
-  private spreadsheetContract: StarknetSpreadsheetContract;
 
   /**
    * Constructs a StarknetProvider.
@@ -152,8 +161,76 @@ export class StarknetProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  async callContract<T>(call: ContractCall): Promise<T> {
+  async callContract(call: ContractCall): Promise<string> {
     const response = await this.rpcProvider.callContract(call, "latest");
-    return response.result[0] as T;
+    return response.result[0];
+  }
+
+  /**
+   * @inheritDoc
+   */
+  async login(): Promise<string> {
+    let starknetWindow = await getStarknet({ modalMode: "neverAsk" });
+
+    if (starknetWindow?.isConnected) {
+      await disconnect({ clearLastWallet: true });
+    }
+
+    starknetWindow = await getStarknet({ modalMode: "canAsk" });
+    if (starknetWindow === null) {
+      throw new Error("Cannot find a starknet window, is ArgentX or Braavos installed?");
+    }
+
+    if (!starknetWindow.isConnected) {
+      throw new Error("Login failed");
+    }
+
+    if (chainId !== hex2str(starknetWindow.provider.chainId)) {
+      if (starknetWindow.id === "argentX") {
+        await starknetWindow.request({
+          type: "wallet_switchStarknetChain",
+          params: { chainId },
+        });
+      } else {
+        throw new Error(`Wrong network detected: "${hex2str(
+          starknetWindow.provider.chainId
+        )}" instead of "${chainId}"`)
+      }
+    }
+
+    return (normalizeHexString(starknetWindow.account.address));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  async execute(calls: Call[], options?: { value?: BigNumberish }): Promise<TransactionResponse> {
+    const starknetWindow = await getStarknet({ modalMode: "neverAsk" });
+    if (starknetWindow === null) {
+      throw new Error("Account is not connected");
+    }
+    if (!starknetWindow.isConnected) {
+      throw new Error("Account is not connected");
+    }
+    if (options?.value) {
+      calls = [
+        {
+          contractAddress:
+            "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
+          entrypoint: "approve",
+          calldata: stark.compileCalldata({
+            spender: calls[0].contractAddress,
+            amount: {
+              type: "struct",
+              low: number.toBN(options.value.toString()),
+              high: 0,
+            },
+          }),
+        },
+        ...calls,
+      ];
+    }
+
+    return await starknetWindow.account.execute(calls);
   }
 }

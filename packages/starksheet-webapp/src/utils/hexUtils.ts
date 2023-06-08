@@ -1,5 +1,6 @@
 import BN from "bn.js";
 import { number } from "starknet";
+import { BigNumber } from "ethers";
 
 export function hex2str(hex: string): string {
   return (hex.match(/[a-f0-9]{2}/g) || [])
@@ -21,3 +22,5 @@ export const normalizeHexString = (address: string) =>
   !!address ? "0x" + number.toBN(address).toString(16) : "";
 
 export const bn2hex = (hex: BN): string => "0x" + hex.toString(16);
+
+export const ethersHexStringToBN = (hexstring: string) => new BN(BigNumber.from(hexstring).toString());

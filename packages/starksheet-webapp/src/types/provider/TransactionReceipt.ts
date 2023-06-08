@@ -4,4 +4,7 @@
  * This type provides add additional abstraction layer with respect to chain base representations to allow cross-chain
  * support.
  */
-export type TransactionReceipt = any;
+export type TransactionReceipt = {
+  status: any;
+  transaction_hash: string;
+};

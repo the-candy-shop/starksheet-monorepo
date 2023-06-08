@@ -105,7 +105,7 @@ export const CellValuesContextProvider = ({
 
     const value =
       cell.abi.stateMutability === "view"
-        ? (await chainProvider.callContract<string>(call))
+        ? (await chainProvider.callContract(call))
         : NaN;
 
     return number.toBN(value);

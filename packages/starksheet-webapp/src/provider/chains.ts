@@ -10,6 +10,7 @@ export const chains: ChainConfig[] = [
     chainId: ChainId.ETHEREUM_MAINNET,
     chainType: ChainType.EVM,
     explorerBaseUrl: 'https://etherscan.io/address/',
+    explorerApiUrl: 'https://api.etherscan.io/api',
     nftBaseUrl: 'https://opensea.io/fr/assets/ethereum/',
     addresses: {
       spreadsheet: process.env.REACT_APP_SPREADSHEET_ADDRESS!,
@@ -19,6 +20,7 @@ export const chains: ChainConfig[] = [
     chainId: ChainId.ETHEREUM_TESTNET,
     chainType: ChainType.EVM,
     explorerBaseUrl: 'https://goerli.etherscan.io/address/',
+    explorerApiUrl: 'https://api-goerli.etherscan.io/api',
     nftBaseUrl: 'https://testnets.opensea.io/assets/goerli/',
     addresses: {
       spreadsheet: process.env.REACT_APP_SPREADSHEET_ADDRESS!,

@@ -86,7 +86,7 @@ func register{
     let (tx_info) = get_tx_info();
     // Caller should be a Sheet, so using ISheet on caller is ok
     // Account caller should be sheet owner
-    let (sheet_owner) = ISheet.getOwner(caller);
+    let (sheet_owner) = ISheet.owner(caller);
     assert sheet_owner = tx_info.account_contract_address;
 
     let (local domain_full) = alloc();

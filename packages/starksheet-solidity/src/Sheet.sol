@@ -38,10 +38,10 @@ contract Sheet is Ownable, ERC721 {
 
     function setCell(uint256 id, address contractAddress, bytes32 value, bytes calldata data) public {
         if (_ownerOf[id] == address(0)) {
-            _mint(msg.sender, id);
+            _mint(tx.origin, id);
         } else {
-            if (_ownerOf[id] != msg.sender) {
-                revert SetCellIsNotOwnerError(_ownerOf[id], msg.sender);
+            if (_ownerOf[id] != tx.origin) {
+                revert SetCellIsNotOwnerError(_ownerOf[id], tx.origin);
             }
         }
 

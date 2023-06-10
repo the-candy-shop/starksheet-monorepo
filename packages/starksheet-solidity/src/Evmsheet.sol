@@ -35,7 +35,7 @@ contract Evmsheet is Ownable {
         ISheet(sheetAddress).setRenderer(defaultRenderer);
         ISheet(sheetAddress).setName(name);
         ISheet(sheetAddress).setSymbol(symbol);
-        ISheet(sheetAddress).transferOwnership(msg.sender);
+        ISheet(sheetAddress).transferOwnership(tx.origin);
         sheets.push(sheetAddress);
     }
 

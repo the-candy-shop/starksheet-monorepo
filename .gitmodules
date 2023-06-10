@@ -8,3 +8,6 @@
 [submodule "packages/starksheet-solidity/lib/eth-projects-monorepo"]
 	path = packages/starksheet-solidity/lib/eth-projects-monorepo
 	url = https://github.com/ClementWalter/eth-projects-monorepo
+[submodule "packages/starksheet-solidity/lib/safe-contracts"]
+	path = packages/starksheet-solidity/lib/safe-contracts
+	url = https://github.com/safe-global/safe-contracts

@@ -15,9 +15,8 @@ struct CellData {
 struct CellRendered {
     uint256 id;
     address owner;
-    uint256 value;
+    bytes value;
 }
-
 
 error SetCellIsNotOwnerError(address owner, address caller);
 error NonExistantTokenError(uint256 id);
@@ -31,7 +30,7 @@ contract Sheet is Ownable, ERC721 {
 
     uint256 public constant DEFAULT_VALUE = 2 ** 128 - 1;
     address public constant RC_BOUND = address(2 ** 128);
-    uint constant SHOULD_RENDER_FLAG = 2;
+    uint256 constant SHOULD_RENDER_FLAG = 2;
 
     address renderer;
 
@@ -54,32 +53,47 @@ contract Sheet is Ownable, ERC721 {
     }
 
     function renderCell(uint256 id) public view returns (CellRendered memory) {
-        uint256 value = _renderCell(id, true);
+        bytes memory value = _renderCell(id);
         return CellRendered(id, _ownerOf[id], value);
     }
 
-    function _renderCell(uint256 value, bool valueIsToken) internal view returns (uint256) {
-        if (valueIsToken == false) {
-            return value;
+    function _isConstant(CellData memory cell) internal pure returns (bool) {
+        return cell.contractAddress == RC_BOUND;
+    }
+
+    function _contractAddressIsTokenId(address contractAddress) internal pure returns (bool) {
+        return uint160(contractAddress) < uint160(RC_BOUND);
+    }
+
+    function _renderCell(uint256 value) internal view returns (bytes memory) {
+        CellData memory cell = cells[value];
+        if (_isConstant(cell)) {
+            return bytes.concat(cell.value);
         }
 
-        if (cells[value].contractAddress == RC_BOUND) {
-            return uint256(cells[value].value);
+        address renderedContractAddress;
+        if (_contractAddressIsTokenId(cell.contractAddress)) {
+            bytes memory renderedContractAddressResult = _renderCell(uint256(uint160(cell.contractAddress)));
+            renderedContractAddress = address(uint160(renderedContractAddressResult.toUint256(0)));
+        } else {
+            renderedContractAddress = cell.contractAddress;
         }
-    
-        bool contractAddressIsTokenId = uint160(cells[value].contractAddress) < uint160(RC_BOUND);
-        address renderedContractAddress = address(uint160(_renderCell(uint256(uint160(cells[value].contractAddress)), contractAddressIsTokenId)));
 
-        uint256[] memory callData = abi.decode(cells[value].data, (uint256[]));
+        uint256[] memory callData = abi.decode(cell.data, (uint256[]));
 
         bytes memory renderedCallData;
         for (uint256 i = 0; i < callData.length; i++) {
             bool isToken = callData[i] % 2 == 0;
-            renderedCallData = bytes.concat(renderedCallData, bytes32(_renderCell(callData[i], isToken)));
+            uint256 arg = callData[i] >> 1;
+            if (isToken) {
+                renderedCallData = bytes.concat(renderedCallData, bytes32(_renderCell(arg)));
+            } else {
+                renderedCallData = bytes.concat(renderedCallData, bytes32(arg));
+            }
         }
-        bytes4 selector = bytes4(cells[value].value);
+        bytes4 selector = bytes4(cell.value);
         (, bytes memory result) = renderedContractAddress.staticcall(abi.encodeWithSelector(selector, renderedCallData));
-        return result.toUint256(0);
+        return result;
     }
 
     constructor() ERC721("Sheet 0", "SHT0") {}
@@ -103,8 +117,7 @@ contract Sheet is Ownable, ERC721 {
         if (owner == address(0)) {
             revert NonExistantTokenError(id);
         }
-        uint256 value = _renderCell(id, true);
+        bytes memory value = _renderCell(id);
         return ICellRenderer(renderer).tokenURI(id, value, name);
     }
-
 }

@@ -12,7 +12,9 @@ import {
 } from "../types";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
-import { Call } from "starknet";
+import { Call, RawCalldata } from "starknet";
+import {TransactionType, encodeSingle, encodeMulti, CallContractTransactionInput} from "ethers-multisend";
+import {evmWorksheetAbi} from "../contracts"
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -190,30 +192,82 @@ export class EVMProvider implements ChainProvider {
   execute = async (calls: Call[], options: { value: number | string })  => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
+    const MULTI_SEND_CONTRACT_ADDRESS = process.env.MULTI_SEND_CONTRACT_ADDRESS || "0x860d2F7C16803004916f7F59F8e84116366457d9";
 
+    const addSheet = async () => {
+      const abi = await this.getAbi(calls[0].contractAddress);
+      const contract = new Contract(calls[0].contractAddress, abi, signer);
 
-    // Callers of the execute function assume the chain supports multi-call, which EVM does not natively.
-    // The following is a hack: we wait for every transaction before resolving, then returning one of the transactions.
-    // This works because callers do not really care about the transaction response, only its status and completion
-    const receipts = await Promise.all(calls.map(async (call) => {
-      const abi = await this.getAbi(call.contractAddress);
-      const contract = new Contract(call.contractAddress, abi, signer);
-
-      const response: ethers.providers.TransactionResponse = await contract[call.entrypoint](...(call.calldata || []), {
+      const response: ethers.providers.TransactionResponse = await contract[calls[0].entrypoint](...(calls[0].calldata || []), {
         value: options.value,
       });
       return await response.wait();
-      }));
+    };
 
-    const firstToFail = receipts.find((receipt) => receipt.status !== 1)
-    if (firstToFail) {
-      return {
-        transaction_hash: firstToFail.transactionHash,
+    const addSheetResponse = (await addSheet());
+
+    const sheetContractAddress = addSheetResponse.logs[0].address;
+  
+    calls.shift();
+
+    const sheetAbi = evmWorksheetAbi;
+    // todo: implement cleanly
+
+    const sheetContract = new Contract(sheetContractAddress, sheetAbi, signer);
+
+    if(calls.length > 0) {
+      const encodeTransactions = await Promise.all(calls.map(async (call, index) => {
+        const fragment = sheetContract.interface.fragments.find((fragment) => fragment.name === call.entrypoint);
+
+        if (!fragment) {
+          throw new Error(`Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`);
+        }
+        const signature = fragment.format();
+    
+        const inputValues= {
+          0: ""
+        };
+        (call.calldata as RawCalldata).forEach((value, index) => {
+          inputValues[index as keyof typeof inputValues] = value as string;
+        });
+        
+        const transactionInput : CallContractTransactionInput = {
+          type: TransactionType.callContract,
+          id: index.toString(),
+          to: sheetContractAddress,
+          value: "0",
+          abi: sheetAbi as any,
+          functionSignature: signature,
+          inputValues
+        }
+    
+        const metaTransaction = encodeSingle(transactionInput);
+        
+        return metaTransaction;
+      }));
+      
+      const transactions = encodeMulti(encodeTransactions, MULTI_SEND_CONTRACT_ADDRESS);
+      const multiSendTx = ethers.utils.solidityPack(
+        ["uint8", "address", "uint256", "uint256", "bytes"],
+        [0, transactions.to, 0, transactions.data.length, transactions.data]
+      );
+
+      const receipt = async () => {
+        const abi = await this.getAbi(MULTI_SEND_CONTRACT_ADDRESS);
+        const contract = new Contract(MULTI_SEND_CONTRACT_ADDRESS, abi, signer);
+        const response: ethers.providers.TransactionResponse = await contract.multiSend(multiSendTx);
+        return await response.wait();
       };
+
+    const transactionResponse = await receipt();
+
+      return {
+        transaction_hash: transactionResponse.transactionHash
+      }
     }
 
     return {
-      transaction_hash: receipts[0].transactionHash,
+      transaction_hash: addSheetResponse.transactionHash
     }
   }
 

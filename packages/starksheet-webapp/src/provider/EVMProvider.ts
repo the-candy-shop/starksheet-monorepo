@@ -216,7 +216,7 @@ export class EVMProvider implements ChainProvider {
     const sheetContract = new Contract(sheetContractAddress, sheetAbi, signer);
 
     if(calls.length > 0) {
-      const encodeTransactions = await Promise.all(calls.map(async (call, index) => {
+      const encodeTransactions = calls.map((call, index) => {
         const fragment = sheetContract.interface.fragments.find((fragment) => fragment.name === call.entrypoint);
 
         if (!fragment) {
@@ -244,7 +244,7 @@ export class EVMProvider implements ChainProvider {
         const metaTransaction = encodeSingle(transactionInput);
         
         return metaTransaction;
-      }));
+      });
       
       const transactions = encodeMulti(encodeTransactions, MULTISEND_CONTRACT_ADDRESS);
       const multiSendTx = ethers.utils.solidityPack(

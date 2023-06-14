@@ -65,7 +65,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    */
   setCellTxBuilder(cell: Cell & { tokenId: number; sheetAddress: string }): ContractCall {
     return {
-      contractAddress: this.address,
+      contractAddress: cell.sheetAddress,
       entrypoint: "setCell",
       calldata: [cell.id, cell.contractAddress.toString(), cell.selector, cell.calldata],
     };

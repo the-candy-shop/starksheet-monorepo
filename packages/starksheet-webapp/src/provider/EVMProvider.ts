@@ -194,81 +194,73 @@ export class EVMProvider implements ChainProvider {
     const signer = provider.getSigner();
     const MULTISEND_CONTRACT_ADDRESS = process.env.REACT_APP_MULTISEND_ADDRESS || "";
 
-    const addSheet = async () => {
-      const abi = await this.getAbi(calls[0].contractAddress);
-      const contract = new Contract(calls[0].contractAddress, abi, signer);
 
-      const response: ethers.providers.TransactionResponse = await contract[calls[0].entrypoint](...(calls[0].calldata || []), {
-        value: options.value,
+    const encodeTransactions = await Promise.all(calls.map(async (call, index) => {
+      let abi = await this.getAbi(call.contractAddress);
+      if(abi.length === 0) {
+        abi = evmWorksheetAbi;
+      }
+      // todo: implement cleanly
+
+      const contract = new Contract(call.contractAddress, abi, signer);
+
+      const fragment = contract.interface.fragments.find((fragment) => fragment.name === call.entrypoint);
+
+      if (!fragment) {
+        throw new Error(`Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`);
+      }
+      const signature = fragment.format();
+  
+      const inputValues= {
+        0: ""
+      };
+      (call.calldata as RawCalldata).forEach((value, index) => {
+        inputValues[index as keyof typeof inputValues] = value as string;
+      });
+      
+      const transactionInput : CallContractTransactionInput = {
+        type: TransactionType.callContract,
+        id: index.toString(),
+        to: call.contractAddress,
+        value: call.entrypoint === "addSheet" ? options.value.toString() : "0",
+        abi: abi,
+        functionSignature: signature,
+        inputValues
+      }
+  
+      const metaTransaction = encodeSingle(transactionInput);
+      
+      return metaTransaction;
+    }));
+    
+    const transactions = encodeMulti(encodeTransactions, MULTISEND_CONTRACT_ADDRESS);
+    const multiSendTx = ethers.utils.solidityPack(
+      ["uint8", "address", "uint256", "uint256", "bytes"],
+      [0, transactions.to, 0, transactions.data.length, transactions.data]
+    );
+
+    let isPayable = false;
+    for(let i = 0; i < calls.length; i++) {
+      if(calls[i].entrypoint === "addSheet") {
+        isPayable = true;
+      } 
+    }
+
+    const receipt = async () => {
+      const abi = await this.getAbi(MULTISEND_CONTRACT_ADDRESS);
+      const contract = new Contract(MULTISEND_CONTRACT_ADDRESS, abi, signer);
+      const response: ethers.providers.TransactionResponse = await contract.multiSend(multiSendTx, {
+        value: isPayable ? options.value : 0
       });
       return await response.wait();
     };
 
-    const addSheetResponse = (await addSheet());
-
-    const sheetContractAddress = addSheetResponse.logs[0].address;
-  
-    calls.shift();
-
-    const sheetAbi = evmWorksheetAbi;
-    // todo: implement cleanly
-
-    const sheetContract = new Contract(sheetContractAddress, sheetAbi, signer);
-
-    if(calls.length > 0) {
-      const encodeTransactions = calls.map((call, index) => {
-        const fragment = sheetContract.interface.fragments.find((fragment) => fragment.name === call.entrypoint);
-
-        if (!fragment) {
-          throw new Error(`Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`);
-        }
-        const signature = fragment.format();
-    
-        const inputValues= {
-          0: ""
-        };
-        (call.calldata as RawCalldata).forEach((value, index) => {
-          inputValues[index as keyof typeof inputValues] = value as string;
-        });
-        
-        const transactionInput : CallContractTransactionInput = {
-          type: TransactionType.callContract,
-          id: index.toString(),
-          to: sheetContractAddress,
-          value: "0",
-          abi: sheetAbi as any,
-          functionSignature: signature,
-          inputValues
-        }
-    
-        const metaTransaction = encodeSingle(transactionInput);
-        
-        return metaTransaction;
-      });
-      
-      const transactions = encodeMulti(encodeTransactions, MULTISEND_CONTRACT_ADDRESS);
-      const multiSendTx = ethers.utils.solidityPack(
-        ["uint8", "address", "uint256", "uint256", "bytes"],
-        [0, transactions.to, 0, transactions.data.length, transactions.data]
-      );
-
-      const receipt = async () => {
-        const abi = await this.getAbi(MULTISEND_CONTRACT_ADDRESS);
-        const contract = new Contract(MULTISEND_CONTRACT_ADDRESS, abi, signer);
-        const response: ethers.providers.TransactionResponse = await contract.multiSend(multiSendTx);
-        return await response.wait();
-      };
-
     const transactionResponse = await receipt();
 
-      return {
-        transaction_hash: transactionResponse.transactionHash
-      }
-    }
-
     return {
-      transaction_hash: addSheetResponse.transactionHash
+      transaction_hash: transactionResponse.transactionHash
     }
+    
   }
 
   async login(): Promise<string> {

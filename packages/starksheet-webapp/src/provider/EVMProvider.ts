@@ -192,7 +192,7 @@ export class EVMProvider implements ChainProvider {
   execute = async (calls: Call[], options: { value: number | string })  => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const MULTI_SEND_CONTRACT_ADDRESS = process.env.MULTI_SEND_CONTRACT_ADDRESS || "0x860d2F7C16803004916f7F59F8e84116366457d9";
+    const MULTISEND_CONTRACT_ADDRESS = process.env.REACT_APP_MULTISEND_ADDRESS || "";
 
     const addSheet = async () => {
       const abi = await this.getAbi(calls[0].contractAddress);
@@ -246,15 +246,15 @@ export class EVMProvider implements ChainProvider {
         return metaTransaction;
       }));
       
-      const transactions = encodeMulti(encodeTransactions, MULTI_SEND_CONTRACT_ADDRESS);
+      const transactions = encodeMulti(encodeTransactions, MULTISEND_CONTRACT_ADDRESS);
       const multiSendTx = ethers.utils.solidityPack(
         ["uint8", "address", "uint256", "uint256", "bytes"],
         [0, transactions.to, 0, transactions.data.length, transactions.data]
       );
 
       const receipt = async () => {
-        const abi = await this.getAbi(MULTI_SEND_CONTRACT_ADDRESS);
-        const contract = new Contract(MULTI_SEND_CONTRACT_ADDRESS, abi, signer);
+        const abi = await this.getAbi(MULTISEND_CONTRACT_ADDRESS);
+        const contract = new Contract(MULTISEND_CONTRACT_ADDRESS, abi, signer);
         const response: ethers.providers.TransactionResponse = await contract.multiSend(multiSendTx);
         return await response.wait();
       };

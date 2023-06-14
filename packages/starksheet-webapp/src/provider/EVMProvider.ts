@@ -13,8 +13,8 @@ import {
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
 import { Call, RawCalldata } from "starknet";
-import {TransactionType, encodeSingle, encodeMulti, CallContractTransactionInput} from "ethers-multisend";
-import {evmWorksheetAbi} from "../contracts"
+import { TransactionType, encodeSingle, encodeMulti, CallContractTransactionInput } from "ethers-multisend";
+import { evmWorksheetAbi } from "../contracts";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -196,10 +196,12 @@ export class EVMProvider implements ChainProvider {
 
     const encodeTransactions = await Promise.all(calls.map(async (call, index) => {
       let abi = await this.getAbi(call.contractAddress);
+
+      // Manually setting the ABI for evm worksheet contract
+      // we get an empty array for evm worksheet contract abi because evm worksheet contract source code not verified
       if(abi.length === 0) {
         abi = evmWorksheetAbi;
       }
-      // todo: implement cleanly
 
       const contract = new Contract(call.contractAddress, abi, signer);
 
@@ -210,13 +212,11 @@ export class EVMProvider implements ChainProvider {
       }
       const signature = fragment.format();
   
-      const inputValues= {
-        0: ""
-      };
-      (call.calldata as RawCalldata).forEach((value, index) => {
-        inputValues[index as keyof typeof inputValues] = value as string;
-      });
-      
+      const inputValues = (call.calldata as RawCalldata).reduce((acc, value, index) => {
+        acc[index] = value as string;
+        return acc;
+      }, {} as { [key: number]: string });
+   
       const transactionInput : CallContractTransactionInput = {
         type: TransactionType.callContract,
         id: index.toString(),
@@ -238,19 +238,11 @@ export class EVMProvider implements ChainProvider {
       [0, transactions.to, 0, transactions.data.length, transactions.data]
     );
 
-    let isPayable = false;
-    for(let i = 0; i < calls.length; i++) {
-      if(calls[i].entrypoint === "addSheet") {
-        isPayable = true;
-        break;
-      } 
-    }
-
     const receipt = async () => {
       const abi = await this.getAbi(MULTISEND_CONTRACT_ADDRESS);
       const contract = new Contract(MULTISEND_CONTRACT_ADDRESS, abi, signer);
       const response: ethers.providers.TransactionResponse = await contract.multiSend(multiSendTx, {
-        value: isPayable ? options.value : 0
+        value: options ? options.value : 0
       });
       return await response.wait();
     };

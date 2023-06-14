@@ -194,7 +194,6 @@ export class EVMProvider implements ChainProvider {
     const signer = provider.getSigner();
     const MULTISEND_CONTRACT_ADDRESS = process.env.REACT_APP_MULTISEND_ADDRESS || "";
 
-
     const encodeTransactions = await Promise.all(calls.map(async (call, index) => {
       let abi = await this.getAbi(call.contractAddress);
       if(abi.length === 0) {
@@ -243,6 +242,7 @@ export class EVMProvider implements ChainProvider {
     for(let i = 0; i < calls.length; i++) {
       if(calls[i].entrypoint === "addSheet") {
         isPayable = true;
+        break;
       } 
     }
 

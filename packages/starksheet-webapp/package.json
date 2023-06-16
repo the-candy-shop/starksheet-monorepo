@@ -17,6 +17,7 @@
     "@web3-react/injected-connector": "^6.0.7",
     "bn.js": "^5.2.1",
     "ethers": "5.7.2",
+    "ethers-multisend": "^2.4.0",
     "expr-eval": "^2.0.2",
     "get-starknet": "^2.0.0",
     "notistack": "^2.0.5",

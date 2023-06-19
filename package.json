@@ -3,5 +3,8 @@
   "private": true,
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "dependencies": {
+    "@ethersproject/bytes": "^5.7.0"
   }
 }

@@ -213,8 +213,8 @@ export class EVMProvider implements ChainProvider {
       }
       const signature = fragment.format();
 
-      const iface = new ethers.utils.Interface(abi);
-      const inputNames = iface.functions[signature].inputs.map(
+      const contractInterface = new ethers.utils.Interface(abi);
+      const inputNames = contractInterface.functions[signature].inputs.map(
         (input) => input.name
       );
       const inputValues = (call.calldata as RawCalldata).reduce((acc, value, index) => {

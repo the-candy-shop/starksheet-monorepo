@@ -23,7 +23,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   addSheetTxBuilder(name: string, symbol: string): ContractCall {
-    const decodedName= hex2str(name);
+    const decodedName = hex2str(name);
     const decodedSymbol = hex2str(symbol);
 
     return {

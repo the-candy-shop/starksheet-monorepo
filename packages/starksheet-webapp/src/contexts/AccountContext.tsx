@@ -1,7 +1,6 @@
 import { useSnackbar } from "notistack";
 import React, { PropsWithChildren, useMemo, useState } from "react";
 import { Call } from "starknet";
-import onsheetContractData from "../contract.json";
 import { useChainProvider } from "../hooks";
 import { TransactionResponse } from "../types";
 
@@ -26,24 +25,20 @@ export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [accountAddress, setAccountAddress] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
 
-  const proof = useMemo(
-    () =>
-      (onsheetContractData.allowlist as { [address: string]: string[] })[
-        accountAddress
-      ] || [],
-    [accountAddress]
-  );
+  const proof = useMemo(() => [], []);
 
   const provider = useChainProvider();
   const execute = provider.execute;
 
-  const connect = () => provider.login()
-    .then((address) => {
-      setAccountAddress(address);
-    })
-    .catch((error) => {
-      enqueueSnackbar(error.toString(), { variant: "warning" })
-    });
+  const connect = () =>
+    provider
+      .login()
+      .then((address) => {
+        setAccountAddress(address);
+      })
+      .catch((error) => {
+        enqueueSnackbar(error.toString(), { variant: "warning" });
+      });
 
   return (
     <AccountContext.Provider

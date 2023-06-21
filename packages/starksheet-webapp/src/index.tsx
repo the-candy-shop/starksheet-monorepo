@@ -1,5 +1,4 @@
 import { SnackbarProvider } from "notistack";
-import React from "react";
 import ReactDOM from "react-dom/client";
 import {
   Navigate,
@@ -15,7 +14,6 @@ import { CellValuesContextProvider } from "./contexts/CellValuesContext";
 import { ChainProviderContextProvider } from "./contexts/ChainProviderContext";
 import { OnsheetContextProvider } from "./contexts/OnsheetContext";
 import { TransactionsContextProvider } from "./contexts/TransactionsContext";
-import onsheetContractData from "./contract.json";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -37,9 +35,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(
-  <RouterProvider router={router} />
-);
+root.render(<RouterProvider router={router} />);
 
 function Root() {
   return (
@@ -47,12 +43,8 @@ function Root() {
       <SnackbarProvider maxSnack={3}>
         <AppStatusContextProvider>
           <AccountContextProvider>
-            <AbisContextProvider
-              initialContractAbis={onsheetContractData.contractAbis}
-            >
-              <OnsheetContextProvider
-                onsheetAddress={onsheetContractData.address}
-              >
+            <AbisContextProvider initialContractAbis={{}}>
+              <OnsheetContextProvider>
                 <CellValuesContextProvider>
                   <TransactionsContextProvider>
                     <App />

@@ -1,0 +1,26 @@
+{
+  "BasicCellRenderer": {
+    "address": "0x5487ee25719502321cd77b3976d5a63aad99f741b38b5ebc6827615e33cddaf",
+    "tx": "0x6bf8fea333ea1258af851a46286ba016f90b4ced86cbddcd757eb9a5befb51",
+    "artifact": "build/BasicCellRenderer.json",
+    "alias": "basic_cell_renderer"
+  },
+  "math": {
+    "address": "0x25451ff81dafd80b4b1329c5f199b700f1f5153e033e4d48486a0339ffe0e43",
+    "tx": "0x18663de690fadb2898659df32bdfbc8c8399d8923315201ae6aa2616b745dd8",
+    "artifact": "build/math.json",
+    "alias": "math"
+  },
+  "execute": {
+    "address": "0x294228a954b0b404019ae1d1318449451cd5a7634323c17e0c6c051beca4d87",
+    "tx": "0x79226036b2d7102c3c8633ccc9100c400f17ff2c83fb819187a415f15f06c81",
+    "artifact": "build/execute.json",
+    "alias": "execute"
+  },
+  "Starksheet": {
+    "address": "0x7608ff1eca1c746a13730c094a83cac7a4aaa55cf30749adc3d063019cd880",
+    "tx": "0x1ed43ff0ea72a4b040e30b3f47cc7a7eb9809c56a895ff7b8d578174946ab99",
+    "artifact": "build/Starksheet.json",
+    "alias": "starksheet"
+  }
+}

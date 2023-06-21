@@ -27,3 +27,4 @@ src/contract.json
 .env
 tmp
 devnet.pkl
+src/contracts/contractData.json

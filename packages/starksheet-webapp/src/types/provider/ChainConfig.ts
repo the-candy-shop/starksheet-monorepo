@@ -7,8 +7,10 @@ export interface ChainConfig {
   explorerBaseUrl: string;
   explorerApiUrl?: string;
   nftBaseUrl: string;
-  sequencerUrl?: string;
+  rpcUrl: string;
   addresses: {
     spreadsheet: string;
+    multisend?: string;
+    math: string;
   };
 }

@@ -1,21 +1,25 @@
-import BN from "bn.js";
-import { Contract, ethers, BigNumber } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import {ABI, Cell, ContractCall} from '../../types';
+import BN from "bn.js";
+import { BigNumber, Contract, ethers } from "ethers";
+import { ABI, Cell, ContractCall } from "../../types";
 import { SpreadsheetContract } from "../../types/contracts";
-import { hex2str, bn2hex } from '../../utils/hexUtils';
+import { bn2hex, hex2str } from "../../utils/hexUtils";
 
 /**
  * Represents an EVM compatible implementation of the SpreadsheetContract.
  */
 export class EvmSpreadsheetContract implements SpreadsheetContract {
-
   private contract: Contract;
 
   /**
    * The class constructor.
    */
-  constructor(private address: string, private abi: ABI, private provider: JsonRpcProvider) {
+  constructor(
+    private address: string,
+    private abi: ABI,
+    private provider: JsonRpcProvider
+  ) {
+    console.log("abi", abi);
     this.contract = new Contract(address, abi, provider);
   }
 
@@ -39,7 +43,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   async calculateSheetAddress(): Promise<string> {
     const from = this.address;
     const nonce = await this.provider.getTransactionCount(from);
-    return ethers.utils.getContractAddress({ from, nonce })
+    return ethers.utils.getContractAddress({ from, nonce });
   }
 
   /**
@@ -67,7 +71,9 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * @inheritDoc
    */
-  setCellTxBuilder(cell: Cell & { tokenId: number; sheetAddress: string }): ContractCall {
+  setCellTxBuilder(
+    cell: Cell & { tokenId: number; sheetAddress: string }
+  ): ContractCall {
     const contractAddress = bn2hex(cell.contractAddress);
 
     const selector = ethers.BigNumber.from(cell.selector.toString());
@@ -75,13 +81,10 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
 
     let calldata = [0];
     if (cell.calldata.length > 0) {
-      calldata = cell.calldata.map((val) => Number(bn2hex(val)))
+      calldata = cell.calldata.map((val) => Number(bn2hex(val)));
     }
 
-    const data = ethers.utils.solidityPack(
-      ["uint256"],
-      [calldata]
-    );
+    const data = ethers.utils.solidityPack(["uint256"], [calldata]);
 
     return {
       contractAddress: cell.sheetAddress,

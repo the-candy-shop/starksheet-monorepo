@@ -1,3 +1,4 @@
+import { BN } from "bn.js";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -7,10 +8,10 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { BN } from "bn.js";
 import { N_ROW } from "../config";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import {Spreadsheet, Sheet, SheetConstructorArgs} from '../types';
+import { chainConfig } from "../provider/chains";
+import { Sheet, SheetConstructorArgs, Spreadsheet } from "../types";
 import { str2hex } from "../utils/hexUtils";
 import { AbisContext } from "./AbisContext";
 import { AccountContext } from "./AccountContext";
@@ -39,16 +40,13 @@ export const OnsheetContext = React.createContext<{
   validateNewSheets: () => {},
 });
 
-export const OnsheetContextProvider = ({
-  onsheetAddress,
-  children,
-}: PropsWithChildren<{ onsheetAddress: string }>) => {
+export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
   const { updateAppStatus, updateSheetStatus } = useContext(AppStatusContext);
   const { accountAddress } = useContext(AccountContext);
   const { getAbiForContract } = useContext(AbisContext);
   const navigate = useNavigate();
   const [onsheet, setOnsheet] = useState<Spreadsheet>({
-    address: onsheetAddress,
+    address: chainConfig.addresses.spreadsheet,
     sheets: [],
     defaultRenderer: "",
     sheetPrice: 0,
@@ -72,8 +70,7 @@ export const OnsheetContextProvider = ({
         contract.getSheetPrice(),
       ])
         .then(async (response) => {
-          const [renderer, sheetPrice] =
-            response;
+          const [renderer, sheetPrice] = response;
           return {
             address,
             defaultRenderer: renderer,
@@ -122,7 +119,7 @@ export const OnsheetContextProvider = ({
 
     const address = await contract.calculateSheetAddress(
       accountAddress,
-      calldata,
+      calldata
     );
     const abi = await getAbiForContract(address);
     let newSheet: Sheet;

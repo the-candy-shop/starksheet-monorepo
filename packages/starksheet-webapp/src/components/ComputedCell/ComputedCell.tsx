@@ -8,8 +8,9 @@ import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { chainConfig } from "../../provider/chains";
 import { CellGraph, Cell as CellType } from "../../types";
-import { RC_BOUND, onsheetContractData } from "../../utils/constants";
+import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, hex2str } from "../../utils/hexUtils";
 import Cell from "../Cell/Cell";
 
@@ -83,7 +84,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
       cell.abi?.name === "symbol" ||
       cellSettings.text;
     if (renderString) return hex2str(bn2hex(value));
-    if (cell.contractAddress.eq(number.toBN(onsheetContractData.mathAddress))) {
+    if (cell.contractAddress.eq(number.toBN(chainConfig.addresses.math))) {
       return value
         .add(
           number

@@ -1,5 +1,15 @@
+import { hexDataLength } from "@ethersproject/bytes";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract, ethers } from "ethers";
+import {
+  CallContractTransactionInput,
+  TransactionType,
+  ValueType,
+  encodeMulti,
+  encodeSingle,
+} from "ethers-multisend";
+import { Call, RawCalldata } from "starknet";
+import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import {
   ABI,
   ChainConfig,
@@ -10,12 +20,7 @@ import {
   TransactionReceipt,
   WorksheetContract,
 } from "../types";
-import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
-import { chainAbi } from "./chains";
-import { Call, RawCalldata } from "starknet";
-import { TransactionType, CallContractTransactionInput, ValueType, encodeSingle, encodeMulti } from "ethers-multisend";
-import { evmWorksheetAbi } from "../contracts";
-import { hexDataLength } from '@ethersproject/bytes';
+import { chainAbi, chainConfig } from "./chains";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -25,8 +30,8 @@ export class EVMProvider implements ChainProvider {
    * The ABI dictionary.
    */
   private cachedAbis: Record<string, ABI> = {
-    '0x0000000000000000000000000000000000000000': [],
-    '0x100000000000000000000000000000000': [],
+    "0x0000000000000000000000000000000000000000": [],
+    "0x100000000000000000000000000000000": [],
   };
 
   /**
@@ -38,7 +43,7 @@ export class EVMProvider implements ChainProvider {
    * Builds an EVM provider for the given rpc and config
    */
   public static build(rpcUrl: string, config: ChainConfig): EVMProvider {
-    const provider = new JsonRpcProvider(rpcUrl)
+    const provider = new JsonRpcProvider(rpcUrl);
     return new EVMProvider(provider, config);
   }
 
@@ -48,17 +53,24 @@ export class EVMProvider implements ChainProvider {
   async callContract(options: ContractCall): Promise<string> {
     const abi = await this.getAbi(options.contractAddress);
     const contract = new Contract(options.contractAddress, abi, this.provider);
-    const functionDefinition = contract.interface.getFunction(options.entrypoint);
+    const functionDefinition = contract.interface.getFunction(
+      options.entrypoint
+    );
 
-    const result = await contract[options.entrypoint](...(options.calldata || []));
+    const result = await contract[options.entrypoint](
+      ...(options.calldata || [])
+    );
     const resultType = functionDefinition.outputs![0];
 
     // checks if the result is of type number
-    if (resultType.type.startsWith('uint') || resultType.type.startsWith('int')) {
+    if (
+      resultType.type.startsWith("uint") ||
+      resultType.type.startsWith("int")
+    ) {
       return result as string;
     }
     // checks if the result is of type string
-    if (resultType.type === 'string') {
+    if (resultType.type === "string") {
       const bytes = ethers.utils.toUtf8Bytes(result);
       const hex = ethers.utils.hexlify(bytes);
       return ethers.BigNumber.from(hex).toString();
@@ -76,7 +88,9 @@ export class EVMProvider implements ChainProvider {
       console.log(`abi retrieved from cache for address ${address}`);
       return cachedAbi;
     } else {
-      console.log(`no cache match for address ${address}, fetching from block explorer`)
+      console.log(
+        `no cache match for address ${address}, fetching from block explorer`
+      );
     }
 
     // build the query parameters
@@ -106,12 +120,12 @@ export class EVMProvider implements ChainProvider {
         return data.result;
       });
 
-    if (rawAbi === 'Contract source code not verified') {
+    if (rawAbi === "Contract source code not verified") {
       return [];
       // todo: throw error
     }
 
-    if (rawAbi === 'Invalid Address format') {
+    if (rawAbi === "Invalid Address format") {
       return [];
       // todo: throw error
     }
@@ -155,7 +169,7 @@ export class EVMProvider implements ChainProvider {
    */
   getSpreadsheetContract(): EvmSpreadsheetContract {
     const address = this.config.addresses.spreadsheet;
-    const abi = chainAbi[this.config.chainType].spreadsheet;
+    const abi = chainAbi.spreadsheet;
 
     return new EvmSpreadsheetContract(address, abi, this.provider);
   }
@@ -168,14 +182,14 @@ export class EVMProvider implements ChainProvider {
     return {
       transaction_hash: receipt.transactionHash,
       status: receipt.status,
-    }
+    };
   }
 
   /**
    * @inheritDoc
    */
   getWorksheetContractByAddress(address: string): WorksheetContract {
-    const abi = chainAbi[this.config.chainType].worksheet;
+    const abi = chainAbi.worksheet;
     return new EvmWorksheetContract(address, abi, this.provider);
   }
 
@@ -190,75 +204,97 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  execute = async (calls: Call[], options: { value: number | string })  => {
+  execute = async (calls: Call[], options: { value: number | string }) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const multisendContractAddress = process.env.REACT_APP_MULTISEND_ADDRESS || "";
 
-    const encodeTransactions = await Promise.all(calls.map(async (call, index) => {
-      let abi = await this.getAbi(call.contractAddress);
+    const encodeTransactions = await Promise.all(
+      calls.map(async (call, index) => {
+        let abi = await this.getAbi(call.contractAddress);
 
-      // Manually setting the ABI for evm worksheet contract
-      // we get an empty array for evm worksheet contract abi because evm worksheet contract source code not verified
-      if(abi.length === 0) {
-        abi = evmWorksheetAbi;
-      }
+        // Manually setting the ABI for evm worksheet contract
+        // we get an empty array for evm worksheet contract abi because evm worksheet contract source code not verified
+        if (abi.length === 0) {
+          abi = chainAbi.worksheet;
+        }
 
-      const contract = new Contract(call.contractAddress, abi, signer);
+        const contract = new Contract(call.contractAddress, abi, signer);
 
-      const fragment = contract.interface.fragments.find((fragment) => fragment.name === call.entrypoint);
+        const fragment = contract.interface.fragments.find(
+          (fragment) => fragment.name === call.entrypoint
+        );
 
-      if (!fragment) {
-        throw new Error(`Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`);
-      }
-      const signature = fragment.format();
+        if (!fragment) {
+          throw new Error(
+            `Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`
+          );
+        }
+        const signature = fragment.format();
 
-      const contractInterface = new ethers.utils.Interface(abi);
-      const inputNames = contractInterface.functions[signature].inputs.map(
-        (input) => input.name
-      );
-      const inputValues = (call.calldata as RawCalldata).reduce((acc, value, index) => {
-        acc[inputNames[index]] = value as ValueType;
-        return acc;
-      }, {} as { [key: string]: ValueType });
-   
-      const transactionInput : CallContractTransactionInput = {
-        type: TransactionType.callContract,
-        id: index.toString(),
-        to: call.contractAddress,
-        value: call.entrypoint === "addSheet" ? options.value.toString() : "0",
-        abi: abi,
-        functionSignature: signature,
-        inputValues
-      }
-  
-      const metaTransaction = encodeSingle(transactionInput);
-      
-      return metaTransaction;
-    }));
-    
-    const transactions = encodeMulti(encodeTransactions, multisendContractAddress);
+        const contractInterface = new ethers.utils.Interface(abi);
+        const inputNames = contractInterface.functions[signature].inputs.map(
+          (input) => input.name
+        );
+        const inputValues = (call.calldata as RawCalldata).reduce(
+          (acc, value, index) => {
+            acc[inputNames[index]] = value as ValueType;
+            return acc;
+          },
+          {} as { [key: string]: ValueType }
+        );
+
+        const transactionInput: CallContractTransactionInput = {
+          type: TransactionType.callContract,
+          id: index.toString(),
+          to: call.contractAddress,
+          value:
+            call.entrypoint === "addSheet" ? options.value.toString() : "0",
+          abi: abi,
+          functionSignature: signature,
+          inputValues,
+        };
+
+        const metaTransaction = encodeSingle(transactionInput);
+
+        return metaTransaction;
+      })
+    );
+
+    const transactions = encodeMulti(
+      encodeTransactions,
+      chainConfig.addresses.multisend
+    );
     const multiSendTx = ethers.utils.solidityPack(
       ["uint8", "address", "uint256", "uint256", "bytes"],
-      [0, transactions.to, 0, hexDataLength(transactions.data), transactions.data]
+      [
+        0,
+        transactions.to,
+        0,
+        hexDataLength(transactions.data),
+        transactions.data,
+      ]
     );
 
     const receipt = async () => {
-      const abi = await this.getAbi(multisendContractAddress);
-      const contract = new Contract(multisendContractAddress, abi, signer);
-      const response: ethers.providers.TransactionResponse = await contract.multiSend(multiSendTx, {
-        value: options ? options.value : 0
-      });
+      const abi = await this.getAbi(this.config.addresses.multisend!);
+      const contract = new Contract(
+        this.config.addresses.multisend!,
+        abi,
+        signer
+      );
+      const response: ethers.providers.TransactionResponse =
+        await contract.multiSend(multiSendTx, {
+          value: options ? options.value : 0,
+        });
       return await response.wait();
     };
 
     const transactionResponse = await receipt();
 
     return {
-      transaction_hash: transactionResponse.transactionHash
-    }
-    
-  }
+      transaction_hash: transactionResponse.transactionHash,
+    };
+  };
 
   async login(): Promise<string> {
     if (!window.ethereum) {
@@ -266,7 +302,9 @@ export class EVMProvider implements ChainProvider {
     }
 
     try {
-      const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
       return accounts[0];
     } catch (error) {
       throw new Error("login failed");

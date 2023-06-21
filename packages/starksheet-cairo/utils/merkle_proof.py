@@ -2,7 +2,6 @@ import logging
 import string
 
 from starkware.crypto.signature.signature import pedersen_hash
-
 from utils.constants import N_COLS
 
 logger = logging.getLogger(__name__)
@@ -20,6 +19,8 @@ def hash2(x, y):
 
 
 def merkle_root(leafs):
+    if not leafs:
+        return 0
     if len(leafs) == 1:
         return leafs[0]
     if len(leafs) % 2 == 1:

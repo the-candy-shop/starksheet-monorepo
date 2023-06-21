@@ -13,8 +13,9 @@ import {
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { chainAbi } from "./chains";
 import { Call, RawCalldata } from "starknet";
-import { TransactionType, encodeSingle, encodeMulti, CallContractTransactionInput } from "ethers-multisend";
+import { TransactionType, CallContractTransactionInput, ValueType, encodeSingle, encodeMulti } from "ethers-multisend";
 import { evmWorksheetAbi } from "../contracts";
+import { hexDataLength } from '@ethersproject/bytes';
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
@@ -211,11 +212,15 @@ export class EVMProvider implements ChainProvider {
         throw new Error(`Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`);
       }
       const signature = fragment.format();
-  
+
+      const contractInterface = new ethers.utils.Interface(abi);
+      const inputNames = contractInterface.functions[signature].inputs.map(
+        (input) => input.name
+      );
       const inputValues = (call.calldata as RawCalldata).reduce((acc, value, index) => {
-        acc[index] = value as string;
+        acc[inputNames[index]] = value as ValueType;
         return acc;
-      }, {} as { [key: number]: string });
+      }, {} as { [key: string]: ValueType });
    
       const transactionInput : CallContractTransactionInput = {
         type: TransactionType.callContract,
@@ -235,7 +240,7 @@ export class EVMProvider implements ChainProvider {
     const transactions = encodeMulti(encodeTransactions, multisendContractAddress);
     const multiSendTx = ethers.utils.solidityPack(
       ["uint8", "address", "uint256", "uint256", "bytes"],
-      [0, transactions.to, 0, transactions.data.length, transactions.data]
+      [0, transactions.to, 0, hexDataLength(transactions.data), transactions.data]
     );
 
     const receipt = async () => {

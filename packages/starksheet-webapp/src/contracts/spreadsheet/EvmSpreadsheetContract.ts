@@ -3,6 +3,7 @@ import { Contract, ethers, BigNumber } from "ethers";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import {ABI, Cell, ContractCall} from '../../types';
 import { SpreadsheetContract } from "../../types/contracts";
+import { hex2str, bn2hex } from '../../utils/hexUtils';
 
 /**
  * Represents an EVM compatible implementation of the SpreadsheetContract.
@@ -22,10 +23,13 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   addSheetTxBuilder(name: string, symbol: string): ContractCall {
+    const decodedName = hex2str(name);
+    const decodedSymbol = hex2str(symbol);
+
     return {
       contractAddress: this.address,
       entrypoint: "addSheet",
-      calldata: [name, symbol],
+      calldata: [decodedName, decodedSymbol],
     };
   }
 
@@ -64,10 +68,25 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   setCellTxBuilder(cell: Cell & { tokenId: number; sheetAddress: string }): ContractCall {
+    const contractAddress = bn2hex(cell.contractAddress);
+
+    const selector = ethers.BigNumber.from(cell.selector.toString());
+    const value = ethers.utils.hexZeroPad(selector.toHexString(), 32);
+
+    let calldata = [0];
+    if (cell.calldata.length > 0) {
+      calldata = cell.calldata.map((val) => Number(bn2hex(val)))
+    }
+
+    const data = ethers.utils.solidityPack(
+      ["uint256"],
+      [calldata]
+    );
+
     return {
       contractAddress: cell.sheetAddress,
       entrypoint: "setCell",
-      calldata: [cell.id, cell.contractAddress.toString(), cell.selector, cell.calldata],
+      calldata: [cell.id, contractAddress, value, data],
     };
   }
 }

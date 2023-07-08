@@ -149,7 +149,7 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
             });
             processedFiles = processedFiles + 1;
           } catch (error) {
-            console.error(`Error parsing ${file}:`);
+            console.error(`Error parsing ${file}: ${error}`);
             errorFiles = errorFiles + 1;
           } finally {
             // Check if all run-latest.json files have been processed
@@ -157,11 +157,20 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
               subdirectories.length * runLatestFiles.length;
             if (processedFiles + errorFiles === totalRunLatestFiles) {
               // Merge starksheetAddresses and evmsheetAddresses
+              console.log(`Network found: ${Object.keys(contractData)}`);
               process.env.REACT_APP_NETWORK
                 ? console.log(
                     `Building for network ${process.env.REACT_APP_NETWORK}`
                   )
-                : console.log("No specific network");
+                : console.log("No specific network, exporting all");
+              if (
+                process.env.REACT_APP_NETWORK &&
+                !contractData[process.env.REACT_APP_NETWORK]
+              ) {
+                throw new Error(
+                  `No data for network ${process.env.REACT_APP_NETWORK}`
+                );
+              }
               const mergedAddresses = {
                 network: process.env.REACT_APP_NETWORK
                   ? contractData[process.env.REACT_APP_NETWORK]
@@ -207,6 +216,7 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
               );
 
               console.log(Object.keys(mergedAddresses));
+              console.log(mergedAddresses.network);
 
               // Write the JSON data to the contractDataFilePath
               fs.writeFile(

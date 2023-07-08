@@ -1,15 +1,14 @@
 import { useSnackbar } from "notistack";
 import React, { PropsWithChildren, useMemo, useState } from "react";
-import { Call } from "starknet";
 import { useChainProvider } from "../hooks";
-import { TransactionResponse } from "../types";
+import { ContractCall, TransactionResponse } from "../types";
 
 export const AccountContext = React.createContext<{
   accountAddress: string;
   setAccountAddress: (address: string) => void;
   connect: () => Promise<void>;
   execute: (
-    calls: Call[],
+    calls: ContractCall[],
     options?: { value?: number | string }
   ) => Promise<TransactionResponse>;
   proof: string[];

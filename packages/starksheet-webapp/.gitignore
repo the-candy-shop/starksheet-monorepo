@@ -28,3 +28,4 @@ src/contract.json
 tmp
 devnet.pkl
 src/contracts/contractData.json
+src/contracts/types/

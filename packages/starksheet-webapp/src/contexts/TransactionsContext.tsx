@@ -5,18 +5,18 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { Call, number } from "starknet";
+import { number } from "starknet";
 import { useChainProvider } from "../hooks/useChainProvider";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { NewSheet } from "../types";
+import { ContractCall, NewSheet } from "../types";
 import { AccountContext } from "./AccountContext";
 import { CellValuesContext } from "./CellValuesContext";
 import { OnsheetContext } from "./OnsheetContext";
 
 export const TransactionsContext = React.createContext<{
-  transactions: Call[];
-  newSheetsTransactions: Call[];
-  settleTransactions: (tx?: Call[]) => Promise<void>;
+  transactions: ContractCall[];
+  newSheetsTransactions: ContractCall[];
+  settleTransactions: (tx?: ContractCall[]) => Promise<void>;
   costEth: number;
 }>({
   transactions: [],
@@ -41,10 +41,11 @@ export const TransactionsContextProvider = ({
       .map((sheet) =>
         contract.addSheetTxBuilder(
           sheet.calldata.name.toString(),
-          sheet.calldata.symbol.toString()
+          sheet.calldata.symbol.toString(),
+          accountAddress
         )
       );
-  }, [onsheet, contract]);
+  }, [onsheet, contract, accountAddress]);
 
   const cellsTransactions = useMemo(() => {
     return Object.entries(updatedValues)
@@ -81,8 +82,7 @@ export const TransactionsContextProvider = ({
             .filter((tx) => tx.entrypoint === "mintAndSetPublic")
             .map(
               (tx) =>
-                onsheet.sheets.find((s) => s.address === tx.contractAddress)
-                  ?.cellPrice || 0
+                onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0
             )
             .reduce((a, b) => a + b, 0)) *
           10_000
@@ -96,7 +96,7 @@ export const TransactionsContextProvider = ({
   ]);
 
   const settleTransactions = useCallback(
-    async (otherTransactions?: Call[]) => {
+    async (otherTransactions?: ContractCall[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
       let options;

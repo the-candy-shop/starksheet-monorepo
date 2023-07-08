@@ -11,10 +11,9 @@ import { FunctionAbi } from "starknet";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
+import { ARGS_SEP, CONTRACT_FUNCTION_SEP } from "../../utils/constants";
 import { bn2hex } from "../../utils/hexUtils";
 import {
-  ARGS_SEP,
-  CONTRACT_FUNCTION_SEP,
   buildFormulaDisplay,
   cellNameRegex,
   cellNameToTokenId,
@@ -70,13 +69,11 @@ function FormulaField({
                 .filter((i) => !i.name.endsWith("_len"))
                 .map((i) => ({
                   ...i,
-                  displayedType: `${i.name}:${i.type
-                    .replace(/felt|Uint256/, "number")
-                    .replace("*", "")}`,
+                  displayedType: `${i.name}:${i.type.replace("*", "")}`,
                 }))
                 .map((i) =>
-                  i.type.endsWith("*")
-                    ? `[${i.displayedType}]`
+                  i.type.endsWith("*") || i.type.endsWith("[]")
+                    ? `[${i.displayedType.replace("[]", "")}]`
                     : i.displayedType
                 )
                 .join(`${ARGS_SEP} `),
@@ -173,7 +170,7 @@ function FormulaField({
                   "&:hover": { background: "#e2e2e2" },
                 }}
               >
-                {op}
+                {`${op}(${abi[op]})`}
               </Box>
             ))}
       </Box>

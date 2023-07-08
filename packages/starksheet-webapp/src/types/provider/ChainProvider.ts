@@ -1,9 +1,10 @@
-import { ABI } from "./ABI";
+import { ContractAbi } from "..";
+import { SpreadsheetContract, WorksheetContract } from "../contracts";
+import { Abi } from "./ABI";
+import { ChainId } from "./ChainId";
+import { ChainType } from "./ChainType";
 import { ContractCall } from "./ContractCall";
 import { TransactionReceipt } from "./TransactionReceipt";
-import { ChainType } from "./ChainType";
-import { ChainId } from "./ChainId";
-import { SpreadsheetContract, WorksheetContract } from "../contracts";
 import { TransactionResponse } from "./TransactionResponse";
 
 /**
@@ -13,9 +14,21 @@ import { TransactionResponse } from "./TransactionResponse";
  */
 export interface ChainProvider {
   /**
+   *
+   * Get bytecode at a given address
+   */
+  addressAlreadyDeployed(address: string): Promise<boolean>;
+
+  /**
    * Gets the ABI of the contract matching the given address.
    */
-  getAbi(address: string): Promise<ABI>;
+  getAbi(address: string): Promise<Abi>;
+
+  /**
+   * Returns an object whose keys are the selectors of the corresponding functions instead of a raw list
+   * @param abi The raw abi
+   */
+  parseAbi(abi: Abi): ContractAbi;
 
   /**
    * Calls a contract entry point with some optional data.
@@ -30,7 +43,10 @@ export interface ChainProvider {
   /**
    * todo: refactor
    */
-  execute(calls: ContractCall[], options?: { value?: number | string }): Promise<TransactionResponse>;
+  execute(
+    calls: ContractCall[],
+    options?: { value?: number | string }
+  ): Promise<TransactionResponse>;
 
   /**
    * Gets the chain id.

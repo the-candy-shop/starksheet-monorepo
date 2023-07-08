@@ -12,11 +12,10 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
-import { useChainProvider } from "../../hooks/useChainProvider";
 import { useSheetContract } from "../../hooks/useSheetContract";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex, hex2str, normalizeHexString } from "../../utils/hexUtils";
+import { bn2hex } from "../../utils/hexUtils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
 
@@ -50,7 +49,6 @@ const SheetTable = ({ sx }: SheetTableProps) => {
   const { address } = params;
   const { contract } = useSheetContract(address);
   const navigate = useNavigate();
-  const chainProvider = useChainProvider();
 
   const cells = useMemo(
     () => (address ? values[address] : []),
@@ -109,23 +107,15 @@ const SheetTable = ({ sx }: SheetTableProps) => {
       );
       if (sheet === undefined) {
         Promise.all([
-          chainProvider.callContract({
-            contractAddress: _selectedSheetAddress,
-            entrypoint: "name",
-          }),
-          chainProvider.callContract({
-            contractAddress: _selectedSheetAddress,
-            entrypoint: "symbol",
-          }),
+          contract.name(),
+          contract.symbol(),
           contract.nRow(),
           contract.getCellPrice(),
         ]).then((response) => {
-          const [name, symbol] = response
-            .slice(0, -1)
-            .map((result) => hex2str(normalizeHexString(result as string)));
+          console.log("response", response);
           appendSheet({
-            name,
-            symbol,
+            name: response[0],
+            symbol: response[1],
             address: _selectedSheetAddress,
             nRow: response[2],
             cellPrice: response[3] / 10 ** 18,
@@ -133,6 +123,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         });
       }
       let cells;
+      console.log("sheet", sheet);
       if (sheet?.calldata) {
         cells = new Promise<Cell[]>((resolve) => resolve([]));
       } else {
@@ -140,9 +131,12 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Fetching cells metadata",
           });
+          console.log("renderedCells", renderedCells);
           return Promise.all(
             (renderedCells as CellRendered[]).map(async (cell) => {
+              console.log("cell", cell);
               const _cell = await contract.getCell(cell.id);
+              console.log("_cell", _cell);
               return {
                 ...cell,
                 ..._cell,
@@ -154,6 +148,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
       }
       return cells
         .then((cells: Cell[]) => {
+          console.log("cells", cells);
           updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
           });
@@ -199,6 +194,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           }));
         })
         .catch((error) => {
+          console.log("error", error);
           error = true;
           finalMessage = `Error: Starksheet cannot render sheet at address ${address}
               <br />

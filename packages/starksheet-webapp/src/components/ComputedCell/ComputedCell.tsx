@@ -123,7 +123,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
       }
       settleTransactions([
         {
-          contractAddress: selectedSheetAddress,
+          to: selectedSheetAddress,
           entrypoint: "renderCell",
           calldata: [id],
         },

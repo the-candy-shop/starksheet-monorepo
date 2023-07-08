@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
+import React from "react";
 import { CELL_BORDER_WIDTH } from "../../config";
+import { chainConfig } from "../../provider/chains";
+import { ChainId } from "../../types";
+import BridgeButton from "../BridgeButton/BridgeButton";
 import Button from "../Button/Button";
 import ConnectButton from "../ConnectButton/ConnectButton";
 import GreyCell from "../GreyCell/GreyCell";
-import BridgeButton from '../BridgeButton/BridgeButton';
-import Widget from '../Widget/Widget';
-import React from 'react';
+import Widget from "../Widget/Widget";
 
 function Header() {
   const [isOpenWidget, setOpenWidget] = React.useState<boolean>(false);
@@ -23,20 +25,24 @@ function Header() {
       >
         Learn more
       </Button>
-      <BridgeButton
-        onClick={() => {
-          setOpenWidget(true)
-        }}
-        sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
-      />
+      {chainConfig.chainId === ChainId.STARKNET_MAINNET && (
+        <>
+          <BridgeButton
+            onClick={() => {
+              setOpenWidget(true);
+            }}
+            sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
+          />
+          <Widget
+            open={isOpenWidget}
+            onClose={() => {
+              setOpenWidget(false);
+            }}
+          />
+        </>
+      )}
       <ConnectButton
         sx={{ width: "174px", marginLeft: `-${CELL_BORDER_WIDTH}px` }}
-      />
-      <Widget
-        open={isOpenWidget}
-        onClose={() => {
-          setOpenWidget(false)
-        }}
       />
     </Box>
   );

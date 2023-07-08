@@ -1,3 +1,7 @@
 cache
 out
 .env
+!out/Evmsheet.sol
+!out/Sheet.sol
+!out/Evmsheet.sol/Evmsheet.json
+!out/Sheet.sol/Sheet.json

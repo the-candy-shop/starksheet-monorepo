@@ -11,6 +11,7 @@ export interface ChainConfig {
   addresses: {
     spreadsheet: string;
     multisend?: string;
+    bytes?: string;
     math: string;
   };
 }

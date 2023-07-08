@@ -15,6 +15,7 @@ import { ChainProviderContextProvider } from "./contexts/ChainProviderContext";
 import { OnsheetContextProvider } from "./contexts/OnsheetContext";
 import { TransactionsContextProvider } from "./contexts/TransactionsContext";
 import "./index.css";
+import { deployedAbis } from "./provider/chains";
 import reportWebVitals from "./reportWebVitals";
 
 const router = createBrowserRouter([
@@ -43,7 +44,7 @@ function Root() {
       <SnackbarProvider maxSnack={3}>
         <AppStatusContextProvider>
           <AccountContextProvider>
-            <AbisContextProvider initialContractAbis={{}}>
+            <AbisContextProvider initialContractAbis={deployedAbis}>
               <OnsheetContextProvider>
                 <CellValuesContextProvider>
                   <TransactionsContextProvider>

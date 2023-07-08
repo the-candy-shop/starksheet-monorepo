@@ -11,6 +11,18 @@ contract Evmsheet is Ownable {
     address public defaultRenderer;
     address[] public sheets;
 
+    function getSheetCreationCode() public pure returns (bytes memory) {
+        return type(Sheet).creationCode;
+    }
+
+    function getSheetCreationAddress(address sender, bytes32 salt) public pure returns (address) {
+        return address(
+            uint160(
+                uint256(keccak256(abi.encodePacked(bytes1(0xff), sender, salt, keccak256(type(Sheet).creationCode))))
+            )
+        );
+    }
+
     constructor(address renderer, uint256 price) {
         defaultRenderer = renderer;
         sheetPrice = price;
@@ -20,15 +32,16 @@ contract Evmsheet is Ownable {
         defaultRenderer = renderer;
     }
 
-    function addSheet(string calldata name, string calldata symbol) external payable returns (address sheetAddress) {
+    function addSheet(string calldata name, string calldata symbol, bytes32 salt) external payable {
         if (msg.value != sheetPrice) {
             revert SheetPriceError(msg.value);
         }
 
         bytes memory bytecode = type(Sheet).creationCode;
 
+        address sheetAddress;
         assembly {
-            sheetAddress := create(0, add(bytecode, 32), mload(bytecode))
+            sheetAddress := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
 
         ISheet(sheetAddress).setRenderer(defaultRenderer);

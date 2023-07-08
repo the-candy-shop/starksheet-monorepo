@@ -1,43 +1,36 @@
-import { hexDataLength } from "@ethersproject/bytes";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { Contract, ethers } from "ethers";
-import {
-  CallContractTransactionInput,
-  TransactionType,
-  ValueType,
-  encodeMulti,
-  encodeSingle,
-} from "ethers-multisend";
-import { Call, RawCalldata } from "starknet";
+import BN from "bn.js";
+import { ethers } from "ethers";
+import { MetaTransaction, OperationType, encodeMulti } from "ethers-multisend";
+import { number } from "starknet";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
+import { MultiSendCallOnly__factory } from "../contracts/types";
 import {
-  ABI,
+  Abi,
   ChainConfig,
   ChainId,
   ChainProvider,
   ChainType,
+  ContractAbi,
   ContractCall,
   TransactionReceipt,
   WorksheetContract,
 } from "../types";
-import { chainAbi, chainConfig } from "./chains";
+import { bn2hex, bn2uint } from "../utils/hexUtils";
+import { chainConfig } from "./chains";
 
 /**
  * Represents an EVM-compatible implementation of the chain provider.
  */
 export class EVMProvider implements ChainProvider {
   /**
-   * The ABI dictionary.
-   */
-  private cachedAbis: Record<string, ABI> = {
-    "0x0000000000000000000000000000000000000000": [],
-    "0x100000000000000000000000000000000": [],
-  };
-
-  /**
    * Constructs an EVM Provider.
    */
   constructor(private provider: JsonRpcProvider, private config: ChainConfig) {}
+
+  async addressAlreadyDeployed(address: string) {
+    return (await this.provider.getCode(address)).length > 2;
+  }
 
   /**
    * Builds an EVM provider for the given rpc and config
@@ -50,49 +43,48 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  async callContract(options: ContractCall): Promise<string> {
-    const abi = await this.getAbi(options.contractAddress);
-    const contract = new Contract(options.contractAddress, abi, this.provider);
-    const functionDefinition = contract.interface.getFunction(
-      options.entrypoint
+  async callContract(call: ContractCall): Promise<string> {
+    console.log("call", call);
+    console.log(
+      "this.contractCallToEVMCalldata(call)",
+      this.contractCallToEVMCalldata(call)
     );
 
-    const result = await contract[options.entrypoint](
-      ...(options.calldata || [])
+    const result = await this.provider.call({
+      to: call.to,
+      data: this.contractCallToEVMCalldata(call),
+    });
+    console.log("result", result);
+    return result;
+  }
+
+  /**
+   *
+   * Convert a ContractCall to an EVM call. The BN are converted using bn2uint (ie. padding with 0 at left) because
+   * they come from hex strings,
+   * @param call
+   * @returns
+   */
+  contractCallToEVMCalldata(call: ContractCall): string {
+    console.log(
+      "bn2uint(4)(call.selector! as BN)",
+      bn2uint(4)(call.selector! as BN)
     );
-    const resultType = functionDefinition.outputs![0];
-
-    // checks if the result is of type number
-    if (
-      resultType.type.startsWith("uint") ||
-      resultType.type.startsWith("int")
-    ) {
-      return result as string;
-    }
-    // checks if the result is of type string
-    if (resultType.type === "string") {
-      const bytes = ethers.utils.toUtf8Bytes(result);
-      const hex = ethers.utils.hexlify(bytes);
-      return ethers.BigNumber.from(hex).toString();
-    }
-
-    throw new Error(`Unhandled return type (${resultType})`);
+    console.log(
+      '(call.calldata as BN[]).map(bn2uint(32)).join("")',
+      (call.calldata as BN[]).map(bn2uint(32)).join("")
+    );
+    return (
+      "0x" +
+      bn2uint(4)(call.selector! as BN) +
+      (call.calldata as BN[]).map(bn2uint(32)).join("")
+    );
   }
 
   /**
    * @inheritDoc
    */
-  async getAbi(address: string): Promise<ABI> {
-    const cachedAbi = this.cachedAbis[address];
-    if (cachedAbi) {
-      console.log(`abi retrieved from cache for address ${address}`);
-      return cachedAbi;
-    } else {
-      console.log(
-        `no cache match for address ${address}, fetching from block explorer`
-      );
-    }
-
+  async getAbi(address: string): Promise<Abi> {
     // build the query parameters
     const params = new URLSearchParams({
       action: "getabi",
@@ -104,36 +96,55 @@ export class EVMProvider implements ChainProvider {
     const url = new URL(this.config.explorerApiUrl!);
     url.search = params.toString();
 
-    const rawAbi = await fetch(url)
-      // check the response is not an error and decode its content to json
-      .then((response) => {
-        if (!response.ok) {
-          throw response.statusText;
-        }
-        return response.json();
-      })
-      // check the body of the response contains a "result" and returns it
-      .then((data) => {
-        if (!data.result) {
-          throw new Error(`Unexpected error, got ${JSON.stringify(data)}`);
-        }
-        return data.result;
-      });
+    let abi = [];
+    try {
+      const rawAbi = await fetch(url)
+        // check the response is not an error and decode its content to json
+        .then((response) => {
+          if (!response.ok) {
+            return { result: [] };
+          }
+          return response.json();
+        })
+        // check the body of the response contains a "result" and returns it
+        .then((data) => {
+          if (!data.result) {
+            throw new Error(`Unexpected error, got ${JSON.stringify(data)}`);
+          }
+          return data.result;
+        });
 
-    if (rawAbi === "Contract source code not verified") {
-      return [];
-      // todo: throw error
+      if (rawAbi === "Contract source code not verified") {
+        return [];
+        // todo: throw error
+      }
+
+      if (rawAbi === "Invalid Address format") {
+        return [];
+        // todo: throw error
+      }
+
+      // parse the raw abi and return it
+      abi = JSON.parse(rawAbi);
+    } catch (error) {
+      abi = [];
     }
-
-    if (rawAbi === "Invalid Address format") {
-      return [];
-      // todo: throw error
-    }
-
-    // parse the raw abi and return it
-    const abi = JSON.parse(rawAbi);
-    this.cachedAbis[address] = abi;
     return abi;
+  }
+
+  parseAbi(abi: Abi): ContractAbi {
+    try {
+      const iface = new ethers.utils.Interface(abi);
+      return iface.fragments.reduce(
+        (prev, cur) => ({
+          ...prev,
+          [iface.getSighash(cur)]: cur,
+        }),
+        {}
+      );
+    } catch {
+      return {};
+    }
   }
 
   /**
@@ -169,9 +180,7 @@ export class EVMProvider implements ChainProvider {
    */
   getSpreadsheetContract(): EvmSpreadsheetContract {
     const address = this.config.addresses.spreadsheet;
-    const abi = chainAbi.spreadsheet;
-
-    return new EvmSpreadsheetContract(address, abi, this.provider);
+    return new EvmSpreadsheetContract(address, this.provider);
   }
 
   /**
@@ -189,8 +198,7 @@ export class EVMProvider implements ChainProvider {
    * @inheritDoc
    */
   getWorksheetContractByAddress(address: string): WorksheetContract {
-    const abi = chainAbi.worksheet;
-    return new EvmWorksheetContract(address, abi, this.provider);
+    return new EvmWorksheetContract(address, this.provider);
   }
 
   /**
@@ -204,95 +212,50 @@ export class EVMProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  execute = async (calls: Call[], options: { value: number | string }) => {
+  execute = async (
+    calls: ContractCall[],
+    options: { value: number | string }
+  ) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
+    console.log("calls", calls);
 
-    const encodeTransactions = await Promise.all(
-      calls.map(async (call, index) => {
-        let abi = await this.getAbi(call.contractAddress);
+    const transactions: MetaTransaction[] = calls.map((call) => ({
+      to: call.to,
+      value: call.value ? bn2hex(call.value) : "0x0",
+      data: call.calldata as string,
+      operation: OperationType.Call,
+    }));
+    console.log("transactions", transactions);
 
-        // Manually setting the ABI for evm worksheet contract
-        // we get an empty array for evm worksheet contract abi because evm worksheet contract source code not verified
-        if (abi.length === 0) {
-          abi = chainAbi.worksheet;
-        }
-
-        const contract = new Contract(call.contractAddress, abi, signer);
-
-        const fragment = contract.interface.fragments.find(
-          (fragment) => fragment.name === call.entrypoint
-        );
-
-        if (!fragment) {
-          throw new Error(
-            `Could not find fragment for ${call.entrypoint} entrypoint in contract ABI`
-          );
-        }
-        const signature = fragment.format();
-
-        const contractInterface = new ethers.utils.Interface(abi);
-        const inputNames = contractInterface.functions[signature].inputs.map(
-          (input) => input.name
-        );
-        const inputValues = (call.calldata as RawCalldata).reduce(
-          (acc, value, index) => {
-            acc[inputNames[index]] = value as ValueType;
-            return acc;
-          },
-          {} as { [key: string]: ValueType }
-        );
-
-        const transactionInput: CallContractTransactionInput = {
-          type: TransactionType.callContract,
-          id: index.toString(),
-          to: call.contractAddress,
-          value:
-            call.entrypoint === "addSheet" ? options.value.toString() : "0",
-          abi: abi,
-          functionSignature: signature,
-          inputValues,
-        };
-
-        const metaTransaction = encodeSingle(transactionInput);
-
-        return metaTransaction;
-      })
-    );
-
-    const transactions = encodeMulti(
-      encodeTransactions,
-      chainConfig.addresses.multisend
-    );
-    const multiSendTx = ethers.utils.solidityPack(
-      ["uint8", "address", "uint256", "uint256", "bytes"],
-      [
-        0,
-        transactions.to,
-        0,
-        hexDataLength(transactions.data),
-        transactions.data,
-      ]
-    );
-
-    const receipt = async () => {
-      const abi = await this.getAbi(this.config.addresses.multisend!);
-      const contract = new Contract(
-        this.config.addresses.multisend!,
-        abi,
-        signer
+    const transaction =
+      "0x" +
+      encodeMulti(transactions, chainConfig.addresses.multisend).data.slice(
+        2 * (1 + 4 + 32 + 32)
       );
-      const response: ethers.providers.TransactionResponse =
-        await contract.multiSend(multiSendTx, {
-          value: options ? options.value : 0,
-        });
-      return await response.wait();
-    };
+    console.log("transaction", transaction);
 
-    const transactionResponse = await receipt();
+    const value = transactions
+      .map((tx) => number.toBN(tx.value))
+      .reduce((prev, cur) => prev.add(cur), number.toBN(0));
+    console.log("value", value);
+
+    const multisend = MultiSendCallOnly__factory.connect(
+      chainConfig.addresses.multisend!,
+      signer
+    );
+    const overrides = value.gt(number.toBN(0)) ? { value: bn2hex(value) } : {};
+    console.log("overrides", overrides);
+    const tx = await multisend.multiSend(
+      // encodeMulti creates a new MetaTransaction, and the data includes to bytes selector and bytes lengths
+      // So we slices "0x" + bytes4 + 2 times bytes.length
+      transaction,
+      overrides
+    );
+    const receipt = await tx.wait();
 
     return {
-      transaction_hash: transactionResponse.transactionHash,
+      transaction_hash: receipt.transactionHash,
     };
   };
 

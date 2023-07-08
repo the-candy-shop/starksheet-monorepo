@@ -9,4 +9,6 @@ export interface WorksheetContract {
   renderCells(): Promise<CellRendered[]>;
   nRow(): Promise<number>;
   getCellPrice(): Promise<number>;
+  name(): Promise<string>;
+  symbol(): Promise<string>;
 }

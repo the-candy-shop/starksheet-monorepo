@@ -8,11 +8,11 @@ import React, {
 } from "react";
 import { number } from "starknet";
 import { isDependency } from "../components/ActionBar/formula.utils";
+import { useChainProvider } from "../hooks/useChainProvider";
 import { Cell, CellData, CellGraph, CellValues, UpdatedValues } from "../types";
 import { RC_BOUND } from "../utils/constants";
 import { bn2hex } from "../utils/hexUtils";
 import { resolveContractAddress } from "../utils/sheetUtils";
-import { useChainProvider } from "../hooks/useChainProvider";
 import { OnsheetContext } from "./OnsheetContext";
 
 export const CellValuesContext = React.createContext<{
@@ -89,25 +89,29 @@ export const CellValuesContextProvider = ({
 
     const contractAddress = bn2hex(resolvedContractAddress);
 
-    const calldata = cell.calldata
-      .map((arg) => {
-        return isDependency(arg)
-          ? values[(arg.toNumber() - 1) / 2]
-          : arg.div(number.toBN(2));
-      })
-      .map((arg) => arg.toString());
+    console.log("contractAddress", contractAddress);
+    const calldata = cell.calldata.map((arg) => {
+      return isDependency(arg)
+        ? values[(arg.toNumber() - 1) / 2]
+        : arg.div(number.toBN(2));
+    });
 
+    console.log("calldata", calldata);
     const call = {
-      contractAddress,
+      to: contractAddress,
       entrypoint: cell.abi.name,
+      selector: cell.selector,
       calldata,
+      abi: cell.abi,
     };
+    console.log("call", call);
 
     const value =
-      cell.abi.stateMutability === "view"
-        ? (await chainProvider.callContract(call))
-        : NaN;
+      cell.abi.stateMutability === "view" || cell.abi.stateMutability === "pure"
+        ? await chainProvider.callContract(call)
+        : 0;
 
+    console.log("value", number.toBN(value).toString());
     return number.toBN(value);
   };
 

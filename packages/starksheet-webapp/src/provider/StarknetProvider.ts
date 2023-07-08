@@ -1,6 +1,7 @@
+import BN from "bn.js";
 import { BigNumberish } from "ethers";
 import { disconnect, connect as getStarknet } from "get-starknet";
-import { Abi, Call, RpcProvider, number, stark } from "starknet";
+import { Abi, RpcProvider, hash, number, stark } from "starknet";
 import {
   StarknetSpreadsheetContract,
   StarknetWorksheetContract,
@@ -10,6 +11,7 @@ import {
   ChainId,
   ChainProvider,
   ChainType,
+  ContractAbi,
   ContractCall,
   TransactionResponse,
   WorksheetContract,
@@ -37,6 +39,15 @@ export class StarknetProvider implements ChainProvider {
       abi,
       this.rpcProvider
     );
+  }
+
+  async addressAlreadyDeployed(address: string) {
+    try {
+      await this.rpcProvider.getClassAt(address, "latest");
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**
@@ -118,7 +129,6 @@ export class StarknetProvider implements ChainProvider {
     } catch (error) {
       response = { abi: [] };
     }
-    console.log("response", response);
 
     abi = response.abi || abi;
     return [
@@ -149,11 +159,27 @@ export class StarknetProvider implements ChainProvider {
     ];
   }
 
+  parseAbi = (abi: Abi): ContractAbi =>
+    (!!abi.length ? abi : []).reduce(
+      (prev, cur) => ({
+        ...prev,
+        [hash.getSelectorFromName(cur.name)]: cur,
+      }),
+      {}
+    );
+
   /**
    * @inheritDoc
    */
   async callContract(call: ContractCall): Promise<string> {
-    const response = await this.rpcProvider.callContract(call, "latest");
+    const response = await this.rpcProvider.callContract(
+      {
+        contractAddress: call.to,
+        entrypoint: call.entrypoint,
+        calldata: call.calldata as BN[],
+      },
+      "latest"
+    );
     return response.result[0];
   }
 
@@ -178,7 +204,15 @@ export class StarknetProvider implements ChainProvider {
       throw new Error("Login failed");
     }
 
-    if (this.config.chainId !== hex2str(starknetWindow.provider.chainId)) {
+    console.log("this.config.chainId", this.config.chainId);
+    console.log(
+      "starknetWindow.provider.chainId",
+      starknetWindow.provider.chainId
+    );
+    if (
+      (this.config.chainId as string) !==
+      (starknetWindow.provider.chainId as string)
+    ) {
       if (starknetWindow.id === "argentX") {
         await starknetWindow.request({
           type: "wallet_switchStarknetChain",
@@ -200,7 +234,7 @@ export class StarknetProvider implements ChainProvider {
    * @inheritDoc
    */
   async execute(
-    calls: Call[],
+    calls: ContractCall[],
     options?: { value?: BigNumberish }
   ): Promise<TransactionResponse> {
     const starknetWindow = await getStarknet({ modalMode: "neverAsk" });
@@ -213,11 +247,10 @@ export class StarknetProvider implements ChainProvider {
     if (options?.value) {
       calls = [
         {
-          contractAddress:
-            "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
+          to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
           entrypoint: "approve",
           calldata: stark.compileCalldata({
-            spender: calls[0].contractAddress,
+            spender: calls[0].to,
             amount: {
               type: "struct",
               low: number.toBN(options.value.toString()),
@@ -229,6 +262,12 @@ export class StarknetProvider implements ChainProvider {
       ];
     }
 
-    return await starknetWindow.account.execute(calls);
+    return await starknetWindow.account.execute(
+      calls.map((call) => ({
+        contractAddress: call.to,
+        entrypoint: call.entrypoint,
+        calldata: call.calldata as BN[],
+      }))
+    );
   }
 }

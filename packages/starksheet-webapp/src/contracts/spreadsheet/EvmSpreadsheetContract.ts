@@ -1,49 +1,50 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import BN from "bn.js";
-import { BigNumber, Contract, ethers } from "ethers";
-import { ABI, Cell, ContractCall } from "../../types";
+import { BigNumber, ethers } from "ethers";
+import { Cell, ContractCall, SheetConstructorArgs } from "../../types";
 import { SpreadsheetContract } from "../../types/contracts";
-import { bn2hex, hex2str } from "../../utils/hexUtils";
+import { RC_BOUND } from "../../utils/constants";
+import { bn2uint, hex2str } from "../../utils/hexUtils";
+import { Evmsheet, Evmsheet__factory, Sheet__factory } from "../types";
 
 /**
  * Represents an EVM compatible implementation of the SpreadsheetContract.
  */
 export class EvmSpreadsheetContract implements SpreadsheetContract {
-  private contract: Contract;
+  private contract: Evmsheet;
+  private sheetPrice: BN;
 
   /**
    * The class constructor.
    */
-  constructor(
-    private address: string,
-    private abi: ABI,
-    private provider: JsonRpcProvider
-  ) {
-    console.log("abi", abi);
-    this.contract = new Contract(address, abi, provider);
+  constructor(private address: string, private provider: JsonRpcProvider) {
+    this.sheetPrice = new BN(0);
+    this.contract = Evmsheet__factory.connect(address, provider);
+    this.getSheetPrice().then((price) => {
+      this.sheetPrice = price;
+    });
+  }
+
+  getSalt(name: string, symbol: string, from: string) {
+    return ethers.utils.keccak256(
+      ethers.utils.solidityPack(
+        ["string", "string", "address"],
+        [name, symbol, from]
+      )
+    );
   }
 
   /**
    * @inheritDoc
    */
-  addSheetTxBuilder(name: string, symbol: string): ContractCall {
-    const decodedName = hex2str(name);
-    const decodedSymbol = hex2str(symbol);
-
-    return {
-      contractAddress: this.address,
-      entrypoint: "addSheet",
-      calldata: [decodedName, decodedSymbol],
-    };
-  }
-
-  /**
-   * @inheritDoc
-   */
-  async calculateSheetAddress(): Promise<string> {
-    const from = this.address;
-    const nonce = await this.provider.getTransactionCount(from);
-    return ethers.utils.getContractAddress({ from, nonce });
+  async calculateSheetAddress(
+    from: string,
+    constructorCalldata: SheetConstructorArgs
+  ): Promise<string> {
+    const decodedName = hex2str(constructorCalldata.name.toString(16));
+    const decodedSymbol = hex2str(constructorCalldata.symbol.toString(16));
+    const salt = this.getSalt(decodedName, decodedSymbol, from);
+    return await this.contract.getSheetCreationAddress(this.address, salt);
   }
 
   /**
@@ -65,7 +66,26 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   getSheets(): Promise<string[]> {
-    return this.contract.sheets();
+    return this.contract.getSheets();
+  }
+
+  /**
+   * @inheritDoc
+   */
+  addSheetTxBuilder(name: string, symbol: string, from: string): ContractCall {
+    const decodedName = hex2str(name);
+    const decodedSymbol = hex2str(symbol);
+    const salt = this.getSalt(decodedName, decodedSymbol, from);
+    const calldata = Evmsheet__factory.createInterface().encodeFunctionData(
+      "addSheet",
+      [decodedName, decodedSymbol, salt]
+    );
+
+    return {
+      to: this.address,
+      calldata,
+      value: this.sheetPrice,
+    };
   }
 
   /**
@@ -74,22 +94,19 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
   ): ContractCall {
-    const contractAddress = bn2hex(cell.contractAddress);
-
-    const selector = ethers.BigNumber.from(cell.selector.toString());
-    const value = ethers.utils.hexZeroPad(selector.toHexString(), 32);
-
-    let calldata = [0];
-    if (cell.calldata.length > 0) {
-      calldata = cell.calldata.map((val) => Number(bn2hex(val)));
-    }
-
-    const data = ethers.utils.solidityPack(["uint256"], [calldata]);
-
+    // If contractAddress is RC_BOUND, then the cell is constant and we store the selector
+    // as a regular uint256
+    const selector = cell.contractAddress.eq(RC_BOUND)
+      ? bn2uint(32)(cell.selector)
+      : bn2uint(4)(cell.selector).padEnd(64, "0");
     return {
-      contractAddress: cell.sheetAddress,
-      entrypoint: "setCell",
-      calldata: [cell.id, contractAddress, value, data],
+      to: cell.sheetAddress,
+      calldata: Sheet__factory.createInterface().encodeFunctionData("setCell", [
+        cell.id,
+        "0x" + bn2uint(20)(cell.contractAddress),
+        "0x" + selector,
+        "0x" + cell.calldata.map(bn2uint(32)).join(""),
+      ]),
     };
   }
 }

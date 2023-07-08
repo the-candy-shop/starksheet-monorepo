@@ -1,12 +1,13 @@
-import { Contract, number, RpcProvider } from "starknet";
 import BN from "bn.js";
-import { ABI, CellData, CellRendered, WorksheetContract } from "../../types";
+import { Contract, number, RpcProvider } from "starknet";
 import { N_ROW } from "../../config";
+import { Abi, CellData, CellRendered, WorksheetContract } from "../../types";
+import { hex2str, normalizeHexString } from "../../utils/hexUtils";
 
 export class StarknetWorksheetContract implements WorksheetContract {
   private contract: Contract;
 
-  constructor(address: string, abi: ABI, provider: RpcProvider) {
+  constructor(address: string, abi: Abi, provider: RpcProvider) {
     this.contract = new Contract(abi, address, provider);
   }
 
@@ -93,5 +94,19 @@ export class StarknetWorksheetContract implements WorksheetContract {
       blockIdentifier: "latest",
     });
     return result.tokenId.low.toNumber();
+  }
+
+  async name(): Promise<string> {
+    const result = await this.contract.call("name", [], {
+      blockIdentifier: "latest",
+    });
+    return hex2str(normalizeHexString(result.name));
+  }
+
+  async symbol(): Promise<string> {
+    const result = await this.contract.call("symbol", [], {
+      blockIdentifier: "latest",
+    });
+    return hex2str(normalizeHexString(result.symbol));
   }
 }

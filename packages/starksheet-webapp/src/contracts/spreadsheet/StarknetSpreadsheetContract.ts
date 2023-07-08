@@ -1,6 +1,12 @@
-import { Call, Contract, hash, number, RpcProvider, stark } from "starknet";
 import BN from "bn.js";
-import { ABI, Cell, SheetConstructorArgs, SpreadsheetContract } from "../../types";
+import { Contract, hash, number, RpcProvider, stark } from "starknet";
+import {
+  Abi,
+  Cell,
+  ContractCall,
+  SheetConstructorArgs,
+  SpreadsheetContract,
+} from "../../types";
 import { bn2hex } from "../../utils/hexUtils";
 
 /**
@@ -22,12 +28,12 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
   /**
    * The class constructor.
    */
-  constructor(private address: string, private abi: ABI, provider: RpcProvider) {
-    this.contract = new Contract(
-      abi,
-      address,
-      provider,
-    );
+  constructor(
+    private address: string,
+    private abi: Abi,
+    provider: RpcProvider
+  ) {
+    this.contract = new Contract(abi, address, provider);
     this.proxyClassHash = this.getProxyClassHash();
     this.sheetClashHash = this.getSheetClassHash();
   }
@@ -38,7 +44,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
   async getSheetDefaultRendererAddress(): Promise<string> {
     const renderer = await this.contract.functions[
       "getSheetDefaultRendererAddress"
-      ]();
+    ]();
     return bn2hex(renderer.address);
   }
 
@@ -63,41 +69,41 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    */
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
-  ): Call {
+  ): ContractCall {
     return cell.owner.eq(number.toBN(0))
       ? {
-        contractAddress: cell.sheetAddress,
-        entrypoint: "mintAndSetPublic",
-        calldata: stark.compileCalldata({
-          tokenId: {
-            type: "struct",
-            low: cell.tokenId,
-            high: 0,
-          },
-          proof: [],
-          contractAddress: cell.contractAddress.toString(),
-          value: cell.selector.toString(),
-          cellCalldata: cell.calldata.map((d) => d.toString()),
-        }),
-      }
+          to: cell.sheetAddress,
+          entrypoint: "mintAndSetPublic",
+          calldata: stark.compileCalldata({
+            tokenId: {
+              type: "struct",
+              low: cell.tokenId,
+              high: 0,
+            },
+            proof: [],
+            contractAddress: cell.contractAddress.toString(),
+            value: cell.selector.toString(),
+            cellCalldata: cell.calldata.map((d) => d.toString()),
+          }),
+        }
       : {
-        contractAddress: cell.sheetAddress,
-        entrypoint: "setCell",
-        calldata: stark.compileCalldata({
-          tokenId: cell.tokenId.toString(),
-          contractAddress: cell.contractAddress.toString(),
-          value: cell.selector.toString(),
-          cellCalldata: cell.calldata.map((d) => d.toString()),
-        }),
-      };
+          to: cell.sheetAddress,
+          entrypoint: "setCell",
+          calldata: stark.compileCalldata({
+            tokenId: cell.tokenId.toString(),
+            contractAddress: cell.contractAddress.toString(),
+            value: cell.selector.toString(),
+            cellCalldata: cell.calldata.map((d) => d.toString()),
+          }),
+        };
   }
 
   /**
    * @inheritDoc
    */
-  addSheetTxBuilder(name: string, symbol: string): Call {
+  addSheetTxBuilder(name: string, symbol: string, from: string): ContractCall {
     return {
-      contractAddress: this.address,
+      to: this.address,
       entrypoint: "addSheet",
       calldata: stark.compileCalldata({
         name,
@@ -111,8 +117,8 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   async calculateSheetAddress(
-    salt: number.BigNumberish,
-    constructorCalldata: SheetConstructorArgs,
+    from: number.BigNumberish,
+    constructorCalldata: SheetConstructorArgs
   ): Promise<string> {
     const classHash = await this.proxyClassHash;
 
@@ -124,19 +130,16 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
       name: constructorCalldata.name,
       symbol: constructorCalldata.symbol,
       owner: constructorCalldata.owner,
-      merkleRoot: 0,
-      maxPerWallet: 0,
+      merkleRoot: constructorCalldata.merkleRoot,
+      maxPerWallet: constructorCalldata.maxPerWallet,
       rendererAddress: constructorCalldata.rendererAddress,
     };
 
     const args = Object.values(extendedCall);
 
-    return Promise.resolve(hash.calculateContractAddressFromHash(
-      salt,
-      classHash,
-      args,
-      this.address
-    ));
+    return Promise.resolve(
+      hash.calculateContractAddressFromHash(from, classHash, args, this.address)
+    );
   }
 
   /**

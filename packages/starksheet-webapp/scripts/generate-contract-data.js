@@ -17,8 +17,9 @@ const evmsheetDeploymentsFolder = path.join(
   "broadcast/Evmsheet.s.sol"
 );
 
-const spreadsheetAddresses = {};
-const evmsheetAddresses = {};
+const contractData = {};
+let errorFiles = 0;
+let processedFiles = 0;
 
 // Read directory
 fs.readdir(starksheetDeploymentsFolder, (err, files) => {
@@ -34,22 +35,35 @@ fs.readdir(starksheetDeploymentsFolder, (err, files) => {
       folder,
       "deployments.json"
     );
+    console.log(`Reading folder ${folder}`);
 
     // Read deployments.json file
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
-        console.error(`Error reading deployments.json in ${folder}:`, err);
+        console.error(`Error reading deployments.json for ${folder}`);
         return;
       }
 
       try {
         const deployments = JSON.parse(data);
-        const starksheetAddress = deployments["Starksheet"].address;
-        const mathAddress = deployments["math"].address;
-        spreadsheetAddresses[folder] = {
-          spreadsheet: starksheetAddress,
-          math: mathAddress,
+        contractData[folder] = {
+          addresses: {},
+          deployedAbis: {},
         };
+        for (const contractName in deployments) {
+          console.log(`Reading contract ${contractName}`);
+          const contractDeployment = deployments[contractName];
+          const contractAddress = contractDeployment.address;
+          const contractAbi = JSON.parse(
+            fs.readFileSync(
+              path.join(starksheetCairoPath, contractDeployment.artifact)
+            )
+          ).abi;
+          contractData[folder].addresses[
+            contractName.toLowerCase().replace("starksheet", "spreadsheet")
+          ] = contractAddress;
+          contractData[folder].deployedAbis[contractAddress] = contractAbi;
+        }
       } catch (error) {
         console.error(`Error parsing deployments.json in ${folder}:`, error);
       }
@@ -75,12 +89,20 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
         return;
       }
 
+      console.log(`Reading ${subdirectoryPath}`);
+      if (subdirectoryPath.includes("dry-run")) {
+        console.log(`Dry-run: skipping`);
+        return;
+      }
+
       const runLatestFiles = files.filter((file) =>
         file.startsWith("run-latest")
       );
+      console.log(`Files: ${runLatestFiles}`);
 
       runLatestFiles.forEach((file) => {
         const filePath = path.join(subdirectoryPath, file);
+        console.log(`Reading : ${filePath}`);
 
         // Read run-latest.json file
         fs.readFile(filePath, "utf8", (err, data) => {
@@ -96,28 +118,51 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
             transactions.forEach((transaction) => {
               const contractName = transaction.contractName || "Math";
               const contractAddress = transaction.contractAddress;
-              const rpcUrl = new URL(transaction.rpc).hostname
-                .replace("127.0.0.1", "anvil")
-                .split(".")[0];
+              const rpcUrl = transaction.rpc
+                ? new URL(transaction.rpc).hostname
+                    .replace("127.0.0.1", "anvil")
+                    .split(".")[0]
+                : "anvil";
 
-              if (!evmsheetAddresses[rpcUrl]) {
-                evmsheetAddresses[rpcUrl] = {};
+              const contractAbi = JSON.parse(
+                fs.readFileSync(
+                  path.join(
+                    evmsheetDirectoryPath,
+                    `out/${contractName}.sol/${contractName}.json`
+                  )
+                )
+              ).abi;
+
+              if (!contractData[rpcUrl]) {
+                contractData[rpcUrl] = {
+                  addresses: {},
+                  deployedAbis: {},
+                };
               }
-
-              evmsheetAddresses[rpcUrl][contractName] = contractAddress;
+              contractData[rpcUrl].addresses[
+                contractName
+                  .replace("Evmsheet", "spreadsheet")
+                  .replace("MultiSendCallOnly", "multisend")
+                  .toLowerCase()
+              ] = contractAddress;
+              contractData[rpcUrl].deployedAbis[contractAddress] = contractAbi;
             });
-
+            processedFiles = processedFiles + 1;
+          } catch (error) {
+            console.error(`Error parsing ${file}:`);
+            errorFiles = errorFiles + 1;
+          } finally {
             // Check if all run-latest.json files have been processed
             const totalRunLatestFiles =
               subdirectories.length * runLatestFiles.length;
-            const processedRunLatestFiles =
-              Object.keys(evmsheetAddresses).length;
-            if (processedRunLatestFiles === totalRunLatestFiles) {
-              // Merge spreadsheetAddresses and evmsheetAddresses
+            if (processedFiles + errorFiles === totalRunLatestFiles) {
+              // Merge starksheetAddresses and evmsheetAddresses
               const mergedAddresses = {
-                starknet: {
-                  addresses: spreadsheetAddresses,
-                  abis: {
+                network: process.env.REACT_APP_NETWORK
+                  ? contractData[process.env.REACT_APP_NETWORK]
+                  : contractData,
+                abis: {
+                  starknet: {
                     spreadsheet: JSON.parse(
                       fs.readFileSync(
                         path.join(starksheetCairoPath, "build/Starksheet.json")
@@ -129,10 +174,7 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
                       )
                     ).abi,
                   },
-                },
-                eth: {
-                  addresses: evmsheetAddresses,
-                  abis: {
+                  eth: {
                     spreadsheet: JSON.parse(
                       fs.readFileSync(
                         path.join(
@@ -158,6 +200,9 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
                 "../src/contracts/contractData.json"
               );
 
+              // if (process.env.REACT_APP_NETWORK) {
+              //   mergedAddresses = {};
+              // }
               // Convert the mergedAddresses object to JSON
               const contractDataJson = JSON.stringify(mergedAddresses, null, 2);
 
@@ -176,8 +221,6 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
                 }
               );
             }
-          } catch (error) {
-            console.error(`Error parsing ${file}:`, error);
           }
         });
       });

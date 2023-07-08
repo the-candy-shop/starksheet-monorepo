@@ -9,11 +9,11 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { N_ROW } from "../config";
+import { useChainProvider } from "../hooks";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { chainConfig } from "../provider/chains";
 import { Sheet, SheetConstructorArgs, Spreadsheet } from "../types";
 import { str2hex } from "../utils/hexUtils";
-import { AbisContext } from "./AbisContext";
 import { AccountContext } from "./AccountContext";
 import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
@@ -43,7 +43,7 @@ export const OnsheetContext = React.createContext<{
 export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
   const { updateAppStatus, updateSheetStatus } = useContext(AppStatusContext);
   const { accountAddress } = useContext(AccountContext);
-  const { getAbiForContract } = useContext(AbisContext);
+  const chainProvider = useChainProvider();
   const navigate = useNavigate();
   const [onsheet, setOnsheet] = useState<Spreadsheet>({
     address: chainConfig.addresses.spreadsheet,
@@ -121,10 +121,20 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
       accountAddress,
       calldata
     );
-    const abi = await getAbiForContract(address);
+    const addressAlreadyDeployed = await chainProvider.addressAlreadyDeployed(
+      address
+    );
     let newSheet: Sheet;
-    if (Object.keys(abi).length !== 0) {
-      newSheet = { ...sheet, address };
+    if (addressAlreadyDeployed) {
+      const sheetContract =
+        chainProvider.getWorksheetContractByAddress(address);
+      const [name, symbol, nRow, cellPrice] = await Promise.all([
+        sheetContract.name(),
+        sheetContract.symbol(),
+        sheetContract.nRow(),
+        sheetContract.getCellPrice(),
+      ]);
+      newSheet = { name, symbol, nRow, cellPrice, address };
     } else {
       newSheet = { ...sheet, address, calldata, nRow: N_ROW, cellPrice: 0 };
     }

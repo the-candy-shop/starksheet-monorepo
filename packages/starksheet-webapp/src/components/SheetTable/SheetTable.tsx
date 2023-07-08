@@ -112,7 +112,6 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           contract.nRow(),
           contract.getCellPrice(),
         ]).then((response) => {
-          console.log("response", response);
           appendSheet({
             name: response[0],
             symbol: response[1],
@@ -123,7 +122,6 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         });
       }
       let cells;
-      console.log("sheet", sheet);
       if (sheet?.calldata) {
         cells = new Promise<Cell[]>((resolve) => resolve([]));
       } else {
@@ -131,12 +129,9 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           updateSheetStatus(_selectedSheetAddress, {
             message: "Fetching cells metadata",
           });
-          console.log("renderedCells", renderedCells);
           return Promise.all(
             (renderedCells as CellRendered[]).map(async (cell) => {
-              console.log("cell", cell);
               const _cell = await contract.getCell(cell.id);
-              console.log("_cell", _cell);
               return {
                 ...cell,
                 ..._cell,
@@ -148,7 +143,6 @@ const SheetTable = ({ sx }: SheetTableProps) => {
       }
       return cells
         .then((cells: Cell[]) => {
-          console.log("cells", cells);
           updateSheetStatus(_selectedSheetAddress, {
             message: "Finalizing sheet data",
           });
@@ -194,7 +188,6 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           }));
         })
         .catch((error) => {
-          console.log("error", error);
           error = true;
           finalMessage = `Error: Starksheet cannot render sheet at address ${address}
               <br />

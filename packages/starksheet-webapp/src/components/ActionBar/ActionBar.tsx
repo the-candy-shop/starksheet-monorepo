@@ -75,7 +75,6 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
       computeValue(_values)(cellData)
         .then(async (value) => {
-          console.log("value", value);
           let error = false;
           updatedCells.push({
             ...currentCells[currentCellId],

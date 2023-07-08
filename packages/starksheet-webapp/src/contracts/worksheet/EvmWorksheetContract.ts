@@ -27,7 +27,6 @@ export class EvmWorksheetContract implements WorksheetContract {
     const [contractAddress, selector, data] = await this.contract.getCell(
       tokenId
     );
-    console.log("tokenId", [tokenId, contractAddress, selector, data]);
     return {
       contractAddress: ethersHexStringToBN(contractAddress),
       selector: number.toBN(selector.slice(0, 10)),
@@ -58,7 +57,6 @@ export class EvmWorksheetContract implements WorksheetContract {
         .ownerOf(tokenId)
         .then((address: string) => new BN(address));
     } catch (error) {
-      console.log("ownerOf", error);
       return new BN(0);
     }
   }
@@ -75,7 +73,6 @@ export class EvmWorksheetContract implements WorksheetContract {
         owner: number.toBN(cell.owner),
       };
     } catch (error) {
-      console.log("renderCell", error);
       const owner = await this.ownerOf(tokenId);
       return {
         id: tokenId,

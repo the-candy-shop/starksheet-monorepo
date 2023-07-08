@@ -1,7 +1,15 @@
 import BN from "bn.js";
 import { BigNumberish } from "ethers";
 import { disconnect, connect as getStarknet } from "get-starknet";
-import { Abi, RpcProvider, hash, number, stark } from "starknet";
+import {
+  Abi,
+  Provider,
+  ProviderInterface,
+  RpcProvider,
+  hash,
+  number,
+  stark,
+} from "starknet";
 import {
   StarknetSpreadsheetContract,
   StarknetWorksheetContract,
@@ -17,33 +25,35 @@ import {
   WorksheetContract,
 } from "../types";
 import { RC_BOUND } from "../utils/constants";
-import { hex2str, normalizeHexString } from "../utils/hexUtils";
+import { bn2hex, hex2str, normalizeHexString } from "../utils/hexUtils";
 import { chainAbi } from "./chains";
 
 export class StarknetProvider implements ChainProvider {
-  private readonly rpcProvider: RpcProvider;
+  private readonly provider: ProviderInterface;
   private readonly spreadsheetContract: StarknetSpreadsheetContract;
 
   /**
    * Constructs a StarknetProvider.
    */
   constructor(rpcUrl: string, private config: ChainConfig) {
-    this.rpcProvider = new RpcProvider({
-      nodeUrl: rpcUrl,
-    });
+    this.provider = config.gateway
+      ? new Provider({ sequencer: { network: config.gateway } })
+      : new RpcProvider({
+          nodeUrl: rpcUrl,
+        });
 
     const address = config.addresses.spreadsheet;
     const abi = chainAbi.spreadsheet;
     this.spreadsheetContract = new StarknetSpreadsheetContract(
       address,
       abi,
-      this.rpcProvider
+      this.provider
     );
   }
 
   async addressAlreadyDeployed(address: string) {
     try {
-      await this.rpcProvider.getClassAt(address, "latest");
+      await this.provider.getClassAt(address, "latest");
       return true;
     } catch (error) {
       return false;
@@ -97,21 +107,21 @@ export class StarknetProvider implements ChainProvider {
    */
   getWorksheetContractByAddress(address: string): WorksheetContract {
     const abi = chainAbi.worksheet;
-    return new StarknetWorksheetContract(address, abi, this.rpcProvider);
+    return new StarknetWorksheetContract(address, abi, this.provider);
   }
 
   /**
    * @inheritDoc
    */
   waitForTransaction(hash: string): Promise<any> {
-    return this.rpcProvider.waitForTransaction(hash, 50_000);
+    return this.provider.waitForTransaction(hash, 3_000);
   }
 
   /**
    * @inheritDoc
    */
   getTransactionReceipt(hash: string): Promise<any> {
-    return this.rpcProvider.getTransactionReceipt(hash);
+    return this.provider.getTransactionReceipt(hash);
   }
 
   /**
@@ -125,7 +135,7 @@ export class StarknetProvider implements ChainProvider {
 
     let response;
     try {
-      response = await this.rpcProvider.getClassAt(address);
+      response = await this.provider.getClassAt(address);
     } catch (error) {
       response = { abi: [] };
     }
@@ -144,12 +154,10 @@ export class StarknetProvider implements ChainProvider {
                 f.inputs.length === 0
             )
             .map(async (f) => {
-              const implementationAddress = await this.rpcProvider.callContract(
-                {
-                  contractAddress: address,
-                  entrypoint: f.name,
-                }
-              );
+              const implementationAddress = await this.provider.callContract({
+                contractAddress: address,
+                entrypoint: f.name,
+              });
               return Object.values(
                 (await this.getAbi(implementationAddress.result[0])) || {}
               ) as Abi;
@@ -172,11 +180,11 @@ export class StarknetProvider implements ChainProvider {
    * @inheritDoc
    */
   async callContract(call: ContractCall): Promise<string> {
-    const response = await this.rpcProvider.callContract(
+    const response = await this.provider.callContract(
       {
         contractAddress: call.to,
         entrypoint: call.entrypoint,
-        calldata: call.calldata as BN[],
+        calldata: (call.calldata as BN[]).map((c) => bn2hex(c)),
       },
       "latest"
     );
@@ -204,11 +212,6 @@ export class StarknetProvider implements ChainProvider {
       throw new Error("Login failed");
     }
 
-    console.log("this.config.chainId", this.config.chainId);
-    console.log(
-      "starknetWindow.provider.chainId",
-      starknetWindow.provider.chainId
-    );
     if (
       (this.config.chainId as string) !==
       (starknetWindow.provider.chainId as string)

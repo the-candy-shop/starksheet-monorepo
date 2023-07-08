@@ -26,7 +26,6 @@ export function toPlainTextFormula(
 ): string {
   if (!cellData) return "0";
 
-  console.log("cellData", cellData);
   const { contractAddress, selector, calldata, abi } = cellData;
   if (contractAddress.eq(RC_BOUND)) {
     return selector.gte(RC_BOUND) ? bn2hex(selector) : selector.toString();
@@ -36,7 +35,6 @@ export function toPlainTextFormula(
     ? tokenIdToCellName(contractAddress.toNumber())
     : bn2hex(contractAddress);
   const selectorHexString = bn2hex(selector);
-  console.log("selectorHexString", selectorHexString);
   const operator = abi?.name || selectorHexString;
 
   const args = calldata.map((arg) =>
@@ -102,15 +100,12 @@ export function toPlainTextFormula(
           )
           .map(bn2uint(32))
           .join("");
-      console.log("data", data);
       const decodedData = ethers.utils.defaultAbiCoder.decode(
         abi.inputs.map((i) => i.type),
         data
       );
-      console.log("decodedData", decodedData);
       // @ts-ignore
       displayedArgs = [customStringify(decodedData).slice(1, -1)];
-      console.log("displayedArgs", displayedArgs);
     } else {
       throw new Error(
         `ChainType ${chainType} has no cellData to string encoding function`
@@ -150,9 +145,7 @@ export function parseContractCall(
     .replaceAll("\r", "")
     .replaceAll("&nbsp;", "");
 
-  console.log("_formula", _formula);
   const formulaMatch = _formula.match(contractCallRegex);
-  console.log("formulaMatch", formulaMatch);
 
   if (!formulaMatch?.groups) {
     return null;
@@ -168,11 +161,6 @@ export function parseContractCall(
     return null;
   }
 
-  console.log({
-    contractAddress,
-    selector: formulaMatch.groups.selector,
-    args: formulaMatch.groups.args,
-  });
   return {
     contractAddress,
     selector: formulaMatch.groups.selector,
@@ -209,25 +197,20 @@ export function parse(
         (_abi as FunctionAbi).inputs.filter((i) => !i.name.endsWith("_len"))
           .length
   );
-  console.log("filteredAbi", filteredAbi);
 
   if (filteredAbi.length !== 1) {
     return null;
   }
 
   const selector = filteredAbi[0][0];
-  console.log("selector", selector);
   const selectorAbi = filteredAbi[0][1] as FunctionAbi;
-  console.log("selectorAbi", selectorAbi);
 
   let calldata;
   if (chainType === ChainType.STARKNET) {
     const encodedArgs = encodeInputs(args) as any[];
-    console.log("encodedArgs", encodedArgs);
     // Flatten the object prefixing arrays with their len
     // Result dismisses the first value, with is the len of the initial array of args
     calldata = flattenWithLen(encodedArgs).slice(1) as BN[];
-    console.log("calldata", calldata);
   } else if (chainType === ChainType.EVM) {
     // TODO: need to support cell references
     calldata = ethers.utils.defaultAbiCoder
@@ -242,8 +225,6 @@ export function parse(
     throw new Error(`No parsing function for chainType ${chainType}`);
   }
 
-  console.log("selectorAbi", selectorAbi);
-  console.log("calldata", calldata);
   return {
     contractAddress: number.toBN(rawCall.contractAddress),
     selector: number.toBN(selector),
@@ -313,9 +294,6 @@ function encodeInputs(input: any): any {
  * @returns
  */
 function flattenWithLen(input: any): any[] {
-  console.log("input", input);
-  console.log("typeof input", typeof input);
-
   if (Array.isArray(input)) {
     return [
       encodeConst(input.length),

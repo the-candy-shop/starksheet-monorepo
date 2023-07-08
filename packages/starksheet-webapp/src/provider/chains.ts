@@ -37,6 +37,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "https://starkscan.co/contract/",
     nftBaseUrl: "https://mintsquare.io/collection/starknet/",
     rpcUrl: `https://starknet-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    gateway: "mainnet-alpha",
   },
   testnet: {
     chainId: ChainId.STARKNET_TESTNET,
@@ -44,6 +45,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "https://testnet.starkscan.co/contract/",
     nftBaseUrl: "https://mintsquare.io/collection/starknet-testnet/",
     rpcUrl: `https://starknet-goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    gateway: "goerli-alpha",
   },
   testnet2: {
     chainId: ChainId.STARKNET_TESTNET2,
@@ -51,6 +53,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "https://testnet-2.starkscan.co/contract/",
     nftBaseUrl: "",
     rpcUrl: `https://starknet-goerli2.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    gateway: "goerli-alpha-2",
   },
   devnet: {
     chainId: ChainId.STARKNET_TESTNET,

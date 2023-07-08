@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { Contract, hash, number, RpcProvider, stark } from "starknet";
+import { Contract, hash, number, ProviderInterface, stark } from "starknet";
 import {
   Abi,
   Cell,
@@ -31,7 +31,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
   constructor(
     private address: string,
     private abi: Abi,
-    provider: RpcProvider
+    provider: ProviderInterface
   ) {
     this.contract = new Contract(abi, address, provider);
     this.proxyClassHash = this.getProxyClassHash();

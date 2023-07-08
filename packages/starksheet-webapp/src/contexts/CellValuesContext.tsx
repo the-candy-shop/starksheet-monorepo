@@ -89,14 +89,12 @@ export const CellValuesContextProvider = ({
 
     const contractAddress = bn2hex(resolvedContractAddress);
 
-    console.log("contractAddress", contractAddress);
     const calldata = cell.calldata.map((arg) => {
       return isDependency(arg)
         ? values[(arg.toNumber() - 1) / 2]
         : arg.div(number.toBN(2));
     });
 
-    console.log("calldata", calldata);
     const call = {
       to: contractAddress,
       entrypoint: cell.abi.name,
@@ -104,14 +102,12 @@ export const CellValuesContextProvider = ({
       calldata,
       abi: cell.abi,
     };
-    console.log("call", call);
 
     const value =
       cell.abi.stateMutability === "view" || cell.abi.stateMutability === "pure"
         ? await chainProvider.callContract(call)
         : 0;
 
-    console.log("value", number.toBN(value).toString());
     return number.toBN(value);
   };
 

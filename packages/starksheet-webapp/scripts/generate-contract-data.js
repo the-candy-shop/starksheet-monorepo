@@ -157,10 +157,16 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
               subdirectories.length * runLatestFiles.length;
             if (processedFiles + errorFiles === totalRunLatestFiles) {
               // Merge starksheetAddresses and evmsheetAddresses
+              process.env.REACT_APP_NETWORK
+                ? console.log(
+                    `Building for network ${process.env.REACT_APP_NETWORK}`
+                  )
+                : console.log("No specific network");
               const mergedAddresses = {
                 network: process.env.REACT_APP_NETWORK
                   ? contractData[process.env.REACT_APP_NETWORK]
                   : contractData,
+
                 abis: {
                   starknet: {
                     spreadsheet: JSON.parse(
@@ -200,16 +206,12 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
                 "../src/contracts/contractData.json"
               );
 
-              // if (process.env.REACT_APP_NETWORK) {
-              //   mergedAddresses = {};
-              // }
-              // Convert the mergedAddresses object to JSON
-              const contractDataJson = JSON.stringify(mergedAddresses, null, 2);
+              console.log(Object.keys(mergedAddresses));
 
               // Write the JSON data to the contractDataFilePath
               fs.writeFile(
                 contractDataFilePath,
-                contractDataJson,
+                JSON.stringify(mergedAddresses, null, 2),
                 "utf8",
                 (err) => {
                   if (err) {

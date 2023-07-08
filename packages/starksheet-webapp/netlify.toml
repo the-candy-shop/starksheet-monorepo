@@ -12,5 +12,8 @@ environment = { REACT_APP_NETWORK = "mainnet" }
 [context.testnet]
 environment = { REACT_APP_NETWORK = "testnet" }
 
+[context.goerli]
+environment = { REACT_APP_NETWORK = "goerli" }
+
 [context.deploy-preview]
 environment = { REACT_APP_NETWORK = "testnet" }

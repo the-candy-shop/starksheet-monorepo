@@ -4,7 +4,7 @@ to = "/index.html"
 status = 200
 
 [build]
-ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . ../starksheet-cairo"
+ignore = "/bin/false"
 
 [context.production]
 environment = { REACT_APP_NETWORK = "mainnet" }

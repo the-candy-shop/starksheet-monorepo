@@ -82,6 +82,16 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
   subdirectories.forEach((subdirectory) => {
     const subdirectoryPath = path.join(evmsheetDeploymentsFolder, subdirectory);
 
+    console.log(`Reading folder ${subdirectory}`);
+    const networkName = {
+      5: "goerli",
+      31337: "anvil",
+    }[subdirectory];
+
+    if (networkName === undefined) {
+      throw new Error(`Unknown chainId ${subdirectory}`);
+    }
+
     // Read subdirectory
     fs.readdir(subdirectoryPath, (err, files) => {
       if (err) {
@@ -89,7 +99,6 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
         return;
       }
 
-      console.log(`Reading ${subdirectoryPath}`);
       if (subdirectoryPath.includes("dry-run")) {
         console.log(`Dry-run: skipping`);
         return;
@@ -98,143 +107,140 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
       const runLatestFiles = files.filter((file) =>
         file.startsWith("run-latest")
       );
-      console.log(`Files: ${runLatestFiles}`);
+      if (runLatestFiles.length !== 1) {
+        throw new Error(
+          `Expected one run-latest.json file, found ${runLatestFiles.length}`
+        );
+      }
 
-      runLatestFiles.forEach((file) => {
-        const filePath = path.join(subdirectoryPath, file);
-        console.log(`Reading : ${filePath}`);
+      const filePath = path.join(subdirectoryPath, runLatestFiles[0]);
+      console.log(`Reading : ${filePath}`);
 
-        // Read run-latest.json file
-        fs.readFile(filePath, "utf8", (err, data) => {
-          if (err) {
-            console.error(`Error reading ${file}:`, err);
-            return;
-          }
+      // Read run-latest.json file
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          console.error(`Error reading ${filePath}:`, err);
+          return;
+        }
 
-          try {
-            const runLatestData = JSON.parse(data);
-            const transactions = runLatestData.transactions;
+        try {
+          const runLatestData = JSON.parse(data);
+          const transactions = runLatestData.transactions;
 
-            transactions.forEach((transaction) => {
-              const contractName = transaction.contractName || "Math";
-              const contractAddress = transaction.contractAddress;
-              const rpcUrl = transaction.rpc
-                ? new URL(transaction.rpc).hostname
-                    .replace("127.0.0.1", "anvil")
-                    .split(".")[0]
-                : "anvil";
-
-              const contractAbi = JSON.parse(
-                fs.readFileSync(
-                  path.join(
-                    evmsheetDirectoryPath,
-                    `out/${contractName}.sol/${contractName}.json`
-                  )
+          transactions.forEach((transaction) => {
+            const contractName = transaction.contractName || "Math";
+            const contractAddress = transaction.contractAddress;
+            const contractAbi = JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  evmsheetDirectoryPath,
+                  `out/${contractName}.sol/${contractName}.json`
                 )
-              ).abi;
+              )
+            ).abi;
 
-              if (!contractData[rpcUrl]) {
-                contractData[rpcUrl] = {
-                  addresses: {},
-                  deployedAbis: {},
-                };
-              }
-              contractData[rpcUrl].addresses[
-                contractName
-                  .replace("Evmsheet", "spreadsheet")
-                  .replace("MultiSendCallOnly", "multisend")
-                  .toLowerCase()
-              ] = contractAddress;
-              contractData[rpcUrl].deployedAbis[contractAddress] = contractAbi;
-            });
-            processedFiles = processedFiles + 1;
-          } catch (error) {
-            console.error(`Error parsing ${file}: ${error}`);
-            errorFiles = errorFiles + 1;
-          } finally {
-            // Check if all run-latest.json files have been processed
-            const totalRunLatestFiles =
-              subdirectories.length * runLatestFiles.length;
-            if (processedFiles + errorFiles === totalRunLatestFiles) {
-              // Merge starksheetAddresses and evmsheetAddresses
-              console.log(`Network found: ${Object.keys(contractData)}`);
-              process.env.REACT_APP_NETWORK
-                ? console.log(
-                    `Building for network ${process.env.REACT_APP_NETWORK}`
-                  )
-                : console.log("No specific network, exporting all");
-              if (
-                process.env.REACT_APP_NETWORK &&
-                !contractData[process.env.REACT_APP_NETWORK]
-              ) {
-                throw new Error(
-                  `No data for network ${process.env.REACT_APP_NETWORK}`
-                );
-              }
-              const mergedAddresses = {
-                network: process.env.REACT_APP_NETWORK
-                  ? contractData[process.env.REACT_APP_NETWORK]
-                  : contractData,
-
-                abis: {
-                  starknet: {
-                    spreadsheet: JSON.parse(
-                      fs.readFileSync(
-                        path.join(starksheetCairoPath, "build/Starksheet.json")
-                      )
-                    ).abi,
-                    worksheet: JSON.parse(
-                      fs.readFileSync(
-                        path.join(starksheetCairoPath, "build/Sheet.json")
-                      )
-                    ).abi,
-                  },
-                  eth: {
-                    spreadsheet: JSON.parse(
-                      fs.readFileSync(
-                        path.join(
-                          evmsheetDirectoryPath,
-                          "out/Evmsheet.sol/Evmsheet.json"
-                        )
-                      )
-                    ).abi,
-                    worksheet: JSON.parse(
-                      fs.readFileSync(
-                        path.join(
-                          evmsheetDirectoryPath,
-                          "out/Sheet.sol/Sheet.json"
-                        )
-                      )
-                    ).abi,
-                  },
-                },
+            if (!contractData[networkName]) {
+              contractData[networkName] = {
+                addresses: {},
+                deployedAbis: {},
               };
-
-              const contractDataFilePath = path.join(
-                __dirname,
-                "../src/contracts/contractData.json"
-              );
-
-              console.log(Object.keys(mergedAddresses));
-              console.log(mergedAddresses.network);
-
-              // Write the JSON data to the contractDataFilePath
-              fs.writeFile(
-                contractDataFilePath,
-                JSON.stringify(mergedAddresses, null, 2),
-                "utf8",
-                (err) => {
-                  if (err) {
-                    console.error("Error writing to contractData.json:", err);
-                    return;
-                  }
-
-                  console.log("contractData.json file created successfully!");
-                }
+            }
+            contractData[networkName].addresses[
+              contractName
+                .replace("Evmsheet", "spreadsheet")
+                .replace("MultiSendCallOnly", "multisend")
+                .toLowerCase()
+            ] = contractAddress;
+            contractData[networkName].deployedAbis[contractAddress] =
+              contractAbi;
+          });
+          processedFiles = processedFiles + 1;
+        } catch (error) {
+          console.error(`Error parsing ${filePath}: ${error}`);
+          errorFiles = errorFiles + 1;
+        } finally {
+          // Check if all run-latest.json files have been processed
+          const totalRunLatestFiles =
+            subdirectories.length * runLatestFiles.length;
+          if (processedFiles + errorFiles === totalRunLatestFiles) {
+            // Merge starksheetAddresses and evmsheetAddresses
+            console.log(`Network found: ${Object.keys(contractData)}`);
+            process.env.REACT_APP_NETWORK
+              ? console.log(
+                  `Building for network ${process.env.REACT_APP_NETWORK}`
+                )
+              : console.log("No specific network, exporting all");
+            if (
+              process.env.REACT_APP_NETWORK &&
+              !contractData[process.env.REACT_APP_NETWORK]
+            ) {
+              throw new Error(
+                `No data for network ${process.env.REACT_APP_NETWORK}`
               );
             }
+            const mergedAddresses = {
+              network: process.env.REACT_APP_NETWORK
+                ? contractData[process.env.REACT_APP_NETWORK]
+                : contractData,
+
+              abis: {
+                starknet: {
+                  spreadsheet: JSON.parse(
+                    fs.readFileSync(
+                      path.join(starksheetCairoPath, "build/Starksheet.json")
+                    )
+                  ).abi,
+                  worksheet: JSON.parse(
+                    fs.readFileSync(
+                      path.join(starksheetCairoPath, "build/Sheet.json")
+                    )
+                  ).abi,
+                },
+                eth: {
+                  spreadsheet: JSON.parse(
+                    fs.readFileSync(
+                      path.join(
+                        evmsheetDirectoryPath,
+                        "out/Evmsheet.sol/Evmsheet.json"
+                      )
+                    )
+                  ).abi,
+                  worksheet: JSON.parse(
+                    fs.readFileSync(
+                      path.join(
+                        evmsheetDirectoryPath,
+                        "out/Sheet.sol/Sheet.json"
+                      )
+                    )
+                  ).abi,
+                },
+              },
+            };
+
+            const contractDataFilePath = path.join(
+              __dirname,
+              "../src/contracts/contractData.json"
+            );
+
+            console.log(Object.keys(mergedAddresses));
+            console.log(mergedAddresses.network);
+
+            // Write the JSON data to the contractDataFilePath
+            fs.writeFile(
+              contractDataFilePath,
+              JSON.stringify(mergedAddresses, null, 2),
+              "utf8",
+              (err) => {
+                if (err) {
+                  console.error("Error writing to contractData.json:", err);
+                  return;
+                }
+
+                console.log("contractData.json file created successfully!");
+              }
+            );
           }
-        });
+        }
       });
     });
   });

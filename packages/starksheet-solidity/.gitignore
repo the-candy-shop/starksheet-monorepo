@@ -2,6 +2,14 @@ cache
 out
 .env
 !out/Evmsheet.sol
-!out/Sheet.sol
 !out/Evmsheet.sol/Evmsheet.json
+!out/Sheet.sol
 !out/Sheet.sol/Sheet.json
+!out/Bytes.sol
+!out/Bytes.sol/Bytes.json
+!out/Math.sol
+!out/Math.sol/Math.json
+!out/MultiSendCallOnly.sol
+!out/MultiSendCallOnly.sol/MultiSendCallOnly.json
+!out/BasicCellRenderer.sol
+!out/BasicCellRenderer.sol/BasicCellRenderer.json

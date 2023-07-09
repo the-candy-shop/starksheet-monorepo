@@ -16,5 +16,18 @@ jobs:
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch origin mainnet
           git checkout mainnet
-          git reset staging --hard
+          git reset main --hard
           git push origin mainnet -f
+
+  merge-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin staging
+          git checkout staging
+          git reset main --hard
+          git push origin staging -f

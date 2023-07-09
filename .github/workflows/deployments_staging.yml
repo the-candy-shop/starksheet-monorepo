@@ -18,12 +18,13 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin testnet
           git checkout testnet
-          git merge staging --no-edit
-          git push
+          git reset staging --hard
+          git push origin testnet -f
 
   merge-testnet2:
-    name: Merge Staging to Testnet
+    name: Merge Staging to Testnet2
     runs-on: ubuntu-latest
 
     steps:
@@ -34,9 +35,10 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin testnet2
           git checkout testnet2
-          git merge staging --no-edit
-          git push
+          git reset staging --hard
+          git push origin testnet2 -f
 
   merge-goerli:
     name: Merge Staging to Goerli
@@ -50,6 +52,7 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin goerli
           git checkout goerli
-          git merge staging --no-edit
-          git push
+          git reset staging --hard
+          git push origin goerli -f

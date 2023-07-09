@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy staging
 
 on:
   push:
@@ -7,15 +7,11 @@ on:
 
 jobs:
   merge-testnet:
-    name: Merge Staging to Testnet
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Merge Staging to Testnet
-        run: |
+      - run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch origin testnet
@@ -24,15 +20,11 @@ jobs:
           git push origin testnet -f
 
   merge-testnet2:
-    name: Merge Staging to Testnet2
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Merge Staging to Testnet
-        run: |
+      - run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch origin testnet2
@@ -41,15 +33,11 @@ jobs:
           git push origin testnet2 -f
 
   merge-goerli:
-    name: Merge Staging to Goerli
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Merge Staging to Goerli
-        run: |
+      - run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch origin goerli

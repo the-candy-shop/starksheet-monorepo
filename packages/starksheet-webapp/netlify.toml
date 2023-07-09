@@ -9,8 +9,14 @@ ignore = "/bin/false"
 [context.production]
 environment = { REACT_APP_NETWORK = "mainnet" }
 
+[context.mainnet]
+environment = { REACT_APP_NETWORK = "mainnet" }
+
 [context.testnet]
 environment = { REACT_APP_NETWORK = "testnet" }
+
+[context.testnet2]
+environment = { REACT_APP_NETWORK = "testnet2" }
 
 [context.goerli]
 environment = { REACT_APP_NETWORK = "goerli" }

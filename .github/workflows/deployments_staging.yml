@@ -1,0 +1,46 @@
+name: Deploy staging
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  merge-testnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin testnet
+          git checkout testnet
+          git reset staging --hard
+          git push origin testnet -f
+
+  merge-testnet2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin testnet2
+          git checkout testnet2
+          git reset staging --hard
+          git push origin testnet2 -f
+
+  merge-goerli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin goerli
+          git checkout goerli
+          git reset staging --hard
+          git push origin goerli -f

@@ -1,9 +1,9 @@
 import React, { PropsWithChildren, useState } from "react";
 import { Abi } from "starknet";
-import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
-import { parseAbi } from "../utils/abiUtils";
-import { normalizeHexString } from "../utils/hexUtils";
 import { useChainProvider } from "../hooks/useChainProvider";
+import { ContractAbi, ContractAbis, InitialContractAbis } from "../types";
+import { RC_BOUND } from "../utils/constants";
+import { bn2hex, normalizeHexString } from "../utils/hexUtils";
 
 export const AbisContext = React.createContext<{
   contractAbis: ContractAbis;
@@ -19,33 +19,34 @@ export const AbisContextProvider = ({
   initialContractAbis,
   children,
 }: PropsWithChildren<{ initialContractAbis: InitialContractAbis }>) => {
+  const chainProvider = useChainProvider();
+
   const _initialContractAbis = Object.entries(initialContractAbis).reduce(
     (prev, cur) => ({
       ...prev,
-      [cur[0]]: parseAbi(cur[1] as Abi),
+      [normalizeHexString(cur[0])]: chainProvider.parseAbi(cur[1] as Abi),
     }),
-    {}
+    {
+      [bn2hex(RC_BOUND)]: {},
+    }
   );
+
   const [contractAbis, setContractAbis] =
     useState<ContractAbis>(_initialContractAbis);
-
-  const chainProvider = useChainProvider();
-
   const setAbiForContract = (address: string, abi: Abi) => {
     setContractAbis((prevContractAbis) => ({
       ...prevContractAbis,
-      [normalizeHexString(address)]: parseAbi(abi),
+      [normalizeHexString(address)]: chainProvider.parseAbi(abi),
     }));
   };
 
   const getAbiForContract = async (address: string) => {
     const _address = normalizeHexString(address);
-
     if (_address in contractAbis) return contractAbis[_address];
 
-    const abi = await chainProvider.getAbi(address);
+    const abi = await chainProvider.getAbi(_address);
     setAbiForContract(_address, abi);
-    return parseAbi(abi);
+    return chainProvider.parseAbi(abi);
   };
 
   return (

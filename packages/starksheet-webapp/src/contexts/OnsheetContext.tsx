@@ -1,3 +1,4 @@
+import { BN } from "bn.js";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -7,17 +8,17 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { hash, number } from "starknet";
 import { N_ROW } from "../config";
+import { useChainProvider } from "../hooks";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
-import { Onsheet, Sheet } from "../types";
+import { chainConfig } from "../provider/chains";
+import { Sheet, SheetConstructorArgs, Spreadsheet } from "../types";
 import { str2hex } from "../utils/hexUtils";
-import { AbisContext } from "./AbisContext";
 import { AccountContext } from "./AccountContext";
 import { AppStatusContext, defaultSheetStatus } from "./AppStatusContext";
 
 export const OnsheetContext = React.createContext<{
-  onsheet: Onsheet;
+  onsheet: Spreadsheet;
   selectedSheetIndex?: number;
   selectedSheetAddress?: string;
   setSelectedSheetAddress: (address: string) => void;
@@ -30,8 +31,6 @@ export const OnsheetContext = React.createContext<{
     address: "",
     sheets: [],
     defaultRenderer: "",
-    sheetClassHash: "",
-    proxyClassHash: "",
     sheetPrice: 0,
   },
   setSelectedSheetAddress: () => {},
@@ -41,20 +40,15 @@ export const OnsheetContext = React.createContext<{
   validateNewSheets: () => {},
 });
 
-export const OnsheetContextProvider = ({
-  onsheetAddress,
-  children,
-}: PropsWithChildren<{ onsheetAddress: string }>) => {
+export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
   const { updateAppStatus, updateSheetStatus } = useContext(AppStatusContext);
   const { accountAddress } = useContext(AccountContext);
-  const { getAbiForContract } = useContext(AbisContext);
+  const chainProvider = useChainProvider();
   const navigate = useNavigate();
-  const [onsheet, setOnsheet] = useState<Onsheet>({
-    address: onsheetAddress,
+  const [onsheet, setOnsheet] = useState<Spreadsheet>({
+    address: chainConfig.addresses.spreadsheet,
     sheets: [],
     defaultRenderer: "",
-    sheetClassHash: "",
-    proxyClassHash: "",
     sheetPrice: 0,
   });
 
@@ -73,21 +67,16 @@ export const OnsheetContextProvider = ({
     () =>
       Promise.all([
         contract.getSheetDefaultRendererAddress(),
-        contract.getSheetClassHash(),
-        contract.getProxyClassHash(),
         contract.getSheetPrice(),
       ])
         .then(async (response) => {
-          const [renderer, sheetClassHash, proxyClassHash, sheetPrice] =
-            response;
+          const [renderer, sheetPrice] = response;
           return {
             address,
             defaultRenderer: renderer,
-            sheetClassHash,
-            proxyClassHash,
             sheets: [],
             sheetPrice:
-              sheetPrice.div(number.toBN(10).pow(number.toBN(9))).toNumber() /
+              sheetPrice.div(new BN(10).pow(new BN(9))).toNumber() /
               1_000_000_000,
           };
         })
@@ -119,11 +108,7 @@ export const OnsheetContextProvider = ({
     sheet: Omit<Sheet, "address">,
     owner: string
   ): Promise<string> => {
-    let calldata = {
-      proxyAdmin: owner,
-      implementation: onsheet.sheetClassHash,
-      selector: hash.getSelectorFromName("initialize"),
-      calldataLen: 6,
+    let calldata: SheetConstructorArgs = {
       name: str2hex(sheet.name),
       symbol: str2hex(sheet.symbol),
       owner,
@@ -131,15 +116,25 @@ export const OnsheetContextProvider = ({
       maxPerWallet: 0,
       rendererAddress: onsheet.defaultRenderer,
     };
-    const address = contract.calculateSheetAddress(
+
+    const address = await contract.calculateSheetAddress(
       accountAddress,
-      onsheet.proxyClassHash,
-      Object.values(calldata)
+      calldata
     );
-    const abi = await getAbiForContract(address);
+    const addressAlreadyDeployed = await chainProvider.addressAlreadyDeployed(
+      address
+    );
     let newSheet: Sheet;
-    if (Object.keys(abi).length !== 0) {
-      newSheet = { ...sheet, address };
+    if (addressAlreadyDeployed) {
+      const sheetContract =
+        chainProvider.getWorksheetContractByAddress(address);
+      const [name, symbol, nRow, cellPrice] = await Promise.all([
+        sheetContract.name(),
+        sheetContract.symbol(),
+        sheetContract.nRow(),
+        sheetContract.getCellPrice(),
+      ]);
+      newSheet = { name, symbol, nRow, cellPrice, address };
     } else {
       newSheet = { ...sheet, address, calldata, nRow: N_ROW, cellPrice: 0 };
     }

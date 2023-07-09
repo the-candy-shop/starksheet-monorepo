@@ -1,0 +1,20 @@
+name: Deploy prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  merge-mainnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin mainnet
+          git checkout mainnet
+          git reset staging --hard
+          git push origin mainnet -f

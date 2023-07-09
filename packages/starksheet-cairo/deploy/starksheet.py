@@ -1,12 +1,15 @@
 # %% Imports
 import logging
 from asyncio import run
+from datetime import datetime
 
 from dotenv import load_dotenv
+from utils.constants import COMPILED_CONTRACTS, NETWORK
 from utils.deployment import (
     compile_contract,
     declare,
     deploy,
+    deploy_starknet_account,
     dump_declarations,
     dump_deployments,
     get_account,
@@ -24,18 +27,30 @@ logger.setLevel(logging.INFO)
 
 # %% Main
 async def main():
-    # %% Compile & declare contracts
-    class_hash = get_declarations()
-    for contract_name in [
-        "Sheet",
-        "Starksheet",
-        "BasicCellRenderer",
-        "math",
-        "execute",
-        "proxy",
-    ]:
-        compile_contract(contract_name)
-        class_hash[contract_name] = await declare(contract_name)
+    # %% Compile
+    logger.info(f"ℹ️  Compiling contracts for network {NETWORK['name']}")
+    initial_time = datetime.now()
+    for contract in COMPILED_CONTRACTS:
+        logger.info(f"⏳ Compiling {contract}")
+        start = datetime.now()
+        compile_contract(contract)
+        elapsed = datetime.now() - start
+        logger.info(f"✅ Compiled in {elapsed.total_seconds():.2f}s")
+
+    logger.info(
+        f"✅ Compiled all in {(datetime.now() - initial_time).total_seconds():.2f}s"
+    )
+
+    # %% Declarations
+    if NETWORK["name"] in ["madara", "sharingan"]:
+        await deploy_starknet_account(amount=100)
+    account = await get_account()
+    logger.info(f"ℹ️  Using account {hex(account.address)} as deployer")
+
+    class_hash = {
+        contract["contract_name"]: await declare(contract["contract_name"])
+        for contract in COMPILED_CONTRACTS
+    }
     dump_declarations(class_hash)
 
     # %% Deploy contracts

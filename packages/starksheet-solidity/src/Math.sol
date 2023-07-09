@@ -2,7 +2,6 @@
 pragma solidity ^0.8.13;
 
 contract Math {
-
     function sum(uint256[] memory arr) public pure returns (uint256) {
         uint256 res = 0;
         unchecked {
@@ -25,15 +24,11 @@ contract Math {
         return res;
     }
 
-    function div(uint256[] memory arr) public pure returns (uint256) {
-        require(arr.length != 2, "arr.length should be 2");
-
-        return arr[0] / arr[1];
+    function div(uint256 a, uint256 b) public pure returns (uint256) {
+        return a / b;
     }
 
-    function sub(uint256[] memory arr) public pure returns (uint256) {
-        require(arr.length != 2, "arr.length should be 2");
-
-        return arr[0] - arr[1];
+    function sub(uint256 a, uint256 b) public pure returns (uint256) {
+        return a - b;
     }
 }

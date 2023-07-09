@@ -27,13 +27,13 @@ logger.setLevel(logging.INFO)
 async def main():
     # %% Compile & declare contracts
     class_hash = get_declarations()
-    for contract_name in [
-        "DustyPilots",
-        "DustyPilotRenderer",
-        "proxy",
+    for contract in [
+        {"contract_name": "DustyPilots", "is_account_contract": False},
+        {"contract_name": "DustyPilotRenderer", "is_account_contract": False},
+        {"contract_name": "proxy", "is_account_contract": False},
     ]:
-        compile_contract(contract_name)
-        class_hash[contract_name] = await declare(contract_name)
+        compile_contract(contract)
+        class_hash[contract["contract_name"]] = await declare(contract["contract_name"])
     dump_declarations(class_hash)
 
     # %% Deploy contracts

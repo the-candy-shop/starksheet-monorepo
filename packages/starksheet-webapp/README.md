@@ -25,17 +25,34 @@ default (not set), it will target the devnet, see
 [Starksheet cairo README](../starksheet-cairo/README.md#deployment).
 
 The app will automatically uses the latest deployments made in
-[starksheet-cairo](../starksheet-cairo/deployments/) so you just need to provide
-the ENV variable:
+[starksheet-cairo](../starksheet-cairo/deployments/) or in
+[starksheet-solidity](../starksheet-solidity/broadcast/Evmsheet.s.sol/) so you
+just need to provide the ENV variable:
 
-- `REACT_APP_NETWORK=devnet npm start` => use local devnet
-- `npm start` => use local devnet
-- `REACT_APP_NETWORK=testnet npm start` => use testnet
-- `REACT_APP_NETWORK=testnet2 npm start` => use testnet2
-- `REACT_APP_NETWORK=mainnet npm start` => use mainnet
+- `REACT_APP_NETWORK=devnet npm start` => use local devnet (Starknet)
+- `npm start` => use local devnet (Starknet)
+- `REACT_APP_NETWORK=testnet npm start` => use testnet (Starknet)
+- `REACT_APP_NETWORK=testnet2 npm start` => use testnet2 (Starknet)
+- `REACT_APP_NETWORK=mainnet npm start` => use mainnet (Starknet)
+- `REACT_APP_NETWORK=anvil npm start` => use anvil (EVM)
+- `REACT_APP_NETWORK=goerli npm start` => use goerli (EVM)
 
-Note: when using the devnet, you need to **first** start the devnet and run
-`python deploy/starksheet.py` and **then** run `npm start`.
+Note: when using the devnet or anvil, you need to **first** start the devnet and
+run either:
+
+for starknet-devnet:
+
+```bash
+python deploy/starksheet.py
+```
+
+for anvil:
+
+```bash
+PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 forge script script/Evmsheet.s.sol --broadcast --rpc-url http://127.0.0.1:8545
+```
+
+and **then** run `REACT_APP_NETWORK={devnet/anvil} npm start`.
 
 ## Architecture
 

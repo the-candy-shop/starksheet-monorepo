@@ -8,6 +8,7 @@ import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
+import { chainConfig } from "../../provider/chains";
 import { CellData, CellGraph, Cell as CellType } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, str2hex } from "../../utils/hexUtils";
@@ -50,7 +51,6 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       const currentCellId = previousSelectedCell.current;
       previousSelectedCell.current = selectedCell;
 
-
       if (
         currentCellId === null ||
         cellData === null ||
@@ -72,6 +72,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
       const _values = currentCells.map((value) => value.value);
       const updatedCells: CellType[] = [];
+
       computeValue(_values)(cellData)
         .then(async (value) => {
           let error = false;
@@ -177,7 +178,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       );
 
       getAbiForContract(bn2hex(resolvedContractAddress)).then((abi) => {
-        const _cellData = parse(_contractCall, abi);
+        const _cellData = parse(_contractCall, abi, chainConfig.chainType);
         setCellData(_cellData);
       });
     },
@@ -197,7 +198,9 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
   }, [selectedSheetAddress, clearBar]);
 
   useEffect(() => {
-    setUnsavedValue(toPlainTextFormula(currentCells[selectedCell]));
+    setUnsavedValue(
+      toPlainTextFormula(currentCells[selectedCell], chainConfig.chainType)
+    );
   }, [selectedCell, currentCells]);
 
   const owner = currentCells[selectedCell]?.owner?.toString(16);

@@ -145,6 +145,6 @@ namespace ISheet {
     ) {
     }
 
-    func getOwner() -> (owner: felt) {
+    func owner() -> (owner: felt) {
     }
 }

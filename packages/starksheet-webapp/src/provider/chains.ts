@@ -16,6 +16,7 @@ type SupportedChains =
 
 const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
   goerli: {
+    appName: "Evmsheet",
     chainId: ChainId.ETHEREUM_TESTNET,
     chainType: ChainType.EVM,
     explorerBaseUrl: "https://goerli.etherscan.io/address/",
@@ -24,6 +25,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   anvil: {
+    appName: "Evmsheet",
     chainId: ChainId.ANVIL,
     chainType: ChainType.EVM,
     explorerBaseUrl: "https://goerli.etherscan.io/address/",
@@ -32,6 +34,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: "http://0.0.0.0:8545",
   },
   mainnet: {
+    appName: "Starksheet",
     chainId: ChainId.STARKNET_MAINNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://starkscan.co/contract/",
@@ -40,6 +43,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     gateway: "mainnet-alpha",
   },
   testnet: {
+    appName: "Starksheet",
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://testnet.starkscan.co/contract/",
@@ -48,6 +52,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     gateway: "goerli-alpha",
   },
   testnet2: {
+    appName: "Starksheet",
     chainId: ChainId.STARKNET_TESTNET2,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://testnet-2.starkscan.co/contract/",
@@ -56,6 +61,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     gateway: "goerli-alpha-2",
   },
   devnet: {
+    appName: "Starksheet",
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://devnet.starkscan.co/contract/",
@@ -63,6 +69,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: "http://127.0.0.1:5050/rpc",
   },
   katana: {
+    appName: "Starksheet",
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
@@ -70,6 +77,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: "http://127.0.0.1:5050",
   },
   madara: {
+    appName: "Madsheet",
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
@@ -77,6 +85,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: "http://127.0.0.1:9944",
   },
   sharingan: {
+    appName: "Madsheet",
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",

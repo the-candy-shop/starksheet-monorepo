@@ -5,6 +5,7 @@ import { CELL_BORDER_WIDTH, CELL_HEIGHT, N_ROW } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { useChainProvider } from "../../hooks/useChainProvider";
+import { chainConfig } from "../../provider/chains";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
 import githubLogo from "./github.svg";
@@ -26,7 +27,7 @@ function Footer({ sx }: FooterProps) {
 
   const addSheetOnClick = async () => {
     if (!accountAddress) {
-      enqueueSnackbar(`Connect your wallet to use Starksheet`, {
+      enqueueSnackbar(`Connect your wallet to use ${chainConfig.appName}`, {
         variant: "info",
       });
       return;

@@ -11,6 +11,7 @@ export interface ChainConfig {
   nftBaseUrl: string;
   rpcUrl: string;
   gateway?: NetworkName;
+  appName: string;
   addresses: {
     spreadsheet: string;
     multisend?: string;

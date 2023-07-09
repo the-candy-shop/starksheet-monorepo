@@ -13,7 +13,9 @@ function Header() {
   const [isOpenWidget, setOpenWidget] = React.useState<boolean>(false);
   return (
     <Box sx={{ display: "flex" }}>
-      <GreyCell sx={{ textIndent: "20px", flex: 1 }}>Starksheet</GreyCell>
+      <GreyCell sx={{ textIndent: "20px", flex: 1 }}>
+        {chainConfig.appName}
+      </GreyCell>
       <Button
         sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px`, width: "191px" }}
         onClick={() =>

@@ -13,6 +13,7 @@ import { AppStatusContext } from "../../contexts/AppStatusContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
 import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { useSheetContract } from "../../hooks/useSheetContract";
+import { chainConfig } from "../../provider/chains";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex } from "../../utils/hexUtils";
@@ -189,7 +190,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         })
         .catch((error) => {
           error = true;
-          finalMessage = `Error: Starksheet cannot render sheet at address ${address}
+          finalMessage = `Error: ${chainConfig.appName} cannot render sheet at address ${address}
               <br />
               <br />
               Double check address or create a new sheet by clicking on the + button`;

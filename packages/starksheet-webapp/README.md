@@ -1,6 +1,6 @@
-# Starksheet webapp
+# Onsheet webapp
 
-This is the starksheet webapp as deployed in
+This is the onsheet webapp as deployed for example for Starknet at
 [app.starksheet.xyz](app.starksheet.xyz).
 
 ## Installation
@@ -21,7 +21,7 @@ devnet. Depending on your need, it may be enough to target the testnet or even
 the mainnet for final testing.
 
 The ENV variable `REACT_APP_NETWORK` is used to select the target network. By
-default (not set), it will target the devnet, see
+default (not set), it will target the starknet-devnet, see
 [Starksheet cairo README](../starksheet-cairo/README.md#deployment).
 
 The app will automatically uses the latest deployments made in

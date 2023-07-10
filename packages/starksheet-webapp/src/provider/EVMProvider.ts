@@ -16,7 +16,7 @@ import {
   TransactionReceipt,
   WorksheetContract,
 } from "../types";
-import { bn2hex, bn2uint } from "../utils/hexUtils";
+import { bn2hex, bn2uint, normalizeHexString } from "../utils/hexUtils";
 import { chainConfig } from "./chains";
 
 /**
@@ -120,14 +120,19 @@ export class EVMProvider implements ChainProvider {
   parseAbi(abi: Abi): ContractAbi {
     try {
       const iface = new ethers.utils.Interface(abi);
-      return iface.fragments.reduce(
-        (prev, cur) => ({
-          ...prev,
-          [iface.getSighash(cur)]: cur,
-        }),
-        {}
+      return iface.fragments
+        .filter((fragment) => fragment.type === "function")
+        .reduce(
+          (prev, cur) => ({
+            ...prev,
+            [normalizeHexString(iface.getSighash(cur))]: cur,
+          }),
+          {}
+        );
+    } catch (error) {
+      console.log(
+        `Couldn't parse the following ABI\n${abi}\n\nError: ${error}`
       );
-    } catch {
       return {};
     }
   }

@@ -213,14 +213,14 @@ export function parse(
     calldata = flattenWithLen(encodedArgs).slice(1) as BN[];
   } else if (chainType === ChainType.EVM) {
     // TODO: need to support cell references
-    calldata = ethers.utils.defaultAbiCoder
+    calldata = (ethers.utils.defaultAbiCoder
       .encode(
         selectorAbi.inputs.map((i) => i.type),
         args
       )
       .slice(2)
       .match(/.{1,64}/g)
-      ?.map((bytes32) => encodeConst("0x" + bytes32)) as BN[];
+      ?.map((bytes32) => encodeConst("0x" + bytes32)) || []) as BN[];
   } else {
     throw new Error(`No parsing function for chainType ${chainType}`);
   }

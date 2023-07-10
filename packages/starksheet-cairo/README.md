@@ -25,6 +25,15 @@ pytest .
 
 ## Deployment
 
+Make sure to have a `.env` file set up at the root of the project:
+
+```bash
+cp .env.example .env
+```
+
+The `.env.example` is pre populated for devnet like networks (madara, katana,
+starknet-devnet). For other networks, make sure to fill it before.
+
 The [deploy folder](./deploy/) contains several deployment scripts but only the
 [starksheet one](./deploy/starksheet.py) is really required.
 

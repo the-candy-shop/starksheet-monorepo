@@ -222,11 +222,13 @@ export class StarknetProvider implements ChainProvider {
           params: { chainId: this.config.chainId },
         });
       } else {
-        throw new Error(
-          `Wrong network detected: "${hex2str(
-            starknetWindow.provider.chainId
-          )}" instead of "${this.config.chainId}"`
-        );
+        if (starknetWindow.provider.chainId !== undefined) {
+          throw new Error(
+            `Wrong network detected: "${hex2str(
+              starknetWindow.provider.chainId
+            )}" instead of "${this.config.chainId}"`
+          );
+        }
       }
     }
 

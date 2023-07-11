@@ -133,9 +133,14 @@ export class StarknetProvider implements ChainProvider {
       return abi;
     }
 
+    let isContract = await this.addressAlreadyDeployed(address);
     let response;
     try {
-      response = await this.provider.getClassAt(address);
+      if (isContract) {
+        response = await this.provider.getClassAt(address);
+      } else {
+        response = await this.provider.getClassByHash(address);
+      }
     } catch (error) {
       response = { abi: [] };
     }

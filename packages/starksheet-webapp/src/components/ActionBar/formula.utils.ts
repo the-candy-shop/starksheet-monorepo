@@ -12,7 +12,7 @@ import {
 import { bn2hex, bn2uint, hex2str, str2hex } from "../../utils/hexUtils";
 
 export const contractCallRegex =
-  /(?<contractAddress>(0x)?[a-z0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9[\]{},;: ]*)\)/i;
+  /(?<contractAddress>(0x)?[a-z0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9[\]{},;: "']*)\)/i;
 export const cellNameRegex = /^[a-z]\d+$/i;
 export const hexStringRegex = /^(0x)?[a-f0-9]+$/i;
 

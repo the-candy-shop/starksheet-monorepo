@@ -2,10 +2,12 @@
 src = 'src'
 out = 'out'
 libs = ['lib']
+eth_rpc_url = "anvil"
 
 [rpc_endpoints]
 goerli = "${GOERLI_RPC_URL}"
-devnet = "http://127.0.0.1:8545"
+anvil = "http://127.0.0.1:8545"
+kakarot = "http://127.0.0.1:3030"
 
 [etherscan]
 goerli = { key = "${ETHERSCAN_API_KEY}" }

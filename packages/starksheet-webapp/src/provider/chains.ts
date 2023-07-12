@@ -16,7 +16,7 @@ type SupportedChains =
 
 const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
   goerli: {
-    appName: "Evmsheet",
+    appName: "Ethsheet",
     chainId: ChainId.ETHEREUM_TESTNET,
     chainType: ChainType.EVM,
     explorerBaseUrl: "https://goerli.etherscan.io/address/",
@@ -25,7 +25,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   anvil: {
-    appName: "Evmsheet",
+    appName: "Ethsheet",
     chainId: ChainId.ANVIL,
     chainType: ChainType.EVM,
     explorerBaseUrl: "https://goerli.etherscan.io/address/",

@@ -12,6 +12,7 @@ type SupportedChains =
   | "madara"
   | "katana"
   | "sharingan"
+  | "kakarot"
   | "devnet";
 
 const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
@@ -91,6 +92,14 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "",
     nftBaseUrl: "",
     rpcUrl: process.env.REACT_APP_SHARINGAN_URL!,
+  },
+  kakarot: {
+    appName: "Kakasheet",
+    chainId: ChainId.STARKNET_TESTNET,
+    chainType: ChainType.EVM,
+    explorerBaseUrl: "",
+    nftBaseUrl: "",
+    rpcUrl: "http://127.0.0.1:3030",
   },
 };
 

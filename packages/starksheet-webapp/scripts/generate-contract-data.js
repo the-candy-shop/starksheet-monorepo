@@ -17,6 +17,12 @@ const evmsheetDeploymentsFolder = path.join(
   "broadcast/Evmsheet.s.sol"
 );
 
+const evmChains = {
+  5: "goerli",
+  31337: "anvil",
+  1263227476: "kakarot",
+};
+
 const contractData = {};
 let errorFiles = 0;
 let processedFiles = 0;
@@ -83,10 +89,7 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
     const subdirectoryPath = path.join(evmsheetDeploymentsFolder, subdirectory);
 
     console.log(`Reading folder ${subdirectory}`);
-    const networkName = {
-      5: "goerli",
-      31337: "anvil",
-    }[subdirectory];
+    const networkName = evmChains[subdirectory];
 
     if (networkName === undefined) {
       throw new Error(`Unknown chainId ${subdirectory}`);

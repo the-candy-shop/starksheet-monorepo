@@ -334,7 +334,7 @@ async def declare(contract_name):
 async def deploy(contract_name, *args):
     logger.info(f"ℹ️  Deploying {contract_name}")
     account = await get_account()
-    abi = json.loads(Path(get_abi(contract_name)).read_text())
+    abi = get_abi(contract_name)
 
     deploy_result = await Contract.deploy_contract(
         account=account,
@@ -488,7 +488,7 @@ def get_tx_url(tx_hash: int) -> str:
 
 
 def get_abi(contract_name):
-    return BUILD_DIR / f"{contract_name}_abi.json"
+    return json.loads((BUILD_DIR / f"{contract_name}.json").read_text())["abi"]
 
 
 async def compute_sheet_address(name, symbol):

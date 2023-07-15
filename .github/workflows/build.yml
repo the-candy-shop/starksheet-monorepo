@@ -25,5 +25,4 @@ jobs:
         with:
           push: true
           tags: ghcr.io/the-candy-shop/starksheet-monorepo/starksheet-cairo:latest
-          platforms: linux/amd64,linux/arm/v8
           context: ./packages/starksheet-cairo

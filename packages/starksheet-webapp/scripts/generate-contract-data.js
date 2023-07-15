@@ -225,8 +225,7 @@ fs.readdir(evmsheetDeploymentsFolder, (err, subdirectories) => {
               "../src/contracts/contractData.json"
             );
 
-            console.log(Object.keys(mergedAddresses));
-            console.log(mergedAddresses.network);
+            console.log(mergedAddresses.network.addresses);
 
             // Write the JSON data to the contractDataFilePath
             fs.writeFile(

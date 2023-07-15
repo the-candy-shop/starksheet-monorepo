@@ -6,7 +6,7 @@ ENV PATH="$PATH:/root/.local/bin"
 RUN poetry config virtualenvs.create false
 
 # install madara swap
-WORKDIR /app
+WORKDIR /app/starksheet/packages/starksheet-cairo
 COPY poetry.lock .
 COPY pyproject.toml .
 COPY scripts ./scripts

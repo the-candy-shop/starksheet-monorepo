@@ -1,20 +1,24 @@
 import BN from "bn.js";
 import { BigNumber, ethers } from "ethers";
 import { FunctionAbi, number, uint256 } from "starknet";
-import { N_COL } from "../../config";
-import { Cell, CellData, ChainType, ContractAbi } from "../../types";
+import { CellData, ChainType, ContractAbi } from "../../types";
 import {
   ARGS_SEP,
   ARG_LIST_SEP,
+  CELL_NAME_REGEX,
+  CONTRACT_CALL_REGEX,
   CONTRACT_FUNCTION_SEP,
+  HEX_STRING_REGEX,
   RC_BOUND,
 } from "../../utils/constants";
-import { bn2hex, bn2uint, hex2str, str2hex } from "../../utils/hexUtils";
-
-export const contractCallRegex =
-  /(?<contractAddress>(0x)?[a-z0-9]+)\.(?<selector>[a-z_0-9]+)\((?<args>[a-z0-9[\]{},;: "']*)\)/i;
-export const cellNameRegex = /^[a-z]\d+$/i;
-export const hexStringRegex = /^(0x)?[a-f0-9]+$/i;
+import { bn2hex, bn2uint, hex2str } from "../../utils/hexUtils";
+import {
+  cellNameToTokenId,
+  encodeConst,
+  encodeTokenId,
+  isDependency,
+  tokenIdToCellName,
+} from "../../utils/sheetUtils";
 
 const isBigNumber = (arg: any): boolean => {
   return arg instanceof BigNumber || arg instanceof BN;
@@ -90,22 +94,29 @@ export function toPlainTextFormula(
         inputIndex++;
       }
     } else if (chainType === ChainType.EVM) {
+      const mapping: Record<string, string> = {};
       const data =
         "0x" +
         calldata
-          .map((arg) =>
-            isDependency(arg)
-              ? arg.sub(number.toBN(1)).div(number.toBN(2))
-              : arg.div(number.toBN(2))
-          )
-          .map(bn2uint(32))
+          .map((arg) => {
+            if (isDependency(arg)) {
+              const placeholder = ethers.BigNumber.from(
+                ethers.utils.randomBytes(32)
+              )._hex.slice(2);
+              mapping[placeholder] = tokenIdToCellName(
+                arg.sub(number.toBN(1)).div(number.toBN(2)).toNumber()
+              );
+              return placeholder;
+            }
+            return bn2uint(32)(arg.div(number.toBN(2)));
+          })
           .join("");
       const decodedData = ethers.utils.defaultAbiCoder.decode(
         abi.inputs.map((i) => i.type),
         data
       );
       // @ts-ignore
-      displayedArgs = [customStringify(decodedData).slice(1, -1)];
+      displayedArgs = [customStringify(mapping)(decodedData).slice(1, -1)];
     } else {
       throw new Error(
         `ChainType ${chainType} has no cellData to string encoding function`
@@ -120,21 +131,27 @@ export function toPlainTextFormula(
   )})`;
 }
 
-function customStringify(input: any): any {
-  if (Array.isArray(input)) {
-    return "[" + input.map(customStringify).join(", ") + "]";
-  } else if (typeof input === "object" && !isBigNumber(input)) {
-    return (
-      "{" +
-      Object.entries(input)
-        .map(([key, value]) => `${key}: ${customStringify(value)}`)
-        .join(", ") +
-      "}"
-    );
-  } else if (isBigNumber(input)) {
-    return input.toString();
-  } else return `${input}`;
-}
+const customStringify =
+  (mapping: Record<string, string>) =>
+  (input: any): any => {
+    if (Array.isArray(input)) {
+      return "[" + input.map(customStringify(mapping)).join(", ") + "]";
+    } else if (typeof input === "object" && !isBigNumber(input)) {
+      return (
+        "{" +
+        Object.entries(input)
+          .map(([key, value]) => `${key}: ${customStringify(mapping)(value)}`)
+          .join(", ") +
+        "}"
+      );
+    } else if (isBigNumber(input)) {
+      const ret =
+        mapping[input._hex.slice(2)] === undefined
+          ? input.toString()
+          : mapping[input._hex.slice(2)];
+      return ret;
+    } else return `${input}`;
+  };
 
 export function parseContractCall(
   formula: string
@@ -145,19 +162,19 @@ export function parseContractCall(
     .replaceAll("\r", "")
     .replaceAll("&nbsp;", "");
 
-  const formulaMatch = _formula.match(contractCallRegex);
+  const formulaMatch = _formula.match(CONTRACT_CALL_REGEX);
 
   if (!formulaMatch?.groups) {
     return null;
   }
 
   const contractAddress = formulaMatch.groups.contractAddress.match(
-    cellNameRegex
+    CELL_NAME_REGEX
   )
     ? cellNameToTokenId(formulaMatch.groups.contractAddress).toString()
     : formulaMatch.groups.contractAddress;
 
-  if (!contractAddress.match(hexStringRegex)) {
+  if (!contractAddress.match(HEX_STRING_REGEX)) {
     return null;
   }
 
@@ -212,15 +229,22 @@ export function parse(
     // Result dismisses the first value, with is the len of the initial array of args
     calldata = flattenWithLen(encodedArgs).slice(1) as BN[];
   } else if (chainType === ChainType.EVM) {
-    // TODO: need to support cell references
+    const m: Record<string, string> = {};
     calldata = (ethers.utils.defaultAbiCoder
       .encode(
         selectorAbi.inputs.map((i) => i.type),
-        args
+        mapCellsToRandom(m)(args)
       )
       .slice(2)
       .match(/.{1,64}/g)
-      ?.map((bytes32) => encodeConst("0x" + bytes32)) || []) as BN[];
+      ?.map((bytes32) => {
+        const parsedWord = number.toBN("0x" + bytes32).toString();
+        if (m[parsedWord] !== undefined) {
+          const cellName = m[parsedWord];
+          return encodeTokenId(cellNameToTokenId(cellName));
+        }
+        return encodeConst("0x" + bytes32);
+      }) || []) as BN[];
   } else {
     throw new Error(`No parsing function for chainType ${chainType}`);
   }
@@ -232,29 +256,6 @@ export function parse(
     abi: selectorAbi,
   };
 }
-
-export const cellNameToTokenId = (arg: string) => {
-  const col = arg.toLowerCase().charCodeAt(0) - "a".charCodeAt(0);
-  const row = parseInt(arg.slice(1)) - 1;
-  return col + row * 15;
-};
-
-export const tokenIdToCellName = (id: number) => {
-  const col = ((id % N_COL) + 1 + 9).toString(36).toUpperCase();
-  const row = Math.floor(id / N_COL) + 1;
-  return `${col}${row}`;
-};
-
-export const encodeConst = (_arg: number.BigNumberish): BN => {
-  try {
-    return number.toBN(_arg).mul(number.toBN(2));
-  } catch (e) {
-    return number.toBN(str2hex(_arg.toString(16))).mul(number.toBN(2));
-  }
-};
-
-export const encodeTokenId = (_arg: number.BigNumberish): BN =>
-  number.toBN(_arg).mul(number.toBN(2)).add(number.toBN(1));
 
 export const decode = (_arg: BN) =>
   isDependency(_arg)
@@ -278,7 +279,7 @@ function encodeInputs(input: any): any {
       );
     }
   } else if (typeof input === "string") {
-    return input.replaceAll('"', "").match(cellNameRegex)
+    return input.replaceAll('"', "").match(CELL_NAME_REGEX)
       ? encodeTokenId(cellNameToTokenId(input))
       : encodeConst(input);
   } else if (typeof input === "number") {
@@ -308,24 +309,6 @@ function flattenWithLen(input: any): any[] {
   }
 }
 
-export const isDependency = (arg: BN): boolean =>
-  arg.mod(number.toBN(2)).toNumber() !== 0;
-
-export function getDependencies(calldata: BN[]): number[] {
-  return calldata.filter(isDependency).map((data) => (data.toNumber() - 1) / 2);
-}
-
-export const getAllDependencies =
-  (cells: Cell[], _dependencies: number[]) => (tokenId: number) => {
-    const deps = getDependencies(cells[tokenId].calldata);
-    deps.forEach((d) => _dependencies.push(d));
-    if (deps.includes(tokenId)) {
-      // We break here because it's enough to conclude about a circular dep
-      return;
-    }
-    deps.map(getAllDependencies(cells, _dependencies));
-  };
-
 export function getError(
   cellId: number,
   cellData: CellData | null,
@@ -345,7 +328,7 @@ export function buildFormulaDisplay(
   formula: string,
   settings?: { text: boolean }
 ): string {
-  const operator = formula.match(contractCallRegex);
+  const operator = formula.match(CONTRACT_CALL_REGEX);
 
   let result = formula;
 
@@ -369,7 +352,7 @@ export function buildFormulaDisplay(
     operator.groups.args
       .split(";")
       .filter((arg) =>
-        arg.replace("[", "").replace("]", "").match(cellNameRegex)
+        arg.replace("[", "").replace("]", "").match(CELL_NAME_REGEX)
       )
       .forEach((name) => {
         result = result.replace(name, `<span class="cell">${name}</span>`);
@@ -378,3 +361,26 @@ export function buildFormulaDisplay(
 
   return result;
 }
+
+const mapCellsToRandom =
+  (mapping: Record<string, string>) =>
+  (input: any): any => {
+    if (Array.isArray(input)) {
+      return input.map(mapCellsToRandom(mapping));
+    } else if (typeof input === "object") {
+      return Object.entries(input)
+        .map(([key, value]) => ({
+          [key]: mapCellsToRandom(mapping)(value),
+        }))
+        .reduce((prev, cur) => ({ ...prev, ...cur }), {});
+    } else if (
+      typeof input === "string" &&
+      input.replace('"', "").match(CELL_NAME_REGEX)
+    ) {
+      const placeholder = ethers.BigNumber.from(
+        ethers.utils.randomBytes(32)
+      ).toString();
+      mapping[placeholder] = input;
+      return placeholder;
+    } else return input;
+  };

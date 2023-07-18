@@ -4,6 +4,7 @@ import "ethers";
 import { number } from "starknet";
 import { N_ROW } from "../../config";
 import { CellData, CellRendered, WorksheetContract } from "../../types";
+import { RC_BOUND } from "../../utils/constants";
 import {
   ethersHexStringToBN,
   hexStringToIntegerArray,
@@ -27,9 +28,12 @@ export class EvmWorksheetContract implements WorksheetContract {
     const [contractAddress, selector, data] = await this.contract.getCell(
       tokenId
     );
+
     return {
       contractAddress: ethersHexStringToBN(contractAddress),
-      selector: number.toBN(selector.slice(0, 10)),
+      selector: ethersHexStringToBN(contractAddress).eq(RC_BOUND)
+        ? number.toBN(selector)
+        : number.toBN(selector.slice(0, 10)),
       calldata: hexStringToIntegerArray(data.slice(2)),
     };
   }

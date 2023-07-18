@@ -12,16 +12,14 @@ import { chainConfig } from "../../provider/chains";
 import { CellData, CellGraph, Cell as CellType } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { bn2hex, str2hex } from "../../utils/hexUtils";
-import { resolveContractAddress } from "../../utils/sheetUtils";
+import {
+  resolveContractAddress,
+  tokenIdToCellName,
+} from "../../utils/sheetUtils";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import SaveButton from "../SaveButton/SaveButton";
-import {
-  parse,
-  parseContractCall,
-  toPlainTextFormula,
-  tokenIdToCellName,
-} from "./formula.utils";
+import { parse, parseContractCall, toPlainTextFormula } from "./formula.utils";
 
 export type ActionBarProps = {
   inputRef: React.RefObject<ContentEditable>;
@@ -90,7 +88,11 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
             .sort((a, b) => a[1] - b[1])
             .map((entry) => parseInt(entry[0]))
             .map((id) => currentCells[id])
-            .filter((cell) => cell.abi?.stateMutability === "view");
+            .filter(
+              (cell) =>
+                cell.abi?.stateMutability === "view" ||
+                cell.abi?.stateMutability === "pure"
+            );
 
           for (const cell of indexes) {
             let value = cell.value;

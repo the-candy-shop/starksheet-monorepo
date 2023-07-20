@@ -81,7 +81,7 @@ export class EVMProvider implements ChainProvider {
     const url = new URL(this.config.explorerApiUrl!);
     url.search = params.toString();
 
-    let abi = [];
+    let abi: Abi = [];
     try {
       const rawAbi = await fetch(url)
         // check the response is not an error and decode its content to json
@@ -111,10 +111,35 @@ export class EVMProvider implements ChainProvider {
 
       // parse the raw abi and return it
       abi = JSON.parse(rawAbi);
+      const iface = new ethers.utils.Interface(abi);
+      const others = await Promise.all(
+        iface.fragments
+          .filter(
+            (f: any) =>
+              f.type === "function" &&
+              f.stateMutability === "view" &&
+              f.inputs.length === 0 &&
+              f.name.toLowerCase().includes("impl")
+          )
+          .map(async (f) => {
+            const implementationAddress = (
+              await this.provider.call({
+                to: address,
+                data: iface.getSighash(f),
+              })
+            )
+              .slice(2)
+              .replace(/^0+/, "");
+            return Object.values(
+              (await this.getAbi("0x" + implementationAddress)) || {}
+            ) as Abi;
+          })
+      );
+      abi = [...abi, ...others.flat()];
     } catch (error) {
       abi = [];
     }
-    return abi;
+    return abi as Abi;
   }
 
   parseAbi(abi: Abi): ContractAbi {

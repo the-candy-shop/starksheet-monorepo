@@ -101,8 +101,10 @@ export function toPlainTextFormula(
           .map((arg) => {
             if (isDependency(arg)) {
               const placeholder = ethers.BigNumber.from(
-                ethers.utils.randomBytes(32)
-              )._hex.slice(2);
+                ethers.utils.randomBytes(20)
+              )
+                ._hex.slice(2)
+                .padStart(64, "0");
               mapping[placeholder] = tokenIdToCellName(
                 arg.sub(number.toBN(1)).div(number.toBN(2)).toNumber()
               );
@@ -145,12 +147,16 @@ const customStringify =
         "}"
       );
     } else if (isBigNumber(input)) {
-      const ret =
-        mapping[input._hex.slice(2)] === undefined
-          ? input.toString()
-          : mapping[input._hex.slice(2)];
+      const key = input._hex.slice(2).padStart(64, "0");
+      const ret = mapping[key] === undefined ? input.toString() : mapping[key];
       return ret;
-    } else return `${input}`;
+    } else if (typeof input === "string") {
+      const key = input.slice(2).padStart(64, "0").toLowerCase();
+      if (mapping[key] !== undefined) {
+        return mapping[key];
+      }
+    }
+    return `"${input}"`;
   };
 
 export function parseContractCall(
@@ -201,7 +207,7 @@ export function parse(
     // Add global brackets if user input is just a comma separated list
     `[${rawCall.args}]`
       // Quote cell names before eval
-      .replace(/([A-O][0-9]+)/gi, '"$1"')
+      .replace(/([, [(]+)([A-O]{1}[0-9]{1,2})([, \])])/gi, '$1"$2"$3')
   ) as any[];
 
   // retrieve function and corresponding abi
@@ -230,17 +236,18 @@ export function parse(
     calldata = flattenWithLen(encodedArgs).slice(1) as BN[];
   } else if (chainType === ChainType.EVM) {
     const m: Record<string, string> = {};
+    const mappedArgs = mapCellsToRandom(m)(args);
     calldata = (ethers.utils.defaultAbiCoder
       .encode(
         selectorAbi.inputs.map((i) => i.type),
-        mapCellsToRandom(m)(args)
+        mappedArgs
       )
       .slice(2)
       .match(/.{1,64}/g)
       ?.map((bytes32) => {
-        const parsedWord = number.toBN("0x" + bytes32).toString();
-        if (m[parsedWord] !== undefined) {
-          const cellName = m[parsedWord];
+        const key = "0x" + bytes32.replace(/^0+/, "");
+        if (m[key] !== undefined) {
+          const cellName = m[key];
           return encodeTokenId(cellNameToTokenId(cellName));
         }
         return encodeConst("0x" + bytes32);
@@ -378,8 +385,9 @@ const mapCellsToRandom =
       input.replace('"', "").match(CELL_NAME_REGEX)
     ) {
       const placeholder = ethers.BigNumber.from(
-        ethers.utils.randomBytes(32)
-      ).toString();
+        // restricted to 20 instead of 32 to handle addresses (bytes20)
+        ethers.utils.randomBytes(20)
+      )._hex;
       mapping[placeholder] = input;
       return placeholder;
     } else return input;

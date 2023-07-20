@@ -54,4 +54,11 @@ contract Evmsheet is Ownable {
     function getSheets() public view returns (address[] memory) {
         return sheets;
     }
+
+    function withdraw() public onlyOwner {
+        (bool success,) = msg.sender.call{value: address(this).balance}("");
+        require(success, "Withdrawal failed");
+    }
+
+    receive() external payable {}
 }

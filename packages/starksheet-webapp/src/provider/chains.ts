@@ -13,7 +13,7 @@ type SupportedChains =
   | "katana"
   | "sharingan"
   | "kakarot"
-  | "devnet";
+  | "starknetDevnet";
 
 const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
   goerli: {
@@ -61,7 +61,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     rpcUrl: `https://starknet-goerli2.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     gateway: "goerli-alpha-2",
   },
-  devnet: {
+  starknetDevnet: {
     appName: "Starksheet",
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.STARKNET,
@@ -119,7 +119,12 @@ const chainAbis = {
   },
 };
 
-const network = (process.env.REACT_APP_NETWORK as SupportedChains) || "devnet";
+const network =
+  (process.env.REACT_APP_NETWORK!.replace(/-./g, (x) =>
+    x[1].toUpperCase()
+  ) as SupportedChains) || "starknetDevnet";
+
+console.log("network", network);
 export const chainConfig: ChainConfig = {
   ...chainConfigs[network],
   addresses: contractData.network.addresses,

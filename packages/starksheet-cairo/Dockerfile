@@ -17,8 +17,7 @@ COPY . .
 RUN poetry install
 
 # Build contracts
-RUN python scripts/starksheet_compile.py
+RUN python scripts/compile_starksheet.py
 
 # Deploy madara swap
-ENV STARKNET_NETWORK=sharingan
-CMD ["python", "scripts/starksheet_deploy.py"]
+CMD ["python", "scripts/deploy_starksheet.py"]

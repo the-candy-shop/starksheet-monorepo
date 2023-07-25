@@ -1,26 +1,22 @@
 {
   "BasicCellRenderer": {
-    "address": "0x3d1b36a9e5a6ce00f1cef365974c1a1364a54b2d3de6a488ebf827df886a52a",
-    "tx": "0x1cc09300bbfa491b5ac939dbd7f6459f130faa217c88a97e15877c332a41737",
-    "artifact": "build/BasicCellRenderer.json",
-    "alias": "basic_cell_renderer"
+    "address": "0x1152e2d3dd5dff367dacc884d17af4fd3b883e07e09edeefcd63fd6f0ab6d1a",
+    "tx": "0x3b5274b925505b90b5a4abe3b36df38371899dacc9e409cd88785436f62a6fe",
+    "artifact": "build/BasicCellRenderer.json"
   },
   "math": {
-    "address": "0x534ef4adc677999df5d2c12e7a79299e7aaed6d36e3c64c4e1ff61536b284b0",
-    "tx": "0x295334035ff50c17edb22e592a5d864f0270926deb77d712bfc57b9c113ba36",
-    "artifact": "build/math.json",
-    "alias": "math"
+    "address": "0x21223730872c32c4c998b5b22ab109aba77032035e993d52f2d24e09f1ef69f",
+    "tx": "0x6b8ce902533ef7908db25462c0b5d695c0f035376f1b8c2bd1820b727113033",
+    "artifact": "build/math.json"
   },
   "execute": {
-    "address": "0x506632ea6381f39420fefba8c98783521536ba2c93492a72baaf7fe73bac268",
-    "tx": "0x480b17c005df8d14512cec97adb7a143689bad1e14490475e52e5eac8113f9d",
-    "artifact": "build/execute.json",
-    "alias": "execute"
+    "address": "0x605182739e1abd0288912fe5be52c3d0f909dc489831cb89602e52ec21ba3c6",
+    "tx": "0x4b9937653fb4a0499de0b3fe105f409f517ddd82062f56d0274ac3f11ed2c3d",
+    "artifact": "build/execute.json"
   },
   "Starksheet": {
-    "address": "0x15e21c7965522f25a65aae2a479001ab897f5900a53651fec2c02236c61e560",
-    "tx": "0x59381098ab6b9bf41cfc20e161d7bf0b5c3e496fc6641a94e55758632668244",
-    "artifact": "build/Starksheet.json",
-    "alias": "starksheet"
+    "address": "0x5cbb31331c3469fe76d9f1e1e1c01ee40569676e4b9c2638f037c5cd32b662f",
+    "tx": "0x7024bb4eabcc9d4c4c8a0de53250bb1849c73ab11490085f601483da2dd152d",
+    "artifact": "build/Starksheet.json"
   }
 }

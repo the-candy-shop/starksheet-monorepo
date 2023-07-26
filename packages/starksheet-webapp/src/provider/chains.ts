@@ -1,3 +1,4 @@
+import { Abi } from "starknet";
 import contractData from "../contracts/contractData.json";
 import { ChainConfig, ChainId, ChainType } from "../types";
 import { EVMProvider } from "./EVMProvider";
@@ -110,12 +111,12 @@ const chainImplementations = {
 
 const chainAbis = {
   [ChainType.EVM]: {
-    spreadsheet: contractData.abis.eth.spreadsheet,
-    worksheet: contractData.abis.eth.worksheet,
+    spreadsheet: contractData.abis.eth.spreadsheet as Abi,
+    worksheet: contractData.abis.eth.worksheet as Abi,
   },
   [ChainType.STARKNET]: {
-    spreadsheet: contractData.abis.starknet.spreadsheet,
-    worksheet: contractData.abis.starknet.worksheet,
+    spreadsheet: contractData.abis.starknet.spreadsheet as Abi,
+    worksheet: contractData.abis.starknet.worksheet as Abi,
   },
 };
 
@@ -124,11 +125,14 @@ const network =
     x[1].toUpperCase()
   ) as SupportedChains) || "starknetDevnet";
 
-console.log("network", network);
 export const chainConfig: ChainConfig = {
   ...chainConfigs[network],
+  rpcUrl: process.env.REACT_APP_RPC_URL || chainConfigs[network].rpcUrl,
   addresses: contractData.network.addresses,
 };
-export const chainAbi = chainAbis[chainConfig.chainType];
+export const chainAbi = chainAbis[chainConfig.chainType] as {
+  spreadsheet: Abi;
+  worksheet: Abi;
+};
 export const chainImplementation = chainImplementations[chainConfig.chainType];
 export const deployedAbis = contractData.network.deployedAbis;

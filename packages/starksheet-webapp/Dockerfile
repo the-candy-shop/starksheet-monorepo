@@ -2,9 +2,7 @@ FROM node:16
 
 WORKDIR /app/starksheet/packages/starksheet-webapp
 
-COPY package*.json ./
-RUN npm install
-
 COPY . .
+RUN npm install
 
 CMD ["npm", "start", "--omit=dev"]

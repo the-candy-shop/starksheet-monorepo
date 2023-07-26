@@ -14,24 +14,17 @@ services:
       - ethereum
 
   ethereum-deployer:
-    image: ghcr.io/foundry-rs/foundry
+    build: ./packages/starksheet-solidity
     platform: linux/x86_64
-    entrypoint: forge
     depends_on:
       ethereum:
         condition: service_healthy
     environment:
+      RPC_URL: http://ethereum:8545
       PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-      ETHERSCAN_API_KEY: "foobar"
     volumes:
-      - ./packages/starksheet-solidity:/app/starksheet/packages/starksheet-solidity
-    working_dir: /app/starksheet/packages/starksheet-solidity
-    command:
-      - "script"
-      - "script/Evmsheet.s.sol"
-      - "--broadcast"
-      - "--rpc-url"
-      - "http://ethereum:8545"
+      - ethereum-broadcast:/app/starksheet/packages/starksheet-solidity/broadcast
+      - ethereum-out:/app/starksheet/packages/starksheet-solidity/out
     networks:
       - ethereum
 
@@ -42,7 +35,8 @@ services:
         condition: service_completed_successfully
     working_dir: /app/starksheet/packages/starksheet-webapp
     volumes:
-      - ./packages/starksheet-solidity:/app/starksheet/packages/starksheet-solidity
+      - ethereum-broadcast:/app/starksheet/packages/starksheet-solidity/broadcast
+      - ethereum-out:/app/starksheet/packages/starksheet-solidity/out
     environment:
       - REACT_APP_NETWORK=anvil
       - REACT_APP_RPC_URL=http://0.0.0.0:8545
@@ -110,6 +104,8 @@ services:
 volumes:
   starknet-deployments:
   starknet-build:
+  ethereum-broadcast:
+  ethereum-out:
 
 networks:
   starknet:

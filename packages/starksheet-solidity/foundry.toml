@@ -4,10 +4,14 @@ out = 'out'
 libs = ['lib']
 eth_rpc_url = "anvil"
 
+[profile.docker]
+eth_rpc_url = "docker"
+
 [rpc_endpoints]
 goerli = "${GOERLI_RPC_URL}"
 anvil = "http://127.0.0.1:8545"
 kakarot = "http://127.0.0.1:3030"
+docker = "${RPC_URL}"
 
 [etherscan]
 goerli = { key = "${ETHERSCAN_API_KEY}" }

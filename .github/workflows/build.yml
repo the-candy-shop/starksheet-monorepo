@@ -47,7 +47,8 @@ jobs:
         with:
           push: true
           tags: ghcr.io/the-candy-shop/starksheet-monorepo/starksheet-solidity:latest
-          context: ./packages/starksheet-solidity
+          context: .
+          file: ./packages/starksheet-solidity/Dockerfile
           platforms: linux/amd64,linux/arm64
 
   webapp:

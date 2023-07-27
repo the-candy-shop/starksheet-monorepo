@@ -1,6 +1,7 @@
-FROM node:16
+FROM node:18
 
 WORKDIR /app/starksheet/packages/starksheet-webapp
+RUN npm update -g npm
 
 COPY . .
 RUN npm install

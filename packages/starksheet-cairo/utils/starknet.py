@@ -31,16 +31,16 @@ from starknet_py.net.signer.stark_curve_signer import KeyPair
 from starkware.starknet.public.abi import get_selector_from_name
 from utils.constants import (
     BUILD_DIR,
+    BUILD_DIR_FIXTURES,
     CLIENT,
     CONTRACTS,
+    CONTRACTS_FIXTURES,
     DEPLOYMENTS_DIR,
     ETH_TOKEN_ADDRESS,
     GATEWAY_CLIENT,
     NETWORK,
     RPC_CLIENT,
     SOURCE_DIR,
-    BUILD_DIR_FIXTURES,
-    CONTRACTS_FIXTURES,
 )
 
 logging.basicConfig()
@@ -285,7 +285,9 @@ def compile_contract(contract):
     )
 
 
-async def deploy_starknet_account(private_key=None, amount=1) -> Account:
+async def deploy_starknet_account(
+    private_key=None, amount: Union[int, float] = 1
+) -> Account:
     compile_contract(
         {"contract_name": "OpenzeppelinAccount", "is_account_contract": True}
     )

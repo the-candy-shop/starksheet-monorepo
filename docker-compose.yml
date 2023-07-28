@@ -7,15 +7,14 @@ services:
       test: cast chain-id
       interval: 5s
     ports:
-      - '8545:8545'
+      - "8545:8545"
     environment:
       ANVIL_IP_ADDR: "0.0.0.0"
     networks:
       - ethereum
 
   ethereum-deployer:
-    build: ./packages/starksheet-solidity
-    platform: linux/x86_64
+    image: ghcr.io/the-candy-shop/starksheet-monorepo/starksheet-solidity:latest
     depends_on:
       ethereum:
         condition: service_healthy
@@ -29,7 +28,7 @@ services:
       - ethereum
 
   ethereum-webapp:
-    build: ./packages/starksheet-webapp
+    image: ghcr.io/the-candy-shop/starksheet-monorepo/starksheet-webapp:latest
     depends_on:
       ethereum-deployer:
         condition: service_completed_successfully
@@ -42,7 +41,7 @@ services:
       - REACT_APP_RPC_URL=http://0.0.0.0:8545
       - PORT=3000
     ports:
-      - '3000:3000'
+      - "3000:3000"
     networks:
       - ethereum
 
@@ -62,12 +61,12 @@ services:
       test: echo "ok"
       interval: 1s
     ports:
-      - '5050:5050'
+      - "5050:5050"
     networks:
       - starknet
 
   starknet-deployer:
-    build: ./packages/starksheet-cairo
+    image: ghcr.io/the-candy-shop/starksheet-monorepo/starksheet-cairo:latest
     depends_on:
       starknet:
         condition: service_healthy
@@ -84,7 +83,7 @@ services:
       - starknet
 
   starknet-webapp:
-    build: ./packages/starksheet-webapp
+    image: ghcr.io/the-candy-shop/starksheet-monorepo/starksheet-webapp:latest
     depends_on:
       starknet-deployer:
         condition: service_completed_successfully
@@ -97,7 +96,7 @@ services:
       - REACT_APP_RPC_URL=http://0.0.0.0:5050
       - PORT=3001
     ports:
-      - '3001:3001'
+      - "3001:3001"
     networks:
       - starknet
 

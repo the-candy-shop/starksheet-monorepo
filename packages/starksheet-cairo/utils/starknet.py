@@ -286,7 +286,7 @@ def compile_contract(contract):
 
 
 async def deploy_starknet_account(
-    private_key=None, amount: Union[int, float] = 1
+    private_key=None, amount: Union[int, float] = 1, update_default=True
 ) -> Account:
     compile_contract(
         {"contract_name": "OpenzeppelinAccount", "is_account_contract": True}
@@ -323,8 +323,9 @@ async def deploy_starknet_account(
     status = "✅" if status == TransactionStatus.ACCEPTED_ON_L2 else "❌"
     logger.info(f"{status} Account deployed at address {hex(res.account.address)}")
 
-    NETWORK["account_address"] = hex(res.account.address)
-    NETWORK["private_key"] = hex(key_pair.private_key)
+    if update_default:
+        NETWORK["account_address"] = hex(res.account.address)
+        NETWORK["private_key"] = hex(key_pair.private_key)
     return res.account
 
 

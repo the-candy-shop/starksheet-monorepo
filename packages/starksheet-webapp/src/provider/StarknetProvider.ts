@@ -208,6 +208,7 @@ export class StarknetProvider implements ChainProvider {
 
     const connection = await connect({
       modalMode: "canAsk",
+      dappName: this.config.appName,
       webWalletUrl:
         this.config.chainId === ChainId.STARKNET_MAINNET
           ? "https://web.argent.xyz"

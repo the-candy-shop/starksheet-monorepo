@@ -1,10 +1,9 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import BN from "bn.js";
 import { BigNumber, ethers } from "ethers";
 import { Cell, ContractCall, SheetConstructorArgs } from "../../types";
 import { SpreadsheetContract } from "../../types/contracts";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2uint, hex2str } from "../../utils/hexUtils";
+import { bigint2uint, hex2str } from "../../utils/hexUtils";
 import { Evmsheet, Evmsheet__factory, Sheet__factory } from "../types";
 
 /**
@@ -12,13 +11,13 @@ import { Evmsheet, Evmsheet__factory, Sheet__factory } from "../types";
  */
 export class EvmSpreadsheetContract implements SpreadsheetContract {
   private contract: Evmsheet;
-  private sheetPrice: BN;
+  private sheetPrice: bigint;
 
   /**
    * The class constructor.
    */
   constructor(private address: string, private provider: JsonRpcProvider) {
-    this.sheetPrice = new BN(0);
+    this.sheetPrice = 0n;
     this.contract = Evmsheet__factory.connect(address, provider);
     this.getSheetPrice().then((price) => {
       this.sheetPrice = price;
@@ -57,9 +56,9 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * @inheritDoc
    */
-  async getSheetPrice(): Promise<BN> {
+  async getSheetPrice(): Promise<bigint> {
     const value: BigNumber = await this.contract.sheetPrice();
-    return new BN(value.toString());
+    return BigInt(value.toString());
   }
 
   /**
@@ -96,16 +95,17 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   ): ContractCall {
     // If contractAddress is RC_BOUND, then the cell is constant and we store the selector
     // as a regular uint256
-    const selector = cell.contractAddress.eq(RC_BOUND)
-      ? bn2uint(32)(cell.selector)
-      : bn2uint(4)(cell.selector).padEnd(64, "0");
+    const selector =
+      cell.contractAddress === RC_BOUND
+        ? bigint2uint(32)(cell.selector)
+        : bigint2uint(4)(cell.selector).padEnd(64, "0");
     return {
       to: cell.sheetAddress,
       calldata: Sheet__factory.createInterface().encodeFunctionData("setCell", [
         cell.id,
-        "0x" + bn2uint(20)(cell.contractAddress),
+        "0x" + bigint2uint(20)(cell.contractAddress),
         "0x" + selector,
-        "0x" + cell.calldata.map(bn2uint(32)).join(""),
+        "0x" + cell.calldata.map(bigint2uint(32)).join(""),
       ]),
     };
   }

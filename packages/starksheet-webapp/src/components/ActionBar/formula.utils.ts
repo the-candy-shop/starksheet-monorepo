@@ -1,6 +1,5 @@
-import BN from "bn.js";
 import { BigNumber, ethers } from "ethers";
-import { FunctionAbi, number, uint256 } from "starknet";
+import { FunctionAbi, uint256 } from "starknet";
 import { CellData, ChainType, ContractAbi } from "../../types";
 import {
   ARGS_SEP,
@@ -11,7 +10,7 @@ import {
   HEX_STRING_REGEX,
   RC_BOUND,
 } from "../../utils/constants";
-import { bn2hex, bn2uint, hex2str } from "../../utils/hexUtils";
+import { bigint2hex, bigint2uint, hex2str } from "../../utils/hexUtils";
 import {
   cellNameToTokenId,
   encodeConst,
@@ -21,7 +20,7 @@ import {
 } from "../../utils/sheetUtils";
 
 const isBigNumber = (arg: any): boolean => {
-  return arg instanceof BigNumber || arg instanceof BN;
+  return arg instanceof BigNumber || typeof arg === "bigint";
 };
 
 export function toPlainTextFormula(
@@ -31,24 +30,23 @@ export function toPlainTextFormula(
   if (!cellData) return "0";
 
   const { contractAddress, selector, calldata, abi } = cellData;
-  if (contractAddress.eq(RC_BOUND)) {
-    return selector.gte(RC_BOUND) ? bn2hex(selector) : selector.toString();
+  if (contractAddress === RC_BOUND) {
+    return selector >= RC_BOUND ? bigint2hex(selector) : selector.toString();
   }
 
-  const contractName = contractAddress.lt(RC_BOUND)
-    ? tokenIdToCellName(contractAddress.toNumber())
-    : bn2hex(contractAddress);
-  const selectorHexString = bn2hex(selector);
+  const contractName =
+    contractAddress <= RC_BOUND
+      ? tokenIdToCellName(Number(contractAddress))
+      : bigint2hex(contractAddress);
+  const selectorHexString = bigint2hex(selector);
   const operator = abi?.name || selectorHexString;
 
   const args = calldata.map((arg) =>
     isDependency(arg)
-      ? tokenIdToCellName(
-          arg.sub(number.toBN(1)).div(number.toBN(2)).toNumber()
-        )
-      : arg.gte(RC_BOUND)
-      ? "0x" + arg.div(number.toBN(2)).toString(16)
-      : arg.div(number.toBN(2)).toString()
+      ? tokenIdToCellName(Number((arg - 1n) / 2n))
+      : arg >= RC_BOUND
+      ? "0x" + (arg / 2n).toString(16)
+      : (arg / 2n).toString()
   );
   let displayedArgs = [];
   if (!!abi) {
@@ -105,12 +103,10 @@ export function toPlainTextFormula(
               )
                 ._hex.slice(2)
                 .padStart(64, "0");
-              mapping[placeholder] = tokenIdToCellName(
-                arg.sub(number.toBN(1)).div(number.toBN(2)).toNumber()
-              );
+              mapping[placeholder] = tokenIdToCellName(Number((arg - 1n) / 2n));
               return placeholder;
             }
-            return bn2uint(32)(arg.div(number.toBN(2)));
+            return bigint2uint(32)(arg / 2n);
           })
           .join("");
       const decodedData = ethers.utils.defaultAbiCoder.decode(
@@ -233,7 +229,7 @@ export function parse(
     const encodedArgs = encodeInputs(args) as any[];
     // Flatten the object prefixing arrays with their len
     // Result dismisses the first value, with is the len of the initial array of args
-    calldata = flattenWithLen(encodedArgs).slice(1) as BN[];
+    calldata = flattenWithLen(encodedArgs).slice(1) as bigint[];
   } else if (chainType === ChainType.EVM) {
     const m: Record<string, string> = {};
     const mappedArgs = mapCellsToRandom(m)(args);
@@ -251,23 +247,21 @@ export function parse(
           return encodeTokenId(cellNameToTokenId(cellName));
         }
         return encodeConst("0x" + bytes32);
-      }) || []) as BN[];
+      }) || []) as bigint[];
   } else {
     throw new Error(`No parsing function for chainType ${chainType}`);
   }
 
   return {
-    contractAddress: number.toBN(rawCall.contractAddress),
-    selector: number.toBN(selector),
+    contractAddress: BigInt(rawCall.contractAddress),
+    selector: BigInt(selector),
     calldata,
     abi: selectorAbi,
   };
 }
 
-export const decode = (_arg: BN) =>
-  isDependency(_arg)
-    ? _arg.sub(number.toBN(1)).div(number.toBN(2))
-    : _arg.div(number.toBN(2));
+export const decode = (_arg: bigint) =>
+  isDependency(_arg) ? (_arg - 1n) / 2n : _arg / 2n;
 
 /**
  *
@@ -341,7 +335,7 @@ export function buildFormulaDisplay(
 
   if (settings?.text) {
     try {
-      return hex2str(bn2hex(number.toBN(formula)));
+      return hex2str(bigint2hex(BigInt(formula)));
     } catch (e) {
       return formula;
     }

@@ -1,6 +1,4 @@
-import BN from "bn.js";
-import { BigNumberish } from "ethers";
-import { FunctionAbi } from "starknet";
+import { BigNumberish, FunctionAbi } from "starknet";
 
 /**
  * Represents a contract call.
@@ -22,12 +20,12 @@ export interface ContractCall {
   /**
    * The function selector.
    */
-  selector?: BigNumberish | BN;
+  selector?: BigNumberish;
 
   /**
    * The calldata. In the EVM world, the calldata includes the bytes4 function selector.
    */
-  calldata: (BigNumberish | BN)[] | string;
+  calldata: BigNumberish[] | string;
 
   /**
    * The value to send in chain base fee token

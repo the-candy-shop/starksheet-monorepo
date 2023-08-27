@@ -1,14 +1,13 @@
-import BN from "bn.js";
-import { Abi, FunctionAbi, StructAbi, number } from "starknet";
+import { Abi, BigNumberish, FunctionAbi, StructAbi } from "starknet";
 import { Cell } from "./cells";
 
 export type SheetConstructorArgs = {
-  name: number.BigNumberish;
-  symbol: number.BigNumberish;
-  owner: number.BigNumberish;
-  merkleRoot: number.BigNumberish;
-  maxPerWallet: number.BigNumberish;
-  rendererAddress: number.BigNumberish;
+  name: BigNumberish;
+  symbol: BigNumberish;
+  owner: BigNumberish;
+  merkleRoot: BigNumberish;
+  maxPerWallet: BigNumberish;
+  rendererAddress: BigNumberish;
 };
 
 export type Sheet = {
@@ -68,5 +67,5 @@ export type OnsheetContractData = {
   contractAbis: { [address: string]: Abi };
 };
 
-export type Uint256 = { low: number.BigNumberish; high: number.BigNumberish };
-export type Uint256Output = { low: BN; high: BN };
+export type Uint256 = { low: BigNumberish; high: BigNumberish };
+export type Uint256Output = { low: bigint; high: bigint };

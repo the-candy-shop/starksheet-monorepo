@@ -16,7 +16,7 @@ import {
   CELL_NAME_REGEX,
   CONTRACT_FUNCTION_SEP,
 } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bigint2hex } from "../../utils/hexUtils";
 import { cellNameToTokenId } from "../../utils/sheetUtils";
 import { buildFormulaDisplay } from "../ActionBar/formula.utils";
 
@@ -55,7 +55,7 @@ function FormulaField({
       let _selectedContractAddress = value.split(CONTRACT_FUNCTION_SEP)[0];
       setSelectedContractAddress(_selectedContractAddress);
       if (_selectedContractAddress.match(CELL_NAME_REGEX)) {
-        _selectedContractAddress = bn2hex(
+        _selectedContractAddress = bigint2hex(
           currentCells[cellNameToTokenId(_selectedContractAddress)].value
         );
       }

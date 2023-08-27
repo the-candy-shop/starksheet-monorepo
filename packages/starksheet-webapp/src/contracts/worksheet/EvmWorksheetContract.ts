@@ -1,14 +1,8 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import BN from "bn.js";
-import "ethers";
-import { number } from "starknet";
 import { N_ROW } from "../../config";
 import { CellData, CellRendered, WorksheetContract } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import {
-  ethersHexStringToBN,
-  hexStringToIntegerArray,
-} from "../../utils/hexUtils";
+import { hexStringToIntegerArray } from "../../utils/hexUtils";
 import { Sheet, Sheet__factory } from "../types";
 
 export class EvmWorksheetContract implements WorksheetContract {
@@ -30,10 +24,11 @@ export class EvmWorksheetContract implements WorksheetContract {
     );
 
     return {
-      contractAddress: ethersHexStringToBN(contractAddress),
-      selector: ethersHexStringToBN(contractAddress).eq(RC_BOUND)
-        ? number.toBN(selector)
-        : number.toBN(selector.slice(0, 10)),
+      contractAddress: BigInt(contractAddress),
+      selector:
+        BigInt(contractAddress) === RC_BOUND
+          ? BigInt(selector)
+          : BigInt(selector.slice(0, 10)),
       calldata: hexStringToIntegerArray(data.slice(2)),
     };
   }
@@ -55,13 +50,13 @@ export class EvmWorksheetContract implements WorksheetContract {
   /**
    * @inheritDoc
    */
-  async ownerOf(tokenId: number): Promise<BN> {
+  async ownerOf(tokenId: number): Promise<bigint> {
     try {
       return await this.contract
         .ownerOf(tokenId)
-        .then((address: string) => new BN(address));
+        .then((address: string) => BigInt(address));
     } catch (error) {
-      return new BN(0);
+      return 0n;
     }
   }
 
@@ -73,14 +68,14 @@ export class EvmWorksheetContract implements WorksheetContract {
       const cell = await this.contract.renderCell(tokenId);
       return {
         id: tokenId,
-        value: number.toBN(cell.value),
-        owner: number.toBN(cell.owner),
+        value: BigInt(cell.value),
+        owner: BigInt(cell.owner),
       };
     } catch (error) {
       const owner = await this.ownerOf(tokenId);
       return {
         id: tokenId,
-        value: new BN(0),
+        value: 0n,
         owner: owner,
         error: true,
       } as CellRendered;

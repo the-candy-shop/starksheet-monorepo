@@ -1,7 +1,7 @@
 import { Box, BoxProps } from "@mui/material";
 import { useCallback, useContext, useEffect, useMemo } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { FunctionAbi, number } from "starknet";
+import { FunctionAbi } from "starknet";
 import {
   CELL_BORDER_WIDTH,
   CELL_HEIGHT,
@@ -16,19 +16,19 @@ import { useSheetContract } from "../../hooks/useSheetContract";
 import { chainConfig } from "../../provider/chains";
 import { Cell, CellData, CellRendered } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
+import { bigint2hex } from "../../utils/hexUtils";
 import ComputedCell from "../ComputedCell/ComputedCell";
 import GreyCell from "../GreyCell/GreyCell";
 
 const defaultRenderedCell = (tokenId: number): CellRendered => ({
   id: tokenId,
-  owner: number.toBN(0),
-  value: number.toBN(0),
+  owner: 0n,
+  value: 0n,
 });
 
 const defaultCellData = (tokenId: number): CellData => ({
   contractAddress: RC_BOUND,
-  selector: number.toBN(0),
+  selector: 0n,
   calldata: [],
 });
 
@@ -166,17 +166,16 @@ const SheetTable = ({ sx }: SheetTableProps) => {
                     }
                 )
                 .map(async (cell, _, array) => {
-                  const resolvedContractAddress = cell.contractAddress.lt(
-                    RC_BOUND
-                  )
-                    ? array[cell.contractAddress.toNumber()].value
-                    : cell.contractAddress;
+                  const resolvedContractAddress =
+                    cell.contractAddress < RC_BOUND
+                      ? array[Number(cell.contractAddress)].value
+                      : cell.contractAddress;
                   const abi = await getAbiForContract(
-                    bn2hex(resolvedContractAddress)
+                    bigint2hex(resolvedContractAddress)
                   );
                   return {
                     ...cell,
-                    abi: abi[bn2hex(cell.selector)] as FunctionAbi,
+                    abi: abi[bigint2hex(cell.selector)] as FunctionAbi,
                   };
                 })
             );

@@ -1,12 +1,14 @@
-import BN from "bn.js";
-import { number } from "starknet";
+import { BigNumberish } from "starknet";
 import { N_COL } from "../config";
 import { Cell } from "../types";
 import { RC_BOUND } from "./constants";
 import { str2hex } from "./hexUtils";
-export const resolveContractAddress = (values: BN[], contractAddress: BN) => {
-  return contractAddress.lt(RC_BOUND)
-    ? values[contractAddress.toNumber()]
+export const resolveContractAddress = (
+  values: bigint[],
+  contractAddress: bigint
+) => {
+  return contractAddress < RC_BOUND
+    ? values[Number(contractAddress)]
     : contractAddress;
 };
 
@@ -16,11 +18,10 @@ export const tokenIdToCellName = (id: number) => {
   return `${col}${row}`;
 };
 
-export const isDependency = (arg: BN): boolean =>
-  arg.mod(number.toBN(2)).toNumber() !== 0;
+export const isDependency = (arg: bigint): boolean => arg % 2n !== 0n;
 
-export function getDependencies(calldata: BN[]): number[] {
-  return calldata.filter(isDependency).map((data) => (data.toNumber() - 1) / 2);
+export function getDependencies(calldata: bigint[]): number[] {
+  return calldata.filter(isDependency).map((data) => (Number(data) - 1) / 2);
 }
 
 export const getAllDependencies =
@@ -34,16 +35,18 @@ export const getAllDependencies =
     deps.map(getAllDependencies(cells, _dependencies));
   };
 
-export const encodeConst = (_arg: number.BigNumberish): BN => {
+export const encodeConst = (_arg: BigNumberish): bigint => {
   try {
-    return number.toBN(_arg).mul(number.toBN(2));
+    // const is a number
+    return BigInt(_arg) * 2n;
   } catch (e) {
-    return number.toBN(str2hex(_arg.toString(16))).mul(number.toBN(2));
+    // const is a string
+    return BigInt(str2hex(_arg.toString(16))) * 2n;
   }
 };
 
-export const encodeTokenId = (_arg: number.BigNumberish): BN =>
-  number.toBN(_arg).mul(number.toBN(2)).add(number.toBN(1));
+export const encodeTokenId = (_arg: BigNumberish): bigint =>
+  BigInt(_arg) * 2n + 1n;
 
 export const cellNameToTokenId = (arg: string) => {
   const col = arg.toLowerCase().charCodeAt(0) - "a".charCodeAt(0);

@@ -1,8 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import BN from "bn.js";
 import { ethers } from "ethers";
 import { MetaTransaction, OperationType, encodeMulti } from "ethers-multisend";
-import { number } from "starknet";
 import { EvmSpreadsheetContract, EvmWorksheetContract } from "../contracts";
 import { MultiSendCallOnly__factory } from "../contracts/types";
 import {
@@ -16,7 +14,7 @@ import {
   TransactionReceipt,
   WorksheetContract,
 } from "../types";
-import { bn2hex, bn2uint, normalizeHexString } from "../utils/hexUtils";
+import { bigint2hex, bigint2uint, normalizeHexString } from "../utils/hexUtils";
 import { chainConfig } from "./chains";
 
 /**
@@ -53,7 +51,7 @@ export class EVMProvider implements ChainProvider {
 
   /**
    *
-   * Convert a ContractCall to an EVM call. The BN are converted using bn2uint (ie. padding with 0 at left) because
+   * Convert a ContractCall to an EVM call. The  bigints are converted using bigint2uint (ie. padding with 0 at left) because
    * they come from hex strings,
    * @param call
    * @returns
@@ -61,8 +59,8 @@ export class EVMProvider implements ChainProvider {
   contractCallToEVMCalldata(call: ContractCall): string {
     return (
       "0x" +
-      bn2uint(4)(call.selector! as BN) +
-      (call.calldata as BN[]).map(bn2uint(32)).join("")
+      bigint2uint(4)(BigInt("0x" + call.selector!.toString(16))) +
+      (call.calldata as bigint[]).map(bigint2uint(32)).join("")
     );
   }
 
@@ -236,7 +234,7 @@ export class EVMProvider implements ChainProvider {
 
     const transactions: MetaTransaction[] = calls.map((call) => ({
       to: call.to,
-      value: call.value ? bn2hex(call.value) : "0x0",
+      value: call.value ? bigint2hex(call.value) : "0x0",
       data: call.calldata as string,
       operation: OperationType.Call,
     }));
@@ -248,14 +246,14 @@ export class EVMProvider implements ChainProvider {
       );
 
     const value = transactions
-      .map((tx) => number.toBN(tx.value))
-      .reduce((prev, cur) => prev.add(cur), number.toBN(0));
+      .map((tx) => BigInt(tx.value))
+      .reduce((prev, cur) => prev + cur, 0n);
 
     const multisend = MultiSendCallOnly__factory.connect(
       chainConfig.addresses.multisend!,
       signer
     );
-    const overrides = value.gt(number.toBN(0)) ? { value: bn2hex(value) } : {};
+    const overrides = value > 0n ? { value: bigint2hex(value) } : {};
     const tx = await multisend.multiSend(
       // encodeMulti creates a new MetaTransaction, and the data includes to bytes selector and bytes lengths
       // So we slices "0x" + bytes4 + 2 times bytes.length

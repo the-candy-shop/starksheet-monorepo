@@ -5,7 +5,6 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { number } from "starknet";
 import { useChainProvider } from "../hooks/useChainProvider";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { ContractCall, NewSheet } from "../types";
@@ -59,8 +58,7 @@ export const TransactionsContextProvider = ({
       .reduce((prev, cur) => [...prev, ...cur], [])
       .filter(
         (cell) =>
-          (cell.owner.eq(number.toBN(0)) &&
-            !cell.selector.eq(number.toBN(0))) ||
+          (cell.owner === 0n && cell.selector !== 0n) ||
           "0x" + cell.owner.toString(16) === accountAddress
       )
       .map((cell) => contract.setCellTxBuilder(cell));
@@ -102,10 +100,7 @@ export const TransactionsContextProvider = ({
       let options;
       if (costEth > 0) {
         options = {
-          value: number
-            .toBN(costEth * 1_000_000_000)
-            .mul(number.toBN(10).pow(number.toBN(9)))
-            .toString(),
+          value: (BigInt(costEth * 1_000_000_000) * 10n ** 9n).toString(),
         };
       }
 

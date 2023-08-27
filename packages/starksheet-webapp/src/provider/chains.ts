@@ -40,7 +40,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainId: ChainId.STARKNET_MAINNET,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://starkscan.co/contract/",
-    nftBaseUrl: "https://mintsquare.io/collection/starknet/",
+    nftBaseUrl: "https://flexing.gg/starknet/collection/",
     rpcUrl: `https://starknet-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   testnet: {

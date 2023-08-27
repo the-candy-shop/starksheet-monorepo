@@ -110,10 +110,20 @@ export class StarknetProvider implements ChainProvider {
     return new StarknetWorksheetContract(address, abi, this.provider);
   }
 
+  sleep = (delay: number) =>
+    new Promise((resolve) => setTimeout(resolve, delay * 1_000));
+
   /**
    * @inheritDoc
    */
-  waitForTransaction(hash: string): Promise<any> {
+  async waitForTransaction(hash: string): Promise<any> {
+    for (let i = 0; i < 10; i++) {
+      try {
+        return await this.provider.getTransactionReceipt(hash);
+      } catch (e) {
+        await this.sleep(3);
+      }
+    }
     return this.provider.waitForTransaction(hash, {
       successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
     });
@@ -122,8 +132,9 @@ export class StarknetProvider implements ChainProvider {
   /**
    * @inheritDoc
    */
-  getTransactionReceipt(hash: string): Promise<any> {
-    return this.provider.getTransactionReceipt(hash);
+  async getTransactionReceipt(hash: string): Promise<any> {
+    const receipt = await this.provider.getTransactionReceipt(hash);
+    return { ...receipt, status: receipt.finality_status };
   }
 
   /**

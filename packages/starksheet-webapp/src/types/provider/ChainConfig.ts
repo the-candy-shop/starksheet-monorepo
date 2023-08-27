@@ -10,7 +10,6 @@ export interface ChainConfig {
   explorerApiUrl?: string;
   nftBaseUrl: string;
   rpcUrl: string;
-  gateway?: NetworkName;
   appName: string;
   addresses: {
     spreadsheet: string;

@@ -3,7 +3,6 @@ import { BigNumberish } from "ethers";
 import { disconnect, connect as getStarknet } from "get-starknet";
 import {
   Abi,
-  Provider,
   ProviderInterface,
   RpcProvider,
   hash,
@@ -36,11 +35,9 @@ export class StarknetProvider implements ChainProvider {
    * Constructs a StarknetProvider.
    */
   constructor(rpcUrl: string, private config: ChainConfig) {
-    this.provider = config.gateway
-      ? new Provider({ sequencer: { network: config.gateway } })
-      : new RpcProvider({
-          nodeUrl: rpcUrl,
-        });
+    this.provider = new RpcProvider({
+      nodeUrl: rpcUrl,
+    });
 
     const address = config.addresses.spreadsheet;
     const abi = chainAbi.spreadsheet;

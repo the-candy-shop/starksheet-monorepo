@@ -126,8 +126,14 @@ export const TransactionsContextProvider = ({
           );
         })
         .catch((error: any) => {
-          console.log("error", error);
-          enqueueSnackbar(error.toString(), { variant: "error" });
+          console.log("error", error.toString());
+          if (error.toString() === "Error: Execute failed") {
+            // TODO: fix because braavos raises while it does work
+            setUpdatedValues({});
+            validateNewSheets();
+          } else {
+            enqueueSnackbar(error.toString(), { variant: "error" });
+          }
         });
     },
     [

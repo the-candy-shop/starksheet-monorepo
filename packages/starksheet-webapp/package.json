@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/bn.js": "^5.1.0",
     "prettier": "2.7.1",
     "typechain": "^8.1.0",

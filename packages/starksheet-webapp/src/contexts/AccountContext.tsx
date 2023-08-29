@@ -1,5 +1,6 @@
 import { useSnackbar } from "notistack";
 import React, { PropsWithChildren, useMemo, useState } from "react";
+import { BigNumberish } from "starknet";
 import { useChainProvider } from "../hooks";
 import { ContractCall, TransactionResponse } from "../types";
 
@@ -27,7 +28,6 @@ export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const proof = useMemo(() => [], []);
 
   const provider = useChainProvider();
-  const execute = provider.execute;
 
   const connect = () =>
     provider
@@ -38,6 +38,10 @@ export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
       .catch((error) => {
         enqueueSnackbar(error.toString(), { variant: "warning" });
       });
+
+  const execute = (calls: ContractCall[], options?: { value?: BigNumberish }) =>
+    // @ts-ignore
+    provider.execute(calls, options);
 
   return (
     <AccountContext.Provider

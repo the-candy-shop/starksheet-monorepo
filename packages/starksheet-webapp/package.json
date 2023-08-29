@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "@argent/get-starknet": "^6.4.7",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.8.6",
@@ -19,7 +20,6 @@
     "ethers": "5.7.2",
     "ethers-multisend": "^2.4.0",
     "expr-eval": "^2.0.2",
-    "get-starknet": "^2.0.0",
     "notistack": "^2.0.5",
     "react": "^18.2.0",
     "react-contenteditable": "^3.3.6",
@@ -27,7 +27,7 @@
     "react-hotkeys": "^2.0.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
-    "starknet": "^4.22.0",
+    "starknet": "^5.18.0",
     "ts-toolbelt": "^9.6.0",
     "web-vitals": "^2.1.4",
     "wido-widget": "^1.0.8"
@@ -50,9 +50,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",

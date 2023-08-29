@@ -2,7 +2,6 @@ import { Box, BoxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useContext, useEffect } from "react";
 import ContentEditable from "react-contenteditable";
-import { number } from "starknet";
 import { CELL_BORDER_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -11,17 +10,15 @@ import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { chainConfig } from "../../provider/chains";
 import { CellData, CellGraph, Cell as CellType } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex, str2hex } from "../../utils/hexUtils";
-import { resolveContractAddress } from "../../utils/sheetUtils";
+import { bigint2hex, str2hex } from "../../utils/hexUtils";
+import {
+  resolveContractAddress,
+  tokenIdToCellName,
+} from "../../utils/sheetUtils";
 import Cell from "../Cell/Cell";
 import FormulaField from "../FormulaField/FormulaField";
 import SaveButton from "../SaveButton/SaveButton";
-import {
-  parse,
-  parseContractCall,
-  toPlainTextFormula,
-  tokenIdToCellName,
-} from "./formula.utils";
+import { parse, parseContractCall, toPlainTextFormula } from "./formula.utils";
 
 export type ActionBarProps = {
   inputRef: React.RefObject<ContentEditable>;
@@ -62,10 +59,10 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       const currentCell = currentCells[currentCellId];
 
       if (
-        currentCell.contractAddress.eq(cellData.contractAddress) &&
-        currentCell.selector.eq(cellData.selector) &&
+        currentCell.contractAddress === cellData.contractAddress &&
+        currentCell.selector === cellData.selector &&
         currentCell.calldata.length === cellData.calldata.length &&
-        currentCell.calldata.every((c, i) => c.eq(cellData.calldata[i]))
+        currentCell.calldata.every((c, i) => c === cellData.calldata[i])
       ) {
         return;
       }
@@ -90,7 +87,11 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
             .sort((a, b) => a[1] - b[1])
             .map((entry) => parseInt(entry[0]))
             .map((id) => currentCells[id])
-            .filter((cell) => cell.abi?.stateMutability === "view");
+            .filter(
+              (cell) =>
+                cell.abi?.stateMutability === "view" ||
+                cell.abi?.stateMutability === "pure"
+            );
 
           for (const cell of indexes) {
             let value = cell.value;
@@ -147,14 +148,14 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
       const _contractCall = parseContractCall(_value);
 
       if (!_contractCall) {
-        let selector = number.toBN(0);
+        let selector = BigInt(0);
         try {
-          selector = number.toBN(_value);
+          selector = BigInt(_value);
         } catch (e) {
           try {
-            selector = number.toBN(str2hex(_value));
+            selector = BigInt(str2hex(_value));
           } catch (e) {
-            selector = number.toBN(0);
+            selector = BigInt(0);
           }
         }
         setCellData({
@@ -167,7 +168,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
       let contractAddress;
       try {
-        contractAddress = number.toBN(_contractCall.contractAddress);
+        contractAddress = BigInt(_contractCall.contractAddress);
       } catch (e) {
         return;
       }
@@ -177,7 +178,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
         contractAddress
       );
 
-      getAbiForContract(bn2hex(resolvedContractAddress)).then((abi) => {
+      getAbiForContract(bigint2hex(resolvedContractAddress)).then((abi) => {
         const _cellData = parse(_contractCall, abi, chainConfig.chainType);
         setCellData(_cellData);
       });
@@ -204,7 +205,6 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
   }, [selectedCell, currentCells]);
 
   const owner = currentCells[selectedCell]?.owner?.toString(16);
-
   return (
     <Box sx={{ display: "flex", ...sx }}>
       <Cell sx={{ width: "134px", "& .content": { textAlign: "center" } }}>

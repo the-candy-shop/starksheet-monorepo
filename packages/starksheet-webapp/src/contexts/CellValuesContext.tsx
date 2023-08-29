@@ -1,4 +1,3 @@
-import BN from "bn.js";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -6,13 +5,11 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { number } from "starknet";
-import { isDependency } from "../components/ActionBar/formula.utils";
 import { useChainProvider } from "../hooks/useChainProvider";
 import { Cell, CellData, CellGraph, CellValues, UpdatedValues } from "../types";
 import { RC_BOUND } from "../utils/constants";
-import { bn2hex } from "../utils/hexUtils";
-import { resolveContractAddress } from "../utils/sheetUtils";
+import { bigint2hex } from "../utils/hexUtils";
+import { isDependency, resolveContractAddress } from "../utils/sheetUtils";
 import { OnsheetContext } from "./OnsheetContext";
 
 export const CellValuesContext = React.createContext<{
@@ -23,7 +20,7 @@ export const CellValuesContext = React.createContext<{
   currentUpdatedCells: { [key: number]: Cell };
   setUpdatedValues: (values: UpdatedValues) => void;
   setCurrentUpdatedCells: (cells: { [key: number]: Cell }) => void;
-  computeValue: (values: BN[]) => (cell: CellData) => Promise<BN>;
+  computeValue: (values: bigint[]) => (cell: CellData) => Promise<bigint>;
   updateCells: (cells: Cell[]) => void;
   buildChildren: (children: CellGraph, depth?: number) => (id: number) => void;
   buildParents: (children: CellGraph, depth?: number) => (id: number) => void;
@@ -37,7 +34,7 @@ export const CellValuesContext = React.createContext<{
   currentUpdatedCells: {},
   setUpdatedValues: () => {},
   setCurrentUpdatedCells: () => {},
-  computeValue: () => async () => number.toBN(0),
+  computeValue: () => async () => 0n,
   updateCells: () => {},
   buildChildren: () => () => {},
   buildParents: () => () => {},
@@ -77,8 +74,8 @@ export const CellValuesContextProvider = ({
     [selectedSheetAddress, setUpdatedValues]
   );
 
-  const computeValue = (values: BN[]) => async (cell: CellData) => {
-    if (cell.contractAddress.eq(RC_BOUND) || !cell.abi) {
+  const computeValue = (values: bigint[]) => async (cell: CellData) => {
+    if (cell.contractAddress === RC_BOUND || !cell.abi) {
       return cell.selector;
     }
 
@@ -87,12 +84,10 @@ export const CellValuesContextProvider = ({
       cell.contractAddress
     );
 
-    const contractAddress = bn2hex(resolvedContractAddress);
+    const contractAddress = bigint2hex(resolvedContractAddress);
 
     const calldata = cell.calldata.map((arg) => {
-      return isDependency(arg)
-        ? values[(arg.toNumber() - 1) / 2]
-        : arg.div(number.toBN(2));
+      return isDependency(arg) ? values[(Number(arg) - 1) / 2] : arg / 2n;
     });
 
     const call = {
@@ -108,7 +103,7 @@ export const CellValuesContextProvider = ({
         ? await chainProvider.callContract(call)
         : 0;
 
-    return number.toBN(value);
+    return BigInt(value);
   };
 
   const buildChildren = useCallback(
@@ -119,10 +114,10 @@ export const CellValuesContextProvider = ({
           (cell) =>
             cell.calldata
               .filter(isDependency)
-              .map((arg) => (arg.toNumber() - 1) / 2)
+              .map((arg) => (Number(arg) - 1) / 2)
               .includes(id) ||
-            (cell.contractAddress.lt(RC_BOUND) &&
-              cell.contractAddress.toNumber() === id)
+            (cell.contractAddress < RC_BOUND &&
+              Number(cell.contractAddress) === id)
         )
         .map((cell) => cell.id);
 
@@ -141,9 +136,9 @@ export const CellValuesContextProvider = ({
       const cell = values[selectedSheetAddress][id];
       const currentParents = cell.calldata
         .filter(isDependency)
-        .map((arg) => (arg.toNumber() - 1) / 2);
-      if (cell.contractAddress.lt(RC_BOUND)) {
-        currentParents.push(cell.contractAddress.toNumber());
+        .map((arg) => (Number(arg) - 1) / 2);
+      if (cell.contractAddress < RC_BOUND) {
+        currentParents.push(Number(cell.contractAddress));
       }
 
       currentParents.forEach((_id) => {
@@ -166,8 +161,8 @@ export const CellValuesContextProvider = ({
         ...cell,
       };
       if (
-        !cell.contractAddress.eq(currentCells[id].contractAddress) ||
-        !cell.selector.eq(currentCells[id].selector) ||
+        cell.contractAddress !== currentCells[id].contractAddress ||
+        cell.selector !== currentCells[id].selector ||
         cell.calldata !== currentCells[id].calldata
       ) {
         newUpdatedCells[id] = newCells[id];

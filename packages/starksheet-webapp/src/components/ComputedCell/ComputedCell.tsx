@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
 import { useContext, useMemo } from "react";
-import { constants, number } from "starknet";
+import { constants } from "starknet";
 import Tooltip from "../../Tooltip/Tooltip";
 import { CELL_BORDER_WIDTH, CELL_WIDTH } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -11,7 +11,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { chainConfig } from "../../provider/chains";
 import { CellGraph, Cell as CellType } from "../../types";
 import { RC_BOUND } from "../../utils/constants";
-import { bn2hex, hex2str } from "../../utils/hexUtils";
+import { bigint2hex, hex2str } from "../../utils/hexUtils";
 import Cell from "../Cell/Cell";
 
 const BLUE = "#0000FF";
@@ -52,18 +52,15 @@ function ComputedCell({ cell }: ComputedCellProps) {
 
   const { background, borderColor, color } = useMemo(() => {
     const background =
-      cell.owner.eq(number.toBN(0)) &&
-      cell.contractAddress.eq(RC_BOUND) &&
-      cell.selector.eq(number.toBN(0))
+      cell.owner === 0n &&
+      cell.contractAddress === RC_BOUND &&
+      cell.selector === 0n
         ? WHITE
         : isInvoke
         ? GREEN
-        : accountAddress === bn2hex(cell.owner) ||
-          (cell.owner.eq(number.toBN(0)) &&
-            !(
-              cell.contractAddress.eq(RC_BOUND) &&
-              cell.selector.eq(number.toBN(0))
-            ))
+        : accountAddress === bigint2hex(cell.owner) ||
+          (cell.owner === 0n &&
+            !(cell.contractAddress === RC_BOUND && cell.selector === 0n))
         ? BLUE
         : GREY;
 
@@ -83,25 +80,15 @@ function ComputedCell({ cell }: ComputedCellProps) {
       cell.abi?.name === "name" ||
       cell.abi?.name === "symbol" ||
       cellSettings.text;
-    if (renderString) return hex2str(bn2hex(value));
-    if (cell.contractAddress.eq(number.toBN(chainConfig.addresses.math))) {
-      return value
-        .add(
-          number
-            .toBN("0x" + constants.FIELD_PRIME)
-            .div(number.toBN(2))
-            .abs()
-        )
-        .mod(number.toBN("0x" + constants.FIELD_PRIME))
-        .sub(
-          number
-            .toBN("0x" + constants.FIELD_PRIME)
-            .div(number.toBN(2))
-            .abs()
-        )
-        .toString();
+    if (renderString) return hex2str(bigint2hex(value));
+    if (cell.contractAddress === BigInt(chainConfig.addresses.math)) {
+      return (
+        ((value + BigInt("0x" + constants.FIELD_PRIME) / 2n) %
+          BigInt("0x" + constants.FIELD_PRIME)) -
+        BigInt("0x" + constants.FIELD_PRIME) / 2n
+      ).toString();
     }
-    if (value.gte(RC_BOUND)) return bn2hex(value);
+    if (value >= RC_BOUND) return bigint2hex(value);
     return value.toString();
   }, [cell, background, cellSettings.text]);
 

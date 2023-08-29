@@ -1,4 +1,3 @@
-import { BN } from "bn.js";
 import React, {
   PropsWithChildren,
   useCallback,
@@ -75,9 +74,7 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
             address,
             defaultRenderer: renderer,
             sheets: [],
-            sheetPrice:
-              sheetPrice.div(new BN(10).pow(new BN(9))).toNumber() /
-              1_000_000_000,
+            sheetPrice: Number(sheetPrice / 10n ** 9n) / 1_000_000_000,
           };
         })
         .then((_onsheet) => {

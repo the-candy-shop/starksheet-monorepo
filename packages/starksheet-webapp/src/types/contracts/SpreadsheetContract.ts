@@ -1,4 +1,3 @@
-import BN from "bn.js";
 import { Cell } from "../cells";
 import { SheetConstructorArgs } from "../onsheet";
 import { ContractCall } from "../provider";
@@ -10,7 +9,7 @@ export interface SpreadsheetContract {
     from: number | string,
     constructorCalldata: SheetConstructorArgs
   ): Promise<string>;
-  getSheetPrice(): Promise<BN>;
+  getSheetPrice(): Promise<bigint>;
   /**
    * Build a raw `setCell` transaction from a Cell.
    *

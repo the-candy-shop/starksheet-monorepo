@@ -1,8 +1,6 @@
 import { ChainId } from "./ChainId";
 import { ChainType } from "./ChainType";
 
-type NetworkName = "mainnet-alpha" | "goerli-alpha" | "goerli-alpha-2";
-
 export interface ChainConfig {
   chainId: ChainId;
   chainType: ChainType;
@@ -10,7 +8,6 @@ export interface ChainConfig {
   explorerApiUrl?: string;
   nftBaseUrl: string;
   rpcUrl: string;
-  gateway?: NetworkName;
   appName: string;
   addresses: {
     spreadsheet: string;

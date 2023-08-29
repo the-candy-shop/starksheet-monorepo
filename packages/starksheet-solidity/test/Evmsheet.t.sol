@@ -13,11 +13,13 @@ contract EvmsheetTest is Test {
     ICellRenderer public renderer;
     MultiSendCallOnly public multicall;
 
-    uint256 price = 0.01 ether;
+    uint256 _price = 0.01 ether;
+
+    receive() external payable {}
 
     function setUp() public {
         renderer = new BasicCellRenderer();
-        evmsheet = new Evmsheet(address(renderer), price);
+        evmsheet = new Evmsheet(address(renderer), _price);
         multicall = new MultiSendCallOnly();
     }
 
@@ -40,7 +42,7 @@ contract EvmsheetTest is Test {
     }
 
     function testAddSheet() public {
-        evmsheet.addSheet{value: price}("name", "SMB", 0);
+        evmsheet.addSheet{value: _price}("name", "SMB", 0);
         address newSheet = evmsheet.sheets(0);
         assertEq(ISheet(newSheet).name(), "name");
         assertEq(ISheet(newSheet).symbol(), "SMB");
@@ -52,14 +54,29 @@ contract EvmsheetTest is Test {
         bytes memory transaction = bytes.concat(
             bytes1(0x00), // operation
             bytes20(address(evmsheet)), // address
-            bytes32(price), // value
+            bytes32(_price), // value
             bytes32(encodedCall.length), // calldata len
             encodedCall // calldata
         );
-        multicall.multiSend{value: price}(transaction);
+        multicall.multiSend{value: _price}(transaction);
         address newSheet = evmsheet.sheets(0);
         assertEq(ISheet(newSheet).name(), "Sheet0");
         assertEq(ISheet(newSheet).symbol(), "SHT0");
         assertEq(ISheet(newSheet).owner(), tx.origin);
+    }
+
+    function testWithdraw() public {
+        evmsheet.addSheet{value: _price}("name", "SMB", 0);
+        uint256 prevBalance = address(this).balance;
+        evmsheet.withdraw();
+        uint256 newBalance = address(this).balance;
+        assertEq(newBalance - prevBalance, _price);
+    }
+
+    function testWithdrawShouldRevert() public {
+        evmsheet.addSheet{value: _price}("name", "SMB", 0);
+        vm.expectRevert();
+        vm.prank(address(0xDEAD));
+        evmsheet.withdraw();
     }
 }

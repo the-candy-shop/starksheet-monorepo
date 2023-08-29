@@ -1,19 +1,18 @@
-import BN from "bn.js";
 import { FunctionAbi } from "starknet";
 
 export type CellData = {
-  contractAddress: BN;
-  selector: BN;
-  calldata: BN[];
+  contractAddress: bigint;
+  selector: bigint;
+  calldata: bigint[];
   abi?: FunctionAbi;
 };
 
 export type CellRendered = {
   id: number;
-  owner: BN;
-  value: BN;
+  owner: bigint;
+  value: bigint;
   error?: boolean;
-  parents?: BN[];
+  parents?: bigint[];
 };
 
 export type Cell = CellRendered & CellData;

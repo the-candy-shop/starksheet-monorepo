@@ -1,25 +1,23 @@
-# pull official base image
-FROM python:3.9.16-slim-buster
+FROM python:3.9.13
 
-# set work directory in the container
-WORKDIR /app
+# install poetry
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="$PATH:/root/.local/bin"
+RUN poetry config virtualenvs.create false
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# install madara swap
+WORKDIR /app/starksheet/packages/starksheet-cairo
+COPY poetry.lock .
+COPY pyproject.toml .
+COPY scripts ./scripts
+COPY README.md .
+RUN poetry install
+# split install in two steps to leverage docker cache
+COPY . .
+RUN poetry install
 
-# install system dependencies
-RUN apt-get update && apt-get install -y gcc libgmp-dev
+# Build contracts
+RUN python scripts/compile_starksheet.py
 
-# install python dependencies
-RUN pip install --upgrade pip
-RUN pip install poetry
-
-# copy project
-COPY . /app/
-
-# install dependencies
-RUN poetry install --no-interaction --no-ansi
-
-# command to run on container start
-CMD ["poetry", "run", "python", "deploy/starksheet.py"]
+# Deploy madara swap
+CMD ["python", "scripts/deploy_starksheet.py"]

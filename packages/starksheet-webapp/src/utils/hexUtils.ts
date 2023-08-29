@@ -1,7 +1,3 @@
-import BN from "bn.js";
-import { BigNumber } from "ethers";
-import { number } from "starknet";
-
 export function hex2str(hex: string): string {
   return (hex.match(/[a-f0-9]{2}/g) || [])
     .map((byte) => String.fromCharCode(parseInt(byte, 16)))
@@ -19,22 +15,19 @@ export function isASCII(s: string) {
 }
 
 export const normalizeHexString = (address: string) =>
-  !!address ? "0x" + number.toBN(address).toString(16) : "";
+  !!address ? "0x" + BigInt(address).toString(16) : "";
 
-export const bn2hex = (hex: BN): string => "0x" + hex.toString(16);
+export const bigint2hex = (hex: bigint): string => "0x" + hex.toString(16);
 
-export const bn2bytes =
+export const bigint2bytes =
   (n: number) =>
-  (hex: BN): string =>
+  (hex: bigint): string =>
     hex.toString(16).padEnd(n * 2, "0");
 
-export const bn2uint =
+export const bigint2uint =
   (n: number) =>
-  (hex: BN): string =>
+  (hex: bigint): string =>
     hex.toString(16).padStart(n * 2, "0");
-
-export const ethersHexStringToBN = (hexstring: string) =>
-  new BN(BigNumber.from(hexstring).toString());
 
 export function hexStringToIntegerArray(hexString: string) {
   // Remove any non-hex characters
@@ -48,9 +41,8 @@ export function hexStringToIntegerArray(hexString: string) {
   }
 
   // Convert each pair to an integer and store it in a new array
-  const integerArray = Array.from(
-    hexPairs,
-    (pair) => new BN(parseInt(pair, 16))
+  const integerArray = Array.from(hexPairs, (pair) =>
+    BigInt(parseInt(pair, 16))
   );
 
   return integerArray;

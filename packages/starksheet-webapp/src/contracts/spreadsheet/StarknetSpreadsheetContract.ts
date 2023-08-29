@@ -1,5 +1,10 @@
-import BN from "bn.js";
-import { Contract, hash, number, ProviderInterface, stark } from "starknet";
+import {
+  BigNumberish,
+  CallData,
+  Contract,
+  hash,
+  ProviderInterface,
+} from "starknet";
 import {
   Abi,
   Cell,
@@ -7,7 +12,7 @@ import {
   SheetConstructorArgs,
   SpreadsheetContract,
 } from "../../types";
-import { bn2hex } from "../../utils/hexUtils";
+import { bigint2hex } from "../../utils/hexUtils";
 
 /**
  * Represents a starknet implementation of the SpreadsheetContract.
@@ -45,7 +50,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
     const renderer = await this.contract.functions[
       "getSheetDefaultRendererAddress"
     ]();
-    return bn2hex(renderer.address);
+    return bigint2hex(renderer.address);
   }
 
   /**
@@ -53,13 +58,13 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    */
   async getSheets(): Promise<string[]> {
     const { addresses } = await this.contract.functions["getSheets"]();
-    return addresses.map((address: BN) => bn2hex(address));
+    return addresses.map((address: bigint) => bigint2hex(address));
   }
 
   /**
    * @inheritDoc
    */
-  async getSheetPrice(): Promise<BN> {
+  async getSheetPrice(): Promise<bigint> {
     const price = await this.contract.functions["getSheetPrice"]();
     return price.price;
   }
@@ -70,13 +75,12 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
   setCellTxBuilder(
     cell: Cell & { tokenId: number; sheetAddress: string }
   ): ContractCall {
-    return cell.owner.eq(number.toBN(0))
+    return cell.owner === 0n
       ? {
           to: cell.sheetAddress,
           entrypoint: "mintAndSetPublic",
-          calldata: stark.compileCalldata({
+          calldata: CallData.compile({
             tokenId: {
-              type: "struct",
               low: cell.tokenId,
               high: 0,
             },
@@ -89,7 +93,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
       : {
           to: cell.sheetAddress,
           entrypoint: "setCell",
-          calldata: stark.compileCalldata({
+          calldata: CallData.compile({
             tokenId: cell.tokenId.toString(),
             contractAddress: cell.contractAddress.toString(),
             value: cell.selector.toString(),
@@ -105,7 +109,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
     return {
       to: this.address,
       entrypoint: "addSheet",
-      calldata: stark.compileCalldata({
+      calldata: CallData.compile({
         name,
         symbol,
         proof: [],
@@ -117,7 +121,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   async calculateSheetAddress(
-    from: number.BigNumberish,
+    from: BigNumberish,
     constructorCalldata: SheetConstructorArgs
   ): Promise<string> {
     const classHash = await this.proxyClassHash;
@@ -149,7 +153,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    */
   private async getSheetClassHash(): Promise<string> {
     const classHash = await this.contract.functions["getSheetClassHash"]();
-    return bn2hex(classHash.hash);
+    return bigint2hex(classHash.hash);
   }
 
   /**
@@ -159,6 +163,6 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    */
   private async getProxyClassHash(): Promise<string> {
     const classHash = await this.contract.functions["getProxyClassHash"]();
-    return bn2hex(classHash.hash);
+    return bigint2hex(classHash.hash);
   }
 }

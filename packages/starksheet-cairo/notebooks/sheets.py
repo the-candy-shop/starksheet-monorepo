@@ -135,6 +135,18 @@ plt.tight_layout()
 plt.savefig("daily_sheets.png")
 
 # %% Plot hourly sheet creation
-(calls.timestamp.dt.strftime("%H").value_counts().sort_index().plot.bar(xlabel="Hour"))
+plt.clf()
+ax = (
+    calls.timestamp.dt.strftime("%H")
+    .value_counts()
+    .sort_index()
+    .plot.bar(xlabel="Hour")
+)
+plt.tight_layout()
+plt.savefig("hourly_sheets.png")
 
-# %%
+# %% Plot cumsum
+plt.clf()
+ax = counts.cumsum().plot.area(grid=True)
+plt.tight_layout()
+plt.savefig("cumsum_sheets.png")

@@ -1,14 +1,15 @@
-import BN from "bn.js";
-import { BigNumberish } from "ethers";
-import { disconnect, connect as getStarknet } from "get-starknet";
+import {
+  StarknetWindowObject,
+  connect,
+  disconnect,
+} from "@argent/get-starknet";
 import {
   Abi,
-  Provider,
-  ProviderInterface,
+  BigNumberish,
+  CallData,
   RpcProvider,
+  TransactionFinalityStatus,
   hash,
-  number,
-  stark,
 } from "starknet";
 import {
   StarknetSpreadsheetContract,
@@ -25,22 +26,21 @@ import {
   WorksheetContract,
 } from "../types";
 import { RC_BOUND } from "../utils/constants";
-import { bn2hex, hex2str, normalizeHexString } from "../utils/hexUtils";
+import { bigint2hex, hex2str, normalizeHexString } from "../utils/hexUtils";
 import { chainAbi } from "./chains";
 
 export class StarknetProvider implements ChainProvider {
-  private readonly provider: ProviderInterface;
+  private readonly provider: RpcProvider;
   private readonly spreadsheetContract: StarknetSpreadsheetContract;
+  private connection: StarknetWindowObject | undefined;
 
   /**
    * Constructs a StarknetProvider.
    */
   constructor(rpcUrl: string, private config: ChainConfig) {
-    this.provider = config.gateway
-      ? new Provider({ sequencer: { network: config.gateway } })
-      : new RpcProvider({
-          nodeUrl: rpcUrl,
-        });
+    this.provider = new RpcProvider({
+      nodeUrl: rpcUrl,
+    });
 
     const address = config.addresses.spreadsheet;
     const abi = chainAbi.spreadsheet;
@@ -110,18 +110,31 @@ export class StarknetProvider implements ChainProvider {
     return new StarknetWorksheetContract(address, abi, this.provider);
   }
 
+  sleep = (delay: number) =>
+    new Promise((resolve) => setTimeout(resolve, delay * 1_000));
+
   /**
    * @inheritDoc
    */
-  waitForTransaction(hash: string): Promise<any> {
-    return this.provider.waitForTransaction(hash, 3_000);
+  async waitForTransaction(hash: string): Promise<any> {
+    for (let i = 0; i < 10; i++) {
+      try {
+        return await this.provider.getTransactionReceipt(hash);
+      } catch (e) {
+        await this.sleep(3);
+      }
+    }
+    return this.provider.waitForTransaction(hash, {
+      successStates: [TransactionFinalityStatus.ACCEPTED_ON_L2],
+    });
   }
 
   /**
    * @inheritDoc
    */
-  getTransactionReceipt(hash: string): Promise<any> {
-    return this.provider.getTransactionReceipt(hash);
+  async getTransactionReceipt(hash: string): Promise<any> {
+    const receipt = await this.provider.getTransactionReceipt(hash);
+    return { ...receipt, status: receipt.finality_status };
   }
 
   /**
@@ -129,13 +142,18 @@ export class StarknetProvider implements ChainProvider {
    */
   async getAbi(address: string): Promise<any> {
     let abi: Abi = [];
-    if (number.toBN(address).eq(RC_BOUND)) {
+    if (BigInt(address) === RC_BOUND) {
       return abi;
     }
 
+    let isContract = await this.addressAlreadyDeployed(address);
     let response;
     try {
-      response = await this.provider.getClassAt(address);
+      if (isContract) {
+        response = await this.provider.getClassAt(address);
+      } else {
+        response = await this.provider.getClassByHash(address);
+      }
     } catch (error) {
       response = { abi: [] };
     }
@@ -184,7 +202,7 @@ export class StarknetProvider implements ChainProvider {
       {
         contractAddress: call.to,
         entrypoint: call.entrypoint,
-        calldata: (call.calldata as BN[]).map((c) => bn2hex(c)),
+        calldata: (call.calldata as bigint[]).map((c) => bigint2hex(c)),
       },
       "latest"
     );
@@ -195,42 +213,50 @@ export class StarknetProvider implements ChainProvider {
    * @inheritDoc
    */
   async login(): Promise<string> {
-    let starknetWindow = await getStarknet({ modalMode: "neverAsk" });
-
-    if (starknetWindow?.isConnected) {
+    if (this.connection?.isConnected) {
       await disconnect({ clearLastWallet: true });
     }
 
-    starknetWindow = await getStarknet({ modalMode: "canAsk" });
-    if (starknetWindow === null) {
-      throw new Error(
-        "Cannot find a starknet window, is ArgentX or Braavos installed?"
-      );
+    const connection = await connect({
+      modalMode: "alwaysAsk",
+      dappName: this.config.appName,
+      webWalletUrl:
+        this.config.chainId === ChainId.STARKNET_MAINNET
+          ? "https://web.argent.xyz"
+          : "https://web.hydrogen.argent47.net",
+    });
+
+    if (connection === null) {
+      return "";
     }
 
-    if (!starknetWindow.isConnected) {
+    if (!connection.isConnected) {
       throw new Error("Login failed");
     }
 
     if (
       (this.config.chainId as string) !==
-      (starknetWindow.provider.chainId as string)
+      (connection.provider.chainId as string)
     ) {
-      if (starknetWindow.id === "argentX") {
-        await starknetWindow.request({
+      if (connection.id === "argentX") {
+        await connection.request({
           type: "wallet_switchStarknetChain",
           params: { chainId: this.config.chainId },
         });
       } else {
-        throw new Error(
-          `Wrong network detected: "${hex2str(
-            starknetWindow.provider.chainId
-          )}" instead of "${this.config.chainId}"`
-        );
+        if (connection.provider.chainId !== undefined) {
+          throw new Error(
+            `Wrong network detected: "${hex2str(
+              connection.provider.chainId
+            )}" instead of "${hex2str(this.config.chainId)}"`
+          );
+        }
       }
     }
 
-    return normalizeHexString(starknetWindow.account.address);
+    this.connection = connection;
+    await this.connection.enable({ starknetVersion: "v5" });
+    return normalizeHexString(connection.account.address);
   }
 
   /**
@@ -240,23 +266,19 @@ export class StarknetProvider implements ChainProvider {
     calls: ContractCall[],
     options?: { value?: BigNumberish }
   ): Promise<TransactionResponse> {
-    const starknetWindow = await getStarknet({ modalMode: "neverAsk" });
-    if (starknetWindow === null) {
+    if (!this.connection?.isConnected) {
       throw new Error("Account is not connected");
     }
-    if (!starknetWindow.isConnected) {
-      throw new Error("Account is not connected");
-    }
+
     if (options?.value) {
       calls = [
         {
           to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
           entrypoint: "approve",
-          calldata: stark.compileCalldata({
+          calldata: CallData.compile({
             spender: calls[0].to,
             amount: {
-              type: "struct",
-              low: number.toBN(options.value.toString()),
+              low: options.value.toString(),
               high: 0,
             },
           }),
@@ -264,12 +286,20 @@ export class StarknetProvider implements ChainProvider {
         ...calls,
       ];
     }
-
-    return await starknetWindow.account.execute(
+    console.log(this.connection);
+    console.log(this.connection.account);
+    console.log(
       calls.map((call) => ({
         contractAddress: call.to,
         entrypoint: call.entrypoint,
-        calldata: call.calldata as BN[],
+        calldata: [...call.calldata],
+      }))
+    );
+    return await this.connection.account.execute(
+      calls.map((call) => ({
+        contractAddress: call.to,
+        entrypoint: call.entrypoint,
+        calldata: [...call.calldata],
       }))
     );
   }

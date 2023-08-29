@@ -1,5 +1,4 @@
-import BN from "bn.js";
-import { Contract, number, ProviderInterface } from "starknet";
+import { BigNumberish, CallData, Contract, ProviderInterface } from "starknet";
 import { N_ROW } from "../../config";
 import { Abi, CellData, CellRendered, WorksheetContract } from "../../types";
 import { hex2str, normalizeHexString } from "../../utils/hexUtils";
@@ -46,12 +45,13 @@ export class StarknetWorksheetContract implements WorksheetContract {
       const result = await this.contract.call("renderCell", [tokenId], {
         blockIdentifier: "latest",
       });
-      return result.cell as CellRendered;
+      // @ts-ignore
+      return { ...result.cell, id: tokenId } as CellRendered;
     } catch (error) {
       const owner = await this.ownerOf(tokenId);
       return {
         id: tokenId,
-        value: number.toBN(0),
+        value: 0n,
         owner: owner,
         error: true,
       } as CellRendered;
@@ -62,22 +62,29 @@ export class StarknetWorksheetContract implements WorksheetContract {
     const result = await this.contract.call("totalSupply", [], {
       blockIdentifier: "latest",
     });
-    return result.totalSupply.low.toNumber();
+    // @ts-ignore
+    return Number(result.totalSupply.low);
   }
 
-  async ownerOf(tokenId: number): Promise<BN> {
-    const result = await this.contract.call("ownerOf", [[tokenId, "0"]]);
+  async ownerOf(tokenId: number): Promise<bigint> {
+    const result = await this.contract.call("ownerOf", [
+      { low: tokenId, high: 0 },
+    ]);
+    // @ts-ignore
     return result.owner;
   }
 
-  async getCell(tokenId: number.BigNumberish): Promise<CellData> {
-    const _cell = await this.contract.call("getCell", [tokenId], {
+  async getCell(tokenId: BigNumberish): Promise<CellData> {
+    const result = await this.contract.call("getCell", [tokenId], {
       blockIdentifier: "latest",
     });
     return {
-      contractAddress: _cell.contractAddress,
-      selector: _cell.value,
-      calldata: _cell.cell_calldata,
+      // @ts-ignore
+      contractAddress: result.contractAddress,
+      // @ts-ignore
+      selector: result.value,
+      // @ts-ignore
+      calldata: result.cell_calldata,
     };
   }
 
@@ -90,23 +97,28 @@ export class StarknetWorksheetContract implements WorksheetContract {
   }
 
   private async tokenByIndex(index: number): Promise<number> {
-    const result = await this.contract.call("tokenByIndex", [[index, "0"]], {
-      blockIdentifier: "latest",
-    });
-    return result.tokenId.low.toNumber();
+    const result = await this.contract.call(
+      "tokenByIndex",
+      CallData.compile({
+        index: {
+          low: index,
+          high: 0,
+        },
+      })
+    );
+    // @ts-ignore
+    return Number(result.tokenId.low);
   }
 
   async name(): Promise<string> {
-    const result = await this.contract.call("name", [], {
-      blockIdentifier: "latest",
-    });
+    const result = await this.contract.call("name", []);
+    // @ts-ignore
     return hex2str(normalizeHexString(result.name));
   }
 
   async symbol(): Promise<string> {
-    const result = await this.contract.call("symbol", [], {
-      blockIdentifier: "latest",
-    });
+    const result = await this.contract.call("symbol", []);
+    // @ts-ignore
     return hex2str(normalizeHexString(result.symbol));
   }
 }

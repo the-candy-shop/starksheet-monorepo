@@ -37,3 +37,5 @@ share/python-wheels/
 tests/tokens/
 calls.csv
 daily_sheets.png
+hourly_sheets.png
+cumsum_sheets.png

@@ -11,13 +11,14 @@ import { FunctionAbi } from "starknet";
 import { CELL_BORDER_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../config";
 import { AbisContext } from "../../contexts/AbisContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
-import { ARGS_SEP, CONTRACT_FUNCTION_SEP } from "../../utils/constants";
-import { bn2hex } from "../../utils/hexUtils";
 import {
-  buildFormulaDisplay,
-  cellNameRegex,
-  cellNameToTokenId,
-} from "../ActionBar/formula.utils";
+  ARGS_SEP,
+  CELL_NAME_REGEX,
+  CONTRACT_FUNCTION_SEP,
+} from "../../utils/constants";
+import { bigint2hex } from "../../utils/hexUtils";
+import { cellNameToTokenId } from "../../utils/sheetUtils";
+import { buildFormulaDisplay } from "../ActionBar/formula.utils";
 
 export type FormulaFieldProps = {
   inputRef: React.RefObject<ContentEditable>;
@@ -53,8 +54,8 @@ function FormulaField({
     (value: string) => {
       let _selectedContractAddress = value.split(CONTRACT_FUNCTION_SEP)[0];
       setSelectedContractAddress(_selectedContractAddress);
-      if (_selectedContractAddress.match(cellNameRegex)) {
-        _selectedContractAddress = bn2hex(
+      if (_selectedContractAddress.match(CELL_NAME_REGEX)) {
+        _selectedContractAddress = bigint2hex(
           currentCells[cellNameToTokenId(_selectedContractAddress)].value
         );
       }

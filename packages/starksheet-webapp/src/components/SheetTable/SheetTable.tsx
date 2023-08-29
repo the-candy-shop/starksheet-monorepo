@@ -188,6 +188,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           }));
         })
         .catch((error) => {
+          console.log(error);
           error = true;
           finalMessage = `Error: ${chainConfig.appName} cannot render sheet at address ${address}
               <br />

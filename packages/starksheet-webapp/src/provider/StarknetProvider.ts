@@ -255,6 +255,7 @@ export class StarknetProvider implements ChainProvider {
     }
 
     this.connection = connection;
+    await this.connection.enable({ starknetVersion: "v5" });
     return normalizeHexString(connection.account.address);
   }
 
@@ -285,12 +286,11 @@ export class StarknetProvider implements ChainProvider {
         ...calls,
       ];
     }
-
     return await this.connection.account.execute(
       calls.map((call) => ({
         contractAddress: call.to,
         entrypoint: call.entrypoint,
-        calldata: call.calldata,
+        calldata: [...call.calldata],
       }))
     );
   }

@@ -126,6 +126,7 @@ export const TransactionsContextProvider = ({
           );
         })
         .catch((error: any) => {
+          console.log("error", error);
           enqueueSnackbar(error.toString(), { variant: "error" });
         });
     },

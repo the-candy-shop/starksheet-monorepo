@@ -286,6 +286,15 @@ export class StarknetProvider implements ChainProvider {
         ...calls,
       ];
     }
+    console.log(this.connection);
+    console.log(this.connection.account);
+    console.log(
+      calls.map((call) => ({
+        contractAddress: call.to,
+        entrypoint: call.entrypoint,
+        calldata: [...call.calldata],
+      }))
+    );
     return await this.connection.account.execute(
       calls.map((call) => ({
         contractAddress: call.to,

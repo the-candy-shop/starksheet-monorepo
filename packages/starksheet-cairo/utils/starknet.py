@@ -32,7 +32,6 @@ from starkware.starknet.public.abi import get_selector_from_name
 from utils.constants import (
     BUILD_DIR,
     BUILD_DIR_FIXTURES,
-    CLIENT,
     CONTRACTS,
     CONTRACTS_FIXTURES,
     DEPLOYMENTS_DIR,
@@ -85,7 +84,9 @@ async def get_starknet_account(
                 selector=get_selector_from_name(selector),
                 calldata=[],
             )
-            public_key = (await CLIENT.call_contract(call=call, block_hash="latest"))[0]
+            public_key = (
+                await RPC_CLIENT.call_contract(call=call, block_hash="latest")
+            )[0]
             break
         except Exception as err:
             if (
@@ -93,6 +94,8 @@ async def get_starknet_account(
                 or err.message
                 == "Client failed with code 21: Invalid message selector."
                 or "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT" in err.message
+                or err.message
+                == "Client failed with code -32603: Internal error: invalid entry point."
             ):
                 continue
             else:
@@ -111,7 +114,7 @@ async def get_starknet_account(
 
     return Account(
         address=address,
-        client=CLIENT,
+        client=RPC_CLIENT,
         chain=NETWORK["chain_id"],
         key_pair=key_pair,
     )
@@ -314,7 +317,7 @@ async def deploy_starknet_account(
         class_hash=class_hash,
         salt=salt,
         key_pair=key_pair,
-        client=CLIENT,
+        client=RPC_CLIENT,
         chain=NETWORK["chain_id"],
         constructor_calldata=constructor_calldata,
         max_fee=_max_fee,
@@ -336,7 +339,7 @@ async def declare(contract_name):
     contract_class = create_compiled_contract(compiled_contract=compiled_contract)
     class_hash = compute_class_hash(contract_class=deepcopy(contract_class))
     try:
-        await CLIENT.get_class_by_hash(class_hash)
+        await RPC_CLIENT.get_class_by_hash(class_hash)
         logger.info(f"✅ Class already declared, skipping")
         return class_hash
     except Exception:

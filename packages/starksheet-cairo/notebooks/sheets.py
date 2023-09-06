@@ -134,6 +134,21 @@ logger.info(f"📈 sheets: {counts.sum().sum()}")
 plt.tight_layout()
 plt.savefig("daily_sheets.png")
 
+# %% Plot monthly
+counts = (
+    calls.groupby(["contract_identifier", pd.Grouper(key="timestamp", freq="M")])
+    .size()
+    .unstack("contract_identifier", fill_value=0)
+    .fillna(0)
+    .astype(int)
+)
+ax = counts.plot(kind="bar", stacked=True)
+x_labels = [d.date().strftime("%Y-%m") for d in counts.index]
+ax.set_xticklabels(x_labels)
+ax.grid(axis="y", linestyle="--", color="grey")
+plt.tight_layout()
+plt.savefig("monthly_sheets.png")
+
 # %% Plot hourly sheet creation
 plt.clf()
 ax = (

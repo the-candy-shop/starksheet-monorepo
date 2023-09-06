@@ -134,6 +134,14 @@ logger.info(f"📈 sheets: {counts.sum().sum()}")
 plt.tight_layout()
 plt.savefig("daily_sheets.png")
 
+
+# %% Plot cumsum
+plt.clf()
+ax = counts.cumsum().plot.area(grid=True)
+plt.tight_layout()
+plt.savefig("cumsum_sheets.png")
+
+
 # %% Plot monthly
 counts = (
     calls.groupby(["contract_identifier", pd.Grouper(key="timestamp", freq="M")])
@@ -159,9 +167,3 @@ ax = (
 )
 plt.tight_layout()
 plt.savefig("hourly_sheets.png")
-
-# %% Plot cumsum
-plt.clf()
-ax = counts.cumsum().plot.area(grid=True)
-plt.tight_layout()
-plt.savefig("cumsum_sheets.png")

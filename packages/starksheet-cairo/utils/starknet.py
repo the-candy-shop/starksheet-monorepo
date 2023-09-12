@@ -94,8 +94,8 @@ async def get_starknet_account(
                 or err.message
                 == "Client failed with code 21: Invalid message selector."
                 or "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT" in err.message
-                or err.message
-                == "Client failed with code -32603: Internal error: invalid entry point."
+                or err.message.find("Client failed with code -32603: Internal error:")
+                != -1
             ):
                 continue
             else:

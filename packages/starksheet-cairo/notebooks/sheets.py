@@ -2,6 +2,7 @@
 import itertools
 import json
 import logging
+import math
 import time
 from pathlib import Path
 
@@ -94,6 +95,9 @@ def get_contracts_calls(contract_addresses):
         _calls = response.json()["data"]["calls"]["edges"]
         page_info = response.json()["data"]["calls"]["pageInfo"]
         if not _calls:
+            timestamps[contract_address] = math.floor(
+                pd.Timestamp.now(tz="UTC").timestamp()
+            )
             return []
 
         timestamps[contract_address] = _calls[-1]["node"]["timestamp"]
@@ -107,32 +111,56 @@ def get_contracts_calls(contract_addresses):
             page_info = response.json()["data"]["calls"]["pageInfo"]
             timestamps[contract_address] = _calls[-1]["node"]["timestamp"]
 
+        timestamps[contract_address] = math.floor(
+            pd.Timestamp.now(tz="UTC").timestamp()
+        )
         return [call["node"] for call in _calls]
+
+    previous_calls = (
+        pd.read_csv(
+            "calls.csv",
+            dtype={"contract_identifier": str},
+            parse_dates=["timestamp"],
+        )
+        if Path("calls.csv").is_file()
+        else pd.DataFrame(
+            columns=header,
+            dtype={"contract_identifier": str},
+        ).astype({"timestamp": int})
+    )
+    logger.info(
+        f"📈 sheets up to "
+        f"{pd.Timestamp(max(timestamps.values()), unit='s', tz='UTC').tz_convert(tz='Europe/Paris')}: "
+        f"{len(previous_calls)}"
+    )
 
     calls = (
         pd.concat(
             [
-                pd.DataFrame(
-                    itertools.chain.from_iterable(
-                        [get_contract_calls(address) for address in contract_addresses]
+                (
+                    pd.DataFrame(
+                        itertools.chain.from_iterable(
+                            [
+                                get_contract_calls(address)
+                                for address in contract_addresses
+                            ]
+                        )
+                    )
+                    .reindex(header, axis=1)
+                    .loc[lambda df: df.selector_name == "addSheet"]
+                    .astype({"timestamp": "datetime64[s]", "contract_identifier": str})
+                    .assign(
+                        contract_identifier=lambda df: df.contract_identifier.str.extract(
+                            r"(v\d+)"
+                        ),
+                        class_hash=lambda df: get_class_hashes(
+                            df.caller_address.tolist()
+                        ),
                     )
                 ),
-                (
-                    pd.read_csv("calls.csv")
-                    if Path("calls.csv").is_file()
-                    else pd.DataFrame(columns=header).astype({"timestamp": int})
-                ),
+                previous_calls,
             ],
             ignore_index=True,
-        )
-        .reindex(header, axis=1)
-        .loc[lambda df: df.selector_name == "addSheet"]
-        .astype({"timestamp": "datetime64[s]", "contract_identifier": str})
-        .assign(
-            contract_identifier=lambda df: df.contract_identifier.str.extract(
-                r"(v\d+)"
-            ),
-            class_hash=lambda df: get_class_hashes(df.caller_address.tolist()),
         )
         .sort_values("timestamp", ascending=False)
         .drop_duplicates("transaction_hash")
@@ -145,6 +173,7 @@ def get_contracts_calls(contract_addresses):
 def get_class_hashes(contract_addresses):
     labels = {
         "0x025ec026985a3bf9d0cc1fe17326b245dfdc3ff89b8fde106542a3ea56c5a918": "Argent",
+        "0x01a736d6ed154502257f02b1ccdf4d9d1089f80811cd6acad48e6b6a9d1f2003": "Argent",
         "0x03131fa018d520a037686ce3efddeab8f28895662f019ca3ca18a626650f7d1e": "Braavos",
     }
     known_classes = (
@@ -189,7 +218,7 @@ def get_class_hashes(contract_addresses):
 
 # %% Fetch data
 calls = get_contracts_calls(
-    [
+    contract_addresses=[
         "0x028850a764600d53b2009b17428ae9eb980a4c4ea930a69ed8668048ef082a04",
         "0x076a028b19d27310f5e9f941041ae4a3a52c0e0024d593ddcb0d34e1dcd24af1",
         "0x071d48483dcfa86718a717f57cf99a72ff8198b4538a6edccd955312fe624747",

@@ -22,6 +22,7 @@ from starknet_py.net.account.account import Account, _add_signature_to_transacti
 from starknet_py.net.client_models import (
     Call,
     DeclareTransactionResponse,
+    SierraContractClass,
     TransactionStatus,
 )
 from starknet_py.net.full_node_client import _create_broadcasted_txn
@@ -77,7 +78,7 @@ async def get_starknet_account(
     key_pair = KeyPair.from_private_key(int(private_key, 16))
 
     public_key = None
-    for selector in ["get_public_key", "getPublicKey", "getSigner"]:
+    for selector in ["get_public_key", "getPublicKey", "getSigner", "get_owner"]:
         try:
             call = Call(
                 to_addr=address,
@@ -94,8 +95,7 @@ async def get_starknet_account(
                 or err.message
                 == "Client failed with code 21: Invalid message selector."
                 or "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT" in err.message
-                or err.message.find("Client failed with code -32603: Internal error:")
-                != -1
+                or err.message.find("Client failed with code -32603") != -1
             ):
                 continue
             else:
@@ -109,14 +109,19 @@ async def get_starknet_account(
             )
     else:
         logger.warning(
-            f"⚠️ Unable to verify public key for account at address 0x{address:x}"
+            f"⚠️  Unable to verify public key for account at address 0x{address:x}"
         )
 
+    contract_class = await RPC_CLIENT.get_class_at(
+        0x1C8D2BB17CDDF22728553C9700ADFBBD42D1999194B409B1188B17191CC2EFD
+    )
+    cairo_version = 1 if isinstance(contract_class, SierraContractClass) else 0
     return Account(
         address=address,
         client=RPC_CLIENT,
         chain=NETWORK["chain_id"],
         key_pair=key_pair,
+        cairo_version=cairo_version,
     )
 
 
@@ -387,6 +392,35 @@ async def deploy(contract_name, *args):
     logger.info(f"ℹ️  Deploying {contract_name}")
     abi = json.loads(Path(get_artifact(contract_name)).read_text())["abi"]
     account = await get_starknet_account()
+
+    # # Unbundled Contract.deploy_contract until
+    # # https://github.com/software-mansion/starknet.py/issues/1182 is fixed
+    # deployer = Deployer(
+    #     deployer_address=deployer_address, account_address=account.address
+    # )
+    # deploy_call, address = deployer.create_contract_deployment(
+    #     class_hash=class_hash,
+    #     abi=abi,
+    #     calldata=constructor_args,
+    #     cairo_version=cairo_version,
+    # )
+    # res = await account.execute(
+    #     calls=deploy_call,
+    #     nonce=nonce,
+    #     max_fee=max_fee,
+    #     auto_estimate=auto_estimate,
+    #     cairo_version=1,
+    # )
+
+    # deployed_contract = Contract(
+    #     provider=account, address=address, abi=abi, cairo_version=cairo_version
+    # )
+    # deploy_result = DeployResult(
+    #     hash=res.transaction_hash,
+    #     _client=account.client,
+    #     deployed_contract=deployed_contract,
+    # )
+
     deploy_result = await Contract.deploy_contract(
         account=account,
         class_hash=get_declarations()[contract_name],
@@ -495,8 +529,8 @@ async def wait_for_transaction(*args, **kwargs):
     """
     if GATEWAY_CLIENT is not None:
         # Gateway case, just use it
-        _, status = await GATEWAY_CLIENT.wait_for_tx(*args, **kwargs)
-        return status
+        receipt = await GATEWAY_CLIENT.wait_for_tx(*args, **kwargs)
+        return receipt.status
 
     start = datetime.now()
     elapsed = 0

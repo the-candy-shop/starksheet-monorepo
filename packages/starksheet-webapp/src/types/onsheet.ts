@@ -14,9 +14,11 @@ export type Sheet = {
   name: string;
   symbol: string;
   address: string;
+  classHash?: bigint;
   nRow: number;
   calldata?: SheetConstructorArgs;
   cellPrice: number;
+  owner?: bigint;
 };
 
 export type NewSheet = Required<Sheet>;
@@ -25,6 +27,7 @@ export type Spreadsheet = {
   sheets: Sheet[];
   address: string;
   defaultRenderer: string;
+  sheetClassHash: bigint;
   sheetPrice: number;
 };
 

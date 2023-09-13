@@ -1,3 +1,4 @@
+import { ContractCall } from "..";
 import { CellData, CellRendered } from "../cells";
 
 export interface WorksheetContract {
@@ -10,4 +11,7 @@ export interface WorksheetContract {
   getCellPrice(): Promise<number>;
   name(): Promise<string>;
   symbol(): Promise<string>;
+  owner(): Promise<bigint>;
+  implementation(): Promise<bigint>;
+  setImplementation(newImplementation: bigint): ContractCall;
 }

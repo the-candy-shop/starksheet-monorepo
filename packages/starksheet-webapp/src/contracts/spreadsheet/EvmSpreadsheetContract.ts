@@ -24,6 +24,10 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
     });
   }
 
+  async getSheetImplementation(): Promise<bigint> {
+    return 0n;
+  }
+
   getSalt(name: string, symbol: string, from: string) {
     return ethers.utils.keccak256(
       ethers.utils.solidityPack(

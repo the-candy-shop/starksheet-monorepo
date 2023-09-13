@@ -1,6 +1,11 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { N_ROW } from "../../config";
-import { CellData, CellRendered, WorksheetContract } from "../../types";
+import {
+  CellData,
+  CellRendered,
+  ContractCall,
+  WorksheetContract,
+} from "../../types";
 import { RC_BOUND } from "../../utils/constants";
 import { hexStringToIntegerArray } from "../../utils/hexUtils";
 import { Sheet, Sheet__factory } from "../types";
@@ -13,6 +18,17 @@ export class EvmWorksheetContract implements WorksheetContract {
    */
   constructor(address: string, provider: JsonRpcProvider) {
     this.contract = Sheet__factory.connect(address, provider);
+  }
+  async owner(): Promise<bigint> {
+    return BigInt(await this.contract.owner());
+  }
+
+  setImplementation(newImplementation: bigint): ContractCall {
+    throw new Error("Method not implemented.");
+  }
+
+  async implementation(): Promise<bigint> {
+    return 0n;
   }
 
   /**

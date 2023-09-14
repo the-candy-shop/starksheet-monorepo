@@ -50,7 +50,7 @@ logger.setLevel(logging.INFO)
 # Due to some fee estimation issues, we skip it in all the calls and set instead
 # this hardcoded value. This has no impact apart from enforcing the signing wallet
 # to have at least 0.1 ETH
-_max_fee = int(1e17)
+_max_fee = int(5e15)
 
 
 def int_to_uint256(value):
@@ -392,34 +392,6 @@ async def deploy(contract_name, *args):
     logger.info(f"ℹ️  Deploying {contract_name}")
     abi = json.loads(Path(get_artifact(contract_name)).read_text())["abi"]
     account = await get_starknet_account()
-
-    # # Unbundled Contract.deploy_contract until
-    # # https://github.com/software-mansion/starknet.py/issues/1182 is fixed
-    # deployer = Deployer(
-    #     deployer_address=deployer_address, account_address=account.address
-    # )
-    # deploy_call, address = deployer.create_contract_deployment(
-    #     class_hash=class_hash,
-    #     abi=abi,
-    #     calldata=constructor_args,
-    #     cairo_version=cairo_version,
-    # )
-    # res = await account.execute(
-    #     calls=deploy_call,
-    #     nonce=nonce,
-    #     max_fee=max_fee,
-    #     auto_estimate=auto_estimate,
-    #     cairo_version=1,
-    # )
-
-    # deployed_contract = Contract(
-    #     provider=account, address=address, abi=abi, cairo_version=cairo_version
-    # )
-    # deploy_result = DeployResult(
-    #     hash=res.transaction_hash,
-    #     _client=account.client,
-    #     deployed_contract=deployed_contract,
-    # )
 
     deploy_result = await Contract.deploy_contract(
         account=account,

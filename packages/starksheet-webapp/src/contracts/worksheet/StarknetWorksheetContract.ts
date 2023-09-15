@@ -148,7 +148,17 @@ export class StarknetWorksheetContract implements WorksheetContract {
   }
 
   async owner(): Promise<bigint> {
-    const result = await this.contract.call("owner", []);
+    let result;
+    try {
+      result = await this.contract.call("owner", []);
+    } catch (e) {
+      result = await this.contract.providerOrAccount.callContract({
+        contractAddress: this.contract.address,
+        entrypoint: "getOwner",
+      });
+      // @ts-ignore
+      result = { owner: BigInt(result.result[0]) };
+    }
     // @ts-ignore
     return result.owner;
   }

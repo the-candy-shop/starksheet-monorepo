@@ -39,6 +39,7 @@ function Header() {
   const displayUpgrade = useMemo(
     () =>
       sheet?.classHash !== undefined &&
+      sheet?.classHash !== 0n &&
       sheet?.classHash !== onsheet.sheetClassHash &&
       !!accountAddress &&
       BigInt(accountAddress) === sheet.owner,

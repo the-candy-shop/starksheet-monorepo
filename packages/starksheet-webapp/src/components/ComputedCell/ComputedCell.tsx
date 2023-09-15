@@ -111,7 +111,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
       settleTransactions([
         {
           to: selectedSheetAddress,
-          entrypoint: "renderCell",
+          entrypoint: "executeCell",
           calldata: [id],
         },
       ]);

@@ -30,6 +30,7 @@ export const OnsheetContext = React.createContext<{
     address: "",
     sheets: [],
     defaultRenderer: "",
+    sheetClassHash: 0n,
     sheetPrice: 0,
   },
   setSelectedSheetAddress: () => {},
@@ -48,6 +49,7 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
     address: chainConfig.addresses.spreadsheet,
     sheets: [],
     defaultRenderer: "",
+    sheetClassHash: 0n,
     sheetPrice: 0,
   });
 
@@ -67,12 +69,14 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
       Promise.all([
         contract.getSheetDefaultRendererAddress(),
         contract.getSheetPrice(),
+        contract.getSheetImplementation(),
       ])
         .then(async (response) => {
-          const [renderer, sheetPrice] = response;
+          const [renderer, sheetPrice, sheetClassHash] = response;
           return {
             address,
             defaultRenderer: renderer,
+            sheetClassHash,
             sheets: [],
             sheetPrice: Number(sheetPrice / 10n ** 9n) / 1_000_000_000,
           };
@@ -89,13 +93,16 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
       const index = prevOnsheet.sheets.findIndex(
         (s) => s.address === sheet.address
       );
+      const sheets = [...prevOnsheet.sheets];
       if (index === -1) {
-        return {
-          ...prevOnsheet,
-          sheets: [...prevOnsheet.sheets, sheet],
-        };
+        sheets.push(sheet);
+      } else {
+        sheets[index] = { ...sheet };
       }
-      return prevOnsheet;
+      return {
+        ...prevOnsheet,
+        sheets,
+      };
     });
     updateSheetStatus(sheet.address, defaultSheetStatus);
     return address;
@@ -125,13 +132,16 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
     if (addressAlreadyDeployed) {
       const sheetContract =
         chainProvider.getWorksheetContractByAddress(address);
-      const [name, symbol, nRow, cellPrice] = await Promise.all([
-        sheetContract.name(),
-        sheetContract.symbol(),
-        sheetContract.nRow(),
-        sheetContract.getCellPrice(),
-      ]);
-      newSheet = { name, symbol, nRow, cellPrice, address };
+      const [name, symbol, nRow, cellPrice, classHash, owner] =
+        await Promise.all([
+          sheetContract.name(),
+          sheetContract.symbol(),
+          sheetContract.nRow(),
+          sheetContract.getCellPrice(),
+          sheetContract.implementation(),
+          sheetContract.owner(),
+        ]);
+      newSheet = { name, symbol, nRow, cellPrice, address, classHash, owner };
     } else {
       newSheet = { ...sheet, address, calldata, nRow: N_ROW, cellPrice: 0 };
     }

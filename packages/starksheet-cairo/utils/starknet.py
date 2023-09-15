@@ -22,6 +22,7 @@ from starknet_py.net.account.account import Account, _add_signature_to_transacti
 from starknet_py.net.client_models import (
     Call,
     DeclareTransactionResponse,
+    SierraContractClass,
     TransactionStatus,
 )
 from starknet_py.net.full_node_client import _create_broadcasted_txn
@@ -32,7 +33,6 @@ from starkware.starknet.public.abi import get_selector_from_name
 from utils.constants import (
     BUILD_DIR,
     BUILD_DIR_FIXTURES,
-    CLIENT,
     CONTRACTS,
     CONTRACTS_FIXTURES,
     DEPLOYMENTS_DIR,
@@ -50,7 +50,7 @@ logger.setLevel(logging.INFO)
 # Due to some fee estimation issues, we skip it in all the calls and set instead
 # this hardcoded value. This has no impact apart from enforcing the signing wallet
 # to have at least 0.1 ETH
-_max_fee = int(1e17)
+_max_fee = int(5e15)
 
 
 def int_to_uint256(value):
@@ -78,14 +78,16 @@ async def get_starknet_account(
     key_pair = KeyPair.from_private_key(int(private_key, 16))
 
     public_key = None
-    for selector in ["get_public_key", "getPublicKey", "getSigner"]:
+    for selector in ["get_public_key", "getPublicKey", "getSigner", "get_owner"]:
         try:
             call = Call(
                 to_addr=address,
                 selector=get_selector_from_name(selector),
                 calldata=[],
             )
-            public_key = (await CLIENT.call_contract(call=call, block_hash="latest"))[0]
+            public_key = (
+                await RPC_CLIENT.call_contract(call=call, block_hash="latest")
+            )[0]
             break
         except Exception as err:
             if (
@@ -93,6 +95,7 @@ async def get_starknet_account(
                 or err.message
                 == "Client failed with code 21: Invalid message selector."
                 or "StarknetErrorCode.ENTRY_POINT_NOT_FOUND_IN_CONTRACT" in err.message
+                or err.message.find("Client failed with code -32603") != -1
             ):
                 continue
             else:
@@ -106,14 +109,17 @@ async def get_starknet_account(
             )
     else:
         logger.warning(
-            f"⚠️ Unable to verify public key for account at address 0x{address:x}"
+            f"⚠️  Unable to verify public key for account at address 0x{address:x}"
         )
 
+    contract_class = await RPC_CLIENT.get_class_at(address)
+    cairo_version = 1 if isinstance(contract_class, SierraContractClass) else 0
     return Account(
         address=address,
-        client=CLIENT,
+        client=RPC_CLIENT,
         chain=NETWORK["chain_id"],
         key_pair=key_pair,
+        cairo_version=cairo_version,
     )
 
 
@@ -314,7 +320,7 @@ async def deploy_starknet_account(
         class_hash=class_hash,
         salt=salt,
         key_pair=key_pair,
-        client=CLIENT,
+        client=RPC_CLIENT,
         chain=NETWORK["chain_id"],
         constructor_calldata=constructor_calldata,
         max_fee=_max_fee,
@@ -336,7 +342,7 @@ async def declare(contract_name):
     contract_class = create_compiled_contract(compiled_contract=compiled_contract)
     class_hash = compute_class_hash(contract_class=deepcopy(contract_class))
     try:
-        await CLIENT.get_class_by_hash(class_hash)
+        await RPC_CLIENT.get_class_by_hash(class_hash)
         logger.info(f"✅ Class already declared, skipping")
         return class_hash
     except Exception:
@@ -384,6 +390,7 @@ async def deploy(contract_name, *args):
     logger.info(f"ℹ️  Deploying {contract_name}")
     abi = json.loads(Path(get_artifact(contract_name)).read_text())["abi"]
     account = await get_starknet_account()
+
     deploy_result = await Contract.deploy_contract(
         account=account,
         class_hash=get_declarations()[contract_name],
@@ -492,8 +499,8 @@ async def wait_for_transaction(*args, **kwargs):
     """
     if GATEWAY_CLIENT is not None:
         # Gateway case, just use it
-        _, status = await GATEWAY_CLIENT.wait_for_tx(*args, **kwargs)
-        return status
+        receipt = await GATEWAY_CLIENT.wait_for_tx(*args, **kwargs)
+        return receipt.status
 
     start = datetime.now()
     elapsed = 0

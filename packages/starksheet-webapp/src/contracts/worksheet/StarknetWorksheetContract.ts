@@ -1,6 +1,12 @@
 import { BigNumberish, CallData, Contract, ProviderInterface } from "starknet";
 import { N_ROW } from "../../config";
-import { Abi, CellData, CellRendered, WorksheetContract } from "../../types";
+import {
+  Abi,
+  CellData,
+  CellRendered,
+  ContractCall,
+  WorksheetContract,
+} from "../../types";
 import { hex2str, normalizeHexString } from "../../utils/hexUtils";
 
 export class StarknetWorksheetContract implements WorksheetContract {
@@ -8,6 +14,31 @@ export class StarknetWorksheetContract implements WorksheetContract {
 
   constructor(address: string, abi: Abi, provider: ProviderInterface) {
     this.contract = new Contract(abi, address, provider);
+  }
+
+  setImplementation(newImplementation: bigint): ContractCall {
+    return {
+      to: this.contract.address,
+      entrypoint: "set_implementation_hash",
+      calldata: CallData.compile({
+        class_hash: newImplementation,
+      }),
+    };
+  }
+
+  async implementation(): Promise<bigint> {
+    try {
+      return BigInt(
+        (
+          await this.contract.providerOrAccount.callContract({
+            contractAddress: this.contract.address,
+            entrypoint: "get_implementation_hash",
+          })
+        ).result[0]
+      );
+    } catch (e) {
+      return 0n;
+    }
   }
 
   async nRow() {
@@ -114,6 +145,22 @@ export class StarknetWorksheetContract implements WorksheetContract {
     const result = await this.contract.call("name", []);
     // @ts-ignore
     return hex2str(normalizeHexString(result.name));
+  }
+
+  async owner(): Promise<bigint> {
+    let result;
+    try {
+      result = await this.contract.call("owner", []);
+    } catch (e) {
+      result = await this.contract.providerOrAccount.callContract({
+        contractAddress: this.contract.address,
+        entrypoint: "getOwner",
+      });
+      // @ts-ignore
+      result = { owner: BigInt(result.result[0]) };
+    }
+    // @ts-ignore
+    return result.owner;
   }
 
   async symbol(): Promise<string> {

@@ -10,6 +10,7 @@ export interface SpreadsheetContract {
     constructorCalldata: SheetConstructorArgs
   ): Promise<string>;
   getSheetPrice(): Promise<bigint>;
+  getSheetImplementation(): Promise<bigint>;
   /**
    * Build a raw `setCell` transaction from a Cell.
    *

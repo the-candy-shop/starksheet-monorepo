@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { FunctionAbi, uint256 } from "starknet";
+import { FunctionAbi } from "starknet";
 import { CellData, ChainType, ContractAbi } from "../../types";
 import {
   ARGS_SEP,
@@ -56,20 +56,8 @@ export function toPlainTextFormula(
       while (inputIndex < abi.inputs.length) {
         const _input = abi.inputs[inputIndex];
         if (_input.type === "Uint256") {
-          if (isDependency(calldata[argsIndex])) {
-            displayedArgs.push(args[argsIndex]);
-            if (args[argsIndex + 1] !== "0")
-              throw new Error("Cannot parse Uint256 input");
-          } else {
-            displayedArgs.push(
-              uint256
-                .uint256ToBN({
-                  low: args[argsIndex],
-                  high: args[argsIndex + 1],
-                })
-                .toString()
-            );
-          }
+          displayedArgs.push(args[argsIndex]);
+          displayedArgs.push(args[argsIndex + 1]);
           argsIndex += 2;
           inputIndex++;
           continue;
@@ -203,7 +191,7 @@ export function parse(
     // Add global brackets if user input is just a comma separated list
     `[${rawCall.args}]`
       // Quote cell names before eval
-      .replace(/([, [(]+)([A-O]{1}[0-9]{1,2})([, \])])/gi, '$1"$2"$3')
+      .replace(/([, [(]?)([A-O]{1}[0-9]{1,2})([, \])]?)/gi, '$1"$2"$3')
   ) as any[];
 
   // retrieve function and corresponding abi

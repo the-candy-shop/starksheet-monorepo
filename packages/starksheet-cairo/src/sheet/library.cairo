@@ -79,6 +79,10 @@ func Sheet_cell_price() -> (price: felt) {
 func Sheet_royalty_rate() -> (rate: felt) {
 }
 
+@storage_var
+func Sheet_is_public() -> (is_public: felt) {
+}
+
 namespace Sheet {
     func get_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         price: felt
@@ -103,6 +107,29 @@ namespace Sheet {
         rate: felt
     ) {
         Sheet_royalty_rate.write(rate);
+        return ();
+    }
+
+    func get_is_public{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        is_public: felt
+    ) {
+        return Sheet_is_public.read();
+    }
+
+    func set_is_public{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        is_public: felt
+    ) {
+        Sheet_is_public.write(is_public);
+        return ();
+    }
+
+    func assert_public{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        is_public: felt
+    ) {
+        let (is_public) = Sheet_is_public.read(is_public);
+        with_attr error_mesage("Sheet is private") {
+            assert is_public = 1;
+        }
         return ();
     }
 

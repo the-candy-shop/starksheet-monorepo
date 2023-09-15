@@ -112,6 +112,8 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           contract.symbol(),
           contract.nRow(),
           contract.getCellPrice(),
+          contract.implementation(),
+          contract.owner(),
         ]).then((response) => {
           appendSheet({
             name: response[0],
@@ -119,6 +121,8 @@ const SheetTable = ({ sx }: SheetTableProps) => {
             address: _selectedSheetAddress,
             nRow: response[2],
             cellPrice: response[3] / 10 ** 18,
+            classHash: response[4],
+            owner: response[5],
           });
         });
       }

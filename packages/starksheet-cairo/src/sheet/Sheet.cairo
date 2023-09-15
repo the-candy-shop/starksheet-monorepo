@@ -7,7 +7,7 @@ from openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
 from openzeppelin.token.erc721.library import ERC721, ERC721_name, ERC721_symbol
 from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.bool import TRUE
-from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
+from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.default_dict import default_dict_new, default_dict_finalize
 from starkware.cairo.common.dict import DictAccess
 from starkware.cairo.common.math_cmp import is_not_zero, RC_BOUND
@@ -20,9 +20,12 @@ from sheet.library import (
     Sheet_merkle_root,
     Sheet_max_per_wallet,
     Sheet_cell_renderer,
+    Sheet_is_public,
     CellRendered,
     DEFAULT_VALUE,
 )
+
+from utils.execution_context import assert_view_call
 
 @storage_var
 func initialized() -> (res: felt) {
@@ -109,6 +112,20 @@ func getCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 }
 
 @external
+func setIsPublic{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(is_public: felt) {
+    Ownable.assert_only_owner();
+    Sheet.set_is_public(is_public);
+    return ();
+}
+
+@view
+func getIsPublic{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    is_public: felt
+) {
+    return Sheet.get_is_public();
+}
+
+@external
 func setMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(root: felt) {
     Ownable.assert_only_owner();
     Sheet_merkle_root.write(root);
@@ -154,10 +171,9 @@ func getCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(to
     return (res.contract_address, res.value, res.calldata_len, res.calldata);
 }
 
-@view
-func renderCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: felt) -> (
-    cell: CellRendered
-) {
+func _renderCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tokenId: felt
+) -> (cell: CellRendered) {
     alloc_locals;
     let (local rendered_cells_start) = default_dict_new(default_value=DEFAULT_VALUE);
     let rendered_cells = rendered_cells_start;
@@ -172,11 +188,35 @@ func renderCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
 }
 
 @view
+func renderCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: felt) -> (
+    cell: CellRendered
+) {
+    alloc_locals;
+    assert_view_call();
+    return _renderCell(tokenId);
+}
+
+@view
 func renderCellValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: felt
 ) -> (value: felt) {
-    let (cell) = renderCell(tokenId);
+    assert_view_call();
+    let (cell) = _renderCell(tokenId);
     return (cell.value,);
+}
+
+@external
+func executeCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: felt) {
+    let (is_public) = Sheet_is_public.read();
+
+    if (is_public == 0) {
+        Ownable.assert_only_owner();
+        _renderCell(tokenId);
+        return ();
+    }
+
+    _renderCell(tokenId);
+    return ();
 }
 
 @view
@@ -184,6 +224,7 @@ func renderGrid{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     cells_len: felt, cells: CellRendered*
 ) {
     alloc_locals;
+    assert_view_call();
     let (local cells: CellRendered*) = alloc();
     let (local rendered_cells_start) = default_dict_new(default_value=DEFAULT_VALUE);
     let rendered_cells = rendered_cells_start;
@@ -257,6 +298,7 @@ func mintAndSetPublic{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_chec
 func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: Uint256
 ) -> (token_uri_len: felt, token_uri: felt*) {
+    assert_view_call();
     let (token_uri_len, token_uri) = Sheet.token_uri(tokenId);
     return (token_uri_len, token_uri);
 }

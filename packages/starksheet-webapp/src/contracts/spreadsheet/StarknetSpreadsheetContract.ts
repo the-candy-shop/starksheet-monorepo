@@ -43,6 +43,11 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
     this.sheetClashHash = this.getSheetClassHash();
   }
 
+  async getSheetImplementation(): Promise<bigint> {
+    const classHash = await this.contract.functions["getSheetClassHash"]();
+    return classHash.hash;
+  }
+
   /**
    * @inheritDoc
    */

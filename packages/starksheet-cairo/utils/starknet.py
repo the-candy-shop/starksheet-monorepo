@@ -112,9 +112,7 @@ async def get_starknet_account(
             f"⚠️  Unable to verify public key for account at address 0x{address:x}"
         )
 
-    contract_class = await RPC_CLIENT.get_class_at(
-        0x1C8D2BB17CDDF22728553C9700ADFBBD42D1999194B409B1188B17191CC2EFD
-    )
+    contract_class = await RPC_CLIENT.get_class_at(address)
     cairo_version = 1 if isinstance(contract_class, SierraContractClass) else 0
     return Account(
         address=address,

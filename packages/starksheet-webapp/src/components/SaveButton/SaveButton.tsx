@@ -19,7 +19,10 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
   const { accountAddress } = useContext(AccountContext);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const cost = useMemo(() => (costEth > 0 ? ` (${costEth})` : ""), [costEth]);
+  const cost = useMemo(
+    () => (costEth > 0 ? ` (${costEth}ETH)` : ""),
+    [costEth]
+  );
 
   const onClick = useCallback(async () => {
     if (transactions.length === 0) {
@@ -55,7 +58,7 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
       <span>
         <Button
           sx={{
-            width: "221px",
+            width: "250px",
             "& .content": {
               backgroundColor: !!accountAddress ? "#FF4F0A" : undefined,
               boxShadow: !!accountAddress

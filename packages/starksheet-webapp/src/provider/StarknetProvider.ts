@@ -60,6 +60,15 @@ export class StarknetProvider implements ChainProvider {
     }
   }
 
+  async getContractType(address: string) {
+    try {
+      const classAt = await this.provider.getClassAt(address, "latest");
+      return Object.hasOwn(classAt, "sierra_program") ? 1 : 0;
+    } catch (error) {
+      return undefined;
+    }
+  }
+
   /**
    * Builds a starknet provider for the given rpc and config.
    */
@@ -146,10 +155,10 @@ export class StarknetProvider implements ChainProvider {
       return abi;
     }
 
-    let isContract = await this.addressAlreadyDeployed(address);
+    let contractType = await this.getContractType(address);
     let response;
     try {
-      if (isContract) {
+      if (contractType !== undefined) {
         response = await this.provider.getClassAt(address);
       } else {
         response = await this.provider.getClassByHash(address);
@@ -159,6 +168,12 @@ export class StarknetProvider implements ChainProvider {
     }
 
     abi = response.abi || abi;
+    if (contractType === 1) {
+      abi = abi
+        .filter((item) => item.type === "interface")
+        .map((item) => item.items)
+        .flat();
+    }
     return [
       ...abi,
       ...(
@@ -181,7 +196,7 @@ export class StarknetProvider implements ChainProvider {
               ) as Abi;
             })
         )
-      ).flat(),
+      ).flat(3),
     ];
   }
 

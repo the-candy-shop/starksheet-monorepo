@@ -97,13 +97,47 @@ export const TransactionsContextProvider = ({
     async (otherTransactions?: ContractCall[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
-      let options;
+      let options = {};
       if (costEth > 0) {
+        if (newSheetsTransactions.length > 0) {
+          options = {
+            [onsheet.address]: {
+              value:
+                BigInt(
+                  newSheetsTransactions.length *
+                    onsheet.sheetPrice *
+                    1_000_000_000
+                ) *
+                10n ** 9n,
+            },
+          };
+        }
+        const cellsCost = cellsTransactions
+          .filter((tx) => tx.entrypoint === "mintAndSetPublic")
+          .map((tx) => ({
+            ...tx,
+            cellPrice:
+              BigInt(
+                onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice! *
+                  1_000_000_000
+              ) *
+              10n ** 9n,
+          }))
+          .filter((tx) => tx.cellPrice > 0)
+          .reduce(
+            (prev, tx) => ({
+              ...prev,
+              [tx.to]: {
+                value: (prev[tx.to]?.value || 0n) + tx.cellPrice,
+              },
+            }),
+            {} as { [address: string]: { value?: bigint } }
+          );
         options = {
-          value: (BigInt(costEth * 1_000_000_000) * 10n ** 9n).toString(),
+          ...options,
+          ...cellsCost,
         };
       }
-
       return execute(
         [...newSheetsTransactions, ...cellsTransactions, ..._otherTxs],
         options
@@ -145,6 +179,9 @@ export const TransactionsContextProvider = ({
       execute,
       chainProvider,
       costEth,
+      onsheet.address,
+      onsheet.sheetPrice,
+      onsheet.sheets,
     ]
   );
 

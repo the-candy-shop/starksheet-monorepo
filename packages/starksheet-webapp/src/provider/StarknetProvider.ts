@@ -128,7 +128,7 @@ export class StarknetProvider implements ChainProvider {
   async waitForTransaction(hash: string): Promise<any> {
     for (let i = 0; i < 10; i++) {
       try {
-        return await this.provider.getTransactionReceipt(hash);
+        return await this.getTransactionReceipt(hash);
       } catch (e) {
         await this.sleep(3);
       }
@@ -278,25 +278,27 @@ export class StarknetProvider implements ChainProvider {
    */
   async execute(
     calls: ContractCall[],
-    options?: { value?: BigNumberish }
+    options?: { [address: string]: { value?: BigNumberish } }
   ): Promise<TransactionResponse> {
     if (!this.connection?.isConnected) {
       throw new Error("Account is not connected");
     }
 
-    if (options?.value) {
+    if (options) {
       calls = [
-        {
-          to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
-          entrypoint: "approve",
-          calldata: CallData.compile({
-            spender: calls[0].to,
-            amount: {
-              low: options.value.toString(),
-              high: 0,
-            },
-          }),
-        },
+        ...Object.entries(options)
+          .filter(([address, option]) => option !== undefined)
+          .map(([address, option]) => ({
+            to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
+            entrypoint: "approve",
+            calldata: CallData.compile({
+              spender: address,
+              amount: {
+                low: option.value!.toString(),
+                high: 0,
+              },
+            }),
+          })),
         ...calls,
       ];
     }

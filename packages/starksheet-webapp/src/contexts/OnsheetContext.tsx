@@ -7,7 +7,6 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { N_ROW } from "../config";
 import { useChainProvider } from "../hooks";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
 import { chainConfig } from "../provider/chains";
@@ -130,26 +129,15 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
     );
     let newSheet: Sheet;
     if (addressAlreadyDeployed) {
-      const sheetContract =
-        chainProvider.getWorksheetContractByAddress(address);
-      const [name, symbol, nRow, cellPrice, classHash, owner] =
-        await Promise.all([
-          sheetContract.name(),
-          sheetContract.symbol(),
-          sheetContract.nRow(),
-          sheetContract.getCellPrice(),
-          sheetContract.implementation(),
-          sheetContract.owner(),
-        ]);
-      newSheet = { name, symbol, nRow, cellPrice, address, classHash, owner };
+      navigate(`/${address}`);
     } else {
-      newSheet = { ...sheet, address, calldata, nRow: N_ROW, cellPrice: 0 };
+      newSheet = { address, calldata, ...sheet };
+      setOnsheet((prevOnsheet) => ({
+        ...prevOnsheet,
+        sheets: [...prevOnsheet.sheets, newSheet],
+      }));
+      updateSheetStatus(address, defaultSheetStatus);
     }
-    setOnsheet((prevOnsheet) => ({
-      ...prevOnsheet,
-      sheets: [...prevOnsheet.sheets, newSheet],
-    }));
-    updateSheetStatus(address, defaultSheetStatus);
     return address;
   };
 

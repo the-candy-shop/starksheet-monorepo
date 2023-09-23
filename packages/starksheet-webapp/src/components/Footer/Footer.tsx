@@ -72,6 +72,8 @@ function Footer({ sx }: FooterProps) {
               key={sheet.address}
               sx={{
                 marginLeft: `-${CELL_BORDER_WIDTH}px`,
+                overflowY: "hidden",
+                overflowX: "auto",
               }}
             />
           ))}

@@ -227,7 +227,7 @@ export class EVMProvider implements ChainProvider {
    */
   execute = async (
     calls: ContractCall[],
-    options: { value: number | string }
+    options: { [address: string]: { value: number | string } }
   ) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();

@@ -45,7 +45,7 @@ export interface ChainProvider {
    */
   execute(
     calls: ContractCall[],
-    options?: { value?: number | string }
+    options?: { [address: string]: { value?: number | string } }
   ): Promise<TransactionResponse>;
 
   /**

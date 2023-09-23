@@ -87,4 +87,9 @@ export interface ChainProvider {
    * Connects the user with the given chain provider.
    */
   login(): Promise<string>;
+
+  /**
+   * Create a send ETH transaction
+   */
+  sendEthTxBuilder(recipientAddress: bigint, amount: bigint): ContractCall;
 }

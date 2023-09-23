@@ -281,4 +281,14 @@ export class EVMProvider implements ChainProvider {
       throw new Error("login failed");
     }
   }
+
+  sendEthTxBuilder(recipientAddress: bigint, amount: bigint) {
+    return {
+      to: recipientAddress.toString(16),
+      entrypoint: "",
+      value: amount,
+      calldata: "",
+      operation: OperationType.Call,
+    };
+  }
 }

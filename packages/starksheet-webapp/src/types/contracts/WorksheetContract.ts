@@ -8,7 +8,8 @@ export interface WorksheetContract {
   renderCell(tokenId: number): Promise<CellRendered>;
   renderCells(): Promise<CellRendered[]>;
   nRow(): Promise<number>;
-  getCellPrice(): Promise<number>;
+  getCellPrice(): Promise<bigint>;
+  getSheetPrice(): Promise<bigint>;
   name(): Promise<string>;
   symbol(): Promise<string>;
   owner(): Promise<bigint>;

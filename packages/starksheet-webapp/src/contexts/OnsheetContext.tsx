@@ -30,7 +30,7 @@ export const OnsheetContext = React.createContext<{
     sheets: [],
     defaultRenderer: "",
     sheetClassHash: 0n,
-    sheetPrice: 0,
+    sheetPrice: 0n,
   },
   setSelectedSheetAddress: () => {},
   load: async () => [],
@@ -49,7 +49,7 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
     sheets: [],
     defaultRenderer: "",
     sheetClassHash: 0n,
-    sheetPrice: 0,
+    sheetPrice: 0n,
   });
 
   const [selectedSheetAddress, setSelectedSheetAddress] = useState<string>();
@@ -77,7 +77,7 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
             defaultRenderer: renderer,
             sheetClassHash,
             sheets: [],
-            sheetPrice: Number(sheetPrice / 10n ** 9n) / 1_000_000_000,
+            sheetPrice,
           };
         })
         .then((_onsheet) => {

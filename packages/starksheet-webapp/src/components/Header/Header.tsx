@@ -20,7 +20,7 @@ function Header() {
   const { onsheet, selectedSheetAddress, appendSheet, addSheet } =
     useContext(OnsheetContext);
   const { accountAddress } = useContext(AccountContext);
-  const { settleTransactions } = useContext(TransactionsContext);
+  const { settleTransactions, addSendEth } = useContext(TransactionsContext);
   const sheet = useMemo(
     () =>
       onsheet.sheets.find((sheet) => sheet.address === selectedSheetAddress),
@@ -52,7 +52,8 @@ function Header() {
         name: `${sheet?.name} copy`,
         symbol: `${sheet?.symbol} copy`,
         nRow: N_ROW,
-        cellPrice: 0,
+        cellPrice: 0n,
+        sheetPrice: 0n,
       },
       accountAddress
     );
@@ -60,6 +61,10 @@ function Header() {
       ...prevValues,
       [address]: values[sheet?.address!],
     }));
+    addSendEth({
+      recipientAddress: BigInt(accountAddress),
+      amount: sheet?.sheetPrice!,
+    });
   };
 
   const displayUpgrade = useMemo(

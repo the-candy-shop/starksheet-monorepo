@@ -58,7 +58,7 @@ export class StarknetWorksheetContract implements WorksheetContract {
 
   async getCellPrice() {
     try {
-      return parseInt(
+      return BigInt(
         (
           await this.contract.providerOrAccount.callContract({
             contractAddress: this.contract.address,
@@ -67,7 +67,22 @@ export class StarknetWorksheetContract implements WorksheetContract {
         ).result[0]
       );
     } catch (e) {
-      return 0;
+      return 0n;
+    }
+  }
+
+  async getSheetPrice() {
+    try {
+      return BigInt(
+        (
+          await this.contract.providerOrAccount.callContract({
+            contractAddress: this.contract.address,
+            entrypoint: "getSheetPrice",
+          })
+        ).result[0]
+      );
+    } catch (e) {
+      return 0n;
     }
   }
 

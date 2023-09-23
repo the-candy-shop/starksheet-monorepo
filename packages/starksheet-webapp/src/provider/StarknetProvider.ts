@@ -319,4 +319,18 @@ export class StarknetProvider implements ChainProvider {
       }))
     );
   }
+
+  sendEthTxBuilder(recipientAddress: bigint, amount: bigint) {
+    return {
+      to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
+      entrypoint: "transfer",
+      calldata: CallData.compile({
+        recipient_address: recipientAddress,
+        amount: {
+          low: amount,
+          high: 0,
+        },
+      }),
+    };
+  }
 }

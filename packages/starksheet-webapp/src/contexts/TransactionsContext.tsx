@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useState,
 } from "react";
 import { useChainProvider } from "../hooks/useChainProvider";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
@@ -17,11 +18,13 @@ export const TransactionsContext = React.createContext<{
   newSheetsTransactions: ContractCall[];
   settleTransactions: (tx?: ContractCall[]) => Promise<void>;
   costEth: number;
+  addSendEth: (tx: { recipientAddress: bigint; amount: bigint }) => void;
 }>({
   transactions: [],
   newSheetsTransactions: [],
   settleTransactions: async () => {},
   costEth: 0,
+  addSendEth: () => {},
 });
 
 export const TransactionsContextProvider = ({
@@ -33,6 +36,13 @@ export const TransactionsContextProvider = ({
   const { contract } = useOnsheetContract();
   const { enqueueSnackbar } = useSnackbar();
   const chainProvider = useChainProvider();
+  const [sendEth, setSendEth] = useState<
+    { recipientAddress: bigint; amount: bigint }[]
+  >([]);
+
+  const addSendEth = (tx: { recipientAddress: bigint; amount: bigint }) => {
+    setSendEth((prev) => [...prev, tx]);
+  };
 
   const newSheetsTransactions = useMemo(() => {
     return onsheet.sheets
@@ -70,27 +80,26 @@ export const TransactionsContextProvider = ({
   );
 
   const costEth = useMemo(() => {
-    // *10_000 then / 10_000 to trim javascript wrong computing
-    // I don't expect people to put more than 4 digits after ","
-    // in cell or sheet prices
     return (
-      Math.round(
-        (newSheetsTransactions.length * onsheet.sheetPrice +
-          cellsTransactions
-            .filter((tx) => tx.entrypoint === "mintAndSetPublic")
-            .map(
-              (tx) =>
-                onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0
-            )
-            .reduce((a, b) => a + b, 0)) *
-          10_000
-      ) / 10_000
+      (newSheetsTransactions.length * Number(onsheet.sheetPrice / 10n ** 9n)) /
+        10 ** 9 +
+      cellsTransactions
+        .filter((tx) => tx.entrypoint === "mintAndSetPublic")
+        .map(
+          (tx) =>
+            onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0n
+        )
+        .reduce((a, b) => a + Number(b / 10n ** 9n) / 10 ** 9, 0) +
+      sendEth
+        .map((tx) => Number(tx.amount / 10n ** 9n) / 10 ** 9)
+        .reduce((a, b) => a + b, 0)
     );
   }, [
     newSheetsTransactions,
     onsheet.sheetPrice,
     onsheet.sheets,
     cellsTransactions,
+    sendEth,
   ]);
 
   const settleTransactions = useCallback(
@@ -102,13 +111,7 @@ export const TransactionsContextProvider = ({
         if (newSheetsTransactions.length > 0) {
           options = {
             [onsheet.address]: {
-              value:
-                BigInt(
-                  newSheetsTransactions.length *
-                    onsheet.sheetPrice *
-                    1_000_000_000
-                ) *
-                10n ** 9n,
+              value: BigInt(newSheetsTransactions.length) * onsheet.sheetPrice,
             },
           };
         }
@@ -116,12 +119,8 @@ export const TransactionsContextProvider = ({
           .filter((tx) => tx.entrypoint === "mintAndSetPublic")
           .map((tx) => ({
             ...tx,
-            cellPrice:
-              BigInt(
-                onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice! *
-                  1_000_000_000
-              ) *
-              10n ** 9n,
+            cellPrice: onsheet.sheets.find((s) => s.address === tx.to)
+              ?.cellPrice!,
           }))
           .filter((tx) => tx.cellPrice > 0)
           .reduce(
@@ -138,8 +137,17 @@ export const TransactionsContextProvider = ({
           ...cellsCost,
         };
       }
+
+      const sendEthTxs = sendEth.map((tx) =>
+        chainProvider.sendEthTxBuilder(tx.recipientAddress, tx.amount)
+      );
       return execute(
-        [...newSheetsTransactions, ...cellsTransactions, ..._otherTxs],
+        [
+          ...sendEthTxs,
+          ...newSheetsTransactions,
+          ...cellsTransactions,
+          ..._otherTxs,
+        ],
         options
       )
         .then(async (response) => {
@@ -150,6 +158,7 @@ export const TransactionsContextProvider = ({
           if (receipt.status !== "REJECTED") {
             setUpdatedValues({});
             validateNewSheets();
+            setSendEth([]);
           }
           return receipt;
         })
@@ -182,6 +191,7 @@ export const TransactionsContextProvider = ({
       onsheet.address,
       onsheet.sheetPrice,
       onsheet.sheets,
+      sendEth,
     ]
   );
 
@@ -192,6 +202,7 @@ export const TransactionsContextProvider = ({
         newSheetsTransactions,
         settleTransactions,
         costEth,
+        addSendEth,
       }}
     >
       {children}

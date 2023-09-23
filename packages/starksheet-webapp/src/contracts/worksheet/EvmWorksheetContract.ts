@@ -52,8 +52,15 @@ export class EvmWorksheetContract implements WorksheetContract {
   /**
    * @inheritDoc
    */
-  getCellPrice(): Promise<number> {
-    return Promise.resolve(0);
+  getCellPrice(): Promise<bigint> {
+    return Promise.resolve(0n);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getSheetPrice(): Promise<bigint> {
+    return Promise.resolve(0n);
   }
 
   /**

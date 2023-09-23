@@ -17,7 +17,8 @@ export type Sheet = {
   classHash?: bigint;
   nRow: number;
   calldata?: SheetConstructorArgs;
-  cellPrice: number;
+  cellPrice: bigint;
+  sheetPrice: bigint;
   owner?: bigint;
 };
 
@@ -28,7 +29,7 @@ export type Spreadsheet = {
   address: string;
   defaultRenderer: string;
   sheetClassHash: bigint;
-  sheetPrice: number;
+  sheetPrice: bigint;
 };
 
 // Starknet types

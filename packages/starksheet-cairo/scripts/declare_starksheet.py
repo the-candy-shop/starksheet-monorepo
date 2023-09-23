@@ -4,11 +4,7 @@ from asyncio import run
 
 from dotenv import load_dotenv
 from utils.constants import COMPILED_CONTRACTS
-from utils.starknet import (
-    declare,
-    dump_declarations,
-    get_starknet_account,
-)
+from utils.starknet import declare, dump_declarations, get_starknet_account
 
 load_dotenv()
 logging.basicConfig()

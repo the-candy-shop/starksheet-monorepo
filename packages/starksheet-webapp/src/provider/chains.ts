@@ -119,7 +119,7 @@ const chainAbis = {
 
 const network =
   (process.env.REACT_APP_NETWORK!.replace(/-./g, (x) =>
-    x[1].toUpperCase()
+    x[1].toUpperCase(),
   ) as SupportedChains) || "starknetDevnet";
 
 export const chainConfig: ChainConfig = {

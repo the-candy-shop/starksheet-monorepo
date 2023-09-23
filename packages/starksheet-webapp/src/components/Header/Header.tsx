@@ -24,7 +24,7 @@ function Header() {
   const sheet = useMemo(
     () =>
       onsheet.sheets.find((sheet) => sheet.address === selectedSheetAddress),
-    [onsheet.sheets, selectedSheetAddress]
+    [onsheet.sheets, selectedSheetAddress],
   );
   const { contract } = useSheetContract(sheet?.address);
   const { enqueueSnackbar } = useSnackbar();
@@ -55,7 +55,7 @@ function Header() {
         cellPrice: 0n,
         sheetPrice: 0n,
       },
-      accountAddress
+      accountAddress,
     );
     setValues((prevValues) => ({
       ...prevValues,
@@ -74,7 +74,7 @@ function Header() {
       sheet?.classHash !== onsheet.sheetClassHash &&
       !!accountAddress &&
       BigInt(accountAddress) === sheet.owner,
-    [sheet?.classHash, onsheet.sheetClassHash, accountAddress, sheet?.owner]
+    [sheet?.classHash, onsheet.sheetClassHash, accountAddress, sheet?.owner],
   );
 
   const displayCopy = useMemo(() => !!sheet, [sheet]);
@@ -102,7 +102,7 @@ function Header() {
       onClick={() =>
         window.open(
           "https://starksheet.notion.site/starksheet/Starksheet-bfb55bc581e446598d7bf5860e219b03",
-          "_blank"
+          "_blank",
         )
       }
     >

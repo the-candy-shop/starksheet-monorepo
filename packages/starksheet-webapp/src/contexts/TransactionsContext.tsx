@@ -51,8 +51,8 @@ export const TransactionsContextProvider = ({
         contract.addSheetTxBuilder(
           sheet.calldata.name.toString(),
           sheet.calldata.symbol.toString(),
-          accountAddress
-        )
+          accountAddress,
+        ),
       );
   }, [onsheet, contract, accountAddress]);
 
@@ -69,14 +69,14 @@ export const TransactionsContextProvider = ({
       .filter(
         (cell) =>
           (cell.owner === 0n && cell.selector !== 0n) ||
-          "0x" + cell.owner.toString(16) === accountAddress
+          "0x" + cell.owner.toString(16) === accountAddress,
       )
       .map((cell) => contract.setCellTxBuilder(cell));
   }, [accountAddress, updatedValues, contract]);
 
   const transactions = useMemo(
     () => [...newSheetsTransactions, ...cellsTransactions],
-    [newSheetsTransactions, cellsTransactions]
+    [newSheetsTransactions, cellsTransactions],
   );
 
   const costEth = useMemo(() => {
@@ -87,7 +87,7 @@ export const TransactionsContextProvider = ({
         .filter((tx) => tx.entrypoint === "mintAndSetPublic")
         .map(
           (tx) =>
-            onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0n
+            onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0n,
         )
         .reduce((a, b) => a + Number(b / 10n ** 9n) / 10 ** 9, 0) +
       sendEth
@@ -130,7 +130,7 @@ export const TransactionsContextProvider = ({
                 value: (prev[tx.to]?.value || 0n) + tx.cellPrice,
               },
             }),
-            {} as { [address: string]: { value?: bigint } }
+            {} as { [address: string]: { value?: bigint } },
           );
         options = {
           ...options,
@@ -139,7 +139,7 @@ export const TransactionsContextProvider = ({
       }
 
       const sendEthTxs = sendEth.map((tx) =>
-        chainProvider.sendEthTxBuilder(tx.recipientAddress, tx.amount)
+        chainProvider.sendEthTxBuilder(tx.recipientAddress, tx.amount),
       );
       return execute(
         [
@@ -148,7 +148,7 @@ export const TransactionsContextProvider = ({
           ...cellsTransactions,
           ..._otherTxs,
         ],
-        options
+        options,
       )
         .then(async (response) => {
           await chainProvider.waitForTransaction(response.transaction_hash);
@@ -165,7 +165,7 @@ export const TransactionsContextProvider = ({
         .then((receipt) => {
           enqueueSnackbar(
             `Transaction ${receipt.transaction_hash} finalized with status ${receipt.status}`,
-            { variant: "info" }
+            { variant: "info" },
           );
         })
         .catch((error: any) => {
@@ -192,7 +192,7 @@ export const TransactionsContextProvider = ({
       onsheet.sheetPrice,
       onsheet.sheets,
       sendEth,
-    ]
+    ],
   );
 
   return (

@@ -58,7 +58,7 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
 
   const selectedSheetIndex = useMemo(() => {
     const index = sheets.findIndex(
-      (sheet) => sheet.address === selectedSheetAddress
+      (sheet) => sheet.address === selectedSheetAddress,
     );
     return index > -1 ? index : undefined;
   }, [sheets, selectedSheetAddress]);
@@ -84,13 +84,13 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
           setOnsheet(_onsheet);
           return _onsheet.sheets;
         }),
-    [address, contract]
+    [address, contract],
   );
 
   const appendSheet = (sheet: Sheet) => {
     setOnsheet((prevOnsheet) => {
       const index = prevOnsheet.sheets.findIndex(
-        (s) => s.address === sheet.address
+        (s) => s.address === sheet.address,
       );
       const sheets = [...prevOnsheet.sheets];
       if (index === -1) {
@@ -109,7 +109,7 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
 
   const addSheet = async (
     sheet: Omit<Sheet, "address">,
-    owner: string
+    owner: string,
   ): Promise<string> => {
     let calldata: SheetConstructorArgs = {
       name: str2hex(sheet.name),
@@ -122,11 +122,10 @@ export const OnsheetContextProvider = ({ children }: PropsWithChildren) => {
 
     const address = await contract.calculateSheetAddress(
       accountAddress,
-      calldata
+      calldata,
     );
-    const addressAlreadyDeployed = await chainProvider.addressAlreadyDeployed(
-      address
-    );
+    const addressAlreadyDeployed =
+      await chainProvider.addressAlreadyDeployed(address);
     let newSheet: Sheet;
     if (addressAlreadyDeployed) {
       navigate(`/${address}`);

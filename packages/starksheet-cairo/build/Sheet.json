@@ -1860,10 +1860,7 @@
         "value": "mint: user {address} exceeds allocation {allocation}"
       },
       {
-        "accessible_scopes": [
-          "sheet.library",
-          "sheet.library._assert_is_open"
-        ],
+        "accessible_scopes": ["sheet.library", "sheet.library._assert_is_open"],
         "end_pc": 3942,
         "flow_tracking_data": {
           "ap_tracking": {
@@ -1894,11 +1891,7 @@
         "value": "Attempting to execute a @view"
       },
       {
-        "accessible_scopes": [
-          "__main__",
-          "__main__",
-          "__main__.setCell"
-        ],
+        "accessible_scopes": ["__main__", "__main__", "__main__.setCell"],
         "end_pc": 4580,
         "flow_tracking_data": {
           "ap_tracking": {
@@ -1912,11 +1905,7 @@
         "value": "setCell: tokenId does not exist"
       },
       {
-        "accessible_scopes": [
-          "__main__",
-          "__main__",
-          "__main__.setCell"
-        ],
+        "accessible_scopes": ["__main__", "__main__", "__main__.setCell"],
         "end_pc": 4591,
         "flow_tracking_data": {
           "ap_tracking": {
@@ -1930,10 +1919,7 @@
         "value": "setCell: caller is not owner"
       }
     ],
-    "builtins": [
-      "pedersen",
-      "range_check"
-    ],
+    "builtins": ["pedersen", "range_check"],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -9855,9 +9841,7 @@
         "type": "alias"
       },
       "__main__.approve": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5797,
         "type": "function"
       },
@@ -9908,9 +9892,7 @@
         "type": "alias"
       },
       "__main__.balanceOf": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5654,
         "type": "function"
       },
@@ -9953,9 +9935,7 @@
         "value": 0
       },
       "__main__.burn": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5961,
         "type": "function"
       },
@@ -9998,9 +9978,7 @@
         "value": 0
       },
       "__main__.closeMint": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5631,
         "type": "function"
       },
@@ -10038,9 +10016,7 @@
         "value": 0
       },
       "__main__.contractURI": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5247,
         "type": "function"
       },
@@ -10086,9 +10062,7 @@
         "type": "alias"
       },
       "__main__.executeCell": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4795,
         "type": "function"
       },
@@ -10131,9 +10105,7 @@
         "value": 0
       },
       "__main__.getApproved": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5725,
         "type": "function"
       },
@@ -10176,9 +10148,7 @@
         "value": 0
       },
       "__main__.getCell": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4632,
         "type": "function"
       },
@@ -10221,9 +10191,7 @@
         "value": 0
       },
       "__main__.getCellPrice": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4208,
         "type": "function"
       },
@@ -10261,9 +10229,7 @@
         "value": 0
       },
       "__main__.getCellRenderer": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4421,
         "type": "function"
       },
@@ -10301,9 +10267,7 @@
         "value": 0
       },
       "__main__.getIsPublic": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4478,
         "type": "function"
       },
@@ -10341,9 +10305,7 @@
         "value": 0
       },
       "__main__.getMaxPerWallet": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4151,
         "type": "function"
       },
@@ -10381,9 +10343,7 @@
         "value": 0
       },
       "__main__.getMerkleRoot": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4535,
         "type": "function"
       },
@@ -10421,9 +10381,7 @@
         "value": 0
       },
       "__main__.getParameters": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4046,
         "type": "function"
       },
@@ -10461,9 +10419,7 @@
         "value": 0
       },
       "__main__.getRoyaltyRate": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4322,
         "type": "function"
       },
@@ -10501,9 +10457,7 @@
         "value": 0
       },
       "__main__.getSheetPrice": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4265,
         "type": "function"
       },
@@ -10549,9 +10503,7 @@
         "type": "alias"
       },
       "__main__.initialize": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5155,
         "type": "function"
       },
@@ -10772,9 +10724,7 @@
         "value": 0
       },
       "__main__.isApprovedForAll": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5761,
         "type": "function"
       },
@@ -10821,9 +10771,7 @@
         "value": 0
       },
       "__main__.is_initialized": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5217,
         "type": "function"
       },
@@ -10865,9 +10813,7 @@
         "type": "alias"
       },
       "__main__.mintAndSetPublic": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5009,
         "type": "function"
       },
@@ -10934,9 +10880,7 @@
         "value": 0
       },
       "__main__.mintOwner": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5927,
         "type": "function"
       },
@@ -10983,9 +10927,7 @@
         "value": 0
       },
       "__main__.mintPublic": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4930,
         "type": "function"
       },
@@ -11036,9 +10978,7 @@
         "value": 0
       },
       "__main__.name": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5494,
         "type": "function"
       },
@@ -11076,9 +11016,7 @@
         "value": 0
       },
       "__main__.openMint": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5608,
         "type": "function"
       },
@@ -11116,9 +11054,7 @@
         "value": 0
       },
       "__main__.owner": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 3991,
         "type": "function"
       },
@@ -11156,9 +11092,7 @@
         "value": 0
       },
       "__main__.ownerOf": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5689,
         "type": "function"
       },
@@ -11201,9 +11135,7 @@
         "value": 0
       },
       "__main__.renderCell": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4715,
         "type": "function"
       },
@@ -11246,9 +11178,7 @@
         "value": 0
       },
       "__main__.renderCellValue": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4755,
         "type": "function"
       },
@@ -11291,9 +11221,7 @@
         "value": 0
       },
       "__main__.renderGrid": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4842,
         "type": "function"
       },
@@ -11331,9 +11259,7 @@
         "value": 6
       },
       "__main__.royaltyInfo": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4352,
         "type": "function"
       },
@@ -11380,9 +11306,7 @@
         "value": 0
       },
       "__main__.safeTransferFrom": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5884,
         "type": "function"
       },
@@ -11441,9 +11365,7 @@
         "value": 0
       },
       "__main__.setApprovalForAll": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5826,
         "type": "function"
       },
@@ -11490,9 +11412,7 @@
         "value": 0
       },
       "__main__.setCell": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4565,
         "type": "function"
       },
@@ -11551,9 +11471,7 @@
         "value": 0
       },
       "__main__.setCellPrice": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4181,
         "type": "function"
       },
@@ -11596,9 +11514,7 @@
         "value": 0
       },
       "__main__.setCellRenderer": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4394,
         "type": "function"
       },
@@ -11641,9 +11557,7 @@
         "value": 0
       },
       "__main__.setContractUri": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5291,
         "type": "function"
       },
@@ -11690,9 +11604,7 @@
         "value": 0
       },
       "__main__.setIsPublic": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4451,
         "type": "function"
       },
@@ -11735,9 +11647,7 @@
         "value": 0
       },
       "__main__.setMaxPerWallet": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4124,
         "type": "function"
       },
@@ -11780,9 +11690,7 @@
         "value": 0
       },
       "__main__.setMerkleRoot": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4508,
         "type": "function"
       },
@@ -11825,9 +11733,7 @@
         "value": 0
       },
       "__main__.setName": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5524,
         "type": "function"
       },
@@ -11870,9 +11776,7 @@
         "value": 0
       },
       "__main__.setParameters": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4083,
         "type": "function"
       },
@@ -11915,9 +11819,7 @@
         "value": 0
       },
       "__main__.setRoyaltyRate": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4295,
         "type": "function"
       },
@@ -11960,9 +11862,7 @@
         "value": 0
       },
       "__main__.setSheetPrice": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4238,
         "type": "function"
       },
@@ -12005,9 +11905,7 @@
         "value": 0
       },
       "__main__.setSymbol": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5581,
         "type": "function"
       },
@@ -12054,9 +11952,7 @@
         "type": "alias"
       },
       "__main__.supportsInterface": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5450,
         "type": "function"
       },
@@ -12099,9 +11995,7 @@
         "value": 0
       },
       "__main__.symbol": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5551,
         "type": "function"
       },
@@ -12139,9 +12033,7 @@
         "value": 0
       },
       "__main__.tokenByIndex": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5364,
         "type": "function"
       },
@@ -12184,9 +12076,7 @@
         "value": 0
       },
       "__main__.tokenOfOwnerByIndex": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5406,
         "type": "function"
       },
@@ -12233,9 +12123,7 @@
         "value": 0
       },
       "__main__.tokenURI": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5095,
         "type": "function"
       },
@@ -12278,9 +12166,7 @@
         "value": 0
       },
       "__main__.totalSupply": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5328,
         "type": "function"
       },
@@ -12318,9 +12204,7 @@
         "value": 0
       },
       "__main__.transferFrom": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5853,
         "type": "function"
       },
@@ -12371,9 +12255,7 @@
         "value": 0
       },
       "__main__.transferOwnership": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4021,
         "type": "function"
       },
@@ -12416,9 +12298,7 @@
         "value": 0
       },
       "__wrappers__.approve": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5806,
         "type": "function"
       },
@@ -12451,9 +12331,7 @@
         "type": "alias"
       },
       "__wrappers__.balanceOf": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5671,
         "type": "function"
       },
@@ -12520,9 +12398,7 @@
         "type": "alias"
       },
       "__wrappers__.burn": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5973,
         "type": "function"
       },
@@ -12555,9 +12431,7 @@
         "type": "alias"
       },
       "__wrappers__.closeMint": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5639,
         "type": "function"
       },
@@ -12590,9 +12464,7 @@
         "type": "alias"
       },
       "__wrappers__.contractURI": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5272,
         "type": "function"
       },
@@ -12659,9 +12531,7 @@
         "type": "alias"
       },
       "__wrappers__.executeCell": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4824,
         "type": "function"
       },
@@ -12694,9 +12564,7 @@
         "type": "alias"
       },
       "__wrappers__.getApproved": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5742,
         "type": "function"
       },
@@ -12763,9 +12631,7 @@
         "type": "alias"
       },
       "__wrappers__.getCell": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4660,
         "type": "function"
       },
@@ -12794,9 +12660,7 @@
         "type": "alias"
       },
       "__wrappers__.getCellPrice": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4223,
         "type": "function"
       },
@@ -12863,9 +12727,7 @@
         "type": "alias"
       },
       "__wrappers__.getCellRenderer": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4436,
         "type": "function"
       },
@@ -12970,9 +12832,7 @@
         "type": "alias"
       },
       "__wrappers__.getIsPublic": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4493,
         "type": "function"
       },
@@ -13039,9 +12899,7 @@
         "type": "alias"
       },
       "__wrappers__.getMaxPerWallet": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4166,
         "type": "function"
       },
@@ -13108,9 +12966,7 @@
         "type": "alias"
       },
       "__wrappers__.getMerkleRoot": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4550,
         "type": "function"
       },
@@ -13177,9 +13033,7 @@
         "type": "alias"
       },
       "__wrappers__.getParameters": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4068,
         "type": "function"
       },
@@ -13246,9 +13100,7 @@
         "type": "alias"
       },
       "__wrappers__.getRoyaltyRate": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4337,
         "type": "function"
       },
@@ -13315,9 +13167,7 @@
         "type": "alias"
       },
       "__wrappers__.getSheetPrice": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4280,
         "type": "function"
       },
@@ -13384,9 +13234,7 @@
         "type": "alias"
       },
       "__wrappers__.initialize": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5194,
         "type": "function"
       },
@@ -13419,9 +13267,7 @@
         "type": "alias"
       },
       "__wrappers__.isApprovedForAll": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5778,
         "type": "function"
       },
@@ -13488,9 +13334,7 @@
         "type": "alias"
       },
       "__wrappers__.is_initialized": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5232,
         "type": "function"
       },
@@ -13557,9 +13401,7 @@
         "type": "alias"
       },
       "__wrappers__.mintAndSetPublic": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5054,
         "type": "function"
       },
@@ -13592,9 +13434,7 @@
         "type": "alias"
       },
       "__wrappers__.mintOwner": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5941,
         "type": "function"
       },
@@ -13627,9 +13467,7 @@
         "type": "alias"
       },
       "__wrappers__.mintPublic": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4980,
         "type": "function"
       },
@@ -13662,9 +13500,7 @@
         "type": "alias"
       },
       "__wrappers__.name": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5509,
         "type": "function"
       },
@@ -13731,9 +13567,7 @@
         "type": "alias"
       },
       "__wrappers__.openMint": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5616,
         "type": "function"
       },
@@ -13766,9 +13600,7 @@
         "type": "alias"
       },
       "__wrappers__.owner": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4006,
         "type": "function"
       },
@@ -13797,9 +13629,7 @@
         "type": "alias"
       },
       "__wrappers__.ownerOf": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5706,
         "type": "function"
       },
@@ -13904,9 +13734,7 @@
         "type": "alias"
       },
       "__wrappers__.renderCell": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4737,
         "type": "function"
       },
@@ -13935,9 +13763,7 @@
         "type": "alias"
       },
       "__wrappers__.renderCellValue": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4777,
         "type": "function"
       },
@@ -14042,9 +13868,7 @@
         "type": "alias"
       },
       "__wrappers__.renderGrid": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4911,
         "type": "function"
       },
@@ -14111,9 +13935,7 @@
         "type": "alias"
       },
       "__wrappers__.royaltyInfo": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 4373,
         "type": "function"
       },
@@ -14180,9 +14002,7 @@
         "type": "alias"
       },
       "__wrappers__.safeTransferFrom": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5896,
         "type": "function"
       },
@@ -14215,9 +14035,7 @@
         "type": "alias"
       },
       "__wrappers__.setApprovalForAll": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5834,
         "type": "function"
       },
@@ -14250,9 +14068,7 @@
         "type": "alias"
       },
       "__wrappers__.setCell": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4602,
         "type": "function"
       },
@@ -14281,9 +14097,7 @@
         "type": "alias"
       },
       "__wrappers__.setCellPrice": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4190,
         "type": "function"
       },
@@ -14316,9 +14130,7 @@
         "type": "alias"
       },
       "__wrappers__.setCellRenderer": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4403,
         "type": "function"
       },
@@ -14355,9 +14167,7 @@
         "type": "alias"
       },
       "__wrappers__.setContractUri": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5301,
         "type": "function"
       },
@@ -14390,9 +14200,7 @@
         "type": "alias"
       },
       "__wrappers__.setIsPublic": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4460,
         "type": "function"
       },
@@ -14425,9 +14233,7 @@
         "type": "alias"
       },
       "__wrappers__.setMaxPerWallet": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4133,
         "type": "function"
       },
@@ -14460,9 +14266,7 @@
         "type": "alias"
       },
       "__wrappers__.setMerkleRoot": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4517,
         "type": "function"
       },
@@ -14495,9 +14299,7 @@
         "type": "alias"
       },
       "__wrappers__.setName": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5533,
         "type": "function"
       },
@@ -14530,9 +14332,7 @@
         "type": "alias"
       },
       "__wrappers__.setParameters": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4099,
         "type": "function"
       },
@@ -14565,9 +14365,7 @@
         "type": "alias"
       },
       "__wrappers__.setRoyaltyRate": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4304,
         "type": "function"
       },
@@ -14600,9 +14398,7 @@
         "type": "alias"
       },
       "__wrappers__.setSheetPrice": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4247,
         "type": "function"
       },
@@ -14635,9 +14431,7 @@
         "type": "alias"
       },
       "__wrappers__.setSymbol": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5590,
         "type": "function"
       },
@@ -14670,9 +14464,7 @@
         "type": "alias"
       },
       "__wrappers__.supportsInterface": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5476,
         "type": "function"
       },
@@ -14739,9 +14531,7 @@
         "type": "alias"
       },
       "__wrappers__.symbol": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5566,
         "type": "function"
       },
@@ -14808,9 +14598,7 @@
         "type": "alias"
       },
       "__wrappers__.tokenByIndex": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5387,
         "type": "function"
       },
@@ -14877,9 +14665,7 @@
         "type": "alias"
       },
       "__wrappers__.tokenOfOwnerByIndex": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5430,
         "type": "function"
       },
@@ -14946,9 +14732,7 @@
         "type": "alias"
       },
       "__wrappers__.tokenURI": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5132,
         "type": "function"
       },
@@ -15015,9 +14799,7 @@
         "type": "alias"
       },
       "__wrappers__.totalSupply": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 5349,
         "type": "function"
       },
@@ -15084,9 +14866,7 @@
         "type": "alias"
       },
       "__wrappers__.transferFrom": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 5863,
         "type": "function"
       },
@@ -15119,9 +14899,7 @@
         "type": "alias"
       },
       "__wrappers__.transferOwnership": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 4028,
         "type": "function"
       },
@@ -24246,9 +24024,7 @@
         "type": "alias"
       },
       "starkware.cairo.common.math.assert_250_bit": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 103,
         "type": "function"
       },
@@ -24379,9 +24155,7 @@
         "value": 0
       },
       "starkware.cairo.common.math.assert_le_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 116,
         "type": "function"
       },
@@ -24489,9 +24263,7 @@
         "type": "label"
       },
       "starkware.cairo.common.math.assert_lt_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 161,
         "type": "function"
       },
@@ -24948,9 +24720,7 @@
         "type": "alias"
       },
       "starkware.cairo.common.math_cmp.is_le": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 482,
         "type": "function"
       },
@@ -24989,9 +24759,7 @@
         "value": 0
       },
       "starkware.cairo.common.math_cmp.is_le_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 487,
         "type": "function"
       },
@@ -25064,9 +24832,7 @@
         "type": "label"
       },
       "starkware.cairo.common.math_cmp.is_nn": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 449,
         "type": "function"
       },
@@ -25124,9 +24890,7 @@
         "type": "label"
       },
       "starkware.cairo.common.math_cmp.is_not_zero": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 441,
         "type": "function"
       },
@@ -26154,9 +25918,7 @@
         "type": "alias"
       },
       "starkware.starknet.common.storage.normalize_address": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 213,
         "type": "function"
       },

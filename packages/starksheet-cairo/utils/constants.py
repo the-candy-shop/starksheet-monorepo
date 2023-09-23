@@ -152,6 +152,7 @@ COMPILED_CONTRACTS = [
     {"contract_name": "execute", "is_account_contract": False},
     {"contract_name": "proxy", "is_account_contract": False},
     {"contract_name": "ERC20", "is_account_contract": False},
+    {"contract_name": "Multicall", "is_account_contract": False},
 ]
 
 N_COLS = 15

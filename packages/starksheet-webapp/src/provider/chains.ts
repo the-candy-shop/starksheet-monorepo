@@ -69,7 +69,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
   },
   katana: {
     appName: "Starksheet",
-    chainId: ChainId.STARKNET_TESTNET,
+    chainId: ChainId.KATANA,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
     nftBaseUrl: "",

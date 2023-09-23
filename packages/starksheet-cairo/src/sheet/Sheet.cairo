@@ -17,10 +17,7 @@ from starkware.starknet.common.syscalls import get_caller_address, get_contract_
 from constants import ETH_ADDRESS
 from sheet.library import (
     Sheet,
-    Sheet_merkle_root,
-    Sheet_max_per_wallet,
-    Sheet_cell_renderer,
-    Sheet_is_public,
+    Parameters,
     CellRendered,
     DEFAULT_VALUE,
 )
@@ -44,10 +41,24 @@ func transferOwnership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
     return ();
 }
 
+@view
+func getParameters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    parameters: Parameters
+) {
+    return Sheet.get_parameters();
+}
+
+@external
+func setParameters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(parameters: Parameters) {
+    Ownable.assert_only_owner();
+    Sheet.set_parameters(parameters);
+    return ();
+}
+
 @external
 func setMaxPerWallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(max: felt) {
     Ownable.assert_only_owner();
-    Sheet_max_per_wallet.write(max);
+    Sheet.set_max_per_wallet(max);
     return ();
 }
 
@@ -55,7 +66,8 @@ func setMaxPerWallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 func getMaxPerWallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     max: felt
 ) {
-    return Sheet_max_per_wallet.read();
+    let (max_per_wallet) = Sheet.get_max_per_wallet();
+    return (max=max_per_wallet);
 }
 
 @external
@@ -70,6 +82,20 @@ func getCellPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_pt
     price: felt
 ) {
     return Sheet.get_cell_price();
+}
+
+@external
+func setSheetPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(price: felt) {
+    Ownable.assert_only_owner();
+    Sheet.set_sheet_price(price);
+    return ();
+}
+
+@view
+func getSheetPrice{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+    price: felt
+) {
+    return Sheet.get_sheet_price();
 }
 
 // @notice Royalty rate taken as per thousand, ie that inputing 1 give 0.1% of royalty over the sell price
@@ -100,7 +126,7 @@ func setCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
     address: felt
 ) {
     Ownable.assert_only_owner();
-    Sheet_cell_renderer.write(address);
+    Sheet.set_cell_renderer(address);
     return ();
 }
 
@@ -108,7 +134,8 @@ func setCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 func getCellRenderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     address: felt
 ) {
-    return Sheet_cell_renderer.read();
+    let (address) = Sheet.get_cell_renderer();
+    return (address=address);
 }
 
 @external
@@ -128,7 +155,7 @@ func getIsPublic{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
 @external
 func setMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(root: felt) {
     Ownable.assert_only_owner();
-    Sheet_merkle_root.write(root);
+    Sheet.set_merkle_root(root);
     return ();
 }
 
@@ -136,8 +163,8 @@ func setMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_p
 func getMerkleRoot{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
     root: felt
 ) {
-    let (root) = Sheet_merkle_root.read();
-    return (root,);
+    let (root) = Sheet.get_merkle_root();
+    return (root=root);
 }
 
 @external
@@ -207,7 +234,7 @@ func renderCellValue{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check
 
 @external
 func executeCell{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(tokenId: felt) {
-    let (is_public) = Sheet_is_public.read();
+    let (is_public) = Sheet.get_is_public();
 
     if (is_public == 0) {
         Ownable.assert_only_owner();
@@ -322,10 +349,17 @@ func initialize{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}
     ERC721.initializer(name, symbol);
     ERC721Enumerable.initializer();
     Ownable.initializer(owner);
-    Sheet_merkle_root.write(merkle_root);
-    Sheet_max_per_wallet.write(max_per_wallet);
-    Sheet_cell_renderer.write(renderer_address);
-    Sheet.open_mint();
+    let parameters = Parameters(
+        sheet_price=0,
+        is_public=0,
+        cell_price=0,
+        royalty_rate=0,
+        merkle_root=merkle_root,
+        max_per_wallet=max_per_wallet,
+        is_mint_open=1,
+        cell_renderer=renderer_address,
+    );
+    Sheet.set_parameters(parameters);
     initialized.write(1);
     return ();
 }

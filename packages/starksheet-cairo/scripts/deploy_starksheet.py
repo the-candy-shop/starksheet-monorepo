@@ -3,11 +3,9 @@ import logging
 from asyncio import run
 
 from dotenv import load_dotenv
-from utils.constants import COMPILED_CONTRACTS
+from utils.constants import NETWORK
 from utils.starknet import (
-    declare,
     deploy,
-    dump_declarations,
     dump_deployments,
     get_declarations,
     get_deployments,
@@ -22,16 +20,6 @@ logger.setLevel(logging.INFO)
 
 # %% Main
 async def main():
-    # %% Declarations
-    account = await get_starknet_account()
-    logger.info(f"ℹ️  Using account {hex(account.address)} as deployer")
-
-    class_hash = {
-        contract["contract_name"]: await declare(contract["contract_name"])
-        for contract in COMPILED_CONTRACTS
-    }
-    dump_declarations(class_hash)
-
     # %% Deploy contracts
     class_hash = get_declarations()
     deployments = get_deployments()
@@ -51,6 +39,9 @@ async def main():
         deployments["BasicCellRenderer"]["address"],  # default_renderer_address
         int(0.01 * 1e18),  # sheet_price
     )
+    if NETWORK["devnet"]:
+        deployments["Multicall"] = await deploy("Multicall")
+
     dump_deployments(deployments)
 
 

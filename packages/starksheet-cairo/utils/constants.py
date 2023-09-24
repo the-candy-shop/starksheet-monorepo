@@ -7,7 +7,6 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-from eth_keys import keys
 from starknet_py.net.full_node_client import FullNodeClient
 from starknet_py.net.gateway_client import GatewayClient
 from starknet_py.net.models.chains import StarknetChainId
@@ -115,10 +114,11 @@ try:
         RPC_CLIENT.url,
         json={
             "jsonrpc": "2.0",
-            "method": f"starknet_chainId",
+            "method": "starknet_chainId",
             "params": [],
             "id": 0,
         },
+        timeout=5,
     )
     payload = json.loads(response.text)
 
@@ -126,7 +126,7 @@ try:
         chain_id = int(payload["result"], 16)
 
     NETWORK["chain_id"] = ChainId.chain_id
-except:
+except (requests.exceptions.ConnectionError, requests.exceptions.MissingSchema):
     pass
 
 
@@ -152,6 +152,7 @@ COMPILED_CONTRACTS = [
     {"contract_name": "execute", "is_account_contract": False},
     {"contract_name": "proxy", "is_account_contract": False},
     {"contract_name": "ERC20", "is_account_contract": False},
+    {"contract_name": "Multicall", "is_account_contract": False},
 ]
 
 N_COLS = 15

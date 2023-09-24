@@ -53,7 +53,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
 
   const cells = useMemo(
     () => (address ? values[address] : []),
-    [address, values]
+    [address, values],
   );
 
   const colNames = useMemo(
@@ -61,7 +61,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
       Array.from(Array(N_COL + 1).keys())
         .map((i) => (i + 9).toString(36).toUpperCase())
         .slice(1),
-    []
+    [],
   );
 
   const sheet = onsheet.sheets.find((sheet) => sheet.address === address);
@@ -104,7 +104,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         message: "Rendering grid values",
       });
       const sheet = onsheet.sheets.find(
-        (sheet) => sheet.address === _selectedSheetAddress
+        (sheet) => sheet.address === _selectedSheetAddress,
       );
       if (sheet === undefined) {
         Promise.all([
@@ -114,15 +114,17 @@ const SheetTable = ({ sx }: SheetTableProps) => {
           contract.getCellPrice(),
           contract.implementation(),
           contract.owner(),
+          contract.getSheetPrice(),
         ]).then((response) => {
           appendSheet({
             name: response[0],
             symbol: response[1],
             address: _selectedSheetAddress,
             nRow: response[2],
-            cellPrice: response[3] / 10 ** 18,
+            cellPrice: response[3],
             classHash: response[4],
             owner: response[5],
+            sheetPrice: response[6],
           });
         });
       }
@@ -142,7 +144,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
                 ..._cell,
                 error: cell.error,
               };
-            })
+            }),
           );
         });
       }
@@ -156,7 +158,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
               ...prev,
               [parseInt(cell.id.toString())]: cell,
             }),
-            {} as { [id: number]: Cell }
+            {} as { [id: number]: Cell },
           );
 
           return contract.nRow().then((n) => {
@@ -167,7 +169,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
                     _cells[i] || {
                       ...defaultRenderedCell(i),
                       ...defaultCellData(i),
-                    }
+                    },
                 )
                 .map(async (cell, _, array) => {
                   const resolvedContractAddress =
@@ -175,13 +177,13 @@ const SheetTable = ({ sx }: SheetTableProps) => {
                       ? array[Number(cell.contractAddress)].value
                       : cell.contractAddress;
                   const abi = await getAbiForContract(
-                    bigint2hex(resolvedContractAddress)
+                    bigint2hex(resolvedContractAddress),
                   );
                   return {
                     ...cell,
                     abi: abi[bigint2hex(cell.selector)] as FunctionAbi,
                   };
-                })
+                }),
             );
           });
         })
@@ -210,7 +212,7 @@ const SheetTable = ({ sx }: SheetTableProps) => {
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [address, contract, getAbiForContract, setValues, values]
+    [address, contract, getAbiForContract, setValues, values],
   );
 
   useEffect(() => {

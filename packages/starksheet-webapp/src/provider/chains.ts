@@ -69,7 +69,7 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
   },
   katana: {
     appName: "Starksheet",
-    chainId: ChainId.STARKNET_TESTNET,
+    chainId: ChainId.KATANA,
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
     nftBaseUrl: "",
@@ -119,7 +119,7 @@ const chainAbis = {
 
 const network =
   (process.env.REACT_APP_NETWORK!.replace(/-./g, (x) =>
-    x[1].toUpperCase()
+    x[1].toUpperCase(),
   ) as SupportedChains) || "starknetDevnet";
 
 export const chainConfig: ChainConfig = {

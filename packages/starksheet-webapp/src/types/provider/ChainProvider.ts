@@ -45,7 +45,7 @@ export interface ChainProvider {
    */
   execute(
     calls: ContractCall[],
-    options?: { value?: number | string }
+    options?: { [address: string]: { value?: number | string } },
   ): Promise<TransactionResponse>;
 
   /**
@@ -87,4 +87,9 @@ export interface ChainProvider {
    * Connects the user with the given chain provider.
    */
   login(): Promise<string>;
+
+  /**
+   * Create a send ETH transaction
+   */
+  sendEthTxBuilder(recipientAddress: bigint, amount: bigint): ContractCall;
 }

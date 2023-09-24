@@ -39,16 +39,19 @@ struct CellRendered {
     value: felt,
 }
 
-@storage_var
-func Sheet_cell_renderer() -> (address: felt) {
+struct Parameters {
+    sheet_price: felt,
+    is_public: felt,
+    cell_price: felt,
+    royalty_rate: felt,
+    merkle_root: felt,
+    max_per_wallet: felt,
+    is_mint_open: felt,
+    cell_renderer: felt,
 }
 
 @storage_var
-func Sheet_merkle_root() -> (root: felt) {
-}
-
-@storage_var
-func Sheet_max_per_wallet() -> (max: felt) {
+func Sheet_parameters() -> (parameters: Parameters) {
 }
 
 @storage_var
@@ -67,68 +70,228 @@ func Sheet_contract_uri_len() -> (res: felt) {
 func Sheet_contract_uri(index: felt) -> (res: felt) {
 }
 
-@storage_var
-func Sheet_is_mint_open() -> (res: felt) {
-}
-
-@storage_var
-func Sheet_cell_price() -> (price: felt) {
-}
-
-@storage_var
-func Sheet_royalty_rate() -> (rate: felt) {
-}
-
-@storage_var
-func Sheet_is_public() -> (is_public: felt) {
-}
 
 namespace Sheet {
-    func get_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        price: felt
+
+    func get_parameters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        parameters: Parameters
     ) {
-        return Sheet_cell_price.read();
+        return Sheet_parameters.read();
     }
 
-    func set_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        price: felt
-    ) {
-        Sheet_cell_price.write(price);
+    func set_parameters{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr} (
+        parameters: Parameters
+    ) -> () {
+        Sheet_parameters.write(parameters);
         return ();
     }
 
-    func get_royalty_rate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
-        rate: felt
+    func get_sheet_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        price: felt
     ) {
-        return Sheet_royalty_rate.read();
+        let (parameters) = Sheet_parameters.read();
+        return (price=parameters.sheet_price);
     }
 
-    func set_royalty_rate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        rate: felt
+    func set_sheet_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        price: felt
     ) {
-        Sheet_royalty_rate.write(rate);
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
         return ();
     }
 
     func get_is_public{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
         is_public: felt
     ) {
-        return Sheet_is_public.read();
+        let (parameters) = Sheet_parameters.read();
+        return (is_public=parameters.is_public);
     }
 
     func set_is_public{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         is_public: felt
     ) {
-        Sheet_is_public.write(is_public);
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
+        return ();
+    }
+
+    func get_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        price: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        return (price=parameters.cell_price);
+    }
+
+    func set_cell_price{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        price: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
+        return ();
+    }
+
+    func get_royalty_rate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        rate: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        return (rate=parameters.royalty_rate);
+    }
+
+    func set_royalty_rate{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        rate: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
+        return ();
+    }
+
+    func get_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        merkle_root: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        return (merkle_root=parameters.merkle_root);
+    }
+
+    func set_merkle_root{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        merkle_root: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
+        return ();
+    }
+
+    func get_max_per_wallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        max_per_wallet: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        return (max_per_wallet=parameters.max_per_wallet);
+    }
+
+    func set_max_per_wallet{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        max_per_wallet: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
+        return ();
+    }
+
+    func get_is_mint_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        is_mint_open: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        return (is_mint_open=parameters.is_mint_open);
+    }
+
+    func set_is_mint_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        is_mint_open: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=is_mint_open,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
+        return ();
+    }
+
+    func get_cell_renderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (
+        cell_renderer: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        return (cell_renderer=parameters.cell_renderer);
+    }
+
+    func set_cell_renderer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+        cell_renderer: felt
+    ) {
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=parameters.is_mint_open,
+            cell_renderer=cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
         return ();
     }
 
     func assert_public{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
         is_public: felt
     ) {
-        let (is_public) = Sheet_is_public.read(is_public);
+        let (parameters) = Sheet_parameters.read();
         with_attr error_mesage("Sheet is private") {
-            assert is_public = 1;
+            assert parameters.is_public = 1;
         }
         return ();
     }
@@ -137,8 +300,8 @@ namespace Sheet {
         token_id: felt, sale_price: felt
     ) -> (receiver: felt, royalty_amount: felt) {
         let (receiver) = Ownable.owner();
-        let (royalty_rate) = Sheet_royalty_rate.read();
-        let (royalty_amount, _) = unsigned_div_rem(sale_price * royalty_rate, 1000);
+        let (parameters) = Sheet_parameters.read();
+        let (royalty_amount, _) = unsigned_div_rem(sale_price * parameters.royalty_rate, 1000);
         return (receiver, royalty_amount);
     }
 
@@ -222,8 +385,8 @@ namespace Sheet {
         let (address) = get_caller_address();
         with address {
             _assert_is_allowed(proof_len, proof);
-            let (max_per_wallet) = Sheet_max_per_wallet.read();
-            _assert_does_not_exceed_allocation(max_per_wallet);
+            let (parameters) = Sheet_parameters.read();
+            _assert_does_not_exceed_allocation(parameters.max_per_wallet);
         }
 
         ERC721Enumerable._mint(address, token_id);
@@ -252,9 +415,9 @@ namespace Sheet {
         tempvar pedersen_ptr = pedersen_ptr;
 
         let (name) = ERC721.name();
-        let (renderer_address) = Sheet_cell_renderer.read();
+        let (parameters) = Sheet_parameters.read();
         let (token_uri_len, token_uri) = ICellRenderer.token_uri(
-            renderer_address, token_id.low, value, name
+            parameters.cell_renderer, token_id.low, value, name
         );
         return (token_uri_len, token_uri);
     }
@@ -286,12 +449,34 @@ namespace Sheet {
     }
 
     func open_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        Sheet_is_mint_open.write(1);
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=1,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
         return ();
     }
 
     func close_mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-        Sheet_is_mint_open.write(0);
+        let (parameters) = Sheet_parameters.read();
+        let new_parameters = Parameters(
+            sheet_price=parameters.sheet_price,
+            is_public=parameters.is_public,
+            cell_price=parameters.cell_price,
+            royalty_rate=parameters.royalty_rate,
+            merkle_root=parameters.merkle_root,
+            max_per_wallet=parameters.max_per_wallet,
+            is_mint_open=0,
+            cell_renderer=parameters.cell_renderer,
+        );
+        Sheet_parameters.write(new_parameters);
         return ();
     }
 }
@@ -431,9 +616,9 @@ func _assert_is_allowed{
 }(proof_len: felt, proof: felt*) {
     alloc_locals;
     let (leaf) = _hash_sorted{hash_ptr=pedersen_ptr}(address, address);
-    let (local root) = Sheet_merkle_root.read();
-    let use_proof = is_not_zero(root);
-    let (is_allow_list) = merkle_verify(leaf, root, proof_len, proof);
+    let (parameters) = Sheet_parameters.read();
+    let use_proof = is_not_zero(parameters.merkle_root);
+    let (is_allow_list) = merkle_verify(leaf, parameters.merkle_root, proof_len, proof);
     with_attr error_message("mint: {address} is not allowed") {
         assert is_allow_list * use_proof + (1 - use_proof) = TRUE;
     }
@@ -455,8 +640,8 @@ func _assert_does_not_exceed_allocation{
 
 func _assert_is_open{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     with_attr error_mesage("Mint is not open") {
-        let (is_open) = Sheet_is_mint_open.read();
-        assert is_open = 1;
+        let (parameters) = Sheet_parameters.read();
+        assert parameters.is_mint_open = 1;
     }
     return ();
 }

@@ -24,7 +24,10 @@ export class EVMProvider implements ChainProvider {
   /**
    * Constructs an EVM Provider.
    */
-  constructor(private provider: JsonRpcProvider, private config: ChainConfig) {}
+  constructor(
+    private provider: JsonRpcProvider,
+    private config: ChainConfig,
+  ) {}
 
   async addressAlreadyDeployed(address: string) {
     return (await this.provider.getCode(address)).length > 2;
@@ -117,7 +120,7 @@ export class EVMProvider implements ChainProvider {
               f.type === "function" &&
               f.stateMutability === "view" &&
               f.inputs.length === 0 &&
-              f.name.toLowerCase().includes("impl")
+              f.name.toLowerCase().includes("impl"),
           )
           .map(async (f) => {
             const implementationAddress = (
@@ -129,9 +132,9 @@ export class EVMProvider implements ChainProvider {
               .slice(2)
               .replace(/^0+/, "");
             return Object.values(
-              (await this.getAbi("0x" + implementationAddress)) || {}
+              (await this.getAbi("0x" + implementationAddress)) || {},
             ) as Abi;
-          })
+          }),
       );
       abi = [...abi, ...others.flat()];
     } catch (error) {
@@ -150,11 +153,11 @@ export class EVMProvider implements ChainProvider {
             ...prev,
             [normalizeHexString(iface.getSighash(cur))]: cur,
           }),
-          {}
+          {},
         );
     } catch (error) {
       console.log(
-        `Couldn't parse the following ABI\n${abi}\n\nError: ${error}`
+        `Couldn't parse the following ABI\n${abi}\n\nError: ${error}`,
       );
       return {};
     }
@@ -227,7 +230,7 @@ export class EVMProvider implements ChainProvider {
    */
   execute = async (
     calls: ContractCall[],
-    options: { value: number | string }
+    options: { [address: string]: { value: number | string } },
   ) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -242,7 +245,7 @@ export class EVMProvider implements ChainProvider {
     const transaction =
       "0x" +
       encodeMulti(transactions, chainConfig.addresses.multisend).data.slice(
-        2 * (1 + 4 + 32 + 32)
+        2 * (1 + 4 + 32 + 32),
       );
 
     const value = transactions
@@ -251,14 +254,14 @@ export class EVMProvider implements ChainProvider {
 
     const multisend = MultiSendCallOnly__factory.connect(
       chainConfig.addresses.multisend!,
-      signer
+      signer,
     );
     const overrides = value > 0n ? { value: bigint2hex(value) } : {};
     const tx = await multisend.multiSend(
       // encodeMulti creates a new MetaTransaction, and the data includes to bytes selector and bytes lengths
       // So we slices "0x" + bytes4 + 2 times bytes.length
       transaction,
-      overrides
+      overrides,
     );
     const receipt = await tx.wait();
 
@@ -280,5 +283,15 @@ export class EVMProvider implements ChainProvider {
     } catch (error) {
       throw new Error("login failed");
     }
+  }
+
+  sendEthTxBuilder(recipientAddress: bigint, amount: bigint) {
+    return {
+      to: recipientAddress.toString(16),
+      entrypoint: "",
+      value: amount,
+      calldata: "",
+      operation: OperationType.Call,
+    };
   }
 }

@@ -37,7 +37,10 @@ export class StarknetProvider implements ChainProvider {
   /**
    * Constructs a StarknetProvider.
    */
-  constructor(rpcUrl: string, private config: ChainConfig) {
+  constructor(
+    rpcUrl: string,
+    private config: ChainConfig,
+  ) {
     this.provider = new RpcProvider({
       nodeUrl: rpcUrl,
     });
@@ -47,7 +50,7 @@ export class StarknetProvider implements ChainProvider {
     this.spreadsheetContract = new StarknetSpreadsheetContract(
       address,
       abi,
-      this.provider
+      this.provider,
     );
   }
 
@@ -57,6 +60,15 @@ export class StarknetProvider implements ChainProvider {
       return true;
     } catch (error) {
       return false;
+    }
+  }
+
+  async getContractType(address: string) {
+    try {
+      const classAt = await this.provider.getClassAt(address, "latest");
+      return Object.hasOwn(classAt, "sierra_program") ? 1 : 0;
+    } catch (error) {
+      return undefined;
     }
   }
 
@@ -119,7 +131,7 @@ export class StarknetProvider implements ChainProvider {
   async waitForTransaction(hash: string): Promise<any> {
     for (let i = 0; i < 10; i++) {
       try {
-        return await this.provider.getTransactionReceipt(hash);
+        return await this.getTransactionReceipt(hash);
       } catch (e) {
         await this.sleep(3);
       }
@@ -146,10 +158,10 @@ export class StarknetProvider implements ChainProvider {
       return abi;
     }
 
-    let isContract = await this.addressAlreadyDeployed(address);
+    let contractType = await this.getContractType(address);
     let response;
     try {
-      if (isContract) {
+      if (contractType !== undefined) {
         response = await this.provider.getClassAt(address);
       } else {
         response = await this.provider.getClassByHash(address);
@@ -159,6 +171,12 @@ export class StarknetProvider implements ChainProvider {
     }
 
     abi = response.abi || abi;
+    if (contractType === 1) {
+      abi = abi
+        .filter((item) => item.type === "interface")
+        .map((item) => item.items)
+        .flat();
+    }
     return [
       ...abi,
       ...(
@@ -169,7 +187,7 @@ export class StarknetProvider implements ChainProvider {
                 f.name.includes("impl") &&
                 f.type === "function" &&
                 f.stateMutability === "view" &&
-                f.inputs.length === 0
+                f.inputs.length === 0,
             )
             .map(async (f) => {
               const implementationAddress = await this.provider.callContract({
@@ -177,11 +195,11 @@ export class StarknetProvider implements ChainProvider {
                 entrypoint: f.name,
               });
               return Object.values(
-                (await this.getAbi(implementationAddress.result[0])) || {}
+                (await this.getAbi(implementationAddress.result[0])) || {},
               ) as Abi;
-            })
+            }),
         )
-      ).flat(),
+      ).flat(3),
     ];
   }
 
@@ -191,7 +209,7 @@ export class StarknetProvider implements ChainProvider {
         ...prev,
         [hash.getSelectorFromName(cur.name)]: cur,
       }),
-      {}
+      {},
     );
 
   /**
@@ -204,7 +222,7 @@ export class StarknetProvider implements ChainProvider {
         entrypoint: call.entrypoint,
         calldata: (call.calldata as bigint[]).map((c) => bigint2hex(c)),
       },
-      "latest"
+      "latest",
     );
     return response.result[0];
   }
@@ -247,8 +265,8 @@ export class StarknetProvider implements ChainProvider {
         if (connection.provider.chainId !== undefined) {
           throw new Error(
             `Wrong network detected: "${hex2str(
-              connection.provider.chainId
-            )}" instead of "${hex2str(this.config.chainId)}"`
+              connection.provider.chainId,
+            )}" instead of "${hex2str(this.config.chainId)}"`,
           );
         }
       }
@@ -263,25 +281,27 @@ export class StarknetProvider implements ChainProvider {
    */
   async execute(
     calls: ContractCall[],
-    options?: { value?: BigNumberish }
+    options?: { [address: string]: { value?: BigNumberish } },
   ): Promise<TransactionResponse> {
     if (!this.connection?.isConnected) {
       throw new Error("Account is not connected");
     }
 
-    if (options?.value) {
+    if (options) {
       calls = [
-        {
-          to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
-          entrypoint: "approve",
-          calldata: CallData.compile({
-            spender: calls[0].to,
-            amount: {
-              low: options.value.toString(),
-              high: 0,
-            },
-          }),
-        },
+        ...Object.entries(options)
+          .filter(([address, option]) => option !== undefined)
+          .map(([address, option]) => ({
+            to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
+            entrypoint: "approve",
+            calldata: CallData.compile({
+              spender: address,
+              amount: {
+                low: option.value!.toString(),
+                high: 0,
+              },
+            }),
+          })),
         ...calls,
       ];
     }
@@ -292,14 +312,28 @@ export class StarknetProvider implements ChainProvider {
         contractAddress: call.to,
         entrypoint: call.entrypoint,
         calldata: [...call.calldata],
-      }))
+      })),
     );
     return await this.connection.account.execute(
       calls.map((call) => ({
         contractAddress: call.to,
         entrypoint: call.entrypoint,
         calldata: [...call.calldata],
-      }))
+      })),
     );
+  }
+
+  sendEthTxBuilder(recipientAddress: bigint, amount: bigint) {
+    return {
+      to: "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7",
+      entrypoint: "transfer",
+      calldata: CallData.compile({
+        recipient_address: recipientAddress,
+        amount: {
+          low: amount,
+          high: 0,
+        },
+      }),
+    };
   }
 }

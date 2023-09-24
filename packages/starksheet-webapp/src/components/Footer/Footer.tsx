@@ -37,9 +37,10 @@ function Footer({ sx }: FooterProps) {
         name: `Sheet${onsheet.sheets.length}`,
         symbol: `SHT${onsheet.sheets.length}`,
         nRow: N_ROW,
-        cellPrice: 0,
+        cellPrice: 0n,
+        sheetPrice: 0n,
       },
-      accountAddress
+      accountAddress,
     );
   };
 
@@ -72,6 +73,8 @@ function Footer({ sx }: FooterProps) {
               key={sheet.address}
               sx={{
                 marginLeft: `-${CELL_BORDER_WIDTH}px`,
+                overflowY: "hidden",
+                overflowX: "auto",
               }}
             />
           ))}
@@ -96,7 +99,7 @@ function Footer({ sx }: FooterProps) {
               selectedSheetAddress
                 ? chainProvider.getExplorerAddress(selectedSheetAddress)
                 : "",
-              "_blank"
+              "_blank",
             )
           }
         >
@@ -112,7 +115,7 @@ function Footer({ sx }: FooterProps) {
           onClick={() =>
             window.open(
               "https://github.com/the-candy-shop/starksheet-monorepo/",
-              "_blank"
+              "_blank",
             )
           }
         >
@@ -154,7 +157,7 @@ function Footer({ sx }: FooterProps) {
               selectedSheetAddress
                 ? chainProvider.getNftMarketplaceAddress(selectedSheetAddress)
                 : "",
-              "_blank"
+              "_blank",
             )
           }
         >

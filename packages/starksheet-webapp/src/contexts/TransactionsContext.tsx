@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useState,
 } from "react";
 import { useChainProvider } from "../hooks/useChainProvider";
 import { useOnsheetContract } from "../hooks/useOnsheetContract";
@@ -17,11 +18,13 @@ export const TransactionsContext = React.createContext<{
   newSheetsTransactions: ContractCall[];
   settleTransactions: (tx?: ContractCall[]) => Promise<void>;
   costEth: number;
+  addSendEth: (tx: { recipientAddress: bigint; amount: bigint }) => void;
 }>({
   transactions: [],
   newSheetsTransactions: [],
   settleTransactions: async () => {},
   costEth: 0,
+  addSendEth: () => {},
 });
 
 export const TransactionsContextProvider = ({
@@ -33,6 +36,13 @@ export const TransactionsContextProvider = ({
   const { contract } = useOnsheetContract();
   const { enqueueSnackbar } = useSnackbar();
   const chainProvider = useChainProvider();
+  const [sendEth, setSendEth] = useState<
+    { recipientAddress: bigint; amount: bigint }[]
+  >([]);
+
+  const addSendEth = (tx: { recipientAddress: bigint; amount: bigint }) => {
+    setSendEth((prev) => [...prev, tx]);
+  };
 
   const newSheetsTransactions = useMemo(() => {
     return onsheet.sheets
@@ -41,8 +51,8 @@ export const TransactionsContextProvider = ({
         contract.addSheetTxBuilder(
           sheet.calldata.name.toString(),
           sheet.calldata.symbol.toString(),
-          accountAddress
-        )
+          accountAddress,
+        ),
       );
   }, [onsheet, contract, accountAddress]);
 
@@ -59,54 +69,86 @@ export const TransactionsContextProvider = ({
       .filter(
         (cell) =>
           (cell.owner === 0n && cell.selector !== 0n) ||
-          "0x" + cell.owner.toString(16) === accountAddress
+          "0x" + cell.owner.toString(16) === accountAddress,
       )
       .map((cell) => contract.setCellTxBuilder(cell));
   }, [accountAddress, updatedValues, contract]);
 
   const transactions = useMemo(
     () => [...newSheetsTransactions, ...cellsTransactions],
-    [newSheetsTransactions, cellsTransactions]
+    [newSheetsTransactions, cellsTransactions],
   );
 
   const costEth = useMemo(() => {
-    // *10_000 then / 10_000 to trim javascript wrong computing
-    // I don't expect people to put more than 4 digits after ","
-    // in cell or sheet prices
     return (
-      Math.round(
-        (newSheetsTransactions.length * onsheet.sheetPrice +
-          cellsTransactions
-            .filter((tx) => tx.entrypoint === "mintAndSetPublic")
-            .map(
-              (tx) =>
-                onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0
-            )
-            .reduce((a, b) => a + b, 0)) *
-          10_000
-      ) / 10_000
+      (newSheetsTransactions.length * Number(onsheet.sheetPrice / 10n ** 9n)) /
+        10 ** 9 +
+      cellsTransactions
+        .filter((tx) => tx.entrypoint === "mintAndSetPublic")
+        .map(
+          (tx) =>
+            onsheet.sheets.find((s) => s.address === tx.to)?.cellPrice || 0n,
+        )
+        .reduce((a, b) => a + Number(b / 10n ** 9n) / 10 ** 9, 0) +
+      sendEth
+        .map((tx) => Number(tx.amount / 10n ** 9n) / 10 ** 9)
+        .reduce((a, b) => a + b, 0)
     );
   }, [
     newSheetsTransactions,
     onsheet.sheetPrice,
     onsheet.sheets,
     cellsTransactions,
+    sendEth,
   ]);
 
   const settleTransactions = useCallback(
     async (otherTransactions?: ContractCall[]) => {
       const _otherTxs =
         otherTransactions === undefined ? [] : otherTransactions;
-      let options;
+      let options = {};
       if (costEth > 0) {
+        if (newSheetsTransactions.length > 0) {
+          options = {
+            [onsheet.address]: {
+              value: BigInt(newSheetsTransactions.length) * onsheet.sheetPrice,
+            },
+          };
+        }
+        const cellsCost = cellsTransactions
+          .filter((tx) => tx.entrypoint === "mintAndSetPublic")
+          .map((tx) => ({
+            ...tx,
+            cellPrice: onsheet.sheets.find((s) => s.address === tx.to)
+              ?.cellPrice!,
+          }))
+          .filter((tx) => tx.cellPrice > 0)
+          .reduce(
+            (prev, tx) => ({
+              ...prev,
+              [tx.to]: {
+                value: (prev[tx.to]?.value || 0n) + tx.cellPrice,
+              },
+            }),
+            {} as { [address: string]: { value?: bigint } },
+          );
         options = {
-          value: (BigInt(costEth * 1_000_000_000) * 10n ** 9n).toString(),
+          ...options,
+          ...cellsCost,
         };
       }
 
+      const sendEthTxs = sendEth.map((tx) =>
+        chainProvider.sendEthTxBuilder(tx.recipientAddress, tx.amount),
+      );
       return execute(
-        [...newSheetsTransactions, ...cellsTransactions, ..._otherTxs],
-        options
+        [
+          ...sendEthTxs,
+          ...newSheetsTransactions,
+          ...cellsTransactions,
+          ..._otherTxs,
+        ],
+        options,
       )
         .then(async (response) => {
           await chainProvider.waitForTransaction(response.transaction_hash);
@@ -116,13 +158,14 @@ export const TransactionsContextProvider = ({
           if (receipt.status !== "REJECTED") {
             setUpdatedValues({});
             validateNewSheets();
+            setSendEth([]);
           }
           return receipt;
         })
         .then((receipt) => {
           enqueueSnackbar(
             `Transaction ${receipt.transaction_hash} finalized with status ${receipt.status}`,
-            { variant: "info" }
+            { variant: "info" },
           );
         })
         .catch((error: any) => {
@@ -145,7 +188,11 @@ export const TransactionsContextProvider = ({
       execute,
       chainProvider,
       costEth,
-    ]
+      onsheet.address,
+      onsheet.sheetPrice,
+      onsheet.sheets,
+      sendEth,
+    ],
   );
 
   return (
@@ -155,6 +202,7 @@ export const TransactionsContextProvider = ({
         newSheetsTransactions,
         settleTransactions,
         costEth,
+        addSendEth,
       }}
     >
       {children}

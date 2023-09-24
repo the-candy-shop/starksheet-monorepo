@@ -34,7 +34,7 @@ export class StarknetWorksheetContract implements WorksheetContract {
             contractAddress: this.contract.address,
             entrypoint: "get_implementation_hash",
           })
-        ).result[0]
+        ).result[0],
       );
     } catch (e) {
       return 0n;
@@ -49,7 +49,7 @@ export class StarknetWorksheetContract implements WorksheetContract {
             contractAddress: this.contract.address,
             entrypoint: "getNRow",
           })
-        ).result[0]
+        ).result[0],
       );
     } catch (e) {
       return N_ROW;
@@ -58,16 +58,31 @@ export class StarknetWorksheetContract implements WorksheetContract {
 
   async getCellPrice() {
     try {
-      return parseInt(
+      return BigInt(
         (
           await this.contract.providerOrAccount.callContract({
             contractAddress: this.contract.address,
             entrypoint: "getCellPrice",
           })
-        ).result[0]
+        ).result[0],
       );
     } catch (e) {
-      return 0;
+      return 0n;
+    }
+  }
+
+  async getSheetPrice() {
+    try {
+      return BigInt(
+        (
+          await this.contract.providerOrAccount.callContract({
+            contractAddress: this.contract.address,
+            entrypoint: "getSheetPrice",
+          })
+        ).result[0],
+      );
+    } catch (e) {
+      return 0n;
     }
   }
 
@@ -122,7 +137,7 @@ export class StarknetWorksheetContract implements WorksheetContract {
   async renderCells(): Promise<CellRendered[]> {
     const totalSupply = await this.totalSupply();
     const tokenIds = await Promise.all(
-      Array.from(Array(totalSupply).keys()).map((i) => this.tokenByIndex(i))
+      Array.from(Array(totalSupply).keys()).map((i) => this.tokenByIndex(i)),
     );
     return Promise.all(tokenIds.map((tokenId) => this.renderCell(tokenId)));
   }
@@ -135,7 +150,7 @@ export class StarknetWorksheetContract implements WorksheetContract {
           low: index,
           high: 0,
         },
-      })
+      }),
     );
     // @ts-ignore
     return Number(result.tokenId.low);

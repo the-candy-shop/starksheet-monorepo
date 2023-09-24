@@ -35,9 +35,8 @@ export class EvmWorksheetContract implements WorksheetContract {
    * @inheritDoc
    */
   async getCell(tokenId: number): Promise<CellData> {
-    const [contractAddress, selector, data] = await this.contract.getCell(
-      tokenId
-    );
+    const [contractAddress, selector, data] =
+      await this.contract.getCell(tokenId);
 
     return {
       contractAddress: BigInt(contractAddress),
@@ -52,8 +51,15 @@ export class EvmWorksheetContract implements WorksheetContract {
   /**
    * @inheritDoc
    */
-  getCellPrice(): Promise<number> {
-    return Promise.resolve(0);
+  getCellPrice(): Promise<bigint> {
+    return Promise.resolve(0n);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  getSheetPrice(): Promise<bigint> {
+    return Promise.resolve(0n);
   }
 
   /**
@@ -105,8 +111,8 @@ export class EvmWorksheetContract implements WorksheetContract {
     const totalSupply = await this.totalSupply();
     const tokenIds = await Promise.all(
       Array.from(Array(totalSupply).keys()).map((i) =>
-        this.contract.tokenByIndex(i)
-      )
+        this.contract.tokenByIndex(i),
+      ),
     );
     return Promise.all(tokenIds.map((id) => this.renderCell(id.toNumber())));
   }

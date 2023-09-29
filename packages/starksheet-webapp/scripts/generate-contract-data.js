@@ -19,6 +19,7 @@ const evmsheetDeploymentsFolder = path.join(
 
 const evmChains = {
   5: "goerli",
+  10: "optimismMainnet",
   31337: "anvil",
   1263227476: "kakarot",
 };

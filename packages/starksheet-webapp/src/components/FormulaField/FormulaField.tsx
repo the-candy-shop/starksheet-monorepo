@@ -67,7 +67,7 @@ function FormulaField({
             (prev, cur) => ({
               ...prev,
               [cur.name]: (cur as FunctionAbi).inputs
-                .filter((i) => !i.name.endsWith("_len"))
+                .filter((i) => !(i.name || "").endsWith("_len"))
                 .map((i) => ({
                   ...i,
                   displayedType: `${i.name}:${i.type.replace("*", "")}`,

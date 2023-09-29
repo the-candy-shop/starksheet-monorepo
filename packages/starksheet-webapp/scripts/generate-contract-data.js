@@ -88,6 +88,9 @@ const readEvmsheet = () => {
 
   // Iterate through each subdirectory in Evmsheet.s.sol directory
   subdirectories.forEach((subdirectory) => {
+    if (subdirectory === ".gitignore") {
+      return;
+    }
     const subdirectoryPath = path.join(evmsheetDeploymentsFolder, subdirectory);
 
     console.log(`Reading folder ${subdirectory}`);

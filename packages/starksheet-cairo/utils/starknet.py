@@ -314,7 +314,7 @@ async def deploy_starknet_account(
     )
     logger.info(f"ℹ️  Funding account {hex(address)} with {amount} ETH")
     await fund_address(address, amount=amount)
-    logger.info("ℹ️  Deploying account"unt")
+    logger.info("ℹ️  Deploying account")
     res = await Account.deploy_account(
         address=address,
         class_hash=class_hash,
@@ -343,7 +343,7 @@ async def declare(contract_name):
     class_hash = compute_class_hash(contract_class=deepcopy(contract_class))
     try:
         await RPC_CLIENT.get_class_by_hash(class_hash)
-        logger.info("✅ Class already declared, skipping"g")
+        logger.info("✅ Class already declared, skipping")
         return class_hash
     except Exception:
         pass

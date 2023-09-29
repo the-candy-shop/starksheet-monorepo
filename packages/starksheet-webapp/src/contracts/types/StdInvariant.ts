@@ -49,73 +49,73 @@ export interface StdInvariantInterface extends utils.Interface {
       | "targetArtifacts"
       | "targetContracts"
       | "targetSelectors"
-      | "targetSenders"
+      | "targetSenders",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "excludeArtifacts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "excludeContracts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "excludeSenders",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetArtifactSelectors",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetArtifacts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetContracts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetSelectors",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetSenders",
-    values?: undefined
+    values?: undefined,
   ): string;
 
   decodeFunctionResult(
     functionFragment: "excludeArtifacts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "excludeContracts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "excludeSenders",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetArtifactSelectors",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetArtifacts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetContracts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetSelectors",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetSenders",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
 
   events: {};
@@ -131,15 +131,15 @@ export interface StdInvariant extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -149,43 +149,39 @@ export interface StdInvariant extends BaseContract {
 
   functions: {
     excludeArtifacts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { excludedArtifacts_: string[] }>;
 
     excludeContracts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { excludedContracts_: string[] }>;
 
     excludeSenders(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { excludedSenders_: string[] }>;
 
-    targetArtifactSelectors(
-      overrides?: CallOverrides
-    ): Promise<
+    targetArtifactSelectors(overrides?: CallOverrides): Promise<
       [StdInvariant.FuzzSelectorStructOutput[]] & {
         targetedArtifactSelectors_: StdInvariant.FuzzSelectorStructOutput[];
       }
     >;
 
     targetArtifacts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { targetedArtifacts_: string[] }>;
 
     targetContracts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { targetedContracts_: string[] }>;
 
-    targetSelectors(
-      overrides?: CallOverrides
-    ): Promise<
+    targetSelectors(overrides?: CallOverrides): Promise<
       [StdInvariant.FuzzSelectorStructOutput[]] & {
         targetedSelectors_: StdInvariant.FuzzSelectorStructOutput[];
       }
     >;
 
     targetSenders(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { targetedSenders_: string[] }>;
   };
 
@@ -196,7 +192,7 @@ export interface StdInvariant extends BaseContract {
   excludeSenders(overrides?: CallOverrides): Promise<string[]>;
 
   targetArtifactSelectors(
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
   targetArtifacts(overrides?: CallOverrides): Promise<string[]>;
@@ -204,7 +200,7 @@ export interface StdInvariant extends BaseContract {
   targetContracts(overrides?: CallOverrides): Promise<string[]>;
 
   targetSelectors(
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
   targetSenders(overrides?: CallOverrides): Promise<string[]>;
@@ -217,7 +213,7 @@ export interface StdInvariant extends BaseContract {
     excludeSenders(overrides?: CallOverrides): Promise<string[]>;
 
     targetArtifactSelectors(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
     targetArtifacts(overrides?: CallOverrides): Promise<string[]>;
@@ -225,7 +221,7 @@ export interface StdInvariant extends BaseContract {
     targetContracts(overrides?: CallOverrides): Promise<string[]>;
 
     targetSelectors(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
     targetSenders(overrides?: CallOverrides): Promise<string[]>;
@@ -259,7 +255,7 @@ export interface StdInvariant extends BaseContract {
     excludeSenders(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     targetArtifactSelectors(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     targetArtifacts(overrides?: CallOverrides): Promise<PopulatedTransaction>;

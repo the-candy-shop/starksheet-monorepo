@@ -53,7 +53,7 @@ export class ERC721TokenReceiver__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): ERC721TokenReceiver {
     return new Contract(address, _abi, signerOrProvider) as ERC721TokenReceiver;
   }

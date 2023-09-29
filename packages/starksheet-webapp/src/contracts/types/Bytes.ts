@@ -71,100 +71,100 @@ export interface BytesInterface extends utils.Interface {
       | "toUint56"
       | "toUint64"
       | "toUint8"
-      | "toUint96"
+      | "toUint96",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "equal",
-    values: [BytesLike, BytesLike]
+    values: [BytesLike, BytesLike],
   ): string;
   encodeFunctionData(
     functionFragment: "slice",
-    values: [BytesLike, BigNumberish, BigNumberish]
+    values: [BytesLike, BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toAddress",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toByes7",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes1",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes12",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes16",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes32",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes5",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes6",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toBytes8",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint128",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint16(bytes)",
-    values: [BytesLike]
+    values: [BytesLike],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint16(bytes,uint256)",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint24",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint256",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint32",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint40",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint48",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint56",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint64",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint8",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "toUint96",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, BigNumberish],
   ): string;
 
   decodeFunctionResult(functionFragment: "equal", data: BytesLike): Result;
@@ -181,11 +181,11 @@ export interface BytesInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "toUint128", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "toUint16(bytes)",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "toUint16(bytes,uint256)",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "toUint24", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "toUint256", data: BytesLike): Result;
@@ -210,15 +210,15 @@ export interface Bytes extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -230,417 +230,417 @@ export interface Bytes extends BaseContract {
     equal(
       _preBytes: BytesLike,
       _postBytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[boolean]>;
 
     slice(
       _bytes: BytesLike,
       _start: BigNumberish,
       _length: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     toAddress(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toByes7(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes1(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes12(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes16(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes5(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes6(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tmp: string }>;
 
     toBytes8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber] & { tmp: BigNumber }>;
 
     toUint128(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber] & { tmp: BigNumber }>;
 
     "toUint16(bytes)"(
       _bytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     "toUint16(bytes,uint256)"(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     toUint24(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     toUint256(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber] & { tmp: BigNumber }>;
 
     toUint32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     toUint40(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     toUint48(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     toUint56(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber] & { tmp: BigNumber }>;
 
     toUint64(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber] & { tmp: BigNumber }>;
 
     toUint8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[number] & { tmp: number }>;
 
     toUint96(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber] & { tmp: BigNumber }>;
   };
 
   equal(
     _preBytes: BytesLike,
     _postBytes: BytesLike,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<boolean>;
 
   slice(
     _bytes: BytesLike,
     _start: BigNumberish,
     _length: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toAddress(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toByes7(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes1(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes12(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes16(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes32(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes5(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes6(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   toBytes8(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   toUint128(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   "toUint16(bytes)"(
     _bytes: BytesLike,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   "toUint16(bytes,uint256)"(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   toUint24(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   toUint256(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   toUint32(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   toUint40(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   toUint48(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   toUint56(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   toUint64(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   toUint8(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<number>;
 
   toUint96(
     _bytes: BytesLike,
     _start: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   callStatic: {
     equal(
       _preBytes: BytesLike,
       _postBytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<boolean>;
 
     slice(
       _bytes: BytesLike,
       _start: BigNumberish,
       _length: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toAddress(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toByes7(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes1(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes12(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes16(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes5(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes6(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     toBytes8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint128(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "toUint16(bytes)"(
       _bytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     "toUint16(bytes,uint256)"(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     toUint24(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     toUint256(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     toUint40(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     toUint48(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     toUint56(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint64(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<number>;
 
     toUint96(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
   };
 
@@ -650,139 +650,139 @@ export interface Bytes extends BaseContract {
     equal(
       _preBytes: BytesLike,
       _postBytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     slice(
       _bytes: BytesLike,
       _start: BigNumberish,
       _length: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toAddress(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toByes7(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes1(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes12(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes16(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes5(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes6(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toBytes8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint128(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "toUint16(bytes)"(
       _bytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "toUint16(bytes,uint256)"(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint24(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint256(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint40(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint48(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint56(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint64(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     toUint96(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
   };
 
@@ -790,139 +790,139 @@ export interface Bytes extends BaseContract {
     equal(
       _preBytes: BytesLike,
       _postBytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     slice(
       _bytes: BytesLike,
       _start: BigNumberish,
       _length: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toAddress(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toByes7(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes1(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes12(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes16(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes5(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes6(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toBytes8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint128(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "toUint16(bytes)"(
       _bytes: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "toUint16(bytes,uint256)"(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint24(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint256(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint32(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint40(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint48(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint56(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint64(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint8(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     toUint96(
       _bytes: BytesLike,
       _start: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

@@ -181,7 +181,7 @@ class TestSheet:
             with pytest.raises(Exception) as e:
                 await sheet.setCell(len(cells), 0, 0, []).execute(caller_address=OWNER)
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == f"setCell: tokenId does not exist"
+            assert message == "setCell: tokenId does not exist"
 
         @staticmethod
         async def test_should_revert_when_caller_is_not_owner(sheet, cells):
@@ -254,7 +254,7 @@ class TestSheet:
             with pytest.raises(Exception) as e:
                 await sheet.tokenURI((len(cells), 0)).call()
             message = re.search(r"Error message: (.*)", e.value.message)[1]  # type: ignore
-            assert message == f"ERC721: tokenURI query for nonexistent token"
+            assert message == "ERC721: tokenURI query for nonexistent token"
 
     class TestSetMerkleRoot:
         @staticmethod

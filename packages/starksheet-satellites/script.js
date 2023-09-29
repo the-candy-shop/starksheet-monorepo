@@ -18,7 +18,7 @@ function compute(uris) {
 
   for (let i = 0; i < l.length; i++) {
     uris_encoded.push(
-      "0x" + (l.slice(0, i).reduce((a, b) => a + b, 0) + l.length).toString(16)
+      "0x" + (l.slice(0, i).reduce((a, b) => a + b, 0) + l.length).toString(16),
     );
   }
 
@@ -51,6 +51,6 @@ function copyResult() {
     },
     function (err) {
       alert("Could not copy text: ", err);
-    }
+    },
   );
 }

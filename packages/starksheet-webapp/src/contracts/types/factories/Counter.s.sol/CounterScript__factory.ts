@@ -46,7 +46,7 @@ type CounterScriptConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: CounterScriptConstructorParams
+  xs: CounterScriptConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class CounterScript__factory extends ContractFactory {
@@ -59,12 +59,12 @@ export class CounterScript__factory extends ContractFactory {
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<CounterScript> {
     return super.deploy(overrides || {}) as Promise<CounterScript>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -82,7 +82,7 @@ export class CounterScript__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): CounterScript {
     return new Contract(address, _abi, signerOrProvider) as CounterScript;
   }

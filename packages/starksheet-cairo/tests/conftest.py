@@ -4,7 +4,6 @@ import pytest
 import pytest_asyncio
 from starkware.starknet.compiler.compile import compile_starknet_files
 from starkware.starknet.testing.starknet import Starknet
-
 from utils.constants import CONTRACTS
 
 

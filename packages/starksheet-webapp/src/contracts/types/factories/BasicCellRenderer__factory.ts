@@ -67,7 +67,7 @@ type BasicCellRendererConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: BasicCellRendererConstructorParams
+  xs: BasicCellRendererConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => {
   return (
     typeof xs[0] === "string" ||
@@ -85,13 +85,13 @@ export class BasicCellRenderer__factory extends ContractFactory {
       super(
         _abi,
         BasicCellRenderer__factory.linkBytecode(linkLibraryAddresses),
-        signer
+        signer,
       );
     }
   }
 
   static linkBytecode(
-    linkLibraryAddresses: BasicCellRendererLibraryAddresses
+    linkLibraryAddresses: BasicCellRendererLibraryAddresses,
   ): string {
     let linkedBytecode = _bytecode;
 
@@ -101,19 +101,19 @@ export class BasicCellRenderer__factory extends ContractFactory {
         "lib/eth-projects-monorepo/packages/eth-projects-contracts/contracts/lib/utils/Bytes.sol:Bytes"
       ]
         .replace(/^0x/, "")
-        .toLowerCase()
+        .toLowerCase(),
     );
 
     return linkedBytecode;
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<BasicCellRenderer> {
     return super.deploy(overrides || {}) as Promise<BasicCellRenderer>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -131,7 +131,7 @@ export class BasicCellRenderer__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): BasicCellRenderer {
     return new Contract(address, _abi, signerOrProvider) as BasicCellRenderer;
   }

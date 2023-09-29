@@ -144,7 +144,7 @@ type StdInvariantConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: StdInvariantConstructorParams
+  xs: StdInvariantConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class StdInvariant__factory extends ContractFactory {
@@ -157,12 +157,12 @@ export class StdInvariant__factory extends ContractFactory {
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<StdInvariant> {
     return super.deploy(overrides || {}) as Promise<StdInvariant>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -180,7 +180,7 @@ export class StdInvariant__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): StdInvariant {
     return new Contract(address, _abi, signerOrProvider) as StdInvariant;
   }

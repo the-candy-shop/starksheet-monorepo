@@ -29,7 +29,7 @@ export interface CounterScriptInterface extends utils.Interface {
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "IS_SCRIPT" | "run" | "setUp"
+    nameOrSignatureOrTopic: "IS_SCRIPT" | "run" | "setUp",
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "IS_SCRIPT", values?: undefined): string;
@@ -53,15 +53,15 @@ export interface CounterScript extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -73,11 +73,11 @@ export interface CounterScript extends BaseContract {
     IS_SCRIPT(overrides?: CallOverrides): Promise<[boolean]>;
 
     run(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     setUp(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
 
@@ -86,7 +86,7 @@ export interface CounterScript extends BaseContract {
   run(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   setUp(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -111,11 +111,11 @@ export interface CounterScript extends BaseContract {
     IS_SCRIPT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     run(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     setUp(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };
 }

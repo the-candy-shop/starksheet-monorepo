@@ -812,10 +812,7 @@
         "value": "Ownable: new owner is the zero address"
       }
     ],
-    "builtins": [
-      "pedersen",
-      "range_check"
-    ],
+    "builtins": ["pedersen", "range_check"],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -3131,9 +3128,7 @@
         "type": "alias"
       },
       "__main__.allowance": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1338,
         "type": "function"
       },
@@ -3180,9 +3175,7 @@
         "value": 0
       },
       "__main__.approve": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1493,
         "type": "function"
       },
@@ -3229,9 +3222,7 @@
         "value": 0
       },
       "__main__.balanceOf": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1303,
         "type": "function"
       },
@@ -3274,9 +3265,7 @@
         "value": 0
       },
       "__main__.constructor": {
-        "decorators": [
-          "constructor"
-        ],
+        "decorators": ["constructor"],
         "pc": 1142,
         "type": "function"
       },
@@ -3331,9 +3320,7 @@
         "value": 0
       },
       "__main__.decimals": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1273,
         "type": "function"
       },
@@ -3371,9 +3358,7 @@
         "value": 0
       },
       "__main__.decreaseAllowance": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1579,
         "type": "function"
       },
@@ -3420,9 +3405,7 @@
         "value": 0
       },
       "__main__.freeMint": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1657,
         "type": "function"
       },
@@ -3469,9 +3452,7 @@
         "type": "alias"
       },
       "__main__.get_owner": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1375,
         "type": "function"
       },
@@ -3509,9 +3490,7 @@
         "value": 0
       },
       "__main__.increaseAllowance": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1536,
         "type": "function"
       },
@@ -3558,9 +3537,7 @@
         "value": 0
       },
       "__main__.name": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1182,
         "type": "function"
       },
@@ -3598,9 +3575,7 @@
         "value": 0
       },
       "__main__.symbol": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1212,
         "type": "function"
       },
@@ -3638,9 +3613,7 @@
         "value": 0
       },
       "__main__.totalSupply": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1242,
         "type": "function"
       },
@@ -3678,9 +3651,7 @@
         "value": 0
       },
       "__main__.transfer": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1405,
         "type": "function"
       },
@@ -3727,9 +3698,7 @@
         "value": 0
       },
       "__main__.transferFrom": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1448,
         "type": "function"
       },
@@ -3780,9 +3749,7 @@
         "value": 0
       },
       "__main__.transfer_ownership": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1622,
         "type": "function"
       },
@@ -3829,9 +3796,7 @@
         "type": "alias"
       },
       "__wrappers__.allowance": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1356,
         "type": "function"
       },
@@ -3898,9 +3863,7 @@
         "type": "alias"
       },
       "__wrappers__.approve": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1516,
         "type": "function"
       },
@@ -3967,9 +3930,7 @@
         "type": "alias"
       },
       "__wrappers__.balanceOf": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1320,
         "type": "function"
       },
@@ -4036,9 +3997,7 @@
         "type": "alias"
       },
       "__wrappers__.constructor": {
-        "decorators": [
-          "constructor"
-        ],
+        "decorators": ["constructor"],
         "pc": 1160,
         "type": "function"
       },
@@ -4071,9 +4030,7 @@
         "type": "alias"
       },
       "__wrappers__.decimals": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1288,
         "type": "function"
       },
@@ -4140,9 +4097,7 @@
         "type": "alias"
       },
       "__wrappers__.decreaseAllowance": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1602,
         "type": "function"
       },
@@ -4209,9 +4164,7 @@
         "type": "alias"
       },
       "__wrappers__.freeMint": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1691,
         "type": "function"
       },
@@ -4278,9 +4231,7 @@
         "type": "alias"
       },
       "__wrappers__.get_owner": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1390,
         "type": "function"
       },
@@ -4347,9 +4298,7 @@
         "type": "alias"
       },
       "__wrappers__.increaseAllowance": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1559,
         "type": "function"
       },
@@ -4416,9 +4365,7 @@
         "type": "alias"
       },
       "__wrappers__.name": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1197,
         "type": "function"
       },
@@ -4485,9 +4432,7 @@
         "type": "alias"
       },
       "__wrappers__.symbol": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1227,
         "type": "function"
       },
@@ -4554,9 +4499,7 @@
         "type": "alias"
       },
       "__wrappers__.totalSupply": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1258,
         "type": "function"
       },
@@ -4623,9 +4566,7 @@
         "type": "alias"
       },
       "__wrappers__.transfer": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1428,
         "type": "function"
       },
@@ -4654,9 +4595,7 @@
         "type": "alias"
       },
       "__wrappers__.transferFrom": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1472,
         "type": "function"
       },
@@ -4761,9 +4700,7 @@
         "type": "alias"
       },
       "__wrappers__.transfer_ownership": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1639,
         "type": "function"
       },
@@ -7777,9 +7714,7 @@
         "type": "alias"
       },
       "starkware.cairo.common.math.assert_250_bit": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 56,
         "type": "function"
       },
@@ -7910,9 +7845,7 @@
         "value": 0
       },
       "starkware.cairo.common.math.assert_le_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 69,
         "type": "function"
       },
@@ -8127,9 +8060,7 @@
         "type": "alias"
       },
       "starkware.cairo.common.math_cmp.is_le": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 187,
         "type": "function"
       },
@@ -8168,9 +8099,7 @@
         "value": 0
       },
       "starkware.cairo.common.math_cmp.is_nn": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 154,
         "type": "function"
       },
@@ -8714,9 +8643,7 @@
         "type": "alias"
       },
       "starkware.starknet.common.storage.normalize_address": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 114,
         "type": "function"
       },

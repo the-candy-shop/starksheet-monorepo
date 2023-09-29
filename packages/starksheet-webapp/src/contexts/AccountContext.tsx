@@ -10,7 +10,7 @@ export const AccountContext = React.createContext<{
   connect: () => Promise<void>;
   execute: (
     calls: ContractCall[],
-    options?: { value?: number | string }
+    options?: { value?: number | string },
   ) => Promise<TransactionResponse>;
   proof: string[];
 }>({

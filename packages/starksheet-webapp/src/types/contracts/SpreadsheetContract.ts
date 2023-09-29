@@ -7,7 +7,7 @@ export interface SpreadsheetContract {
   getSheets(): Promise<string[]>;
   calculateSheetAddress(
     from: number | string,
-    constructorCalldata: SheetConstructorArgs
+    constructorCalldata: SheetConstructorArgs,
   ): Promise<string>;
   getSheetPrice(): Promise<bigint>;
   getSheetImplementation(): Promise<bigint>;
@@ -17,7 +17,7 @@ export interface SpreadsheetContract {
    * @param cell the cell to be saved (possibly also minted)
    */
   setCellTxBuilder(
-    cell: Cell & { tokenId: number; sheetAddress: string }
+    cell: Cell & { tokenId: number; sheetAddress: string },
   ): ContractCall;
   /**
    * Build a raw `addSheet` transaction

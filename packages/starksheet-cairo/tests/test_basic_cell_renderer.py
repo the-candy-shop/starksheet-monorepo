@@ -3,7 +3,6 @@ import xml.etree.ElementTree as ET
 from urllib.parse import unquote
 
 import pytest
-
 from utils.constants import N_COLS, N_ROWS
 from utils.merkle_proof import number_to_index
 

@@ -78,7 +78,7 @@ async def deploy_starknet_account(private_key=None, amount=1) -> Account:
     )
     logger.info(f"ℹ️  Funding account {hex(address)} with {amount} ETH")
     await fund_address(address, amount=amount)
-    logger.info(f"ℹ️  Deploying account")
+    logger.info("ℹ️  Deploying account"unt")
     res = await Account.deploy_account(
         address=address,
         class_hash=class_hash,

@@ -1,5 +1,7 @@
 name: Deploy prod
 
+permissions: read-all
+
 on:
   push:
     branches:
@@ -18,6 +20,19 @@ jobs:
           git checkout mainnet
           git reset main --hard
           git push origin mainnet -f
+
+  merge-optimism-mainnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin optimism
+          git checkout optimism
+          git reset main --hard
+          git push origin optimism -f
 
   merge-staging:
     runs-on: ubuntu-latest

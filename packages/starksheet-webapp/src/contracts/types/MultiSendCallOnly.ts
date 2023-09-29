@@ -30,7 +30,7 @@ export interface MultiSendCallOnlyInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "multiSend",
-    values: [BytesLike]
+    values: [BytesLike],
   ): string;
 
   decodeFunctionResult(functionFragment: "multiSend", data: BytesLike): Result;
@@ -48,15 +48,15 @@ export interface MultiSendCallOnly extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -67,19 +67,19 @@ export interface MultiSendCallOnly extends BaseContract {
   functions: {
     multiSend(
       transactions: BytesLike,
-      overrides?: PayableOverrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
 
   multiSend(
     transactions: BytesLike,
-    overrides?: PayableOverrides & { from?: string }
+    overrides?: PayableOverrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   callStatic: {
     multiSend(
       transactions: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
   };
 
@@ -88,14 +88,14 @@ export interface MultiSendCallOnly extends BaseContract {
   estimateGas: {
     multiSend(
       transactions: BytesLike,
-      overrides?: PayableOverrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string },
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     multiSend(
       transactions: BytesLike,
-      overrides?: PayableOverrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };
 }

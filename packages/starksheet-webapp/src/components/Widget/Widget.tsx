@@ -52,10 +52,10 @@ const WidgetDialog = ({ open, onClose, provider }: WidgetProps) => {
       chainId: [ethChainId, snChainId],
     }).then((tokens) => {
       const ethereumTokens = tokens.filter(
-        (token) => token.chainId === ethChainId
+        (token) => token.chainId === ethChainId,
       );
       const starknetTokens = tokens.filter(
-        (token) => token.chainId === snChainId
+        (token) => token.chainId === snChainId,
       );
       setFromTokens(ethereumTokens);
       setToTokens(starknetTokens);
@@ -100,7 +100,7 @@ const WidgetDialog = ({ open, onClose, provider }: WidgetProps) => {
         handleMetamask();
       }
     },
-    [snChainId, handleStarknet, handleMetamask]
+    [snChainId, handleStarknet, handleMetamask],
   );
 
   const widget = (

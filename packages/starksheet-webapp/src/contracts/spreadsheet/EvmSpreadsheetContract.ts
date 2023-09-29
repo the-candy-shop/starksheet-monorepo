@@ -16,7 +16,10 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
   /**
    * The class constructor.
    */
-  constructor(private address: string, private provider: JsonRpcProvider) {
+  constructor(
+    private address: string,
+    private provider: JsonRpcProvider,
+  ) {
     this.sheetPrice = 0n;
     this.contract = Evmsheet__factory.connect(address, provider);
     this.getSheetPrice().then((price) => {
@@ -32,8 +35,8 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
     return ethers.utils.keccak256(
       ethers.utils.solidityPack(
         ["string", "string", "address"],
-        [name, symbol, from]
-      )
+        [name, symbol, from],
+      ),
     );
   }
 
@@ -42,7 +45,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    */
   async calculateSheetAddress(
     from: string,
-    constructorCalldata: SheetConstructorArgs
+    constructorCalldata: SheetConstructorArgs,
   ): Promise<string> {
     const decodedName = hex2str(constructorCalldata.name.toString(16));
     const decodedSymbol = hex2str(constructorCalldata.symbol.toString(16));
@@ -81,7 +84,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
     const salt = this.getSalt(decodedName, decodedSymbol, from);
     const calldata = Evmsheet__factory.createInterface().encodeFunctionData(
       "addSheet",
-      [decodedName, decodedSymbol, salt]
+      [decodedName, decodedSymbol, salt],
     );
 
     return {
@@ -95,7 +98,7 @@ export class EvmSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   setCellTxBuilder(
-    cell: Cell & { tokenId: number; sheetAddress: string }
+    cell: Cell & { tokenId: number; sheetAddress: string },
   ): ContractCall {
     // If contractAddress is RC_BOUND, then the cell is constant and we store the selector
     // as a regular uint256

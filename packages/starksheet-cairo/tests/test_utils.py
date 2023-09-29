@@ -1,7 +1,6 @@
 import random
 
 import pytest
-
 from utils.merkle_proof import (
     address_to_leaf,
     merkle_proofs,

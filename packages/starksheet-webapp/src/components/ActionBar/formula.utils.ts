@@ -25,7 +25,7 @@ const isBigNumber = (arg: any): boolean => {
 
 export function toPlainTextFormula(
   cellData: CellData,
-  chainType: ChainType
+  chainType: ChainType,
 ): string {
   if (!cellData) return "0";
 
@@ -46,7 +46,7 @@ export function toPlainTextFormula(
       ? tokenIdToCellName(Number((arg - 1n) / 2n))
       : arg >= RC_BOUND
       ? "0x" + (arg / 2n).toString(16)
-      : (arg / 2n).toString()
+      : (arg / 2n).toString(),
   );
   let displayedArgs = [];
   if (!!abi) {
@@ -69,7 +69,7 @@ export function toPlainTextFormula(
               args
                 .slice(argsIndex + 1, argsIndex + 1 + len)
                 .join(ARG_LIST_SEP) +
-              "]"
+              "]",
           );
           argsIndex += len + 1; // arg_len, arg and len
           inputIndex += 2; // skip next arg
@@ -87,7 +87,7 @@ export function toPlainTextFormula(
           .map((arg) => {
             if (isDependency(arg)) {
               const placeholder = ethers.BigNumber.from(
-                ethers.utils.randomBytes(20)
+                ethers.utils.randomBytes(20),
               )
                 ._hex.slice(2)
                 .padStart(64, "0");
@@ -99,13 +99,13 @@ export function toPlainTextFormula(
           .join("");
       const decodedData = ethers.utils.defaultAbiCoder.decode(
         abi.inputs.map((i) => i.type),
-        data
+        data,
       );
       // @ts-ignore
       displayedArgs = [customStringify(mapping)(decodedData).slice(1, -1)];
     } else {
       throw new Error(
-        `ChainType ${chainType} has no cellData to string encoding function`
+        `ChainType ${chainType} has no cellData to string encoding function`,
       );
     }
   } else {
@@ -113,7 +113,7 @@ export function toPlainTextFormula(
   }
 
   return `${contractName}${CONTRACT_FUNCTION_SEP}${operator}(${displayedArgs.join(
-    ARGS_SEP
+    ARGS_SEP,
   )})`;
 }
 
@@ -144,7 +144,7 @@ const customStringify =
   };
 
 export function parseContractCall(
-  formula: string
+  formula: string,
 ): { contractAddress: string; selector: string; args: string } | null {
   const _formula = formula
     .trim()
@@ -159,7 +159,7 @@ export function parseContractCall(
   }
 
   const contractAddress = formulaMatch.groups.contractAddress.match(
-    CELL_NAME_REGEX
+    CELL_NAME_REGEX,
   )
     ? cellNameToTokenId(formulaMatch.groups.contractAddress).toString()
     : formulaMatch.groups.contractAddress;
@@ -182,7 +182,7 @@ export function parse(
     args: string;
   },
   abi: ContractAbi,
-  chainType: ChainType
+  chainType: ChainType,
 ): CellData | null {
   // eval is safe client side with user input only
   // see https://stackoverflow.com/questions/197769/when-is-javascripts-eval-not-evil
@@ -191,7 +191,7 @@ export function parse(
     // Add global brackets if user input is just a comma separated list
     `[${rawCall.args}]`
       // Quote cell names before eval
-      .replace(/([, [(]?)([A-O]{1}[0-9]{1,2})([, \])]?)/gi, '$1"$2"$3')
+      .replace(/([, [(]?)([A-O]{1}[0-9]{1,2})([, \])]?)/gi, '$1"$2"$3'),
   ) as any[];
 
   // retrieve function and corresponding abi
@@ -202,7 +202,7 @@ export function parse(
       (_abi as FunctionAbi).type === "function" &&
       args.length ===
         (_abi as FunctionAbi).inputs.filter((i) => !i.name.endsWith("_len"))
-          .length
+          .length,
   );
 
   if (filteredAbi.length !== 1) {
@@ -224,7 +224,7 @@ export function parse(
     calldata = (ethers.utils.defaultAbiCoder
       .encode(
         selectorAbi.inputs.map((i) => i.type),
-        mappedArgs
+        mappedArgs,
       )
       .slice(2)
       .match(/.{1,64}/g)
@@ -264,7 +264,7 @@ function encodeInputs(input: any): any {
     } else {
       return Object.entries(input).reduce(
         (prev, cur) => ({ ...prev, [cur[0]]: encodeInputs(cur[1]) }),
-        {}
+        {},
       );
     }
   } else if (typeof input === "string") {
@@ -301,7 +301,7 @@ function flattenWithLen(input: any): any[] {
 export function getError(
   cellId: number,
   cellData: CellData | null,
-  newDependencies: number[]
+  newDependencies: number[],
 ): string | null {
   if (cellData) {
     if (newDependencies.includes(cellId)) {
@@ -315,7 +315,7 @@ export function getError(
 
 export function buildFormulaDisplay(
   formula: string,
-  settings?: { text: boolean }
+  settings?: { text: boolean },
 ): string {
   const operator = formula.match(CONTRACT_CALL_REGEX);
 
@@ -331,17 +331,17 @@ export function buildFormulaDisplay(
   if (operator?.groups) {
     result = result.replace(
       operator.groups.contractAddress,
-      `<span class="operator">${operator.groups.contractAddress}</span>`
+      `<span class="operator">${operator.groups.contractAddress}</span>`,
     );
     result = result.replace(
       operator.groups.selector,
-      `<span class="operator">${operator.groups.selector}</span>`
+      `<span class="operator">${operator.groups.selector}</span>`,
     );
 
     operator.groups.args
       .split(";")
       .filter((arg) =>
-        arg.replace("[", "").replace("]", "").match(CELL_NAME_REGEX)
+        arg.replace("[", "").replace("]", "").match(CELL_NAME_REGEX),
       )
       .forEach((name) => {
         result = result.replace(name, `<span class="cell">${name}</span>`);
@@ -368,7 +368,7 @@ const mapCellsToRandom =
     ) {
       const placeholder = ethers.BigNumber.from(
         // restricted to 20 instead of 32 to handle addresses (bytes20)
-        ethers.utils.randomBytes(20)
+        ethers.utils.randomBytes(20),
       )._hex;
       mapping[placeholder] = input;
       return placeholder;

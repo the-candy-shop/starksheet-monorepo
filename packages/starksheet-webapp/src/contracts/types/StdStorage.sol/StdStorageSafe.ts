@@ -58,15 +58,15 @@ export interface StdStorageSafe extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -83,22 +83,22 @@ export interface StdStorageSafe extends BaseContract {
       who?: null,
       fsig?: null,
       keysHash?: null,
-      slot?: null
+      slot?: null,
     ): SlotFoundEventFilter;
     SlotFound(
       who?: null,
       fsig?: null,
       keysHash?: null,
-      slot?: null
+      slot?: null,
     ): SlotFoundEventFilter;
 
     "WARNING_UninitedSlot(address,uint256)"(
       who?: null,
-      slot?: null
+      slot?: null,
     ): WARNING_UninitedSlotEventFilter;
     WARNING_UninitedSlot(
       who?: null,
-      slot?: null
+      slot?: null,
     ): WARNING_UninitedSlotEventFilter;
   };
 

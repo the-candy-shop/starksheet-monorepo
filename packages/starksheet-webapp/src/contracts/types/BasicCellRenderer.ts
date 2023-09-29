@@ -27,21 +27,21 @@ export interface BasicCellRendererInterface extends utils.Interface {
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "numberToIndex" | "tokenURI"
+    nameOrSignatureOrTopic: "numberToIndex" | "tokenURI",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "numberToIndex",
-    values: [BigNumberish]
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
-    values: [BigNumberish, BytesLike, string]
+    values: [BigNumberish, BytesLike, string],
   ): string;
 
   decodeFunctionResult(
     functionFragment: "numberToIndex",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
 
@@ -58,15 +58,15 @@ export interface BasicCellRenderer extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -77,14 +77,14 @@ export interface BasicCellRenderer extends BaseContract {
   functions: {
     numberToIndex(
       id: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     tokenURI(
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
   };
 
@@ -94,7 +94,7 @@ export interface BasicCellRenderer extends BaseContract {
     id: BigNumberish,
     value: BytesLike,
     name: string,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   callStatic: {
@@ -104,7 +104,7 @@ export interface BasicCellRenderer extends BaseContract {
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
   };
 
@@ -113,28 +113,28 @@ export interface BasicCellRenderer extends BaseContract {
   estimateGas: {
     numberToIndex(
       id: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     tokenURI(
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     numberToIndex(
       id: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     tokenURI(
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

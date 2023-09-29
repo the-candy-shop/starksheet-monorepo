@@ -4,7 +4,6 @@ from asyncio import run
 
 from starkware.starknet.public.abi import get_selector_from_name
 from utils.deployment import (
-    call,
     compile_contract,
     declare,
     deploy,
@@ -15,7 +14,6 @@ from utils.deployment import (
     get_artifact,
     get_declarations,
     get_deployments,
-    invoke,
 )
 
 logging.basicConfig()

@@ -42,7 +42,7 @@ export function hexStringToIntegerArray(hexString: string) {
 
   // Convert each pair to an integer and store it in a new array
   const integerArray = Array.from(hexPairs, (pair) =>
-    BigInt(parseInt(pair, 16))
+    BigInt(parseInt(pair, 16)),
   );
 
   return integerArray;

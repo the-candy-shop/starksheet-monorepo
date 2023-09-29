@@ -68,7 +68,7 @@ export class Ownable__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): Ownable {
     return new Contract(address, _abi, signerOrProvider) as Ownable;
   }

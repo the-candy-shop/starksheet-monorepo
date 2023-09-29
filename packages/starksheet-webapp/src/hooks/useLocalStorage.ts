@@ -22,7 +22,7 @@ export function useLocalStorage(key: string, initialState: CellSettings) {
       }
       setValue(newValue ?? initialState);
     },
-    [initialState, serializedInitialState, key]
+    [initialState, serializedInitialState, key],
   );
   return [value, updatedSetValue];
 }

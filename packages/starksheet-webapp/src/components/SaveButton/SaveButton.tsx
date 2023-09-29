@@ -21,7 +21,7 @@ function SaveButton({ currentCellOwnerAddress, error, sx }: SaveButtonProps) {
 
   const cost = useMemo(
     () => (costEth > 0 ? ` (${costEth}ETH)` : ""),
-    [costEth]
+    [costEth],
   );
 
   const onClick = useCallback(async () => {

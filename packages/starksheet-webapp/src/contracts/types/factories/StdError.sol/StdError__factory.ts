@@ -133,7 +133,7 @@ type StdErrorConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: StdErrorConstructorParams
+  xs: StdErrorConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class StdError__factory extends ContractFactory {
@@ -146,12 +146,12 @@ export class StdError__factory extends ContractFactory {
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<StdError> {
     return super.deploy(overrides || {}) as Promise<StdError>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -169,7 +169,7 @@ export class StdError__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): StdError {
     return new Contract(address, _abi, signerOrProvider) as StdError;
   }

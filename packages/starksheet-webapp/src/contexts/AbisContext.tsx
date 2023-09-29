@@ -28,7 +28,7 @@ export const AbisContextProvider = ({
     }),
     {
       [bigint2hex(RC_BOUND)]: {},
-    }
+    },
   );
 
   const [contractAbis, setContractAbis] =

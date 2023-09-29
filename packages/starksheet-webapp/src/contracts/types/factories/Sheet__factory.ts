@@ -725,7 +725,7 @@ type SheetConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: SheetConstructorParams
+  xs: SheetConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => {
   return (
     typeof xs[0] === "string" ||
@@ -753,7 +753,7 @@ export class Sheet__factory extends ContractFactory {
         "lib/eth-projects-monorepo/packages/eth-projects-contracts/contracts/lib/utils/Bytes.sol:Bytes"
       ]
         .replace(/^0x/, "")
-        .toLowerCase()
+        .toLowerCase(),
     );
 
     return linkedBytecode;
@@ -763,7 +763,7 @@ export class Sheet__factory extends ContractFactory {
     return super.deploy(overrides || {}) as Promise<Sheet>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }

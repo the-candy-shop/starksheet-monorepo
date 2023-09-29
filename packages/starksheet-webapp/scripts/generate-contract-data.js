@@ -5,16 +5,16 @@ const path = require("path");
 const starksheetCairoPath = path.join(__dirname, "./../../starksheet-cairo");
 const starksheetDeploymentsFolder = path.join(
   starksheetCairoPath,
-  "deployments"
+  "deployments",
 );
 
 const evmsheetDirectoryPath = path.join(
   __dirname,
-  "./../../starksheet-solidity"
+  "./../../starksheet-solidity",
 );
 const evmsheetDeploymentsFolder = path.join(
   evmsheetDirectoryPath,
-  "broadcast/Evmsheet.s.sol"
+  "broadcast/Evmsheet.s.sol",
 );
 
 const evmChains = {
@@ -43,7 +43,7 @@ const readStarksheet = () => {
     const filePath = path.join(
       starksheetDeploymentsFolder,
       folder,
-      "deployments.json"
+      "deployments.json",
     );
     console.log(`Reading folder ${folder}`);
 
@@ -62,8 +62,8 @@ const readStarksheet = () => {
         const contractAddress = contractDeployment.address;
         const contractAbi = JSON.parse(
           fs.readFileSync(
-            path.join(starksheetCairoPath, contractDeployment.artifact)
-          )
+            path.join(starksheetCairoPath, contractDeployment.artifact),
+          ),
         ).abi;
         contractData[folder].addresses[
           contractName.toLowerCase().replace("starksheet", "spreadsheet")
@@ -105,11 +105,11 @@ const readEvmsheet = () => {
     // Read subdirectory
     const files = fs.readdirSync(subdirectoryPath);
     const runLatestFiles = files.filter((file) =>
-      file.startsWith("run-latest")
+      file.startsWith("run-latest"),
     );
     if (runLatestFiles.length !== 1) {
       throw new Error(
-        `Expected one run-latest.json file, found ${runLatestFiles.length}`
+        `Expected one run-latest.json file, found ${runLatestFiles.length}`,
       );
     }
 
@@ -129,9 +129,9 @@ const readEvmsheet = () => {
           fs.readFileSync(
             path.join(
               evmsheetDirectoryPath,
-              `out/${contractName}.sol/${contractName}.json`
-            )
-          )
+              `out/${contractName}.sol/${contractName}.json`,
+            ),
+          ),
         ).abi;
 
         if (!contractData[networkName]) {
@@ -178,10 +178,10 @@ let starknetAbis = {
 try {
   starknetAbis = {
     spreadsheet: JSON.parse(
-      fs.readFileSync(path.join(starksheetCairoPath, "build/Starksheet.json"))
+      fs.readFileSync(path.join(starksheetCairoPath, "build/Starksheet.json")),
     ).abi,
     worksheet: JSON.parse(
-      fs.readFileSync(path.join(starksheetCairoPath, "build/Sheet.json"))
+      fs.readFileSync(path.join(starksheetCairoPath, "build/Sheet.json")),
     ).abi,
   };
 } catch (error) {
@@ -196,13 +196,13 @@ try {
   evmAbis = {
     spreadsheet: JSON.parse(
       fs.readFileSync(
-        path.join(evmsheetDirectoryPath, "out/Evmsheet.sol/Evmsheet.json")
-      )
+        path.join(evmsheetDirectoryPath, "out/Evmsheet.sol/Evmsheet.json"),
+      ),
     ).abi,
     worksheet: JSON.parse(
       fs.readFileSync(
-        path.join(evmsheetDirectoryPath, "out/Sheet.sol/Sheet.json")
-      )
+        path.join(evmsheetDirectoryPath, "out/Sheet.sol/Sheet.json"),
+      ),
     ).abi,
   };
 } catch (error) {
@@ -221,7 +221,7 @@ const mergedAddresses = {
 
 const contractDataFilePath = path.join(
   __dirname,
-  "../src/contracts/contractData.json"
+  "../src/contracts/contractData.json",
 );
 
 console.log(mergedAddresses.network.addresses);
@@ -238,5 +238,5 @@ fs.writeFileSync(
     }
 
     console.log("contractData.json file created successfully!");
-  }
+  },
 );

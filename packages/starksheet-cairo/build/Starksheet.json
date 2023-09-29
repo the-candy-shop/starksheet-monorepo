@@ -349,10 +349,7 @@
         "value": "addSheet: proof is not valid"
       }
     ],
-    "builtins": [
-      "pedersen",
-      "range_check"
-    ],
+    "builtins": ["pedersen", "range_check"],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -2473,9 +2470,7 @@
         "type": "alias"
       },
       "__main__.addSheet": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1283,
         "type": "function"
       },
@@ -2530,9 +2525,7 @@
         "value": 0
       },
       "__main__.constructor": {
-        "decorators": [
-          "constructor"
-        ],
+        "decorators": ["constructor"],
         "pc": 1401,
         "type": "function"
       },
@@ -2591,9 +2584,7 @@
         "value": 0
       },
       "__main__.getMerkleRoot": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1175,
         "type": "function"
       },
@@ -2631,9 +2622,7 @@
         "value": 0
       },
       "__main__.getProxyClassHash": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1061,
         "type": "function"
       },
@@ -2671,9 +2660,7 @@
         "value": 0
       },
       "__main__.getSheet": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1249,
         "type": "function"
       },
@@ -2716,9 +2703,7 @@
         "value": 0
       },
       "__main__.getSheetClassHash": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1004,
         "type": "function"
       },
@@ -2756,9 +2741,7 @@
         "value": 0
       },
       "__main__.getSheetDefaultRendererAddress": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 947,
         "type": "function"
       },
@@ -2796,9 +2779,7 @@
         "value": 0
       },
       "__main__.getSheetPrice": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1118,
         "type": "function"
       },
@@ -2836,9 +2817,7 @@
         "value": 0
       },
       "__main__.getSheets": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1205,
         "type": "function"
       },
@@ -2884,9 +2863,7 @@
         "type": "alias"
       },
       "__main__.setMerkleRoot": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1148,
         "type": "function"
       },
@@ -2929,9 +2906,7 @@
         "value": 0
       },
       "__main__.setProxyClassHash": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1034,
         "type": "function"
       },
@@ -2974,9 +2949,7 @@
         "value": 0
       },
       "__main__.setSheetClassHash": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 977,
         "type": "function"
       },
@@ -3019,9 +2992,7 @@
         "value": 0
       },
       "__main__.setSheetDefaultRendererAddress": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 920,
         "type": "function"
       },
@@ -3064,9 +3035,7 @@
         "value": 0
       },
       "__main__.setSheetPrice": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1091,
         "type": "function"
       },
@@ -3109,9 +3078,7 @@
         "value": 0
       },
       "__main__.withdraw": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1353,
         "type": "function"
       },
@@ -3149,9 +3116,7 @@
         "value": 0
       },
       "__wrappers__.addSheet": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1324,
         "type": "function"
       },
@@ -3218,9 +3183,7 @@
         "type": "alias"
       },
       "__wrappers__.constructor": {
-        "decorators": [
-          "constructor"
-        ],
+        "decorators": ["constructor"],
         "pc": 1420,
         "type": "function"
       },
@@ -3253,9 +3216,7 @@
         "type": "alias"
       },
       "__wrappers__.getMerkleRoot": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1190,
         "type": "function"
       },
@@ -3322,9 +3283,7 @@
         "type": "alias"
       },
       "__wrappers__.getProxyClassHash": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1076,
         "type": "function"
       },
@@ -3391,9 +3350,7 @@
         "type": "alias"
       },
       "__wrappers__.getSheet": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1265,
         "type": "function"
       },
@@ -3422,9 +3379,7 @@
         "type": "alias"
       },
       "__wrappers__.getSheetClassHash": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1019,
         "type": "function"
       },
@@ -3491,9 +3446,7 @@
         "type": "alias"
       },
       "__wrappers__.getSheetDefaultRendererAddress": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 962,
         "type": "function"
       },
@@ -3560,9 +3513,7 @@
         "type": "alias"
       },
       "__wrappers__.getSheetPrice": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1133,
         "type": "function"
       },
@@ -3667,9 +3618,7 @@
         "type": "alias"
       },
       "__wrappers__.getSheets": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 1230,
         "type": "function"
       },
@@ -3736,9 +3685,7 @@
         "type": "alias"
       },
       "__wrappers__.setMerkleRoot": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1157,
         "type": "function"
       },
@@ -3771,9 +3718,7 @@
         "type": "alias"
       },
       "__wrappers__.setProxyClassHash": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1043,
         "type": "function"
       },
@@ -3806,9 +3751,7 @@
         "type": "alias"
       },
       "__wrappers__.setSheetClassHash": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 986,
         "type": "function"
       },
@@ -3841,9 +3784,7 @@
         "type": "alias"
       },
       "__wrappers__.setSheetDefaultRendererAddress": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 929,
         "type": "function"
       },
@@ -3876,9 +3817,7 @@
         "type": "alias"
       },
       "__wrappers__.setSheetPrice": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1100,
         "type": "function"
       },
@@ -3911,9 +3850,7 @@
         "type": "alias"
       },
       "__wrappers__.withdraw": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 1386,
         "type": "function"
       },
@@ -6681,9 +6618,7 @@
         "type": "alias"
       },
       "starkware.cairo.common.math.assert_250_bit": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 93,
         "type": "function"
       },
@@ -6775,9 +6710,7 @@
         "type": "reference"
       },
       "starkware.cairo.common.math.assert_le_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 106,
         "type": "function"
       },
@@ -6885,9 +6818,7 @@
         "type": "label"
       },
       "starkware.cairo.common.math.assert_lt_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 151,
         "type": "function"
       },
@@ -7013,9 +6944,7 @@
         "type": "alias"
       },
       "starkware.cairo.common.math_cmp.is_le_felt": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 314,
         "type": "function"
       },
@@ -7088,9 +7017,7 @@
         "type": "label"
       },
       "starkware.cairo.common.math_cmp.is_not_zero": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 306,
         "type": "function"
       },
@@ -7333,9 +7260,7 @@
         "type": "alias"
       },
       "starkware.starknet.common.storage.normalize_address": {
-        "decorators": [
-          "known_ap_change"
-        ],
+        "decorators": ["known_ap_change"],
         "pc": 162,
         "type": "function"
       },

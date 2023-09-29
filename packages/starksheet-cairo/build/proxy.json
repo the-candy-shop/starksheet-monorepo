@@ -209,10 +209,7 @@
         "value": "Proxy: implementation hash cannot be zero"
       }
     ],
-    "builtins": [
-      "pedersen",
-      "range_check"
-    ],
+    "builtins": ["pedersen", "range_check"],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -904,11 +901,7 @@
         "type": "alias"
       },
       "__main__.__default__": {
-        "decorators": [
-          "external",
-          "raw_input",
-          "raw_output"
-        ],
+        "decorators": ["external", "raw_input", "raw_output"],
         "pc": 344,
         "type": "function"
       },
@@ -959,10 +952,7 @@
         "value": 0
       },
       "__main__.__l1_default__": {
-        "decorators": [
-          "l1_handler",
-          "raw_input"
-        ],
+        "decorators": ["l1_handler", "raw_input"],
         "pc": 371,
         "type": "function"
       },
@@ -1013,9 +1003,7 @@
         "value": 0
       },
       "__main__.constructor": {
-        "decorators": [
-          "constructor"
-        ],
+        "decorators": ["constructor"],
         "pc": 286,
         "type": "function"
       },
@@ -1074,9 +1062,7 @@
         "value": 2
       },
       "__main__.get_implementation_hash": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 404,
         "type": "function"
       },
@@ -1122,9 +1108,7 @@
         "type": "alias"
       },
       "__main__.set_implementation_hash": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 434,
         "type": "function"
       },
@@ -1167,11 +1151,7 @@
         "value": 0
       },
       "__wrappers__.__default__": {
-        "decorators": [
-          "external",
-          "raw_input",
-          "raw_output"
-        ],
+        "decorators": ["external", "raw_input", "raw_output"],
         "pc": 362,
         "type": "function"
       },
@@ -1204,10 +1184,7 @@
         "type": "alias"
       },
       "__wrappers__.__l1_default__": {
-        "decorators": [
-          "l1_handler",
-          "raw_input"
-        ],
+        "decorators": ["l1_handler", "raw_input"],
         "pc": 387,
         "type": "function"
       },
@@ -1240,9 +1217,7 @@
         "type": "alias"
       },
       "__wrappers__.constructor": {
-        "decorators": [
-          "constructor"
-        ],
+        "decorators": ["constructor"],
         "pc": 314,
         "type": "function"
       },
@@ -1275,9 +1250,7 @@
         "type": "alias"
       },
       "__wrappers__.get_implementation_hash": {
-        "decorators": [
-          "view"
-        ],
+        "decorators": ["view"],
         "pc": 419,
         "type": "function"
       },
@@ -1344,9 +1317,7 @@
         "type": "alias"
       },
       "__wrappers__.set_implementation_hash": {
-        "decorators": [
-          "external"
-        ],
+        "decorators": ["external"],
         "pc": 443,
         "type": "function"
       },

@@ -36,7 +36,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
   const id = useMemo(() => cell.id, [cell]);
   const [cellSettings, setCellSettings] = useLocalStorage(
     `${selectedSheetAddress}.${id}`,
-    {}
+    {},
   );
   const selected = useMemo(() => id === selectedCell, [selectedCell, id]);
   const isInvoke = useMemo(() => {

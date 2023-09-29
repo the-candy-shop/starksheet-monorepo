@@ -143,13 +143,13 @@ async def get_contract(contract_name) -> Contract:
 
 async def fund_address(address: Union[int, str], amount: float):
     """
-    Fund a given starknet address with {amount} ETH
+    Fund a given starknet address with {amount} ETH.
     """
     address = int(address, 16) if isinstance(address, str) else address
     amount = amount * 1e18
     if NETWORK["name"] == "starknet-devnet":
         response = requests.post(
-            f"http://127.0.0.1:5050/mint",
+            "http://127.0.0.1:5050/mint",
             json={"address": hex(address), "amount": amount},
         )
         if response.status_code != 200:
@@ -314,7 +314,7 @@ async def deploy_starknet_account(
     )
     logger.info(f"ℹ️  Funding account {hex(address)} with {amount} ETH")
     await fund_address(address, amount=amount)
-    logger.info(f"ℹ️  Deploying account")
+    logger.info("ℹ️  Deploying account"unt")
     res = await Account.deploy_account(
         address=address,
         class_hash=class_hash,
@@ -343,7 +343,7 @@ async def declare(contract_name):
     class_hash = compute_class_hash(contract_class=deepcopy(contract_class))
     try:
         await RPC_CLIENT.get_class_by_hash(class_hash)
-        logger.info(f"✅ Class already declared, skipping")
+        logger.info("✅ Class already declared, skipping"g")
         return class_hash
     except Exception:
         pass
@@ -495,7 +495,7 @@ async def call(contract, *args, **kwargs):
 async def wait_for_transaction(*args, **kwargs):
     """
     We need to write this custom hacky wait_for_transaction instead of using the one from starknet-py
-    because the RPCs don't know RECEIVED, PENDING and REJECTED states currently
+    because the RPCs don't know RECEIVED, PENDING and REJECTED states currently.
     """
     if GATEWAY_CLIENT is not None:
         # Gateway case, just use it
@@ -522,7 +522,7 @@ async def wait_for_transaction(*args, **kwargs):
             RPC_CLIENT.url,
             json={
                 "jsonrpc": "2.0",
-                "method": f"starknet_getTransactionReceipt",
+                "method": "starknet_getTransactionReceipt",
                 "params": {"transaction_hash": hex(transaction_hash)},
                 "id": 0,
             },

@@ -10,6 +10,7 @@ on:
 jobs:
   merge-mainnet:
     runs-on: ubuntu-latest
+    permissions: read-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,6 +24,7 @@ jobs:
 
   merge-optimism-mainnet:
     runs-on: ubuntu-latest
+    permissions: read-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -36,6 +38,7 @@ jobs:
 
   merge-staging:
     runs-on: ubuntu-latest
+    permissions: read-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

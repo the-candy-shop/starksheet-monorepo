@@ -10,6 +10,7 @@ on:
 jobs:
   merge-testnet:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,6 +24,7 @@ jobs:
 
   merge-testnet2:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -36,6 +38,7 @@ jobs:
 
   merge-goerli:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

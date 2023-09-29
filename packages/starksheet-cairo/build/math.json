@@ -135,7 +135,11 @@
   "program": {
     "attributes": [
       {
-        "accessible_scopes": ["__main__", "__main__", "__main__.div"],
+        "accessible_scopes": [
+          "__main__",
+          "__main__",
+          "__main__.div"
+        ],
         "end_pc": 180,
         "flow_tracking_data": {
           "ap_tracking": {
@@ -151,7 +155,11 @@
         "value": "div only works with 2 arguments, {arr_len} given"
       },
       {
-        "accessible_scopes": ["__main__", "__main__", "__main__.sub"],
+        "accessible_scopes": [
+          "__main__",
+          "__main__",
+          "__main__.sub"
+        ],
         "end_pc": 225,
         "flow_tracking_data": {
           "ap_tracking": {
@@ -167,7 +175,9 @@
         "value": "sub only works with 2 arguments, {arr_len} given"
       }
     ],
-    "builtins": ["range_check"],
+    "builtins": [
+      "range_check"
+    ],
     "compiler_version": "0.11.2",
     "data": [
       "0x208b7fff7fff7ffe",
@@ -622,7 +632,9 @@
         "type": "alias"
       },
       "__main__.div": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 178,
         "type": "function"
       },
@@ -676,7 +688,9 @@
         "type": "reference"
       },
       "__main__.pow": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 262,
         "type": "function"
       },
@@ -719,7 +733,9 @@
         "type": "alias"
       },
       "__main__.prod": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 131,
         "type": "function"
       },
@@ -757,7 +773,9 @@
         "type": "alias"
       },
       "__main__.sub": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 223,
         "type": "function"
       },
@@ -806,7 +824,9 @@
         "type": "reference"
       },
       "__main__.sum": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 84,
         "type": "function"
       },
@@ -840,7 +860,9 @@
         "value": 0
       },
       "__wrappers__.div": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 199,
         "type": "function"
       },
@@ -907,7 +929,9 @@
         "type": "alias"
       },
       "__wrappers__.pow": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 277,
         "type": "function"
       },
@@ -974,7 +998,9 @@
         "type": "alias"
       },
       "__wrappers__.prod": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 154,
         "type": "function"
       },
@@ -1041,7 +1067,9 @@
         "type": "alias"
       },
       "__wrappers__.sub": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 238,
         "type": "function"
       },
@@ -1108,7 +1136,9 @@
         "type": "alias"
       },
       "__wrappers__.sum": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 107,
         "type": "function"
       },
@@ -1760,7 +1790,9 @@
         "type": "alias"
       },
       "starkware.cairo.lang.compiler.lib.registers.get_ap": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 1,
         "type": "function"
       },

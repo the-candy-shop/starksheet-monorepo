@@ -63,7 +63,10 @@
   },
   "program": {
     "attributes": [],
-    "builtins": ["pedersen", "range_check"],
+    "builtins": [
+      "pedersen",
+      "range_check"
+    ],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -1551,7 +1554,9 @@
         "type": "alias"
       },
       "__main__.number_to_index": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 261,
         "type": "function"
       },
@@ -1602,7 +1607,9 @@
         "type": "alias"
       },
       "__main__.token_uri": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 325,
         "type": "function"
       },
@@ -1657,7 +1664,9 @@
         "type": "alias"
       },
       "__wrappers__.number_to_index": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 307,
         "type": "function"
       },
@@ -1724,7 +1733,9 @@
         "type": "alias"
       },
       "__wrappers__.token_uri": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 1150,
         "type": "function"
       },
@@ -2035,7 +2046,9 @@
         "type": "alias"
       },
       "starkware.cairo.common.math.abs_value": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 72,
         "type": "function"
       },
@@ -2139,7 +2152,9 @@
         "value": 0
       },
       "starkware.cairo.common.math.assert_le_felt": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 27,
         "type": "function"
       },
@@ -2297,7 +2312,9 @@
         "type": "reference"
       },
       "starkware.cairo.common.math.sign": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 87,
         "type": "function"
       },
@@ -2473,7 +2490,9 @@
         "type": "alias"
       },
       "starkware.cairo.common.math_cmp.is_le": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 163,
         "type": "function"
       },
@@ -2512,7 +2531,9 @@
         "value": 0
       },
       "starkware.cairo.common.math_cmp.is_nn": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 130,
         "type": "function"
       },

@@ -38,7 +38,9 @@
   },
   "program": {
     "attributes": [],
-    "builtins": ["range_check"],
+    "builtins": [
+      "range_check"
+    ],
     "compiler_version": "0.11.2",
     "data": [
       "0x20780017fff7ffd",
@@ -258,7 +260,9 @@
         "type": "alias"
       },
       "__main__.all": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 50,
         "type": "function"
       },
@@ -296,7 +300,9 @@
         "type": "alias"
       },
       "__wrappers__.all": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 72,
         "type": "function"
       },

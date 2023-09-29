@@ -237,7 +237,10 @@
         "value": "Ownable: new owner is the zero address"
       }
     ],
-    "builtins": ["pedersen", "range_check"],
+    "builtins": [
+      "pedersen",
+      "range_check"
+    ],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -2181,7 +2184,9 @@
         "type": "alias"
       },
       "__main__.constructor": {
-        "decorators": ["constructor"],
+        "decorators": [
+          "constructor"
+        ],
         "pc": 604,
         "type": "function"
       },
@@ -2232,7 +2237,9 @@
         "value": 0
       },
       "__main__.getBaseUri": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 652,
         "type": "function"
       },
@@ -2270,7 +2277,9 @@
         "value": 1
       },
       "__main__.getOwner": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 549,
         "type": "function"
       },
@@ -2308,7 +2317,9 @@
         "value": 0
       },
       "__main__.getUseTokenId": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 492,
         "type": "function"
       },
@@ -2350,7 +2361,9 @@
         "type": "alias"
       },
       "__main__.setBaseUri": {
-        "decorators": ["external"],
+        "decorators": [
+          "external"
+        ],
         "pc": 710,
         "type": "function"
       },
@@ -2397,7 +2410,9 @@
         "value": 0
       },
       "__main__.setUseTokenId": {
-        "decorators": ["external"],
+        "decorators": [
+          "external"
+        ],
         "pc": 522,
         "type": "function"
       },
@@ -2444,7 +2459,9 @@
         "type": "alias"
       },
       "__main__.token_uri": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 752,
         "type": "function"
       },
@@ -2495,7 +2512,9 @@
         "value": 5
       },
       "__main__.transferOwnership": {
-        "decorators": ["external"],
+        "decorators": [
+          "external"
+        ],
         "pc": 579,
         "type": "function"
       },
@@ -2538,7 +2557,9 @@
         "value": 0
       },
       "__wrappers__.constructor": {
-        "decorators": ["constructor"],
+        "decorators": [
+          "constructor"
+        ],
         "pc": 624,
         "type": "function"
       },
@@ -2571,7 +2592,9 @@
         "type": "alias"
       },
       "__wrappers__.getBaseUri": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 691,
         "type": "function"
       },
@@ -2638,7 +2661,9 @@
         "type": "alias"
       },
       "__wrappers__.getOwner": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 564,
         "type": "function"
       },
@@ -2705,7 +2730,9 @@
         "type": "alias"
       },
       "__wrappers__.getUseTokenId": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 507,
         "type": "function"
       },
@@ -2772,7 +2799,9 @@
         "type": "alias"
       },
       "__wrappers__.setBaseUri": {
-        "decorators": ["external"],
+        "decorators": [
+          "external"
+        ],
         "pc": 725,
         "type": "function"
       },
@@ -2805,7 +2834,9 @@
         "type": "alias"
       },
       "__wrappers__.setUseTokenId": {
-        "decorators": ["external"],
+        "decorators": [
+          "external"
+        ],
         "pc": 531,
         "type": "function"
       },
@@ -2838,7 +2869,9 @@
         "type": "alias"
       },
       "__wrappers__.token_uri": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 824,
         "type": "function"
       },
@@ -2905,7 +2938,9 @@
         "type": "alias"
       },
       "__wrappers__.transferOwnership": {
-        "decorators": ["external"],
+        "decorators": [
+          "external"
+        ],
         "pc": 586,
         "type": "function"
       },
@@ -3701,7 +3736,9 @@
         "type": "alias"
       },
       "starkware.cairo.common.math.abs_value": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 84,
         "type": "function"
       },
@@ -3766,7 +3803,9 @@
         "type": "reference"
       },
       "starkware.cairo.common.math.assert_250_bit": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 71,
         "type": "function"
       },
@@ -3992,7 +4031,9 @@
         "type": "reference"
       },
       "starkware.cairo.common.math.sign": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 99,
         "type": "function"
       },
@@ -4286,7 +4327,9 @@
         "type": "alias"
       },
       "starkware.starknet.common.storage.normalize_address": {
-        "decorators": ["known_ap_change"],
+        "decorators": [
+          "known_ap_change"
+        ],
         "pc": 142,
         "type": "function"
       },

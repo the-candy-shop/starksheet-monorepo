@@ -90,7 +90,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
             .filter(
               (cell) =>
                 cell.abi?.stateMutability === "view" ||
-                cell.abi?.stateMutability === "pure"
+                cell.abi?.stateMutability === "pure",
             );
 
           for (const cell of indexes) {
@@ -113,12 +113,12 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
         .catch((error) => {
           enqueueSnackbar(
             `Cannot compute value of cell ${tokenIdToCellName(
-              currentCellId
+              currentCellId,
             )}, error:
               ${error}`,
             {
               variant: "error",
-            }
+            },
           );
           updatedCells.push({
             ...currentCells[currentCellId],
@@ -175,7 +175,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
       const resolvedContractAddress = resolveContractAddress(
         currentCells.map((cell) => cell.value),
-        contractAddress
+        contractAddress,
       );
 
       getAbiForContract(bigint2hex(resolvedContractAddress)).then((abi) => {
@@ -183,7 +183,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
         setCellData(_cellData);
       });
     },
-    [getAbiForContract, currentCells]
+    [getAbiForContract, currentCells],
   );
 
   const clearBar = useCallback(() => {
@@ -200,7 +200,7 @@ function ActionBar({ inputRef, sx }: ActionBarProps) {
 
   useEffect(() => {
     setUnsavedValue(
-      toPlainTextFormula(currentCells[selectedCell], chainConfig.chainType)
+      toPlainTextFormula(currentCells[selectedCell], chainConfig.chainType),
     );
   }, [selectedCell, currentCells]);
 

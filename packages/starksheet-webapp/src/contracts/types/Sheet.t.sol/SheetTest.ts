@@ -81,21 +81,21 @@ export interface SheetTestInterface extends utils.Interface {
       | "testSetCellShouldFailWhenNotOwner"
       | "testSetCellShouldMint"
       | "testTokenUri"
-      | "testTokenUriShouldFailIfNotExist"
+      | "testTokenUriShouldFailIfNotExist",
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "IS_TEST", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "excludeArtifacts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "excludeContracts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "excludeSenders",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(functionFragment: "failed", values?: undefined): string;
   encodeFunctionData(functionFragment: "multicall", values?: undefined): string;
@@ -104,65 +104,65 @@ export interface SheetTestInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "sheet", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "targetArtifactSelectors",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetArtifacts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetContracts",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetSelectors",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "targetSenders",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testCreationCode",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testGetCellShouldReturnEmptyIfNotExist",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testMulticallSetCell",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testSetCellShouldFailWhenNotOwner",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testSetCellShouldMint",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testTokenUri",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "testTokenUriShouldFailIfNotExist",
-    values?: undefined
+    values?: undefined,
   ): string;
 
   decodeFunctionResult(functionFragment: "IS_TEST", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "excludeArtifacts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "excludeContracts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "excludeSenders",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "failed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
@@ -171,51 +171,51 @@ export interface SheetTestInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "sheet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "targetArtifactSelectors",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetArtifacts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetContracts",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetSelectors",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "targetSenders",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testCreationCode",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testGetCellShouldReturnEmptyIfNotExist",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testMulticallSetCell",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testSetCellShouldFailWhenNotOwner",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testSetCellShouldMint",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testTokenUri",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "testTokenUriShouldFailIfNotExist",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
 
   events: {
@@ -253,13 +253,13 @@ export interface SheetTestInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "log_int"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "log_named_address"): EventFragment;
   getEvent(
-    nameOrSignatureOrTopic: "log_named_array(string,uint256[])"
+    nameOrSignatureOrTopic: "log_named_array(string,uint256[])",
   ): EventFragment;
   getEvent(
-    nameOrSignatureOrTopic: "log_named_array(string,int256[])"
+    nameOrSignatureOrTopic: "log_named_array(string,int256[])",
   ): EventFragment;
   getEvent(
-    nameOrSignatureOrTopic: "log_named_array(string,address[])"
+    nameOrSignatureOrTopic: "log_named_array(string,address[])",
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "log_named_bytes"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "log_named_bytes32"): EventFragment;
@@ -503,15 +503,15 @@ export interface SheetTest extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -523,19 +523,19 @@ export interface SheetTest extends BaseContract {
     IS_TEST(overrides?: CallOverrides): Promise<[boolean]>;
 
     excludeArtifacts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { excludedArtifacts_: string[] }>;
 
     excludeContracts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { excludedContracts_: string[] }>;
 
     excludeSenders(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { excludedSenders_: string[] }>;
 
     failed(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     multicall(overrides?: CallOverrides): Promise<[string]>;
@@ -543,63 +543,59 @@ export interface SheetTest extends BaseContract {
     renderer(overrides?: CallOverrides): Promise<[string]>;
 
     setUp(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     sheet(overrides?: CallOverrides): Promise<[string]>;
 
-    targetArtifactSelectors(
-      overrides?: CallOverrides
-    ): Promise<
+    targetArtifactSelectors(overrides?: CallOverrides): Promise<
       [StdInvariant.FuzzSelectorStructOutput[]] & {
         targetedArtifactSelectors_: StdInvariant.FuzzSelectorStructOutput[];
       }
     >;
 
     targetArtifacts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { targetedArtifacts_: string[] }>;
 
     targetContracts(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { targetedContracts_: string[] }>;
 
-    targetSelectors(
-      overrides?: CallOverrides
-    ): Promise<
+    targetSelectors(overrides?: CallOverrides): Promise<
       [StdInvariant.FuzzSelectorStructOutput[]] & {
         targetedSelectors_: StdInvariant.FuzzSelectorStructOutput[];
       }
     >;
 
     targetSenders(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string[]] & { targetedSenders_: string[] }>;
 
     testCreationCode(overrides?: CallOverrides): Promise<[void]>;
 
     testGetCellShouldReturnEmptyIfNotExist(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     testMulticallSetCell(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     testSetCellShouldFailWhenNotOwner(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     testSetCellShouldMint(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     testTokenUri(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     testTokenUriShouldFailIfNotExist(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
 
@@ -612,7 +608,7 @@ export interface SheetTest extends BaseContract {
   excludeSenders(overrides?: CallOverrides): Promise<string[]>;
 
   failed(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   multicall(overrides?: CallOverrides): Promise<string>;
@@ -620,13 +616,13 @@ export interface SheetTest extends BaseContract {
   renderer(overrides?: CallOverrides): Promise<string>;
 
   setUp(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   sheet(overrides?: CallOverrides): Promise<string>;
 
   targetArtifactSelectors(
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
   targetArtifacts(overrides?: CallOverrides): Promise<string[]>;
@@ -634,7 +630,7 @@ export interface SheetTest extends BaseContract {
   targetContracts(overrides?: CallOverrides): Promise<string[]>;
 
   targetSelectors(
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
   targetSenders(overrides?: CallOverrides): Promise<string[]>;
@@ -642,27 +638,27 @@ export interface SheetTest extends BaseContract {
   testCreationCode(overrides?: CallOverrides): Promise<void>;
 
   testGetCellShouldReturnEmptyIfNotExist(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   testMulticallSetCell(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   testSetCellShouldFailWhenNotOwner(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   testSetCellShouldMint(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   testTokenUri(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   testTokenUriShouldFailIfNotExist(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -685,7 +681,7 @@ export interface SheetTest extends BaseContract {
     sheet(overrides?: CallOverrides): Promise<string>;
 
     targetArtifactSelectors(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
     targetArtifacts(overrides?: CallOverrides): Promise<string[]>;
@@ -693,7 +689,7 @@ export interface SheetTest extends BaseContract {
     targetContracts(overrides?: CallOverrides): Promise<string[]>;
 
     targetSelectors(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<StdInvariant.FuzzSelectorStructOutput[]>;
 
     targetSenders(overrides?: CallOverrides): Promise<string[]>;
@@ -701,7 +697,7 @@ export interface SheetTest extends BaseContract {
     testCreationCode(overrides?: CallOverrides): Promise<void>;
 
     testGetCellShouldReturnEmptyIfNotExist(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     testMulticallSetCell(overrides?: CallOverrides): Promise<void>;
@@ -737,72 +733,72 @@ export interface SheetTest extends BaseContract {
 
     "log_named_address(string,address)"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_addressEventFilter;
     log_named_address(key?: null, val?: null): log_named_addressEventFilter;
 
     "log_named_array(string,uint256[])"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_array_string_uint256_array_EventFilter;
     "log_named_array(string,int256[])"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_array_string_int256_array_EventFilter;
     "log_named_array(string,address[])"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_array_string_address_array_EventFilter;
 
     "log_named_bytes(string,bytes)"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_bytesEventFilter;
     log_named_bytes(key?: null, val?: null): log_named_bytesEventFilter;
 
     "log_named_bytes32(string,bytes32)"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_bytes32EventFilter;
     log_named_bytes32(key?: null, val?: null): log_named_bytes32EventFilter;
 
     "log_named_decimal_int(string,int256,uint256)"(
       key?: null,
       val?: null,
-      decimals?: null
+      decimals?: null,
     ): log_named_decimal_intEventFilter;
     log_named_decimal_int(
       key?: null,
       val?: null,
-      decimals?: null
+      decimals?: null,
     ): log_named_decimal_intEventFilter;
 
     "log_named_decimal_uint(string,uint256,uint256)"(
       key?: null,
       val?: null,
-      decimals?: null
+      decimals?: null,
     ): log_named_decimal_uintEventFilter;
     log_named_decimal_uint(
       key?: null,
       val?: null,
-      decimals?: null
+      decimals?: null,
     ): log_named_decimal_uintEventFilter;
 
     "log_named_int(string,int256)"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_intEventFilter;
     log_named_int(key?: null, val?: null): log_named_intEventFilter;
 
     "log_named_string(string,string)"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_stringEventFilter;
     log_named_string(key?: null, val?: null): log_named_stringEventFilter;
 
     "log_named_uint(string,uint256)"(
       key?: null,
-      val?: null
+      val?: null,
     ): log_named_uintEventFilter;
     log_named_uint(key?: null, val?: null): log_named_uintEventFilter;
 
@@ -848,25 +844,25 @@ export interface SheetTest extends BaseContract {
     testCreationCode(overrides?: CallOverrides): Promise<BigNumber>;
 
     testGetCellShouldReturnEmptyIfNotExist(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     testMulticallSetCell(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     testSetCellShouldFailWhenNotOwner(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     testSetCellShouldMint(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     testTokenUri(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     testTokenUriShouldFailIfNotExist(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
   };
 
@@ -880,7 +876,7 @@ export interface SheetTest extends BaseContract {
     excludeSenders(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     failed(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     multicall(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -888,13 +884,13 @@ export interface SheetTest extends BaseContract {
     renderer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setUp(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     sheet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     targetArtifactSelectors(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     targetArtifacts(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -908,27 +904,27 @@ export interface SheetTest extends BaseContract {
     testCreationCode(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     testGetCellShouldReturnEmptyIfNotExist(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     testMulticallSetCell(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     testSetCellShouldFailWhenNotOwner(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     testSetCellShouldMint(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     testTokenUri(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     testTokenUriShouldFailIfNotExist(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };
 }

@@ -8,7 +8,7 @@ import { ChainProvider } from "../types";
  * This context exposes an instantiated ChainProvider.
  */
 export const ChainProviderContext = React.createContext<ChainProvider>(
-  {} as ChainProvider
+  {} as ChainProvider,
 );
 
 /**

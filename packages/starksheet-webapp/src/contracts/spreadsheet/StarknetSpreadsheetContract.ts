@@ -36,7 +36,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
   constructor(
     private address: string,
     private abi: Abi,
-    provider: ProviderInterface
+    provider: ProviderInterface,
   ) {
     this.contract = new Contract(abi, address, provider);
     this.proxyClassHash = this.getProxyClassHash();
@@ -52,9 +52,8 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   async getSheetDefaultRendererAddress(): Promise<string> {
-    const renderer = await this.contract.functions[
-      "getSheetDefaultRendererAddress"
-    ]();
+    const renderer =
+      await this.contract.functions["getSheetDefaultRendererAddress"]();
     return bigint2hex(renderer.address);
   }
 
@@ -78,7 +77,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    * @inheritDoc
    */
   setCellTxBuilder(
-    cell: Cell & { tokenId: number; sheetAddress: string }
+    cell: Cell & { tokenId: number; sheetAddress: string },
   ): ContractCall {
     return cell.owner === 0n
       ? {
@@ -127,7 +126,7 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
    */
   async calculateSheetAddress(
     from: BigNumberish,
-    constructorCalldata: SheetConstructorArgs
+    constructorCalldata: SheetConstructorArgs,
   ): Promise<string> {
     const classHash = await this.proxyClassHash;
 
@@ -147,7 +146,12 @@ export class StarknetSpreadsheetContract implements SpreadsheetContract {
     const args = Object.values(extendedCall);
 
     return Promise.resolve(
-      hash.calculateContractAddressFromHash(from, classHash, args, this.address)
+      hash.calculateContractAddressFromHash(
+        from,
+        classHash,
+        args,
+        this.address,
+      ),
     );
   }
 

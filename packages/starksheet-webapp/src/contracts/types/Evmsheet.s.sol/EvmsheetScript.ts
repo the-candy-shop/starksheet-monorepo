@@ -38,7 +38,7 @@ export interface EvmsheetScriptInterface extends utils.Interface {
       | "math"
       | "multicall"
       | "renderer"
-      | "run"
+      | "run",
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "IS_SCRIPT", values?: undefined): string;
@@ -68,15 +68,15 @@ export interface EvmsheetScript extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -96,7 +96,7 @@ export interface EvmsheetScript extends BaseContract {
     renderer(overrides?: CallOverrides): Promise<[string]>;
 
     run(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
 
@@ -154,7 +154,7 @@ export interface EvmsheetScript extends BaseContract {
     renderer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     run(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };
 }

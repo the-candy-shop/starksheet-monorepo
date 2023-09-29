@@ -45,19 +45,27 @@ jobs:
       # via-ir compilation time checks.
       - name: Measure compilation time of Test with 0.8.17 --via-ir
         if: always()
-        run: forge build --skip test --contracts test/compilation/CompilationTest.sol --use solc:0.8.17 --via-ir
+        run:
+          forge build --skip test --contracts
+          test/compilation/CompilationTest.sol --use solc:0.8.17 --via-ir
 
       - name: Measure compilation time of TestBase with 0.8.17 --via-ir
         if: always()
-        run: forge build --skip test --contracts test/compilation/CompilationTestBase.sol --use solc:0.8.17 --via-ir
+        run:
+          forge build --skip test --contracts
+          test/compilation/CompilationTestBase.sol --use solc:0.8.17 --via-ir
 
       - name: Measure compilation time of Script with 0.8.17 --via-ir
         if: always()
-        run: forge build --skip test --contracts test/compilation/CompilationScript.sol --use solc:0.8.17 --via-ir
+        run:
+          forge build --skip test --contracts
+          test/compilation/CompilationScript.sol --use solc:0.8.17 --via-ir
 
       - name: Measure compilation time of ScriptBase with 0.8.17 --via-ir
         if: always()
-        run: forge build --skip test --contracts test/compilation/CompilationScriptBase.sol --use solc:0.8.17 --via-ir
+        run:
+          forge build --skip test --contracts
+          test/compilation/CompilationScriptBase.sol --use solc:0.8.17 --via-ir
 
   test:
     runs-on: ubuntu-latest

@@ -78,7 +78,10 @@
   "program": {
     "attributes": [
       {
-        "accessible_scopes": ["__main__", "__main__.do_calls"],
+        "accessible_scopes": [
+          "__main__",
+          "__main__.do_calls"
+        ],
         "end_pc": 182,
         "flow_tracking_data": {
           "ap_tracking": {
@@ -94,7 +97,9 @@
         "value": "multicall {index} failed"
       }
     ],
-    "builtins": ["range_check"],
+    "builtins": [
+      "range_check"
+    ],
     "compiler_version": "0.11.2",
     "data": [
       "0x40780017fff7fff",
@@ -439,7 +444,9 @@
         "type": "alias"
       },
       "__main__.aggregate": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 61,
         "type": "function"
       },
@@ -619,7 +626,9 @@
         "type": "alias"
       },
       "__wrappers__.aggregate": {
-        "decorators": ["view"],
+        "decorators": [
+          "view"
+        ],
         "pc": 99,
         "type": "function"
       },

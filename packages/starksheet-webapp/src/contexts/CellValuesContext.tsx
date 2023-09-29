@@ -54,13 +54,13 @@ export const CellValuesContextProvider = ({
 
   const currentCells = useMemo(
     () => (selectedSheetAddress ? values[selectedSheetAddress] || [] : []),
-    [selectedSheetAddress, values]
+    [selectedSheetAddress, values],
   );
 
   const currentUpdatedCells = useMemo(
     () =>
       selectedSheetAddress ? updatedValues[selectedSheetAddress] || {} : {},
-    [selectedSheetAddress, updatedValues]
+    [selectedSheetAddress, updatedValues],
   );
 
   const setCurrentUpdatedCells = useCallback(
@@ -71,7 +71,7 @@ export const CellValuesContextProvider = ({
         [selectedSheetAddress]: cells,
       }));
     },
-    [selectedSheetAddress, setUpdatedValues]
+    [selectedSheetAddress, setUpdatedValues],
   );
 
   const computeValue = (values: bigint[]) => async (cell: CellData) => {
@@ -81,7 +81,7 @@ export const CellValuesContextProvider = ({
 
     const resolvedContractAddress = resolveContractAddress(
       values,
-      cell.contractAddress
+      cell.contractAddress,
     );
 
     const contractAddress = bigint2hex(resolvedContractAddress);
@@ -117,7 +117,7 @@ export const CellValuesContextProvider = ({
               .map((arg) => (Number(arg) - 1) / 2)
               .includes(id) ||
             (cell.contractAddress < RC_BOUND &&
-              Number(cell.contractAddress) === id)
+              Number(cell.contractAddress) === id),
         )
         .map((cell) => cell.id);
 
@@ -127,7 +127,7 @@ export const CellValuesContextProvider = ({
 
       currentChildren.map(buildChildren(children, (depth || 1) + 1));
     },
-    [values, selectedSheetAddress]
+    [values, selectedSheetAddress],
   );
 
   const buildParents = useCallback(
@@ -147,7 +147,7 @@ export const CellValuesContextProvider = ({
 
       currentParents.map(buildParents(parents, (depth || 1) + 1));
     },
-    [values, selectedSheetAddress]
+    [values, selectedSheetAddress],
   );
 
   const updateCells = (cells: Cell[]) => {

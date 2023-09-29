@@ -44,10 +44,10 @@ function FormulaField({
     () =>
       Object.keys(contractAbis)
         .filter(
-          (address) => Object.keys(contractAbis[address] || {}).length > 0
+          (address) => Object.keys(contractAbis[address] || {}).length > 0,
         )
         .filter((op) => op.startsWith(value) && !value.includes(op)),
-    [contractAbis, value]
+    [contractAbis, value],
   );
 
   const updateAbi = useCallback(
@@ -56,7 +56,7 @@ function FormulaField({
       setSelectedContractAddress(_selectedContractAddress);
       if (_selectedContractAddress.match(CELL_NAME_REGEX)) {
         _selectedContractAddress = bigint2hex(
-          currentCells[cellNameToTokenId(_selectedContractAddress)].value
+          currentCells[cellNameToTokenId(_selectedContractAddress)].value,
         );
       }
       getAbiForContract(_selectedContractAddress).then((abi) => {
@@ -67,7 +67,7 @@ function FormulaField({
             (prev, cur) => ({
               ...prev,
               [cur.name]: (cur as FunctionAbi).inputs
-                .filter((i) => !i.name.endsWith("_len"))
+                .filter((i) => !(i.name || "").endsWith("_len"))
                 .map((i) => ({
                   ...i,
                   displayedType: `${i.name}:${i.type.replace("*", "")}`,
@@ -75,16 +75,16 @@ function FormulaField({
                 .map((i) =>
                   i.type.endsWith("*") || i.type.endsWith("[]")
                     ? `[${i.displayedType.replace("[]", "")}]`
-                    : i.displayedType
+                    : i.displayedType,
                 )
                 .join(`${ARGS_SEP} `),
             }),
-            {}
+            {},
           );
         setAbi(parsedAbi);
       });
     },
-    [getAbiForContract, currentCells]
+    [getAbiForContract, currentCells],
   );
 
   useEffect(() => {
@@ -112,7 +112,7 @@ function FormulaField({
             inputRef?.current?.el.current.innerText
               .trim()
               .replaceAll("\n", "")
-              .replaceAll("\r", "")
+              .replaceAll("\r", ""),
           )
         }
         html={buildFormulaDisplay(value, cellSettings)}
@@ -154,7 +154,7 @@ function FormulaField({
             .filter(
               (op) =>
                 op.startsWith(value.split(CONTRACT_FUNCTION_SEP)[1]) &&
-                !value.split(CONTRACT_FUNCTION_SEP)[1].includes(op)
+                !value.split(CONTRACT_FUNCTION_SEP)[1].includes(op),
             )
             .map((op) => (
               <Box

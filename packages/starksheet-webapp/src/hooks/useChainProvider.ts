@@ -8,5 +8,5 @@ import { ChainProvider } from "../types";
  * This hook is a wrapper around fetching the actual chainProvider from the React context.
  */
 export function useChainProvider(): ChainProvider {
-  return useContext(ChainProviderContext)
+  return useContext(ChainProviderContext);
 }

@@ -29,20 +29,20 @@ export interface MathInterface extends utils.Interface {
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "div" | "prod" | "sub" | "sum"
+    nameOrSignatureOrTopic: "div" | "prod" | "sub" | "sum",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "div",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "prod",
-    values: [BigNumberish[]]
+    values: [BigNumberish[]],
   ): string;
   encodeFunctionData(
     functionFragment: "sub",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(functionFragment: "sum", values: [BigNumberish[]]): string;
 
@@ -64,15 +64,15 @@ export interface Math extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -84,7 +84,7 @@ export interface Math extends BaseContract {
     div(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber]>;
 
     prod(arr: BigNumberish[], overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -92,7 +92,7 @@ export interface Math extends BaseContract {
     sub(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[BigNumber]>;
 
     sum(arr: BigNumberish[], overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -101,7 +101,7 @@ export interface Math extends BaseContract {
   div(
     a: BigNumberish,
     b: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   prod(arr: BigNumberish[], overrides?: CallOverrides): Promise<BigNumber>;
@@ -109,7 +109,7 @@ export interface Math extends BaseContract {
   sub(
     a: BigNumberish,
     b: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
   sum(arr: BigNumberish[], overrides?: CallOverrides): Promise<BigNumber>;
@@ -118,7 +118,7 @@ export interface Math extends BaseContract {
     div(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     prod(arr: BigNumberish[], overrides?: CallOverrides): Promise<BigNumber>;
@@ -126,7 +126,7 @@ export interface Math extends BaseContract {
     sub(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     sum(arr: BigNumberish[], overrides?: CallOverrides): Promise<BigNumber>;
@@ -138,7 +138,7 @@ export interface Math extends BaseContract {
     div(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     prod(arr: BigNumberish[], overrides?: CallOverrides): Promise<BigNumber>;
@@ -146,7 +146,7 @@ export interface Math extends BaseContract {
     sub(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     sum(arr: BigNumberish[], overrides?: CallOverrides): Promise<BigNumber>;
@@ -156,23 +156,23 @@ export interface Math extends BaseContract {
     div(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     prod(
       arr: BigNumberish[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     sub(
       a: BigNumberish,
       b: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     sum(
       arr: BigNumberish[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

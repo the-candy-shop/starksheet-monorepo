@@ -454,7 +454,7 @@ export class IMulticall3__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): IMulticall3 {
     return new Contract(address, _abi, signerOrProvider) as IMulticall3;
   }

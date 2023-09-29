@@ -44,105 +44,105 @@ export interface ArrayInterface extends utils.Interface {
       | "join(string[])"
       | "join(bytes2[])"
       | "join(uint16[])"
-      | "join(string[],string)"
+      | "join(string[],string)",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "_joinReferenceType",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes16[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes4[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes[],bytes)",
-    values: [BytesLike[], BytesLike]
+    values: [BytesLike[], BytesLike],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes32[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes3[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes8[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(string[])",
-    values: [string[]]
+    values: [string[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(bytes2[])",
-    values: [BytesLike[]]
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(uint16[])",
-    values: [BigNumberish[]]
+    values: [BigNumberish[]],
   ): string;
   encodeFunctionData(
     functionFragment: "join(string[],string)",
-    values: [string[], string]
+    values: [string[], string],
   ): string;
 
   decodeFunctionResult(
     functionFragment: "_joinReferenceType",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes16[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes4[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes[],bytes)",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes32[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes3[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes8[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(string[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(bytes2[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(uint16[])",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "join(string[],string)",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
 
   events: {};
@@ -166,7 +166,7 @@ export interface Array extends BaseContract {
   // ): Array<TypedListener<TEvent>>;
   // listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -178,68 +178,68 @@ export interface Array extends BaseContract {
     _joinReferenceType(
       inputPointer: BigNumberish,
       gluePointer: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string] & { tempBytes: string }>;
 
     "join(bytes16[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(bytes[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(bytes4[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(bytes[],bytes)"(
       a: BytesLike[],
       glue: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(bytes32[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(bytes3[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(bytes8[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(string[])"(a: string[], overrides?: CallOverrides): Promise<[string]>;
 
     "join(bytes2[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(uint16[])"(
       a: BigNumberish[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     "join(string[],string)"(
       a: string[],
       glue: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
   };
 
   _joinReferenceType(
     inputPointer: BigNumberish,
     gluePointer: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   "join(bytes16[])"(a: BytesLike[], overrides?: CallOverrides): Promise<string>;
@@ -251,7 +251,7 @@ export interface Array extends BaseContract {
   "join(bytes[],bytes)"(
     a: BytesLike[],
     glue: BytesLike,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   "join(bytes32[])"(a: BytesLike[], overrides?: CallOverrides): Promise<string>;
@@ -266,71 +266,71 @@ export interface Array extends BaseContract {
 
   "join(uint16[])"(
     a: BigNumberish[],
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   "join(string[],string)"(
     a: string[],
     glue: string,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   callStatic: {
     _joinReferenceType(
       inputPointer: BigNumberish,
       gluePointer: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(bytes16[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(bytes[])"(a: BytesLike[], overrides?: CallOverrides): Promise<string>;
 
     "join(bytes4[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(bytes[],bytes)"(
       a: BytesLike[],
       glue: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(bytes32[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(bytes3[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(bytes8[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(string[])"(a: string[], overrides?: CallOverrides): Promise<string>;
 
     "join(bytes2[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(uint16[])"(
       a: BigNumberish[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     "join(string[],string)"(
       a: string[],
       glue: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
   };
 
@@ -340,64 +340,64 @@ export interface Array extends BaseContract {
     _joinReferenceType(
       inputPointer: BigNumberish,
       gluePointer: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes16[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes4[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes[],bytes)"(
       a: BytesLike[],
       glue: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes32[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes3[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes8[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(string[])"(
       a: string[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(bytes2[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(uint16[])"(
       a: BigNumberish[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     "join(string[],string)"(
       a: string[],
       glue: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
   };
 
@@ -405,64 +405,64 @@ export interface Array extends BaseContract {
     _joinReferenceType(
       inputPointer: BigNumberish,
       gluePointer: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes16[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes4[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes[],bytes)"(
       a: BytesLike[],
       glue: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes32[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes3[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes8[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(string[])"(
       a: string[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(bytes2[])"(
       a: BytesLike[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(uint16[])"(
       a: BigNumberish[],
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     "join(string[],string)"(
       a: string[],
       glue: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

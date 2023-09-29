@@ -75,7 +75,7 @@ export class EVMProvider implements ChainProvider {
     const params = new URLSearchParams({
       action: "getabi",
       address,
-      apikey: process.env.REACT_APP_EXPLORER_KEY || "",
+      apikey: chainConfig.explorerApiKey || "",
       module: "contract",
     });
     // build the query url

@@ -568,7 +568,7 @@ type BytesConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: BytesConstructorParams
+  xs: BytesConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class Bytes__factory extends ContractFactory {
@@ -584,7 +584,7 @@ export class Bytes__factory extends ContractFactory {
     return super.deploy(overrides || {}) as Promise<Bytes>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }

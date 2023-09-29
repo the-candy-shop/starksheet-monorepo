@@ -233,7 +233,7 @@ type EvmsheetConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: EvmsheetConstructorParams
+  xs: EvmsheetConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => {
   return (
     typeof xs[0] === "string" ||
@@ -261,7 +261,7 @@ export class Evmsheet__factory extends ContractFactory {
         "lib/eth-projects-monorepo/packages/eth-projects-contracts/contracts/lib/utils/Bytes.sol:Bytes"
       ]
         .replace(/^0x/, "")
-        .toLowerCase()
+        .toLowerCase(),
     );
 
     return linkedBytecode;
@@ -270,14 +270,14 @@ export class Evmsheet__factory extends ContractFactory {
   override deploy(
     renderer: string,
     price: BigNumberish,
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<Evmsheet> {
     return super.deploy(renderer, price, overrides || {}) as Promise<Evmsheet>;
   }
   override getDeployTransaction(
     renderer: string,
     price: BigNumberish,
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(renderer, price, overrides || {});
   }
@@ -295,7 +295,7 @@ export class Evmsheet__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): Evmsheet {
     return new Contract(address, _abi, signerOrProvider) as Evmsheet;
   }

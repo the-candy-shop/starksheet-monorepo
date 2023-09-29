@@ -36,7 +36,7 @@ async def main():
     (max_per_wallet,) = await call("Sheet", "getMaxPerWallet", address=sheet)
     logger.info(f"Current max per wallet: {max_per_wallet}")
     if max_per_wallet != 10:
-        logger.info(f"Setting max per wallet to 10")
+        logger.info("Setting max per wallet to 10")
         await invoke("Sheet", "setMaxPerWallet", 10, address=sheet)
     logger.info(f"Sheet {sheet} ready to be used!")
 

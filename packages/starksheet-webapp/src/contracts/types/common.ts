@@ -6,7 +6,7 @@ import type { Event, EventFilter } from "ethers";
 
 export interface TypedEvent<
   TArgsArray extends Array<any> = any,
-  TArgsObject = any
+  TArgsObject = any,
 > extends Event {
   args: TArgsArray & TArgsObject;
 }
@@ -23,7 +23,7 @@ type __TypechainArgsArray<T> = T extends TypedEvent<infer U> ? U : never;
 export interface OnEvent<TRes> {
   <TEvent extends TypedEvent>(
     eventFilter: TypedEventFilter<TEvent>,
-    listener: TypedListener<TEvent>
+    listener: TypedListener<TEvent>,
   ): TRes;
   (eventName: string, listener: Listener): TRes;
 }

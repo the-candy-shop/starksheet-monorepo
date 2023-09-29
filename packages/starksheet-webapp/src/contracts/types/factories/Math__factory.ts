@@ -102,7 +102,7 @@ type MathConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: MathConstructorParams
+  xs: MathConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class Math__factory extends ContractFactory {
@@ -118,7 +118,7 @@ export class Math__factory extends ContractFactory {
     return super.deploy(overrides || {}) as Promise<Math>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }

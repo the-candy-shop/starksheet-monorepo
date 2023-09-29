@@ -406,7 +406,7 @@ export class StdAssertions__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): StdAssertions {
     return new Contract(address, _abi, signerOrProvider) as StdAssertions;
   }

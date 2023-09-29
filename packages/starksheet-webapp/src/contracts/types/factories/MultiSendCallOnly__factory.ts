@@ -32,7 +32,7 @@ type MultiSendCallOnlyConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: MultiSendCallOnlyConstructorParams
+  xs: MultiSendCallOnlyConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class MultiSendCallOnly__factory extends ContractFactory {
@@ -45,12 +45,12 @@ export class MultiSendCallOnly__factory extends ContractFactory {
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<MultiSendCallOnly> {
     return super.deploy(overrides || {}) as Promise<MultiSendCallOnly>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -68,7 +68,7 @@ export class MultiSendCallOnly__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): MultiSendCallOnly {
     return new Contract(address, _abi, signerOrProvider) as MultiSendCallOnly;
   }

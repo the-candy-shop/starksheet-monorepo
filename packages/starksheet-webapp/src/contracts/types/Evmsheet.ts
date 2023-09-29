@@ -54,76 +54,76 @@ export interface EvmsheetInterface extends utils.Interface {
       | "setDefaultRenderer"
       | "sheetPrice"
       | "sheets"
-      | "transferOwnership"
+      | "transferOwnership",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "addSheet",
-    values: [string, string, BytesLike]
+    values: [string, string, BytesLike],
   ): string;
   encodeFunctionData(
     functionFragment: "defaultRenderer",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "getSheetCreationAddress",
-    values: [string, BytesLike]
+    values: [string, BytesLike],
   ): string;
   encodeFunctionData(
     functionFragment: "getSheetCreationCode",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(functionFragment: "getSheets", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "setDefaultRenderer",
-    values: [string]
+    values: [string],
   ): string;
   encodeFunctionData(
     functionFragment: "sheetPrice",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "sheets",
-    values: [BigNumberish]
+    values: [BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [string]
+    values: [string],
   ): string;
 
   decodeFunctionResult(functionFragment: "addSheet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "defaultRenderer",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "getSheetCreationAddress",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "getSheetCreationCode",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "getSheets", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "setDefaultRenderer",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "sheetPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sheets", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
 
   events: {
@@ -155,15 +155,15 @@ export interface Evmsheet extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -176,7 +176,7 @@ export interface Evmsheet extends BaseContract {
       name: string,
       symbol: string,
       salt: BytesLike,
-      overrides?: PayableOverrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     defaultRenderer(overrides?: CallOverrides): Promise<[string]>;
@@ -184,7 +184,7 @@ export interface Evmsheet extends BaseContract {
     getSheetCreationAddress(
       sender: string,
       salt: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
     getSheetCreationCode(overrides?: CallOverrides): Promise<[string]>;
@@ -194,12 +194,12 @@ export interface Evmsheet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     setDefaultRenderer(
       renderer: string,
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
 
     sheetPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -208,7 +208,7 @@ export interface Evmsheet extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<ContractTransaction>;
   };
 
@@ -216,7 +216,7 @@ export interface Evmsheet extends BaseContract {
     name: string,
     symbol: string,
     salt: BytesLike,
-    overrides?: PayableOverrides & { from?: string }
+    overrides?: PayableOverrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   defaultRenderer(overrides?: CallOverrides): Promise<string>;
@@ -224,7 +224,7 @@ export interface Evmsheet extends BaseContract {
   getSheetCreationAddress(
     sender: string,
     salt: BytesLike,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   getSheetCreationCode(overrides?: CallOverrides): Promise<string>;
@@ -234,12 +234,12 @@ export interface Evmsheet extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   setDefaultRenderer(
     renderer: string,
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   sheetPrice(overrides?: CallOverrides): Promise<BigNumber>;
@@ -248,7 +248,7 @@ export interface Evmsheet extends BaseContract {
 
   transferOwnership(
     newOwner: string,
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -256,7 +256,7 @@ export interface Evmsheet extends BaseContract {
       name: string,
       symbol: string,
       salt: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     defaultRenderer(overrides?: CallOverrides): Promise<string>;
@@ -264,7 +264,7 @@ export interface Evmsheet extends BaseContract {
     getSheetCreationAddress(
       sender: string,
       salt: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
     getSheetCreationCode(overrides?: CallOverrides): Promise<string>;
@@ -277,7 +277,7 @@ export interface Evmsheet extends BaseContract {
 
     setDefaultRenderer(
       renderer: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     sheetPrice(overrides?: CallOverrides): Promise<BigNumber>;
@@ -286,18 +286,18 @@ export interface Evmsheet extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
   };
 
   filters: {
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
-      newOwner?: string | null
+      newOwner?: string | null,
     ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
       previousOwner?: string | null,
-      newOwner?: string | null
+      newOwner?: string | null,
     ): OwnershipTransferredEventFilter;
   };
 
@@ -306,7 +306,7 @@ export interface Evmsheet extends BaseContract {
       name: string,
       symbol: string,
       salt: BytesLike,
-      overrides?: PayableOverrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string },
     ): Promise<BigNumber>;
 
     defaultRenderer(overrides?: CallOverrides): Promise<BigNumber>;
@@ -314,7 +314,7 @@ export interface Evmsheet extends BaseContract {
     getSheetCreationAddress(
       sender: string,
       salt: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     getSheetCreationCode(overrides?: CallOverrides): Promise<BigNumber>;
@@ -324,12 +324,12 @@ export interface Evmsheet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     setDefaultRenderer(
       renderer: string,
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
 
     sheetPrice(overrides?: CallOverrides): Promise<BigNumber>;
@@ -338,7 +338,7 @@ export interface Evmsheet extends BaseContract {
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<BigNumber>;
   };
 
@@ -347,7 +347,7 @@ export interface Evmsheet extends BaseContract {
       name: string,
       symbol: string,
       salt: BytesLike,
-      overrides?: PayableOverrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     defaultRenderer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -355,11 +355,11 @@ export interface Evmsheet extends BaseContract {
     getSheetCreationAddress(
       sender: string,
       salt: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     getSheetCreationCode(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     getSheets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -367,24 +367,24 @@ export interface Evmsheet extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     setDefaultRenderer(
       renderer: string,
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
 
     sheetPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     sheets(
       arg0: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string }
+      overrides?: Overrides & { from?: string },
     ): Promise<PopulatedTransaction>;
   };
 }

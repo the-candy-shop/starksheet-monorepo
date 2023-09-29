@@ -15,7 +15,7 @@ async function run() {
   });
   fs.writeFileSync(
     path.join(__dirname, "./tmp/events.json"),
-    JSON.stringify(events, null, 2)
+    JSON.stringify(events, null, 2),
   );
 }
 

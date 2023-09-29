@@ -36,12 +36,12 @@ function App() {
       },
       LEFT: () => {
         setSelectedCell(
-          selectedCell - 1 >= 0 ? selectedCell - 1 : selectedCell
+          selectedCell - 1 >= 0 ? selectedCell - 1 : selectedCell,
         );
       },
       TOP: () => {
         setSelectedCell(
-          selectedCell - N_COL >= 0 ? selectedCell - N_COL : selectedCell
+          selectedCell - N_COL >= 0 ? selectedCell - N_COL : selectedCell,
         );
       },
       BOTTOM: () => {
@@ -54,36 +54,39 @@ function App() {
         setSelectedCell(selectedCell + 1);
       },
     }),
-    [selectedCell, setSelectedCell]
+    [selectedCell, setSelectedCell],
   );
 
   const message = useMemo(
     () =>
-      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
+      selectedSheetAddress &&
+      Object.hasOwn(appStatus.sheets, selectedSheetAddress)
         ? appStatus.sheets[selectedSheetAddress].message
         : appStatus?.message,
-    [appStatus, selectedSheetAddress]
+    [appStatus, selectedSheetAddress],
   );
 
   const loading = useMemo(
     () =>
-      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
+      selectedSheetAddress &&
+      Object.hasOwn(appStatus.sheets, selectedSheetAddress)
         ? appStatus.sheets[selectedSheetAddress].loading
         : appStatus.loading,
-    [appStatus, selectedSheetAddress]
+    [appStatus, selectedSheetAddress],
   );
 
   const error = useMemo(
     () =>
-      selectedSheetAddress && Object.hasOwn(appStatus.sheets, selectedSheetAddress)
+      selectedSheetAddress &&
+      Object.hasOwn(appStatus.sheets, selectedSheetAddress)
         ? appStatus.sheets[selectedSheetAddress].error
         : appStatus.error,
-    [appStatus, selectedSheetAddress]
+    [appStatus, selectedSheetAddress],
   );
 
   const hideSheet = useMemo(
     () => loading || error || location.pathname === "/",
-    [loading, error, location]
+    [loading, error, location],
   );
 
   return (

@@ -598,7 +598,7 @@ type EvmsheetTestConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: EvmsheetTestConstructorParams
+  xs: EvmsheetTestConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class EvmsheetTest__factory extends ContractFactory {
@@ -611,12 +611,12 @@ export class EvmsheetTest__factory extends ContractFactory {
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<EvmsheetTest> {
     return super.deploy(overrides || {}) as Promise<EvmsheetTest>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -634,7 +634,7 @@ export class EvmsheetTest__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): EvmsheetTest {
     return new Contract(address, _abi, signerOrProvider) as EvmsheetTest;
   }

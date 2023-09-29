@@ -3,7 +3,7 @@ BASIC_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789-"
 
 def encode_domain(domain) -> int:
     """
-    From https://github.com/starknet-id/naming_contract/blob/78db668f32e730d0d688698c96ca677b3f801216/tools/encoding/encoding.py#L9
+    From https://github.com/starknet-id/naming_contract/blob/78db668f32e730d0d688698c96ca677b3f801216/tools/encoding/encoding.py#L9.
     """
     big_alphabet = "这来"
     small_size_plus = len(BASIC_ALPHABET) + 1

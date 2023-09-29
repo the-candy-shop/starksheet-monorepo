@@ -58,7 +58,7 @@ pilots.gh_profile.map(download_profile_picture)
 dusted_pilots = (
     pilots.loc[
         lambda df: df.gh.isin(
-            [p.stem for p in Path(f"dust_pilots/dusted/").glob("*.png")]
+            [p.stem for p in Path("dust_pilots/dusted/").glob("*.png")]
         )
     ]
     .assign(

@@ -632,7 +632,7 @@ type SheetTestConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: SheetTestConstructorParams
+  xs: SheetTestConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => {
   return (
     typeof xs[0] === "string" ||
@@ -650,7 +650,7 @@ export class SheetTest__factory extends ContractFactory {
       super(
         _abi,
         SheetTest__factory.linkBytecode(linkLibraryAddresses),
-        signer
+        signer,
       );
     }
   }
@@ -664,19 +664,19 @@ export class SheetTest__factory extends ContractFactory {
         "lib/eth-projects-monorepo/packages/eth-projects-contracts/contracts/lib/utils/Bytes.sol:Bytes"
       ]
         .replace(/^0x/, "")
-        .toLowerCase()
+        .toLowerCase(),
     );
 
     return linkedBytecode;
   }
 
   override deploy(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): Promise<SheetTest> {
     return super.deploy(overrides || {}) as Promise<SheetTest>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
@@ -694,7 +694,7 @@ export class SheetTest__factory extends ContractFactory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    signerOrProvider: Signer | Provider,
   ): SheetTest {
     return new Contract(address, _abi, signerOrProvider) as SheetTest;
   }

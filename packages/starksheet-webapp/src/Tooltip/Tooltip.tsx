@@ -19,7 +19,7 @@ const Tooltip = styled(
       </MuiTooltip>
     ) : (
       children
-    )
+    ),
 )(`
     background-color: #F0DCA8;
     font-size: 14px;

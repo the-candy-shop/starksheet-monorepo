@@ -5,7 +5,7 @@ import { RC_BOUND } from "./constants";
 import { str2hex } from "./hexUtils";
 export const resolveContractAddress = (
   values: bigint[],
-  contractAddress: bigint
+  contractAddress: bigint,
 ) => {
   return contractAddress < RC_BOUND
     ? values[Number(contractAddress)]

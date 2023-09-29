@@ -29,7 +29,7 @@ export interface ICellRendererInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "tokenURI",
-    values: [BigNumberish, BytesLike, string]
+    values: [BigNumberish, BytesLike, string],
   ): string;
 
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
@@ -47,15 +47,15 @@ export interface ICellRenderer extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -68,7 +68,7 @@ export interface ICellRenderer extends BaseContract {
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
   };
 
@@ -76,7 +76,7 @@ export interface ICellRenderer extends BaseContract {
     id: BigNumberish,
     value: BytesLike,
     name: string,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
   callStatic: {
@@ -84,7 +84,7 @@ export interface ICellRenderer extends BaseContract {
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
   };
 
@@ -95,7 +95,7 @@ export interface ICellRenderer extends BaseContract {
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
   };
 
@@ -104,7 +104,7 @@ export interface ICellRenderer extends BaseContract {
       id: BigNumberish,
       value: BytesLike,
       name: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

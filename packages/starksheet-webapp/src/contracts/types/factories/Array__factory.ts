@@ -259,7 +259,7 @@ type ArrayConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: ArrayConstructorParams
+  xs: ArrayConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class Array__factory extends ContractFactory {
@@ -275,7 +275,7 @@ export class Array__factory extends ContractFactory {
     return super.deploy(overrides || {}) as Promise<Array>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }

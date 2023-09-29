@@ -35,7 +35,7 @@ type CellsConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: CellsConstructorParams
+  xs: CellsConstructorParams,
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class Cells__factory extends ContractFactory {
@@ -51,7 +51,7 @@ export class Cells__factory extends ContractFactory {
     return super.deploy(overrides || {}) as Promise<Cells>;
   }
   override getDeployTransaction(
-    overrides?: Overrides & { from?: string }
+    overrides?: Overrides & { from?: string },
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }

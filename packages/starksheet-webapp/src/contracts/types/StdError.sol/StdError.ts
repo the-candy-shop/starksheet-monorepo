@@ -42,75 +42,75 @@ export interface StdErrorInterface extends utils.Interface {
       | "indexOOBError"
       | "memOverflowError"
       | "popError"
-      | "zeroVarError"
+      | "zeroVarError",
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "arithmeticError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "assertionError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "divisionError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "encodeStorageError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "enumConversionError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "indexOOBError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "memOverflowError",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(functionFragment: "popError", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "zeroVarError",
-    values?: undefined
+    values?: undefined,
   ): string;
 
   decodeFunctionResult(
     functionFragment: "arithmeticError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "assertionError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "divisionError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "encodeStorageError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "enumConversionError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "indexOOBError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "memOverflowError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "popError", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "zeroVarError",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
 
   events: {};
@@ -126,15 +126,15 @@ export interface StdError extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
+    eventFilter?: TypedEventFilter<TEvent>,
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
+    eventFilter: TypedEventFilter<TEvent>,
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -230,11 +230,11 @@ export interface StdError extends BaseContract {
     divisionError(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     encodeStorageError(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     enumConversionError(
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     indexOOBError(overrides?: CallOverrides): Promise<PopulatedTransaction>;

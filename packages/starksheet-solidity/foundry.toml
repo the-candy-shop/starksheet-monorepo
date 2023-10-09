@@ -7,6 +7,9 @@ eth_rpc_url = "anvil"
 [profile.docker]
 eth_rpc_url = "docker"
 
+[profile.linea]
+eth_rpc_url = "linea"
+
 [rpc_endpoints]
 mainnet = "https://mainnet.infura.io/v3/${INFURA_KEY}"
 linea = "https://linea-mainnet.infura.io/v3/${INFURA_KEY}"
@@ -33,4 +36,5 @@ kakarot = "http://127.0.0.1:3030"
 docker = "${RPC_URL}"
 
 [etherscan]
-goerli = { key = "${ETHERSCAN_API_KEY}" }
+goerli = { key = "${GOERLI_EXPLORER_KEY}" }
+linea = { key = "${LINEA_EXPLORER_KEY}" }

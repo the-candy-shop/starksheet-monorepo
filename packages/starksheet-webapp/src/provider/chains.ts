@@ -1,6 +1,15 @@
 import { Abi } from "starknet";
 import contractData from "../contracts/contractData.json";
 import { ChainConfig, ChainId, ChainType } from "../types";
+import elementLogo from "./../assets/element.png";
+import etherscanLogo from "./../assets/etherscan.svg";
+import flexLogo from "./../assets/flex.svg";
+import lineaLogo from "./../assets/linea.png";
+import openseaLogo from "./../assets/opensea.svg";
+import optimismLogo from "./../assets/optimism.svg";
+import starknetLogo from "./../assets/starknet.svg";
+import wenmoonLogo from "./../assets/wenmoon.png";
+
 import { EVMProvider } from "./EVMProvider";
 import { StarknetProvider } from "./StarknetProvider";
 
@@ -27,7 +36,9 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "https://goerli.etherscan.io/address/",
     explorerApiUrl: "https://api-goerli.etherscan.io/api",
     explorerApiKey: `${process.env.REACT_APP_GOERLI_EXPLORER_KEY}`,
+    explorerLogo: etherscanLogo,
     nftBaseUrl: "https://testnets.opensea.io/assets/goerli/",
+    nftLogo: openseaLogo,
     rpcUrl: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   optimismMainnet: {
@@ -37,7 +48,9 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "https://optimistic.etherscan.io/address/",
     explorerApiUrl: "https://api-optimistic.etherscan.io/api",
     explorerApiKey: `${process.env.REACT_APP_OPTIMISM_EXPLORER_KEY}`,
+    explorerLogo: optimismLogo,
     nftBaseUrl: "https://wenmoon.market/collection/optimism/",
+    nftLogo: wenmoonLogo,
     rpcUrl: `https://optimism-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   linea: {
@@ -47,7 +60,9 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerBaseUrl: "https://lineascan.build/address/",
     explorerApiUrl: "https://api.lineascan.build/api",
     explorerApiKey: `${process.env.REACT_APP_LINEA_EXPLORER_KEY}`,
+    explorerLogo: lineaLogo,
     nftBaseUrl: "https://element.market/assets/linea/",
+    nftLogo: elementLogo,
     rpcUrl: `https://linea-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   anvil: {
@@ -56,7 +71,9 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.EVM,
     explorerBaseUrl: "https://goerli.etherscan.io/address/",
     explorerApiUrl: "https://api-goerli.etherscan.io/api",
+    explorerLogo: etherscanLogo,
     nftBaseUrl: "https://testnets.opensea.io/assets/goerli/",
+    nftLogo: openseaLogo,
     rpcUrl: "http://0.0.0.0:8545",
   },
   kakarot: {
@@ -64,7 +81,9 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainId: ChainId.STARKNET_TESTNET,
     chainType: ChainType.EVM,
     explorerBaseUrl: "",
+    explorerLogo: starknetLogo,
     nftBaseUrl: "",
+    nftLogo: flexLogo,
     rpcUrl: "http://127.0.0.1:3030",
   },
   // Starknet chains
@@ -74,6 +93,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://starkscan.co/contract/",
     nftBaseUrl: "https://flexing.gg/starknet/collection/",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: `https://starknet-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   testnet: {
@@ -82,6 +103,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://testnet.starkscan.co/contract/",
     nftBaseUrl: "https://mintsquare.io/collection/starknet-testnet/",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: `https://starknet-goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   testnet2: {
@@ -90,6 +113,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://testnet-2.starkscan.co/contract/",
     nftBaseUrl: "",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: `https://starknet-goerli2.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   starknetDevnet: {
@@ -98,6 +123,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "https://devnet.starkscan.co/contract/",
     nftBaseUrl: "",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: "http://127.0.0.1:5050/rpc",
   },
   katana: {
@@ -106,6 +133,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
     nftBaseUrl: "",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: "http://127.0.0.1:5050",
   },
   madara: {
@@ -114,6 +143,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
     nftBaseUrl: "",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: "http://127.0.0.1:9944",
   },
   sharingan: {
@@ -122,6 +153,8 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     chainType: ChainType.STARKNET,
     explorerBaseUrl: "",
     nftBaseUrl: "",
+    explorerLogo: starknetLogo,
+    nftLogo: flexLogo,
     rpcUrl: process.env.REACT_APP_SHARINGAN_URL!,
   },
 };

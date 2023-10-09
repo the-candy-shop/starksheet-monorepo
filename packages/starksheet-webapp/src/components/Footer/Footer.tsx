@@ -8,11 +8,9 @@ import { useChainProvider } from "../../hooks/useChainProvider";
 import { chainConfig } from "../../provider/chains";
 import GreyCell from "../GreyCell/GreyCell";
 import { SheetButton } from "../SheetButton/SheetButton";
-import githubLogo from "./github.svg";
-import mintSquareLogo from "./mintsquare.svg";
-import starknetLogo from "./starknet.svg";
-import telegramLogo from "./telegram.svg";
-import twitterLogo from "./twitter.svg";
+import githubLogo from "./../../assets/github.svg";
+import telegramLogo from "./../../assets/telegram.svg";
+import twitterLogo from "./../../assets/twitter.svg";
 
 export type FooterProps = {
   sx?: BoxProps["sx"];
@@ -103,7 +101,11 @@ function Footer({ sx }: FooterProps) {
             )
           }
         >
-          <img src={starknetLogo} alt="" />
+          <img
+            src={chainConfig.explorerLogo}
+            style={{ height: "18px" }}
+            alt=""
+          />
         </GreyCell>
         <GreyCell
           sx={{
@@ -161,7 +163,7 @@ function Footer({ sx }: FooterProps) {
             )
           }
         >
-          <img src={mintSquareLogo} style={{ height: "18px" }} alt="" />
+          <img src={chainConfig.nftLogo} style={{ height: "18px" }} alt="" />
         </GreyCell>
       </Box>
     </GreyCell>

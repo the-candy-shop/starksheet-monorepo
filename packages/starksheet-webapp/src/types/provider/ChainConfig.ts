@@ -7,7 +7,9 @@ export interface ChainConfig {
   explorerBaseUrl: string;
   explorerApiUrl?: string;
   explorerApiKey?: string;
+  explorerLogo: string;
   nftBaseUrl: string;
+  nftLogo: string;
   rpcUrl: string;
   appName: string;
   addresses: {

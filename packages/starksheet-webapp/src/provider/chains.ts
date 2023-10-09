@@ -7,6 +7,7 @@ import { StarknetProvider } from "./StarknetProvider";
 type SupportedChains =
   | "goerli"
   | "optimismMainnet"
+  | "linea"
   | "anvil"
   | "mainnet"
   | "testnet"
@@ -38,6 +39,16 @@ const chainConfigs: Record<SupportedChains, Omit<ChainConfig, "addresses">> = {
     explorerApiKey: `${process.env.REACT_APP_OPTIMISM_EXPLORER_KEY}`,
     nftBaseUrl: "https://wenmoon.market/collection/optimism/",
     rpcUrl: `https://optimism-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+  },
+  linea: {
+    appName: "Lineasheet",
+    chainId: ChainId.LINEA_MAINNET,
+    chainType: ChainType.EVM,
+    explorerBaseUrl: "https://lineascan.build/address/",
+    explorerApiUrl: "https://api.lineascan.build/api",
+    explorerApiKey: `${process.env.REACT_APP_LINEA_EXPLORER_KEY}`,
+    nftBaseUrl: "https://element.market/assets/linea/",
+    rpcUrl: `https://linea-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
   },
   anvil: {
     appName: "Ethsheet",

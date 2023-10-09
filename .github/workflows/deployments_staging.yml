@@ -8,44 +8,19 @@ on:
       - staging
 
 jobs:
-  merge-testnet:
+  merge:
     runs-on: ubuntu-latest
     permissions: write-all
+    strategy:
+      matrix:
+        branch: [testnet, testnet2, goerli]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin testnet
-          git checkout testnet
+          git fetch origin ${{ matrix.branch }}
+          git checkout ${{ matrix.branch }}
           git reset staging --hard
-          git push origin testnet -f
-
-  merge-testnet2:
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin testnet2
-          git checkout testnet2
-          git reset staging --hard
-          git push origin testnet2 -f
-
-  merge-goerli:
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin goerli
-          git checkout goerli
-          git reset staging --hard
-          git push origin goerli -f
+          git push origin ${{ matrix.branch }} -f

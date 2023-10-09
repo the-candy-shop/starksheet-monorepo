@@ -15,6 +15,9 @@ environment = { REACT_APP_NETWORK = "mainnet" }
 [context.optimism]
 environment = { REACT_APP_NETWORK = "optimismMainnet" }
 
+[context.linea]
+environment = { REACT_APP_NETWORK = "linea" }
+
 [context.testnet]
 environment = { REACT_APP_NETWORK = "testnet" }
 

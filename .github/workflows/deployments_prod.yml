@@ -8,44 +8,19 @@ on:
       - main
 
 jobs:
-  merge-mainnet:
+  merge:
     runs-on: ubuntu-latest
     permissions: write-all
+    strategy:
+      matrix:
+        branch: [mainnet, optimism, linea, staging]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin mainnet
-          git checkout mainnet
+          git fetch origin ${{ matrix.branch }}
+          git checkout ${{ matrix.branch }}
           git reset main --hard
-          git push origin mainnet -f
-
-  merge-optimism-mainnet:
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin optimism
-          git checkout optimism
-          git reset main --hard
-          git push origin optimism -f
-
-  merge-staging:
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin staging
-          git checkout staging
-          git reset main --hard
-          git push origin staging -f
+          git push origin ${{ matrix.branch }} -f

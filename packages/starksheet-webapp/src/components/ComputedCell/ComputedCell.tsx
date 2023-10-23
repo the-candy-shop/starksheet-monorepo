@@ -36,10 +36,14 @@ function ComputedCell({ cell }: ComputedCellProps) {
   const id = useMemo(() => cell.id, [cell]);
   const [cellSettings, setCellSettings] = useLocalStorage(
     `${selectedSheetAddress}.${id}`,
-    {}
+    {},
   );
   const selected = useMemo(() => id === selectedCell, [selectedCell, id]);
   const isInvoke = useMemo(() => {
+    if (cell.error) {
+      return false;
+    }
+
     if (
       !!cell.abi &&
       ((Object.hasOwn(cell.abi, "state_mutability") &&
@@ -59,7 +63,7 @@ function ComputedCell({ cell }: ComputedCellProps) {
           ((Object.hasOwn(_cell.abi, "state_mutability") &&
             _cell.abi?.state_mutability === "external") ||
             (!Object.hasOwn(_cell.abi, "state_mutability") &&
-              _cell.abi.stateMutability === undefined))
+              _cell.abi.stateMutability === undefined)),
       );
   }, [cell, currentCells, id, buildParents]);
 

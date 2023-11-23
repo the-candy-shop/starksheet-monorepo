@@ -8,13 +8,10 @@ import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { useSheetContract } from "../../hooks";
 import { chainConfig } from "../../provider/chains";
-import { ChainId } from "../../types";
-import BridgeButton from "../BridgeButton/BridgeButton";
 import Button from "../Button/Button";
 import ConnectButton from "../ConnectButton/ConnectButton";
 import GreyCell from "../GreyCell/GreyCell";
 import LoadingDots from "../LoadingDots/LoadingDots";
-import Widget from "../Widget/Widget";
 
 function Header() {
   const { onsheet, selectedSheetAddress, appendSheet, addSheet } =
@@ -79,23 +76,6 @@ function Header() {
 
   const displayCopy = useMemo(() => !!sheet, [sheet]);
 
-  const [isOpenWidget, setOpenWidget] = React.useState<boolean>(false);
-  const bridgeButton = (
-    <>
-      <BridgeButton
-        onClick={() => {
-          setOpenWidget(true);
-        }}
-        sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }}
-      />
-      <Widget
-        open={isOpenWidget}
-        onClose={() => {
-          setOpenWidget(false);
-        }}
-      />
-    </>
-  );
   const learnMoreButton = (
     <Button
       sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px`, width: "191px" }}
@@ -142,7 +122,6 @@ function Header() {
       {displayUpgrade && upgradeButton}
       {displayCopy && copySheetButton}
       {learnMoreButton}
-      {chainConfig.chainId === ChainId.STARKNET_MAINNET && bridgeButton}
       <ConnectButton
         sx={{ width: "174px", marginLeft: `-${CELL_BORDER_WIDTH}px` }}
       />

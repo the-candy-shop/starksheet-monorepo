@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { CELL_BORDER_WIDTH, N_ROW } from "../../config";
 import { AccountContext } from "../../contexts/AccountContext";
 import { CellValuesContext } from "../../contexts/CellValuesContext";
@@ -8,6 +8,7 @@ import { OnsheetContext } from "../../contexts/OnsheetContext";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { useSheetContract } from "../../hooks";
 import { chainConfig } from "../../provider/chains";
+import { RC_BOUND } from "../../utils/constants";
 import Button from "../Button/Button";
 import ConnectButton from "../ConnectButton/ConnectButton";
 import GreyCell from "../GreyCell/GreyCell";
@@ -26,7 +27,7 @@ function Header() {
   const { contract } = useSheetContract(sheet?.address);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState<boolean>(false);
-  const { values, setValues } = useContext(CellValuesContext);
+  const { values, setValues, updateCells } = useContext(CellValuesContext);
 
   const updateOnClick = async () => {
     setLoading(true);
@@ -64,6 +65,22 @@ function Header() {
     });
   };
 
+  const fillOnClick = () => {
+    const newValues = values[sheet?.address!]
+      .filter((cell) => cell.value === 0n && cell.owner === 0n)
+      .map((cell) => {
+        const value = BigInt(Math.floor(Math.random() * 255)) + 1n;
+        return {
+          ...cell,
+          contractAddress: RC_BOUND,
+          selector: value,
+          value,
+          calldata: [],
+        };
+      });
+    updateCells(newValues);
+  };
+
   const displayUpgrade = useMemo(
     () =>
       sheet?.classHash !== undefined &&
@@ -73,8 +90,6 @@ function Header() {
       BigInt(accountAddress) === sheet.owner,
     [sheet?.classHash, onsheet.sheetClassHash, accountAddress, sheet?.owner],
   );
-
-  const displayCopy = useMemo(() => !!sheet, [sheet]);
 
   const learnMoreButton = (
     <Button
@@ -114,13 +129,26 @@ function Header() {
       Copy sheet
     </Button>
   );
+  const fillSheetButton = (
+    <Button
+      sx={{
+        marginLeft: `-${CELL_BORDER_WIDTH}px`,
+        width: "210px",
+      }}
+      onClick={fillOnClick}
+      variant="1"
+    >
+      Fill sheet
+    </Button>
+  );
   return (
     <Box sx={{ display: "flex" }}>
       <GreyCell sx={{ textIndent: "20px", flex: 1 }}>
         {chainConfig.appName}
       </GreyCell>
       {displayUpgrade && upgradeButton}
-      {displayCopy && copySheetButton}
+      {!!sheet && copySheetButton}
+      {!!sheet && fillSheetButton}
       {learnMoreButton}
       <ConnectButton
         sx={{ width: "174px", marginLeft: `-${CELL_BORDER_WIDTH}px` }}

@@ -3,12 +3,13 @@ import itertools
 import json
 import logging
 import math
+import shlex
+import subprocess
 import time
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import requests
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -35,7 +36,7 @@ def get_contracts_calls(contract_addresses):
         json.load(open("timestamps.json")) if Path("timestamps.json").is_file() else {}
     )
     data = {
-        "query": """query AccountCallsTablePaginationFragment(
+        "query": """query AccountCallsTableQuery(
                     $after: String,
                     $first: Int!,
                     $input: CallsInput!
@@ -91,9 +92,16 @@ def get_contracts_calls(contract_addresses):
         data["variables"]["after"] = None
         data["variables"]["input"]["contract_address"] = contract_address
         data["variables"]["input"]["min_timestamp"] = timestamps.get(contract_address)
-        response = requests.post(url, headers=headers, json=data)
-        _calls = response.json()["data"]["calls"]["edges"]
-        page_info = response.json()["data"]["calls"]["pageInfo"]
+        data_raw = json.dumps(data).replace("\\n", "")
+        res = subprocess.run(
+            shlex.split(
+                f"""curl 'https://api.starkscancdn.com/graphql' -H 'authority: api.starkscancdn.com' -H 'accept: application/json' -H 'accept-language: en-US,en;q=0.9' -H 'content-type: application/json' -H 'dnt: 1' -H 'origin: https://starkscan.co' -H 'referer: https://starkscan.co/' -H 'sec-ch-ua: "Not=A?Brand";v="99", "Chromium";v="118"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "macOS"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: cross-site' -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36' --data-raw '{data_raw}' --compressed"""
+            ),
+            capture_output=True,
+        )
+        response = json.loads(res.stdout.decode())
+        _calls = response["data"]["calls"]["edges"]
+        page_info = response["data"]["calls"]["pageInfo"]
         if not _calls:
             timestamps[contract_address] = math.floor(
                 pd.Timestamp.now(tz="UTC").timestamp()
@@ -106,9 +114,18 @@ def get_contracts_calls(contract_addresses):
             page += 1
             logger.info(f"⏳ contract {contract_address}: fetching page {page}")
             data["variables"]["after"] = page_info["endCursor"]
-            response = requests.post(url, headers=headers, json=data)
-            _calls += response.json()["data"]["calls"]["edges"]
-            page_info = response.json()["data"]["calls"]["pageInfo"]
+
+            data_raw = json.dumps(data).replace("\\n", "")
+            res = subprocess.run(
+                shlex.split(
+                    f"""curl 'https://api.starkscancdn.com/graphql' -H 'authority: api.starkscancdn.com' -H 'accept: application/json' -H 'accept-language: en-US,en;q=0.9' -H 'content-type: application/json' -H 'dnt: 1' -H 'origin: https://starkscan.co' -H 'referer: https://starkscan.co/' -H 'sec-ch-ua: "Not=A?Brand";v="99", "Chromium";v="118"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "macOS"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: cross-site' -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36' --data-raw '{data_raw}' --compressed"""
+                ),
+                capture_output=True,
+            )
+            response = json.loads(res.stdout.decode())
+
+            _calls += response["data"]["calls"]["edges"]
+            page_info = response["data"]["calls"]["pageInfo"]
             timestamps[contract_address] = _calls[-1]["node"]["timestamp"]
 
         timestamps[contract_address] = math.floor(
@@ -198,8 +215,17 @@ def get_class_hashes(contract_addresses):
         }""",
             "variables": {"input": {"contract_address": contract_address}},
         }
-        response = requests.post(url, headers=headers, json=data)
-        class_hash = response.json()["data"]["contract"]["class_hash"]
+
+        data_raw = json.dumps(data).replace("\\n", "")
+        res = subprocess.run(
+            shlex.split(
+                f"""curl 'https://api.starkscancdn.com/graphql' -H 'authority: api.starkscancdn.com' -H 'accept: application/json' -H 'accept-language: en-US,en;q=0.9' -H 'content-type: application/json' -H 'dnt: 1' -H 'origin: https://starkscan.co' -H 'referer: https://starkscan.co/' -H 'sec-ch-ua: "Not=A?Brand";v="99", "Chromium";v="118"' -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "macOS"' -H 'sec-fetch-dest: empty' -H 'sec-fetch-mode: cors' -H 'sec-fetch-site: cross-site' -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36' --data-raw '{data_raw}' --compressed"""
+            ),
+            capture_output=True,
+        )
+        response = json.loads(res.stdout.decode())
+
+        class_hash = response["data"]["contract"]["class_hash"]
         known_classes[contract_address] = class_hash
         return class_hash
 

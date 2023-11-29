@@ -9,7 +9,7 @@ ignore = "/bin/false"
 [context.production]
 environment = { REACT_APP_NETWORK = "mainnet" }
 
-[context.mainnet]
+[context.starknet]
 environment = { REACT_APP_NETWORK = "mainnet" }
 
 [context.optimism]

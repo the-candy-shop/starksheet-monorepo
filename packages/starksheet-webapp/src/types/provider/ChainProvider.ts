@@ -92,4 +92,9 @@ export interface ChainProvider {
    * Create a send ETH transaction
    */
   sendEthTxBuilder(recipientAddress: bigint, amount: bigint): ContractCall;
+
+  /**
+   * Resolve an address to a name
+   */
+  resolveAddress(address: string): Promise<string>;
 }

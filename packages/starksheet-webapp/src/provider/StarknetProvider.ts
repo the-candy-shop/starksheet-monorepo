@@ -54,6 +54,17 @@ export class StarknetProvider implements ChainProvider {
     );
   }
 
+  async resolveAddress(address: string): Promise<string> {
+    try {
+      const response = await fetch(
+        `https://api.starknet.id/addr_to_domain?addr=${address}`,
+      );
+      return (await response.json()).domain;
+    } catch (error) {
+      return address;
+    }
+  }
+
   async addressAlreadyDeployed(address: string) {
     try {
       await this.provider.getClassAt(address, "latest");

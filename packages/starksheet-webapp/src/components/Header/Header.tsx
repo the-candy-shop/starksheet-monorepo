@@ -150,9 +150,7 @@ function Header() {
       {!!sheet && copySheetButton}
       {!!sheet && fillSheetButton}
       {learnMoreButton}
-      <ConnectButton
-        sx={{ width: "174px", marginLeft: `-${CELL_BORDER_WIDTH}px` }}
-      />
+      <ConnectButton sx={{ marginLeft: `-${CELL_BORDER_WIDTH}px` }} />
     </Box>
   );
 }

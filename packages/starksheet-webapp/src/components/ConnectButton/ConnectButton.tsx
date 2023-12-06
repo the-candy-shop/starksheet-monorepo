@@ -1,5 +1,5 @@
 import { BoxProps } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { AccountContext } from "../../contexts/AccountContext";
 import Button from "../Button/Button";
 
@@ -8,17 +8,28 @@ export type ConnectButtonProps = {
 };
 
 function ConnectButton({ sx }: ConnectButtonProps) {
-  const { accountAddress, connect } = useContext(AccountContext);
+  const { accountDomain, connect } = useContext(AccountContext);
+
+  const displayedName = useMemo(() => {
+    if (!accountDomain) {
+      return "Connect";
+    }
+    if (accountDomain.length <= 8) {
+      return accountDomain;
+    }
+    return `${accountDomain.substring(0, 8)}...`;
+  }, [accountDomain]);
 
   return (
     <Button
       onClick={connect}
       sx={{
         color: "#0000FF",
+        width: "210px",
         ...sx,
       }}
     >
-      {accountAddress ? accountAddress.substring(0, 8) : "Connect"}
+      {displayedName}
     </Button>
   );
 }

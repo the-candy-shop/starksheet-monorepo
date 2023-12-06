@@ -29,6 +29,10 @@ export class EVMProvider implements ChainProvider {
     private config: ChainConfig,
   ) {}
 
+  resolveAddress(address: string): Promise<string> {
+    throw new Error("Method not implemented.");
+  }
+
   async addressAlreadyDeployed(address: string) {
     return (await this.provider.getCode(address)).length > 2;
   }

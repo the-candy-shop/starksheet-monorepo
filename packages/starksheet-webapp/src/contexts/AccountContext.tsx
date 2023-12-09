@@ -1,11 +1,12 @@
 import { useSnackbar } from "notistack";
-import React, { PropsWithChildren, useMemo, useState } from "react";
+import React, { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { BigNumberish } from "starknet";
 import { useChainProvider } from "../hooks";
 import { ContractCall, TransactionResponse } from "../types";
 
 export const AccountContext = React.createContext<{
   accountAddress: string;
+  accountDomain: string;
   setAccountAddress: (address: string) => void;
   connect: () => Promise<void>;
   execute: (
@@ -15,6 +16,7 @@ export const AccountContext = React.createContext<{
   proof: string[];
 }>({
   accountAddress: "",
+  accountDomain: "",
   setAccountAddress: () => {},
   connect: async () => {},
   execute: async () => ({ transaction_hash: "" }),
@@ -23,11 +25,17 @@ export const AccountContext = React.createContext<{
 
 export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
   const [accountAddress, setAccountAddress] = useState<string>("");
+  const [accountDomain, setAccountDomain] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
 
   const proof = useMemo(() => [], []);
 
   const provider = useChainProvider();
+  useEffect(() => {
+    provider.resolveAddress(accountAddress).then((resolved) => {
+      setAccountDomain(resolved);
+    });
+  }, [provider, accountAddress]);
 
   const connect = () =>
     provider
@@ -47,6 +55,7 @@ export const AccountContextProvider = ({ children }: PropsWithChildren<{}>) => {
     <AccountContext.Provider
       value={{
         accountAddress,
+        accountDomain,
         setAccountAddress,
         connect,
         execute,

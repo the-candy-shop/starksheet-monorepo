@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@argent/get-starknet": "^6.4.7",
-    "@emotion/react": "^11.11.3",
+    "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.15.11",
     "@testing-library/jest-dom": "^5.16.4",
